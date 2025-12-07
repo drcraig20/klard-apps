@@ -1,9 +1,8 @@
-import { z } from 'zod';
 import {
   SubscriptionSchema,
   CreateSubscriptionSchema,
   UpdateSubscriptionSchema,
-} from '../types/subscription';
+} from '../types';
 
 export function validateSubscription(data: unknown) {
   return SubscriptionSchema.safeParse(data);

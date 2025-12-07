@@ -1,8 +1,18 @@
-# Klard
+# Klard Apps
 
 **Track. Detect. Protect.** Stop paying for what you don't use.
 
-Klard is a privacy-first subscription intelligence and protection platform designed to help individuals, freelancers, and small teams take control of their recurring payments.
+This monorepo contains the client applications for **Klard** — a privacy-first subscription intelligence and protection platform designed to help individuals, freelancers, and small teams take control of their recurring payments.
+
+## About This Repository
+
+`klard-apps` is a **pnpm monorepo** containing all Klard client applications:
+
+- **klard-web** — Next.js 16 progressive web application
+- **klard-mobile** — React Native (Expo) mobile app for iOS and Android
+- **commons** — Shared TypeScript types, validation schemas, and constants
+
+> **Note:** Backend services (Auth, Core API, Card Service, etc.) are maintained in separate repositories.
 
 ## The Problem
 
@@ -36,19 +46,31 @@ Klard provides a unified dashboard for subscription tracking, price monitoring, 
 
 ## Tech Stack
 
-### Frontend
-- Next.js 16 (PWA)
+### Web (klard-web)
+- Next.js 16 (App Router, PWA)
+- TypeScript (strict mode)
 - Tailwind CSS
+- shadcn/ui components
 - React Query / Zustand
 - Recharts
 
-### Mobile
-- React Native 
-- Expo
+### Mobile (klard-mobile)
+- React Native
+- Expo (SDK 52+)
+- Expo Router
+- TypeScript
 
+### Shared (commons)
+- TypeScript types and interfaces
+- Zod validation schemas
+- Constants and configuration
+
+### Build Tools
+- pnpm (package manager)
+- Turborepo (monorepo orchestration)
 
 ### External Services
-- **Auth**: klard-auth
+- **Auth**: klard-auth (separate repository)
 - **Email**: Sendgrid
 - **Cards**: Airwallex / Lithic / Stripe Issuing
 - **Price Scraping**: ScrapingBee / Zyte
@@ -57,8 +79,6 @@ Klard provides a unified dashboard for subscription tracking, price monitoring, 
 
 ## Repository Structure
 
-This is the central specification repository for the Klard-apps platform. Each application is maintained in its own dedicated repository.
-
 ```
 klard-apps/
 ├── .github/
@@ -66,51 +86,21 @@ klard-apps/
 │       ├── web.yml                    # Vercel preview/prod deploys
 │       └── mobile.yml                 # EAS builds trigger
 │
-├── klard-web/                         # Next.js 15 App
-│   ├── app/
-│   │   ├── (auth)/
-│   │   │   ├── login/
-│   │   │   │   └── page.tsx
-│   │   │   ├── signup/
-│   │   │   │   └── page.tsx
-│   │   │   └── layout.tsx
-│   │   ├── (dashboard)/
+├── klard-web/                         # Next.js 16 App
+│   ├── src/
+│   │   ├── app/                       # App Router pages
+│   │   │   ├── (auth)/                # Auth route group
+│   │   │   ├── (dashboard)/           # Dashboard route group
+│   │   │   ├── layout.tsx
+│   │   │   └── page.tsx               # Landing page
+│   │   ├── components/
+│   │   │   ├── ui/                    # shadcn/ui components
+│   │   │   ├── auth/
 │   │   │   ├── dashboard/
-│   │   │   │   └── page.tsx
-│   │   │   ├── subscriptions/
-│   │   │   │   ├── [id]/
-│   │   │   │   │   └── page.tsx
-│   │   │   │   └── page.tsx
-│   │   │   ├── settings/
-│   │   │   │   └── page.tsx
-│   │   │   └── layout.tsx
-│   │   ├── api/
-│   │   │   └── [...proxy]/            # Optional: proxy to Spring Boot
-│   │   │       └── route.ts
-│   │   ├── layout.tsx
-│   │   └── page.tsx                   # Landing page
-│   ├── components/
-│   │   ├── ui/                        # shadcn/ui components
-│   │   ├── auth/
-│   │   │   ├── login-form.tsx
-│   │   │   ├── signup-form.tsx
-│   │   │   └── social-buttons.tsx
-│   │   ├── dashboard/
-│   │   │   ├── subscription-card.tsx
-│   │   │   ├── subscription-list.tsx
-│   │   │   └── sidebar.tsx
-│   │   └── shared/
-│   │       ├── header.tsx
-│   │       └── footer.tsx
-│   ├── lib/
-│   │   ├── auth-client.ts             # Better Auth client
-│   │   ├── api-client.ts              # Spring Boot API client
-│   │   └── utils.ts
-│   ├── hooks/
-│   │   ├── use-subscriptions.ts
-│   │   └── use-auth.ts
-│   ├── styles/
-│   │   └── globals.css
+│   │   │   └── shared/
+│   │   ├── api/                       # API routes
+│   │   ├── lib/
+│   │   └── hooks/
 │   ├── public/
 │   ├── next.config.ts
 │   ├── tailwind.config.ts
@@ -118,63 +108,31 @@ klard-apps/
 │   └── package.json
 │
 ├── klard-mobile/                      # React Native (Expo) App
-│   ├── app/                           # Expo Router
-│   │   ├── (auth)/
-│   │   │   ├── login.tsx
-│   │   │   ├── signup.tsx
-│   │   │   └── _layout.tsx
-│   │   ├── (tabs)/
-│   │   │   ├── dashboard.tsx
-│   │   │   ├── subscriptions/
-│   │   │   │   ├── [id].tsx
-│   │   │   │   └── index.tsx
-│   │   │   ├── settings.tsx
-│   │   │   └── _layout.tsx
-│   │   ├── _layout.tsx
-│   │   └── index.tsx
-│   ├── components/
-│   │   ├── auth/
-│   │   │   ├── LoginForm.tsx
-│   │   │   └── SocialButtons.tsx
-│   │   ├── dashboard/
-│   │   │   ├── SubscriptionCard.tsx
-│   │   │   └── SubscriptionList.tsx
-│   │   └── ui/
-│   │       ├── Button.tsx
-│   │       ├── Input.tsx
-│   │       └── Card.tsx
-│   ├── lib/
-│   │   ├── auth-client.ts             # Better Auth + Expo client
-│   │   ├── api-client.ts              # Spring Boot API client
-│   │   └── storage.ts                 # SecureStore wrapper
-│   ├── hooks/
-│   │   ├── useSubscriptions.ts
-│   │   └── useAuth.ts
+│   ├── src/
+│   │   ├── app/                       # Expo Router
+│   │   │   ├── (auth)/
+│   │   │   ├── (tabs)/
+│   │   │   ├── _layout.tsx
+│   │   │   └── index.tsx
+│   │   ├── components/
+│   │   ├── lib/
+│   │   └── hooks/
 │   ├── assets/
-│   │   ├── icon.png
-│   │   ├── splash.png
-│   │   └── adaptive-icon.png
 │   ├── app.json
 │   ├── eas.json
-│   ├── tsconfig.json
 │   └── package.json
 │
 ├── commons/                           # Shared code across all apps
 │   ├── src/
 │   │   ├── types/
-│   │   │   ├── subscription.ts
-│   │   │   ├── user.ts
-│   │   │   └── index.ts
 │   │   ├── validation/
-│   │   │   ├── subscription.ts
-│   │   │   ├── user.ts
-│   │   │   └── index.ts
 │   │   ├── constants/
-│   │   │   ├── plans.ts
-│   │   │   └── index.ts
 │   │   └── index.ts
 │   ├── tsconfig.json
 │   └── package.json
+│
+├── docs/                              # Documentation
+│   └── design/                        # Design system specs
 │
 ├── package.json                       # Root package.json
 ├── pnpm-workspace.yaml                # Workspace config
@@ -185,24 +143,22 @@ klard-apps/
 └── README.md
 ```
 
-### Related Repositories
+### Workspace Packages
 
-| Repository                   | Description                       | Stack                                     |
-|------------------------------|-----------------------------------|-------------------------------------------|
-| `klard-web`                  | Web application (PWA)             | Next.js, Tailwind CSS, React Query        |
-| `klard-mobile`               | Mobile Application (iOS/android)  | React Native, Expo, Better Auth           |
-| `commons`                    | Shared code across all apps       | Spring Boot, Spring Data JPA              |
-| `klard-card-service`         | BurnerCard provisioning & rules   | Spring Boot, Airwallex/Stripe integration |
-| `klard-price-service`        | Price tracking & scraping         | Spring Boot, ScrapingBee                  |
-| `klard-notification-service` | Email, SMS, push notifications    | Spring Boot, Sendgrid, Twilio             |
-| `klard-jobs-service`         | Scheduled tasks & background jobs | Spring Boot, Quartz                       |
+| Package        | Path             | Description                              |
+|----------------|------------------|------------------------------------------|
+| `klard-web`    | `./klard-web`    | Next.js 16 PWA                           |
+| `klard-mobile` | `./klard-mobile` | React Native (Expo) mobile app           |
+| `commons`      | `./commons`      | Shared types, validation, and constants  |
 
-## Architecture Overview
+## Backend Architecture (External)
+
+The client apps connect to backend services maintained separately:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│                         API Gateway                              │
-│              (Rate Limiting, Auth, WAF Protection)               │
+│                         API Gateway                             │
+│              (Rate Limiting, Auth, WAF Protection)              │
 └─────────────────────────────────────────────────────────────────┘
                                  │
         ┌────────────────────────┼────────────────────────┐
@@ -222,35 +178,110 @@ klard-apps/
 
 ## Design System
 
-Klard uses a modern dark-first design with glassmorphism effects:
+Klard uses a **light-first design** with soft shadows and subtle glassmorphism, with full dark theme support.
 
-| Token | Value | Usage |
-|-------|-------|-------|
-| Background | `#0F172A` | Dark navy base |
-| Primary | `#15B5B0` | Vibrant teal CTAs |
-| Success | `#10B981` | Savings indicators |
-| Warning | `#F59E0B` | Alerts and renewals |
-| Error | `#EF4444` | Blocked/urgent states |
+### Light Theme (Default)
 
-See `docs/07.Klard Design System.md` for complete design specifications.
+| Token       | Value     | Usage                             |
+|-------------|-----------|-----------------------------------|
+| Background  | `#FFFFFF` | Pure white base                   |
+| Foreground  | `#0F172A` | Dark navy text                    |
+| Primary     | `#0D7C7A` | Deep teal CTAs and interactive    |
+| Secondary   | `#15B5B0` | Vibrant teal accents              |
+| Success     | `#059669` | Savings indicators                |
+| Warning     | `#D97706` | Alerts and renewals               |
+| Error       | `#DC2626` | Blocked/urgent states             |
+| Muted       | `#F1F5F9` | Soft gray surfaces                |
+
+### Dark Theme
+
+| Token       | Value     | Usage                             |
+|-------------|-----------|-----------------------------------|
+| Background  | `#0F172A` | Dark navy base                    |
+| Foreground  | `#F8FAFC` | Light text                        |
+| Primary     | `#15B5B0` | Vibrant teal CTAs                 |
+| Secondary   | `#0D7C7A` | Deep teal accents                 |
+| Success     | `#10B981` | Savings indicators                |
+| Warning     | `#F59E0B` | Alerts and renewals               |
+| Error       | `#EF4444` | Blocked/urgent states             |
+| Muted       | `#1E293B` | Dark surfaces                     |
+
+### Design Features
+- **Light-first approach** with full dark mode support via `prefers-color-scheme`
+- **Glassmorphism effects** for cards, modals, and overlays
+- **Soft shadows** with subtle depth hierarchy
+- **WCAG AA compliant** contrast ratios
+- **Inter / SF Pro** typography
+
+See [`docs/design/Klard Design System.md`](docs/design/Klard%20Design%20System.md) for complete design specifications.
 
 ## Pricing Tiers
 
-| Tier | Features | Price |
-|------|----------|-------|
-| Free | 3 subscriptions, manual cancel links, renewal alerts | $0 |
-| Pro | Unlimited subscriptions, price alerts, alternatives | $9.99/mo |
-| Saver+ | Cancellation automation, 4 BurnerCards/mo, custom rules | $16.99/mo |
+| Tier    | Features                                                  | Price     |
+|---------|-----------------------------------------------------------|-----------|
+| Free    | 3 subscriptions, manual cancel links, renewal alerts      | $0        |
+| Pro     | Unlimited subscriptions, price alerts, alternatives       | $9.99/mo  |
+| Saver+  | Cancellation automation, 4 BurnerCards/mo, custom rules   | $16.99/mo |
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js 20+
+- pnpm 8+
+- Expo CLI (for mobile development)
+- iOS Simulator / Android Emulator (for mobile)
+
+### Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/klard-apps.git
+cd klard-apps
+
+# Install dependencies
+pnpm install
+
+# Start all development servers
+pnpm dev
+
+# Or start individual apps
+pnpm dev:web      # Start Next.js dev server
+pnpm dev:mobile   # Start Expo dev server
+```
+
+### Environment Setup
+
+```bash
+# Copy environment template
+cp .env.example .env.local
+
+# Configure required variables
+# - API_URL: Backend API endpoint
+# - AUTH_URL: Authentication service endpoint
+# - POSTHOG_KEY: Analytics key
+```
+
+### Available Scripts
+
+| Command           | Description                          |
+|-------------------|--------------------------------------|
+| `pnpm dev`        | Start all apps in development mode   |
+| `pnpm dev:web`    | Start web app only                   |
+| `pnpm dev:mobile` | Start mobile app only                |
+| `pnpm build`      | Build all apps for production        |
+| `pnpm lint`       | Run ESLint across all packages       |
+| `pnpm typecheck`  | Run TypeScript type checking         |
+| `pnpm test`       | Run tests across all packages        |
 
 ## Documentation
 
 Comprehensive documentation is available in the `/docs` directory:
 
-1. **Product Requirements** - Feature specs, personas, competitive analysis
-2. **System Architecture** - High-level and lean MVP architecture options
-3. **Lean Stack Recommendations** - Modern managed services for MVP
-4. **GTM Strategy** - Go-to-market and growth playbook
-5. **Design System** - Complete design tokens, components, and guidelines
+- **Design System** — Complete design tokens, components, color palettes, and guidelines
+  - [`Klard Design System.md`](docs/design/Klard%20Design%20System.md) — Main design document
+  - [`Light Theme Colors & Effects.md`](docs/design/Klard%20Design%20System%20-%20Light%20Theme%20Colors%20%26%20Effects.md) — Light theme specs
+  - [`Dark Theme Colors & Effects.md`](docs/design/Klard%20Design%20System%20-%20Dark%20Theme%20Colors%20%26%20Effects.md) — Dark theme specs
 
 ## Key Differentiators
 
@@ -259,53 +290,6 @@ Comprehensive documentation is available in the `/docs` directory:
 - **Smart Cards**: Category-locked and recurring-limited BurnerCards
 - **No Bank Access**: Privacy compliance by design
 - **Unified Platform**: Subscriptions + price tracking + payment protection
-
-## Getting Started
-
-> Implementation coming soon. Currently in documentation/design phase.
-
-### Prerequisites
-
-- Node.js 20+
-- Java 25+
-- PostgreSQL 16+
-- pnpm
-
-### Development
-
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/klard-apps.git
-cd klard-apps
-
-# Install dependencies (when implemented)
-pnpm install
-
-# Start development servers
-pnpm dev
-```
-
-## MVP Roadmap
-
-### Weekend 1: Auth + Core Subscriptions
-- User registration/login (Clerk)
-- Subscription CRUD
-- Renewal reminder emails
-- Basic dashboard UI
-
-### Weekend 2: BurnerCard + Price Tracking
-- ONE_TIME card provisioning
-- Card state machine
-- Price scraping for top 10 services
-- Savings dashboard
-
-## Success Metrics (3-Month MVP)
-
-- 2,000+ active users
-- ≥8 average subscriptions per user
-- ≥$100 average monthly savings per user
-- ≥7% free-to-paid conversion
-- >40 NPS
 
 ## Contributing
 
