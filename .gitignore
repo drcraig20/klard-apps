@@ -1,0 +1,81 @@
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+node_modules/
+.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+coverage/
+
+# Next.js (klard-web)
+.next/
+out/
+
+# Expo (klard-mobile)
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+
+# Native (klard-mobile)
+.kotlin/
+*.orig.*
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+
+# Metro
+.metro-health-check*
+
+# generated native folders (klard-mobile)
+klard-mobile/ios
+klard-mobile/android
+
+# production
+build/
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+npm-debug.*
+yarn-debug.log*
+yarn-debug.*
+yarn-error.log*
+yarn-error.*
+.pnpm-debug.log*
+.worktrees/
+
+# env files (can opt-in for committing if needed)
+.env*
+!.env.example
+.env*.local
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# IDE
+.idea/
+
+# test artifacts
+TEST_RESULTS.md
+BROWSER_TEST_SUMMARY.txt
+playwright-report/
+test-results/
+
+# turbo
+.turbo/

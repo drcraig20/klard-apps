@@ -1,0 +1,4 @@
+packages:
+  - "klard-web"
+  - "klard-mobile"
+  - "commons"
