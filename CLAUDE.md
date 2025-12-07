@@ -1,0 +1,1 @@
+- Always use context7 to read about any library before you start any planning or implementation if you ever think you will need that library
