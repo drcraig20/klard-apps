@@ -1,104 +1,51 @@
-import { useEffect } from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  ActivityIndicator,
-  useColorScheme,
-} from 'react-native';
-import { useRouter } from 'expo-router';
-import { useSession, signOut } from '@/lib/auth-client';
-import { Colors } from '@/constants/colors';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { useThemeColors, useAuthRedirect } from '@/hooks';
+import { LoadingScreen } from '@/components/common';
+import { signOut } from '@/lib/auth-client';
+import { typography } from '@/styles';
+import { styles } from './dashboard.styles';
 
 export default function DashboardScreen() {
-  const router = useRouter();
-  const colorScheme = useColorScheme() ?? 'light';
-  const colors = Colors[colorScheme];
-  const { data: session, isPending } = useSession();
+  const colors = useThemeColors();
+  const { session, isPending } = useAuthRedirect({ requireAuth: true });
 
-  useEffect(() => {
-    if (!isPending && !session) {
-      router.replace('/(auth)/login');
-    }
-  }, [session, isPending, router]);
-
-  async function handleSignOut() {
-    await signOut();
-    router.replace('/(auth)/login');
+  if (isPending || !session) {
+    return <LoadingScreen />;
   }
 
-  // Show loading while checking session
-  if (isPending) {
-    return (
-      <View style={[styles.container, { backgroundColor: colors.background }]}>
-        <ActivityIndicator size="large" color={colors.primary} />
-      </View>
-    );
-  }
-
-  // Don't render if not authenticated (will redirect)
-  if (!session) {
-    return null;
-  }
+  const userName = session.user?.name || session.user?.email || 'there';
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <View style={styles.header}>
-        <Text style={[styles.title, { color: colors.foreground }]}>
-          Dashboard
-        </Text>
-        <TouchableOpacity onPress={handleSignOut} style={styles.signOutButton}>
-          <Text style={[styles.signOutText, { color: colors.textSecondary }]}>
-            Sign out
-          </Text>
-        </TouchableOpacity>
-      </View>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={styles.content}>
-        <Text style={[styles.welcome, { color: colors.foreground }]}>
-          Welcome back, {session.user?.name ?? session.user?.email}!
-        </Text>
-        <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
-          Your subscription management dashboard is coming soon.
-        </Text>
+        <View style={styles.header}>
+          <View>
+            <Text style={[styles.greeting, typography.h2, { color: colors.foreground }]}>
+              Welcome back, {userName}!
+            </Text>
+            <Text style={[typography.body, { color: colors.textSecondary }]}>
+              Your subscription dashboard
+            </Text>
+          </View>
+          <TouchableOpacity
+            onPress={() => signOut()}
+            style={styles.signOutButton}
+            accessibilityRole="button"
+            accessibilityLabel="Sign out"
+          >
+            <Text style={[typography.label, { color: colors.primary }]}>
+              Sign Out
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <View style={styles.placeholder}>
+          <Text style={[styles.placeholderText, typography.body, { color: colors.textSecondary }]}>
+            Your subscription management features will appear here soon.
+          </Text>
+        </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    paddingTop: 60,
-    paddingHorizontal: 24,
-  },
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 32,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: '600',
-  },
-  signOutButton: {
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-  },
-  signOutText: {
-    fontSize: 14,
-    fontWeight: '500',
-  },
-  content: {
-    flex: 1,
-  },
-  welcome: {
-    fontSize: 18,
-    fontWeight: '500',
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 16,
-  },
-});
