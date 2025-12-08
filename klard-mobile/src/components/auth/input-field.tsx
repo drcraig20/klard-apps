@@ -5,10 +5,9 @@ import {
   TextInput,
   TouchableOpacity,
   StyleSheet,
-  useColorScheme,
   TextInputProps,
 } from 'react-native';
-import { Colors } from '@/constants/colors';
+import { useThemeColors } from '@/hooks';
 
 interface InputFieldProps extends TextInputProps {
   label: string;
@@ -27,8 +26,7 @@ export function InputField({
 }: InputFieldProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
-  const colorScheme = useColorScheme() ?? 'light';
-  const colors = Colors[colorScheme];
+  const colors = useThemeColors();
 
   return (
     <View style={styles.container}>

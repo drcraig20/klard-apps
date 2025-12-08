@@ -37,6 +37,39 @@ Tracks completed implementation work across the Klard platform.
 
 ---
 
+## Mobile Separation of Concerns Refactor
+
+**Completed:** 2025-12-08
+**Platforms:** Mobile
+
+### What Was Done
+
+**Shared Styles (`src/styles/`):**
+- Design tokens: `colors.ts`, `typography.ts`, `spacing.ts`
+- Reusable patterns: `common.ts` (containers, rows, buttons, cards)
+
+**Custom Hooks (`src/hooks/`):**
+- `useThemeColors` - System theme-aware color selection
+- `useAuthRedirect` - Auth navigation with configurable routes
+- `useLoginForm` - Form state + validation (react-hook-form + Zod)
+
+**Shared Components:**
+- `LoadingScreen`, `PlaceholderScreen` in `src/components/common/`
+- `MagicLinkSent`, `ErrorBanner` in `src/components/auth/`
+- `ErrorBoundary` for global error handling
+
+**Refactored:**
+- `LoginForm` - Now uses `useLoginForm` hook, styles extracted to separate file
+- All screens updated to use shared components and hooks
+
+**Bug Fix:**
+- `useAuthRedirect` - Fixed missing redirect for unauthenticated users on index page
+
+### Source Documents
+- `klard-mobile/docs/plans/2025-12-08-separation-of-concerns-refactor.md` (archived)
+
+---
+
 <!--
 ## [Feature Name]
 

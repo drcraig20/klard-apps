@@ -5,16 +5,14 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
-  useColorScheme,
   Image,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Colors } from '@/constants/colors';
-import { LoginForm } from '@/components/auth/login-form';
+import { useThemeColors } from '@/hooks';
+import { LoginForm } from '@/components/auth';
 
 export default function LoginScreen() {
-  const colorScheme = useColorScheme() ?? 'light';
-  const colors = Colors[colorScheme];
+  const colors = useThemeColors();
 
   return (
     <SafeAreaView
