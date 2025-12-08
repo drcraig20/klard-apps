@@ -37,7 +37,7 @@ Refactored mobile codebase to follow separation of concerns with shared styles, 
 | Category | Items |
 |----------|-------|
 | Styles (`src/styles/`) | `colors.ts`, `typography.ts`, `spacing.ts`, `common.ts` |
-| Hooks (`src/hooks/`) | `useThemeColors`, `useAuthRedirect`, `useLoginForm` |
+| Hooks (`src/hooks/`) | `useThemeColors`, `useAuthRedirect` |
 | Components | `LoadingScreen`, `PlaceholderScreen`, `MagicLinkSent`, `ErrorBanner`, `ErrorBoundary` |
 
 **Bug Fix:** `useAuthRedirect` - added missing redirect for unauthenticated users
@@ -92,6 +92,36 @@ Centralized all user-facing strings in commons package with platform-specific i1
 | `dashboard.*` | Welcome, sign out |
 | `common.*` | Loading, actions |
 | `navigation.*` | Tab labels |
+
+---
+
+## Signup & Registration
+
+Implemented full signup flow for web and mobile with password strength indicator, terms checkbox, and social OAuth. Uses shared validation schemas and translations from commons, Zustand for state management on both platforms.
+
+| | |
+|---|---|
+| **Date** | 2025-12-08 |
+| **Platforms** | Web, Mobile |
+| **Source** | `2025-01-08-signup-screen.md` |
+
+| Package | Implementation |
+|---------|---------------|
+| commons | `SignupSchema` validation, `calculatePasswordStrength` utility with tests, signup translations |
+| klard-web | `SignupForm`, `PasswordStrengthIndicator`, `TermsCheckbox`, `/signup` route, `/onboarding` placeholder |
+| klard-mobile | `SignupForm`, `PasswordStrengthIndicator`, `TermsCheckbox`, Zustand `useAuthUIStore` |
+
+**Features:**
+- Password strength calculator (weak/fair/good/strong with feedback)
+- Password confirmation matching validation
+- Terms of Service checkbox with links
+- Social signup (Google/Apple via better-auth)
+- Redirect to `/onboarding` after signup
+
+**Refactoring:**
+- Migrated mobile login from `useLoginForm` hook to Zustand store
+- Updated to use `expo-image` instead of `react-native` Image
+- Added "Expo SDK First" guidance to AGENTS.md
 
 ---
 
