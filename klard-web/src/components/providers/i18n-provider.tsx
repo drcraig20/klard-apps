@@ -15,7 +15,7 @@ function getSnapshot() {
 }
 
 function getServerSnapshot() {
-  return false;
+  return true;
 }
 
 export function I18nProvider({ children }: { children: React.ReactNode }) {
