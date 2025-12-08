@@ -3,6 +3,7 @@ import { Controller } from 'react-hook-form';
 import { useRouter } from 'expo-router';
 import { useThemeColors, useLoginForm } from '@/hooks';
 import { typography } from '@/styles';
+import { t } from '@/lib/i18n';
 import { InputField } from '../input-field';
 import { SocialButtons } from '../social-buttons';
 import { MagicLinkSent } from '../magic-link-sent';
@@ -43,8 +44,8 @@ export function LoginForm() {
           name="email"
           render={({ field: { onChange, onBlur, value } }) => (
             <InputField
-              label="Email"
-              placeholder="you@example.com"
+              label={t('auth.login.emailLabel')}
+              placeholder={t('auth.login.emailPlaceholder')}
               keyboardType="email-address"
               autoCapitalize="none"
               autoComplete="email"
@@ -64,8 +65,8 @@ export function LoginForm() {
           name="password"
           render={({ field: { onChange, onBlur, value } }) => (
             <InputField
-              label="Password"
-              placeholder="Enter your password"
+              label={t('auth.login.passwordLabel')}
+              placeholder={t('auth.login.passwordPlaceholder')}
               isPassword
               autoComplete="password"
               error={errors.password?.message}
@@ -87,7 +88,7 @@ export function LoginForm() {
                 style={styles.checkboxContainer}
                 disabled={isSubmitting}
                 accessibilityRole="checkbox"
-                accessibilityLabel="Remember me"
+                accessibilityLabel={t('auth.login.rememberMe')}
                 accessibilityState={{ checked: value }}
               >
                 <View
@@ -104,7 +105,7 @@ export function LoginForm() {
                   )}
                 </View>
                 <Text style={[typography.body, { color: colors.textSecondary }]}>
-                  Remember me
+                  {t('auth.login.rememberMe')}
                 </Text>
               </TouchableOpacity>
             )}
@@ -114,10 +115,10 @@ export function LoginForm() {
             onPress={handleMagicLink}
             disabled={isSubmitting}
             accessibilityRole="button"
-            accessibilityLabel="Sign in with email link"
+            accessibilityLabel={t('auth.login.magicLinkButton')}
           >
             <Text style={[typography.label, { color: colors.primary }]}>
-              Sign in with email link
+              {t('auth.login.magicLinkButton')}
             </Text>
           </TouchableOpacity>
         </View>
@@ -133,14 +134,14 @@ export function LoginForm() {
             },
           ]}
           accessibilityRole="button"
-          accessibilityLabel="Sign in"
+          accessibilityLabel={t('auth.login.submitButton')}
           accessibilityState={{ disabled: isSubmitting }}
         >
           {isSubmitting ? (
             <ActivityIndicator color={colors.primaryForeground} />
           ) : (
             <Text style={[typography.button, { color: colors.primaryForeground }]}>
-              Sign In
+              {t('auth.login.submitButton')}
             </Text>
           )}
         </TouchableOpacity>
@@ -149,7 +150,7 @@ export function LoginForm() {
       <View style={styles.divider}>
         <View style={[styles.dividerLine, { backgroundColor: colors.border }]} />
         <Text style={[styles.dividerText, typography.bodySmall, { color: colors.textTertiary }]}>
-          or continue with
+          {t('auth.login.orContinueWith')}
         </Text>
         <View style={[styles.dividerLine, { backgroundColor: colors.border }]} />
       </View>
@@ -158,22 +159,22 @@ export function LoginForm() {
 
       <View style={styles.signupContainer}>
         <Text style={[typography.body, { color: colors.textSecondary }]}>
-          Don't have an account?{' '}
+          {t('auth.login.noAccount')}{' '}
         </Text>
         <TouchableOpacity
           onPress={() => router.push('/(auth)/signup')}
           accessibilityRole="link"
-          accessibilityLabel="Sign up"
+          accessibilityLabel={t('auth.login.signUp')}
         >
           <Text style={[typography.label, { color: colors.primary }]}>
-            Sign up
+            {t('auth.login.signUp')}
           </Text>
         </TouchableOpacity>
       </View>
 
       <View style={styles.trustContainer}>
         <Text style={[typography.bodySmall, { color: colors.textTertiary }]}>
-          🔒 Privacy-first. No bank access required.
+          🔒 {t('auth.login.trustElement')}
         </Text>
       </View>
     </View>

@@ -1,30 +1,23 @@
 'use client';
 
-import { useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { useSession } from '@/lib/auth-client';
+import { useTranslation } from 'react-i18next';
+import { useAuthRedirect } from '@/hooks/use-auth-redirect';
+import { LoadingSpinner } from '@/components/ui/loading-spinner';
 
 export default function Home() {
-  const router = useRouter();
-  const { data: session, isPending } = useSession();
+  const { t } = useTranslation();
+  const { isPending } = useAuthRedirect();
 
-  useEffect(() => {
-    if (!isPending) {
-      if (session) {
-        router.replace('/dashboard');
-      } else {
-        router.replace('/login');
-      }
-    }
-  }, [session, isPending, router]);
-
-  // Show loading state while checking session
-  return (
-    <div className="min-h-screen flex items-center justify-center bg-[var(--background)]">
-      <div className="flex flex-col items-center gap-4">
-        <div className="w-8 h-8 border-2 border-[var(--primary)] border-t-transparent rounded-full animate-spin" />
-        <p className="text-[var(--text-secondary)] text-sm">Loading...</p>
+  if (isPending) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="flex flex-col items-center gap-4">
+          <LoadingSpinner size="lg" />
+          <p className="text-muted-foreground text-sm">{t('common.loading')}</p>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
+
+  return null;
 }

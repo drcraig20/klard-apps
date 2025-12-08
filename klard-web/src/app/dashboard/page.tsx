@@ -1,54 +1,51 @@
 'use client';
 
-import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useSession, signOut } from '@/lib/auth-client';
+import { useTranslation } from 'react-i18next';
+import { useAuthRedirect } from '@/hooks/use-auth-redirect';
+import { signOut } from '@/lib/auth-client';
+import { LoadingSpinner } from '@/components/ui/loading-spinner';
 
 export default function DashboardPage() {
+  const { t } = useTranslation();
   const router = useRouter();
-  const { data: session, isPending } = useSession();
-
-  useEffect(() => {
-    if (!isPending && !session) {
-      router.replace('/login');
-    }
-  }, [session, isPending, router]);
+  const { session, isPending } = useAuthRedirect({ requireAuth: true });
 
   async function handleSignOut() {
     await signOut();
     router.replace('/login');
   }
 
-  // Show loading while checking session
   if (isPending) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[var(--background)]">
-        <div className="w-8 h-8 border-2 border-[var(--primary)] border-t-transparent rounded-full animate-spin" />
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <LoadingSpinner size="lg" />
       </div>
     );
   }
 
-  // Don't render if not authenticated (will redirect)
   if (!session) {
     return null;
   }
 
+  const userName = session.user?.name ?? session.user?.email ?? '';
+
   return (
-    <div className="min-h-screen bg-[var(--background)] p-8">
+    <div className="min-h-screen bg-background p-8">
       <div className="max-w-4xl mx-auto">
         <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-semibold text-[var(--foreground)]">
-            Dashboard
+          <h1 className="text-3xl font-semibold text-foreground">
+            {t('dashboard.title')}
           </h1>
           <button
             onClick={handleSignOut}
-            className="px-4 py-2 text-sm font-medium text-[var(--text-secondary)] hover:text-[var(--foreground)] transition-colors"
+            className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
           >
-            Sign out
+            {t('dashboard.signOut')}
           </button>
         </div>
-        <p className="text-[var(--text-secondary)]">
-          Welcome back, {session.user?.name ?? session.user?.email}! Your subscription management dashboard is coming soon.
+        <p className="text-muted-foreground">
+          {t('dashboard.welcome', { name: userName })}
         </p>
       </div>
     </div>

@@ -1,6 +1,7 @@
 import { Text } from 'react-native';
 import { Tabs } from 'expo-router';
 import { useThemeColors } from '@/hooks';
+import { t } from '@/lib/i18n';
 
 export default function TabsLayout() {
   const colors = useThemeColors();
@@ -20,21 +21,21 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="dashboard"
         options={{
-          title: 'Dashboard',
+          title: t('navigation.dashboard'),
           tabBarIcon: ({ color }) => <TabBarIcon name="home" color={color} />,
         }}
       />
       <Tabs.Screen
         name="subscriptions"
         options={{
-          title: 'Subscriptions',
+          title: t('navigation.subscriptions'),
           tabBarIcon: ({ color }) => <TabBarIcon name="list" color={color} />,
         }}
       />
       <Tabs.Screen
         name="settings"
         options={{
-          title: 'Settings',
+          title: t('navigation.settings'),
           tabBarIcon: ({ color }) => <TabBarIcon name="settings" color={color} />,
         }}
       />
