@@ -32,11 +32,14 @@ export function useAuthRedirect(options: UseAuthRedirectOptions = {}): UseAuthRe
 
     const isAuthenticated = !!session;
 
-    if (requireAuth && !isAuthenticated) {
+    if (!isAuthenticated) {
+      // Unauthenticated users always go to login
       router.replace(unauthenticatedRoute);
-    } else if (!requireAuth && isAuthenticated) {
+    } else if (!requireAuth) {
+      // Authenticated user on guest-only page (like index) → redirect to dashboard
       router.replace(authenticatedRoute);
     }
+    // Authenticated user on protected page (requireAuth: true) → stay on page
   }, [session, isPending, requireAuth, authenticatedRoute, unauthenticatedRoute, router]);
 
   return {

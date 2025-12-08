@@ -4,7 +4,7 @@ import { useThemeColors, useAuthRedirect } from '@/hooks';
 import { LoadingScreen } from '@/components/common';
 import { signOut } from '@/lib/auth-client';
 import { typography } from '@/styles';
-import { styles } from './dashboard.styles';
+import { styles } from '@/styles/screens/dashboard.styles';
 
 export default function DashboardScreen() {
   const colors = useThemeColors();

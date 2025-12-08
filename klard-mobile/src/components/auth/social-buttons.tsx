@@ -4,11 +4,10 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  useColorScheme,
   ActivityIndicator,
 } from 'react-native';
-import Svg, { Path, Circle } from 'react-native-svg';
-import { Colors } from '@/constants/colors';
+import Svg, { Path } from 'react-native-svg';
+import { useThemeColors } from '@/hooks';
 import { signIn } from '@/lib/auth-client';
 
 interface SocialButtonsProps {
@@ -18,8 +17,7 @@ interface SocialButtonsProps {
 
 export function SocialButtons({ disabled, onError }: SocialButtonsProps) {
   const [loadingProvider, setLoadingProvider] = useState<string | null>(null);
-  const colorScheme = useColorScheme() ?? 'light';
-  const colors = Colors[colorScheme];
+  const colors = useThemeColors();
 
   async function handleSocialLogin(provider: 'google' | 'apple') {
     try {
