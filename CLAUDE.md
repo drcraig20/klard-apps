@@ -120,6 +120,16 @@ klard-apps/
 
 All packages use TypeScript 5.9.3 with **strict mode**.
 
+### Mobile: Expo SDK First
+
+For klard-mobile, **always prefer Expo SDK packages over React Native core imports**:
+- Use `expo-linking` instead of `react-native` Linking
+- Use `expo-image` instead of `react-native` Image
+- Use `expo-secure-store` instead of `react-native-async-storage`
+- Use `expo-localization` instead of `react-native-localize`
+
+Full guidance in `klard-mobile/AGENTS.md` under "MANDATORY: Expo SDK First".
+
 ### Path Aliases
 
 All packages use `@/*` → `./src/*`:

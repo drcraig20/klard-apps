@@ -456,7 +456,7 @@ const styles = StyleSheet.create({
   },
   button: {
     paddingVertical: 18,
-    paddingHorizontal: 32,
+paddingHorizontal: 32,
     borderRadius: 9999, // Full pill
     alignItems: 'center',
     justifyContent: 'center',

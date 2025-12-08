@@ -1,7 +1,12 @@
 import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
-import { Controller } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'expo-router';
-import { useThemeColors, useLoginForm } from '@/hooks';
+import * as Linking from 'expo-linking';
+import { LoginSchema, MagicLinkSchema, type LoginInput } from '@klard-apps/commons';
+import { signIn } from '@/lib/auth-client';
+import { useThemeColors } from '@/hooks';
+import { useAuthUIStore } from '@/stores';
 import { typography } from '@/styles';
 import { t } from '@/lib/i18n';
 import { InputField } from '../input-field';
@@ -15,21 +20,90 @@ export function LoginForm() {
   const colors = useThemeColors();
 
   const {
-    formState,
+    formState: uiState,
     errorMessage,
     magicLinkEmail,
-    isSubmitting,
-    control,
-    errors,
-    handlePasswordLogin,
-    handleMagicLink,
-    handleSocialError,
-    resetToIdle,
+    setSubmitting,
+    setMagicLinkSent,
+    setError,
     clearError,
-  } = useLoginForm();
+    reset,
+  } = useAuthUIStore();
 
-  if (formState === 'magicLinkSent' && magicLinkEmail) {
-    return <MagicLinkSent email={magicLinkEmail} onBack={resetToIdle} />;
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    getValues,
+  } = useForm<LoginInput>({
+    resolver: zodResolver(LoginSchema),
+    defaultValues: {
+      email: '',
+      password: '',
+      rememberMe: false,
+    },
+  });
+
+  const isSubmitting = uiState === 'submitting';
+
+  async function onSubmit(data: LoginInput) {
+    try {
+      setSubmitting();
+
+      const result = await signIn.email({
+        email: data.email,
+        password: data.password,
+      });
+
+      if (result.error) {
+        throw new Error(result.error.message || 'Invalid email or password');
+      }
+
+      router.replace('/(tabs)/dashboard');
+    } catch (error) {
+      setError(
+        error instanceof Error ? error.message : 'An unexpected error occurred'
+      );
+    }
+  }
+
+  async function handleMagicLink() {
+    const email = getValues('email');
+    const validation = MagicLinkSchema.safeParse({ email });
+
+    if (!validation.success) {
+      setError('Please enter a valid email to receive a magic link');
+      return;
+    }
+
+    try {
+      setSubmitting();
+
+      const callbackURL = Linking.createURL('(tabs)/dashboard');
+
+      const result = await signIn.magicLink({
+        email: validation.data.email,
+        callbackURL,
+      });
+
+      if (result.error) {
+        throw new Error(result.error.message || 'Failed to send magic link');
+      }
+
+      setMagicLinkSent(validation.data.email);
+    } catch (error) {
+      setError(
+        error instanceof Error ? error.message : 'Failed to send magic link'
+      );
+    }
+  }
+
+  function handleSocialError(error: string) {
+    setError(error);
+  }
+
+  if (uiState === 'magicLinkSent' && magicLinkEmail) {
+    return <MagicLinkSent email={magicLinkEmail} onBack={reset} />;
   }
 
   return (
@@ -124,7 +198,7 @@ export function LoginForm() {
         </View>
 
         <TouchableOpacity
-          onPress={handlePasswordLogin}
+          onPress={handleSubmit(onSubmit)}
           disabled={isSubmitting}
           style={[
             styles.submitButton,
