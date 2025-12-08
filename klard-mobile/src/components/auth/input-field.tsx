@@ -56,8 +56,8 @@ export function InputField({
           style={[
             styles.input,
             { color: colors.foreground },
-            icon && styles.inputWithIcon,
-            isPassword && styles.inputWithToggle,
+            icon ? styles.inputWithIcon : undefined,
+            isPassword ? styles.inputWithToggle : undefined,
             style,
           ]}
           placeholderTextColor={colors.mutedForeground}

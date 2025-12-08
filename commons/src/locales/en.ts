@@ -30,11 +30,40 @@ export const en = {
       apple: "Apple",
       error: "Failed to sign in with {{provider}}. Please try again."
     },
+    signup: {
+      title: "Create account",
+      subtitle: "Start tracking your subscriptions",
+      nameLabel: "Full name",
+      namePlaceholder: "John Doe",
+      emailLabel: "Email",
+      emailPlaceholder: "you@example.com",
+      passwordLabel: "Password",
+      passwordPlaceholder: "Create a password",
+      confirmPasswordLabel: "Confirm password",
+      confirmPasswordPlaceholder: "Re-enter your password",
+      termsLabel: "I agree to the Terms of Service and Privacy Policy",
+      termsLink: "Terms of Service",
+      privacyLink: "Privacy Policy",
+      submitButton: "Create Account",
+      submitting: "Creating account...",
+      orContinueWith: "or continue with",
+      haveAccount: "Already have an account?",
+      signIn: "Sign in",
+      trustElement: "Privacy-first. No bank access required.",
+      passwordStrength: {
+        weak: "Weak",
+        fair: "Fair",
+        good: "Good",
+        strong: "Strong",
+      },
+    },
     errors: {
       invalidCredentials: "Invalid email or password",
       magicLinkFailed: "Failed to send magic link",
       unexpectedError: "An unexpected error occurred",
-      invalidEmailForMagicLink: "Please enter a valid email to receive a magic link"
+      invalidEmailForMagicLink: "Please enter a valid email to receive a magic link",
+      signupFailed: "Failed to create account",
+      accountExists: "An account with this email already exists"
     }
   },
   dashboard: {

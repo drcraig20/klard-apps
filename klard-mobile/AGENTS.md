@@ -105,6 +105,30 @@ Internationalization (i18n)
 - Ensure all user-facing text is internationalized and supports localization.
 
 
+## MANDATORY: Expo SDK First
+
+**ALWAYS prefer Expo SDK packages over React Native core imports:**
+
+| Instead of (React Native) | Use (Expo SDK) |
+|--------------------------|----------------|
+| `react-native-safe-area-context` | Use but prefer `expo-constants` for status bar |
+| `react-native` Linking | `expo-linking` |
+| `react-native` Image | `expo-image` |
+| `react-native-async-storage` | `expo-secure-store` (for sensitive data) |
+| `react-native-permissions` | `expo-permissions` |
+| `react-native-fs` | `expo-file-system` |
+| `react-native-camera` | `expo-camera` |
+| `react-native-maps` | `expo-maps` or `react-native-maps` via Expo |
+| `react-native-device-info` | `expo-device` |
+| `react-native-localize` | `expo-localization` |
+
+**Only use React Native core when:**
+1. Expo SDK has no equivalent package
+2. The Expo package lacks required functionality
+3. Explicit documentation states React Native is required
+
+**Why:** Expo SDK packages are optimized for Expo managed workflow, have better TypeScript support, and receive coordinated updates.
+
 Key Conventions
 1. Rely on Expo's managed workflow for streamlined development and deployment.
 2. Prioritize Mobile Web Vitals (Load Time, Jank, and Responsiveness).

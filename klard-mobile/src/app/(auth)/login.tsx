@@ -5,8 +5,8 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
-  Image,
 } from 'react-native';
+import { Image } from 'expo-image';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useThemeColors } from '@/hooks';
 import { LoginForm } from '@/components/auth';
@@ -33,7 +33,7 @@ export default function LoginScreen() {
             <Image
               source={require('../../../assets/icon.png')}
               style={styles.logo}
-              resizeMode="contain"
+              contentFit="contain"
             />
             <Text style={[styles.logoText, { color: colors.primary }]}>
               Klard
