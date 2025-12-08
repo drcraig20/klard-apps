@@ -1,92 +1,114 @@
 # Klard Implementation Summary
 
-Tracks completed implementation work across the Klard platform.
+Completed implementation work across the Klard platform.
 
 ---
 
 ## Login & Authentication
 
-**Completed:** 2025-12-08
-**Platforms:** Web + Mobile
+Implemented full authentication flow for web and mobile with email/password, magic links, and social OAuth. Both platforms share validation schemas from commons and use better-auth for the auth client.
 
-### What Was Done
+| | |
+|---|---|
+| **Date** | 2025-12-08 |
+| **Platforms** | Web, Mobile |
+| **Source** | `2025-12-07-login-screen-*.md` (archived) |
 
-**Commons:**
-- Auth validation schemas (`LoginSchema`, `MagicLinkSchema`) with Zod
+| Package | Implementation |
+|---------|---------------|
+| commons | Zod schemas: `LoginSchema`, `MagicLinkSchema` |
+| klard-web | Split-screen layout, glassmorphism card, better-auth client |
+| klard-mobile | KeyboardAvoidingView, SafeAreaView, better-auth/expo with SecureStore |
 
-**Web (klard-web):**
-- Split-screen auth layout with glassmorphism card
-- Login page with InputField, SocialButtons, AuthIllustration components
-- Klard design system CSS tokens in globals.css
-- better-auth client with magicLinkClient plugin
-
-**Mobile (klard-mobile):**
-- Login screen with KeyboardAvoidingView and SafeAreaView
-- InputField, SocialButtons (with SVG icons), LoginForm components
-- Design tokens (colors.ts) for light/dark themes
-- better-auth/expo client with SecureStore and expoClient plugin
-
-**Auth Methods:**
-- Email/password login
-- Magic link with deep link callbacks (Expo Go + web)
-- Google and Apple OAuth (configured, requires server setup)
-
-### Source Documents
-- `docs/plans/2025-12-07-login-screen-design.md` (archived)
-- `docs/plans/2025-12-07-login-screen-implementation.md` (archived)
+**Auth Methods:** Email/password, Magic link (deep links), Google/Apple OAuth (configured)
 
 ---
 
-## Mobile Separation of Concerns Refactor
+## Mobile Separation of Concerns
 
-**Completed:** 2025-12-08
-**Platforms:** Mobile
+Refactored mobile codebase to follow separation of concerns with shared styles, custom hooks, and reusable components. Extracted common patterns to reduce duplication across screens.
 
-### What Was Done
+| | |
+|---|---|
+| **Date** | 2025-12-08 |
+| **Platforms** | Mobile |
+| **Source** | `2025-12-08-separation-of-concerns-refactor.md` (archived) |
 
-**Shared Styles (`src/styles/`):**
-- Design tokens: `colors.ts`, `typography.ts`, `spacing.ts`
-- Reusable patterns: `common.ts` (containers, rows, buttons, cards)
+| Category | Items |
+|----------|-------|
+| Styles (`src/styles/`) | `colors.ts`, `typography.ts`, `spacing.ts`, `common.ts` |
+| Hooks (`src/hooks/`) | `useThemeColors`, `useAuthRedirect`, `useLoginForm` |
+| Components | `LoadingScreen`, `PlaceholderScreen`, `MagicLinkSent`, `ErrorBanner`, `ErrorBoundary` |
 
-**Custom Hooks (`src/hooks/`):**
-- `useThemeColors` - System theme-aware color selection
-- `useAuthRedirect` - Auth navigation with configurable routes
-- `useLoginForm` - Form state + validation (react-hook-form + Zod)
+**Bug Fix:** `useAuthRedirect` - added missing redirect for unauthenticated users
 
-**Shared Components:**
-- `LoadingScreen`, `PlaceholderScreen` in `src/components/common/`
-- `MagicLinkSent`, `ErrorBanner` in `src/components/auth/`
-- `ErrorBoundary` for global error handling
+---
 
-**Refactored:**
-- `LoginForm` - Now uses `useLoginForm` hook, styles extracted to separate file
-- All screens updated to use shared components and hooks
+## Web SOLID/DRY Refactoring
 
-**Bug Fix:**
-- `useAuthRedirect` - Fixed missing redirect for unauthenticated users on index page
+Major refactoring to achieve SOLID compliance and eliminate code duplication. Decomposed the 298-line LoginForm into focused components, added Zustand for state management, and integrated i18n for internationalization.
 
-### Source Documents
-- `klard-mobile/docs/plans/2025-12-08-separation-of-concerns-refactor.md` (archived)
+| | |
+|---|---|
+| **Date** | 2025-12-08 |
+| **Platforms** | Web |
+| **Source** | `2025-12-08-klard-web-refactoring.md` (deleted) |
+
+| Phase | Changes |
+|-------|---------|
+| 0. shadcn/ui | Initialized with Klard tokens, button variants (`klard`, `social`) |
+| 1. UI Components | `LoadingSpinner`, `ErrorBanner`, `SocialButton`, icons barrel |
+| 2. Hooks | `useAuthRedirect`, `useAuthError` |
+| 3. LoginForm SRP | Extracted `MagicLinkSuccess`, `SubmitButton` (~200 lines from 298) |
+| 4. State | Zustand `useAuthUIStore` |
+| 5. i18n | i18next + react-i18next with `I18nProvider` |
+| 6. Cleanup | Barrel exports, data-driven `SocialButtons` (OCP) |
+
+
+---
+
+## Shared Internationalization (i18n)
+
+Centralized all user-facing strings in commons package with platform-specific i18n implementations. Web uses i18next hooks, mobile uses i18n-js with expo-localization for device locale detection.
+
+| | |
+|---|---|
+| **Date** | 2025-12-08 |
+| **Platforms** | Commons, Web, Mobile |
+
+| Package | Implementation |
+|---------|---------------|
+| commons | `src/locales/en.ts` - shared translations, `TranslationKeys` type |
+| klard-web | i18next + react-i18next, imports from commons |
+| klard-mobile | expo-localization + i18n-js, `t()` helper function |
+
+**Translation Keys:**
+
+| Namespace | Content |
+|-----------|---------|
+| `auth.login.*` | Form labels, buttons, placeholders |
+| `auth.magicLink.*` | Success messages |
+| `auth.errors.*` | Error messages |
+| `dashboard.*` | Welcome, sign out |
+| `common.*` | Loading, actions |
+| `navigation.*` | Tab labels |
 
 ---
 
 <!--
 ## [Feature Name]
 
-**Completed:** YYYY-MM-DD
-**Platforms:** Web | Mobile | Both
+Short summary paragraph describing what was done and why.
 
-### What Was Done
+| | |
+|---|---|
+| **Date** | YYYY-MM-DD |
+| **Platforms** | Web, Mobile |
+| **Source** | `plan-file.md` |
 
-**Commons:**
-- Shared code added
-
-**Web:**
-- Components and pages created
-
-**Mobile:**
-- Screens and components created
-
-### Source Documents
-- List design/implementation docs used
+| Package | Implementation |
+|---------|---------------|
+| commons | ... |
+| klard-web | ... |
+| klard-mobile | ... |
 -->

@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity } from 'react-native';
 import { useThemeColors } from '@/hooks';
 import { typography } from '@/styles';
+import { t } from '@/lib/i18n';
 import { styles } from './magic-link-sent.styles';
 
 interface MagicLinkSentProps {
@@ -17,18 +18,18 @@ export function MagicLinkSent({ email, onBack }: MagicLinkSentProps) {
         <Text style={{ color: colors.accentSuccess, fontSize: 32 }}>✓</Text>
       </View>
       <Text style={[styles.title, typography.h2, { color: colors.foreground }]}>
-        Check your email
+        {t('auth.magicLink.title')}
       </Text>
       <Text style={[styles.message, typography.body, { color: colors.textSecondary }]}>
-        We sent a login link to {email}
+        {t('auth.magicLink.description')} {email}
       </Text>
       <TouchableOpacity
         onPress={onBack}
         accessibilityRole="button"
-        accessibilityLabel="Back to login"
+        accessibilityLabel={t('auth.magicLink.backToLogin')}
       >
         <Text style={[styles.backLink, typography.label, { color: colors.primary }]}>
-          Back to login
+          {t('auth.magicLink.backToLogin')}
         </Text>
       </TouchableOpacity>
     </View>

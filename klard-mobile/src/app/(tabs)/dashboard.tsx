@@ -5,6 +5,7 @@ import { LoadingScreen } from '@/components/common';
 import { signOut } from '@/lib/auth-client';
 import { typography } from '@/styles';
 import { styles } from '@/styles/screens/dashboard.styles';
+import { t } from '@/lib/i18n';
 
 export default function DashboardScreen() {
   const colors = useThemeColors();
@@ -22,20 +23,20 @@ export default function DashboardScreen() {
         <View style={styles.header}>
           <View>
             <Text style={[styles.greeting, typography.h2, { color: colors.foreground }]}>
-              Welcome back, {userName}!
+              {t('dashboard.welcome', { name: userName })}
             </Text>
             <Text style={[typography.body, { color: colors.textSecondary }]}>
-              Your subscription dashboard
+              {t('dashboard.title')}
             </Text>
           </View>
           <TouchableOpacity
             onPress={() => signOut()}
             style={styles.signOutButton}
             accessibilityRole="button"
-            accessibilityLabel="Sign out"
+            accessibilityLabel={t('dashboard.signOut')}
           >
             <Text style={[typography.label, { color: colors.primary }]}>
-              Sign Out
+              {t('dashboard.signOut')}
             </Text>
           </TouchableOpacity>
         </View>

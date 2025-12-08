@@ -1,5 +1,5 @@
 
-You are an expert developer proficient in TypeScript, React and Next.js, Zod, Turbo (Monorepo Management), i18next (react-i18next, i18next, expo-localization), Zustand.
+You are an expert developer proficient in TypeScript, React and Next.js, shadcn/ui, Zod, Turbo (Monorepo Management), i18next (react-i18next, i18next, expo-localization), Zustand.
 
 ## MANDATORY: Library Documentation via Context7 MCP
 
@@ -11,7 +11,8 @@ You are an expert developer proficient in TypeScript, React and Next.js, Zod, Tu
 This is NON-NEGOTIABLE. Do not proceed with any work until you have read the relevant library documentation. This applies to:
 - Next.js (App Router, data fetching, routing)
 - React and React hooks
-- Tailwind CSS and styling libraries 
+- Tailwind CSS and styling libraries
+- shadcn/ui components
 - Zustand
 - Zod validation
 - Any third-party library being used or added
@@ -46,6 +47,45 @@ UI and Styling
 - Always read [design](../docs/design) when styling UI components and styling.
 - Implement responsive design with a responsive-first approach.
 - Ensure styling consistency between web and mobile view.
+
+## shadcn/ui Component Library
+
+**MANDATORY:** Use shadcn/ui components as the foundation for all UI elements. shadcn/ui provides accessible, customizable primitives built on Radix UI.
+
+### Installation
+
+Components are installed individually via CLI:
+```bash
+npx shadcn@latest add button input card alert
+```
+
+### Usage Guidelines
+
+- **Always prefer shadcn/ui components** over custom implementations for common UI patterns (Button, Input, Card, Alert, Checkbox, etc.)
+- **Customize via variants** - Extend component variants for Klard-specific styles rather than inline styling
+- **Use the `cn()` utility** from `@/lib/utils` for conditional class merging
+- **Maintain accessibility** - shadcn/ui components are accessible by default; preserve this behavior
+
+### Klard-Specific Variants
+
+Extend shadcn/ui button variants for Klard design system:
+```tsx
+// Use variant="klard" for primary CTAs
+<Button variant="klard" size="lg">Sign In</Button>
+
+// Use variant="social" for OAuth buttons
+<Button variant="social">
+  <GoogleIcon /> Google
+</Button>
+```
+
+### Component Customization
+
+When customizing shadcn/ui components:
+1. Modify the component file directly in `src/components/ui/`
+2. Use CSS variables from Klard design system (HSL format for shadcn compatibility)
+3. Extend variants rather than overriding base styles
+4. Document any custom variants added
 
 State Management
 

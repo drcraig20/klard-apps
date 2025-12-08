@@ -10,6 +10,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useThemeColors } from '@/hooks';
 import { LoginForm } from '@/components/auth';
+import { t } from '@/lib/i18n';
 
 export default function LoginScreen() {
   const colors = useThemeColors();
@@ -42,10 +43,10 @@ export default function LoginScreen() {
           {/* Header */}
           <View style={styles.header}>
             <Text style={[styles.title, { color: colors.foreground }]}>
-              Welcome back
+              {t('auth.login.title')}
             </Text>
             <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
-              Sign in to your account
+              {t('auth.login.subtitle')}
             </Text>
           </View>
 

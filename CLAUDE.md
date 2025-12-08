@@ -25,6 +25,17 @@ This is NON-NEGOTIABLE. These files contain coding standards, patterns, and mand
 
 This is NON-NEGOTIABLE. Skills contain proven techniques that prevent mistakes.
 
+## MANDATORY: SOLID and DRY Principles
+
+**ALL code must adhere to SOLID principles and DRY (Don't Repeat Yourself).**
+
+Before any implementation, planning, or refactoring work:
+1. Activate the `solid-design-principles` skill using `Skill(solid-design-principles)`
+2. Follow the skill's checklist for every component/class
+3. Extract repeated code into reusable components/hooks/utilities
+
+This is NON-NEGOTIABLE. SOLID violations compound and create technical debt.
+
 ## MANDATORY: Parallel Sub-Agents
 
 **USE parallel sub-agents via Task tool** when implementing tasks with independent subtasks:
@@ -148,6 +159,10 @@ Light-first design with dark theme support. Key colors:
 Design features: glassmorphism effects, soft shadows, Inter/SF Pro typography.
 
 Full specs in `docs/design/Klard Design System.md`.
+
+## Git Commit Preferences
+
+- **Never add co-author attribution** - Do not include `Co-Authored-By: Claude` or "🤖 Generated with [Claude Code](https://claude.com/claude-code)" or similar lines in commit messages
 
 ## External Services
 
