@@ -1,1 +1,2 @@
-export * from './colors';
+// Re-export from styles for backward compatibility
+export * from '../styles/colors';
