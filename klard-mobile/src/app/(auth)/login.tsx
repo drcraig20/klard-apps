@@ -1,29 +1,102 @@
-import { View, Text, StyleSheet } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+  useColorScheme,
+  Image,
+} from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { Colors } from '@/constants/colors';
+import { LoginForm } from '@/components/auth/login-form';
 
 export default function LoginScreen() {
+  const colorScheme = useColorScheme() ?? 'light';
+  const colors = Colors[colorScheme];
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.text}>Login Screen</Text>
-      <Text style={styles.subtitle}>Coming soon...</Text>
-    </View>
+    <SafeAreaView
+      style={[styles.safeArea, { backgroundColor: colors.background }]}
+    >
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.keyboardView}
+      >
+        <ScrollView
+          contentContainerStyle={styles.scrollContent}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+        >
+          {/* Logo */}
+          <View style={styles.logoContainer}>
+            <Image
+              source={require('../../../assets/icon.png')}
+              style={styles.logo}
+              resizeMode="contain"
+            />
+            <Text style={[styles.logoText, { color: colors.primary }]}>
+              Klard
+            </Text>
+          </View>
+
+          {/* Header */}
+          <View style={styles.header}>
+            <Text style={[styles.title, { color: colors.foreground }]}>
+              Welcome back
+            </Text>
+            <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
+              Sign in to your account
+            </Text>
+          </View>
+
+          {/* Form */}
+          <LoginForm />
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
+  safeArea: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#0F172A',
   },
-  text: {
+  keyboardView: {
+    flex: 1,
+  },
+  scrollContent: {
+    flexGrow: 1,
+    paddingHorizontal: 24,
+    paddingTop: 24,
+    paddingBottom: 48,
+  },
+  logoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 32,
+  },
+  logo: {
+    width: 40,
+    height: 40,
+    marginRight: 8,
+  },
+  logoText: {
     fontSize: 24,
     fontWeight: '600',
-    color: '#F8FAFC',
+  },
+  header: {
+    alignItems: 'center',
+    marginBottom: 32,
+  },
+  title: {
+    fontSize: 32,
+    fontWeight: '600',
     marginBottom: 8,
   },
   subtitle: {
     fontSize: 16,
-    color: '#94A3B8',
   },
 });

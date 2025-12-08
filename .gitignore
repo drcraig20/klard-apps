@@ -79,3 +79,4 @@ test-results/
 
 # turbo
 .turbo/
+/klard-mobile/.env.example

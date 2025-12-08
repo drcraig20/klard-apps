@@ -15,6 +15,31 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is NON-NEGOTIABLE. These files contain coding standards, patterns, and mandatory Context7 MCP requirements for fetching library documentation.
 
+## MANDATORY: Skill Evaluation
+
+**BEFORE any implementation work**, you MUST evaluate ALL available skills:
+
+1. For each skill, determine: `[skill-name] - YES/NO - [reason]`
+2. If ANY skill matches → Use `Skill(skill-name)` tool for EACH relevant skill
+3. Only proceed with implementation AFTER activating matching skills
+
+This is NON-NEGOTIABLE. Skills contain proven techniques that prevent mistakes.
+
+## MANDATORY: Parallel Sub-Agents
+
+**USE parallel sub-agents via Task tool** when implementing tasks with independent subtasks:
+
+- Launch multiple agents concurrently for independent work (use single message with multiple Task tool calls)
+- Use `subagent_type` appropriate for the task (Explore, Plan, code-reviewer, etc.)
+- Run code review agents after significant implementations
+- Use background agents (`run_in_background: true`) for long-running tasks
+
+**When to use parallel agents:**
+- Multiple independent files need changes
+- Research + implementation can happen concurrently
+- Code review while continuing other work
+- Exploring multiple codepaths simultaneously
+
 ## Required: Library Documentation
 
 Always use Context7 MCP to read about any library before you start any planning or implementation:
@@ -127,7 +152,7 @@ Full specs in `docs/design/Klard Design System.md`.
 ## External Services
 
 Backend services are in separate repositories:
-- Auth: klard-auth (JWT/OIDC)
+- **Auth: klard-auth (IMPLEMENTED)** - Uses better-auth library, handles JWT/OIDC authentication
 - Core API: subscriptions CRUD
 - Card Service: BurnerCard issuing (Airwallex/Lithic/Stripe)
 - Analytics: PostHog
