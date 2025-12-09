@@ -89,6 +89,79 @@ export const en = {
     settings: "Settings",
     subscriptions: "Subscriptions",
     profile: "Profile"
+  },
+  onboarding: {
+    navigation: {
+      skip: "Skip",
+      next: "Next",
+      getStarted: "Get Started"
+    },
+    welcome: {
+      slides: {
+        track: {
+          headline: "Track all your subscriptions",
+          body: "See every recurring payment in one place. Never forget a renewal date again."
+        },
+        protect: {
+          headline: "Protect with BurnerCards",
+          body: "Create virtual cards that auto-block unwanted charges. You control the rules."
+        },
+        save: {
+          headline: "Save money automatically",
+          body: "Get alerts on price increases and discover cheaper alternatives."
+        }
+      }
+    },
+    addSubscription: {
+      stepIndicator: "Step 1 of 2 — Add your first subscription",
+      headline: "What's your first subscription?",
+      searchPlaceholder: "Search services...",
+      labels: {
+        price: "Price",
+        billingCycle: "Billing Cycle",
+        renewalDate: "Next Renewal Date",
+        category: "Category",
+        cancellationUrl: "Cancellation Link (optional)"
+      },
+      helperText: {
+        autoFilled: "Auto-filled • Edit if incorrect",
+        optional: "Optional"
+      },
+      billingCycles: {
+        monthly: "Monthly",
+        annual: "Annual"
+      },
+      buttons: {
+        addSubscription: "Add Subscription",
+        skipForNow: "Skip for now"
+      },
+      toast: {
+        success: "{{serviceName}} added! You'll be reminded before it renews."
+      }
+    },
+    burnerCardTutorial: {
+      stepIndicator: "Step 2 of 2 — Protect your payments",
+      headline: "Meet BurnerCards",
+      body: "Create disposable virtual cards that protect you from unwanted charges. Set limits, expiry rules, and auto-block renewals.",
+      features: [
+        {
+          title: "Block surprise renewals",
+          description: "Stop charges before they happen"
+        },
+        {
+          title: "Set expiry rules",
+          description: "Cards auto-lock after trial periods"
+        },
+        {
+          title: "Control spending limits",
+          description: "Cap how much a service can charge"
+        }
+      ],
+      buttons: {
+        createBurnerCard: "Create Your First BurnerCard",
+        exploreDashboard: "Explore Dashboard First"
+      }
+    }
   }
 } as const;
 
