@@ -5,6 +5,7 @@ export const UserSchema = z.object({
   email: z.string().email(),
   name: z.string().min(1).optional(),
   avatarUrl: z.string().url().optional(),
+  hasOnboarded: z.boolean().default(false),
   createdAt: z.coerce.date(),
   updatedAt: z.coerce.date(),
 });

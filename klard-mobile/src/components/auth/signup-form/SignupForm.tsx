@@ -60,7 +60,8 @@ export function SignupForm() {
         throw new Error(result.error.message || t('auth.errors.signupFailed'));
       }
 
-      router.replace('/(tabs)/dashboard');
+      // New users need to complete onboarding
+      router.replace('/onboarding');
     } catch (error) {
       setError(
         error instanceof Error ? error.message : t('auth.errors.unexpectedError')

@@ -1,5 +1,5 @@
 import { createAuthClient } from 'better-auth/react';
-import { magicLinkClient } from 'better-auth/client/plugins';
+import { magicLinkClient, inferAdditionalFields } from 'better-auth/client/plugins';
 import { expoClient } from "@better-auth/expo/client";
 import * as SecureStore from 'expo-secure-store';
 
@@ -11,7 +11,15 @@ export const authClient = createAuthClient({
       scheme: "klard",
       storagePrefix: "klard",
       storage: SecureStore,
-    })
+    }),
+    inferAdditionalFields({
+      user: {
+        hasOnboarded: {
+          type: "boolean",
+          required: false,
+        },
+      },
+    }),
   ],
 });
 
@@ -20,4 +28,5 @@ export const {
   signUp,
   signOut,
   useSession,
+  updateUser,
 } = authClient;
