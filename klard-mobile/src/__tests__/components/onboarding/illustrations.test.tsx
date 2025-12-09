@@ -3,7 +3,8 @@ import { render } from '@testing-library/react-native';
 import {
   TrackIllustration,
   ProtectIllustration,
-  SaveIllustration
+  SaveIllustration,
+  BurnerCardIllustration
 } from '@/components/onboarding/illustrations';
 
 describe('Onboarding Illustrations', () => {
@@ -97,6 +98,36 @@ describe('Onboarding Illustrations', () => {
     });
   });
 
+  describe('BurnerCardIllustration', () => {
+    it('should render without error', () => {
+      const { getByLabelText } = render(<BurnerCardIllustration />);
+
+      const illustration = getByLabelText('Virtual BurnerCard with shield protection blocking unwanted charges');
+      expect(illustration).toBeTruthy();
+    });
+
+    it('should render with light theme', () => {
+      const { getByLabelText } = render(<BurnerCardIllustration theme="light" />);
+
+      const illustration = getByLabelText('Virtual BurnerCard with shield protection blocking unwanted charges');
+      expect(illustration).toBeTruthy();
+    });
+
+    it('should render with dark theme', () => {
+      const { getByLabelText } = render(<BurnerCardIllustration theme="dark" />);
+
+      const illustration = getByLabelText('Virtual BurnerCard with shield protection blocking unwanted charges');
+      expect(illustration).toBeTruthy();
+    });
+
+    it('should render with custom dimensions', () => {
+      const { getByLabelText } = render(<BurnerCardIllustration width={300} height={250} />);
+
+      const illustration = getByLabelText('Virtual BurnerCard with shield protection blocking unwanted charges');
+      expect(illustration).toBeTruthy();
+    });
+  });
+
   describe('Accessibility', () => {
     it('TrackIllustration should have accessibility label', () => {
       const { getByLabelText } = render(<TrackIllustration />);
@@ -114,6 +145,12 @@ describe('Onboarding Illustrations', () => {
       const { getByLabelText } = render(<SaveIllustration />);
 
       expect(getByLabelText('Upward trending arrow with dollar signs showing savings growth')).toBeTruthy();
+    });
+
+    it('BurnerCardIllustration should have accessibility label', () => {
+      const { getByLabelText } = render(<BurnerCardIllustration />);
+
+      expect(getByLabelText('Virtual BurnerCard with shield protection blocking unwanted charges')).toBeTruthy();
     });
   });
 });
