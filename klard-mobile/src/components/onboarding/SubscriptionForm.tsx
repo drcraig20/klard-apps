@@ -113,7 +113,7 @@ export function SubscriptionForm() {
     if (!result.success) {
       // Extract errors
       const fieldErrors: Record<string, string> = {};
-      result.error.errors.forEach((err) => {
+      result.error.issues.forEach((err) => {
         const field = err.path[0] as string;
         fieldErrors[field] = err.message;
       });

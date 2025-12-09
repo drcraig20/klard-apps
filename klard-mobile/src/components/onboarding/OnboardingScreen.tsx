@@ -287,7 +287,7 @@ export function OnboardingScreen({ onSkip }: OnboardingScreenProps) {
       {/* Skip button */}
       <Animated.View style={[styles.skipContainer, { opacity: fadeAnim }]}>
         <Pressable onPress={handleSkip} style={styles.skipButton}>
-          <Text style={styles.skipText}>Skip</Text>
+          <Text style={styles.skipText}>{en.onboarding.navigation.skip}</Text>
         </Pressable>
       </Animated.View>
 
@@ -350,7 +350,9 @@ export function OnboardingScreen({ onSkip }: OnboardingScreenProps) {
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
             >
-              <Text style={styles.buttonText}>{isLastSlide ? 'Get Started' : 'Next'}</Text>
+              <Text style={styles.buttonText}>
+                {isLastSlide ? en.onboarding.navigation.getStarted : en.onboarding.navigation.next}
+              </Text>
             </LinearGradient>
           </Pressable>
         </Animated.View>
