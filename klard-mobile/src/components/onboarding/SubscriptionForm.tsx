@@ -9,16 +9,17 @@ import {
   Alert,
   Platform,
 } from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
 import * as Haptics from 'expo-haptics';
 import { router } from 'expo-router';
 import {
   en,
-  POPULAR_SERVICES,
   AddSubscriptionSchema,
   SUBSCRIPTION_CATEGORIES,
+  formatCategoryUppercase,
+  formatCategoryLabel,
   type PopularService,
   type OnboardingBillingCycle,
   type SubscriptionCategory,
@@ -26,17 +27,14 @@ import {
 } from '@klard-apps/commons';
 import { useSubscriptionStore } from '@/stores/subscriptionStore';
 import { ServiceGrid } from './ServiceGrid';
+import { Colors } from '@/styles/colors';
 
-// Klard Design System Colors
+// Use dark theme colors (onboarding is always dark mode)
 const colors = {
-  background: '#0F172A',
+  ...Colors.dark,
+  primaryDark: Colors.dark.secondary,
   glassBg: 'rgba(30, 41, 59, 0.6)',
-  primary: '#15B5B0',
-  primaryDark: '#0D7C7A',
-  foreground: '#F8FAFC',
-  muted: '#94A3B8',
-  border: 'rgba(148, 163, 184, 0.12)',
-  error: '#EF4444',
+  error: Colors.dark.accentError,
 };
 
 /**
@@ -86,7 +84,7 @@ export function SubscriptionForm() {
   }, []);
 
   // Handle date picker
-  const handleDateChange = useCallback((_event: any, selectedDate?: Date) => {
+  const handleDateChange = useCallback((_event: DateTimePickerEvent, selectedDate?: Date) => {
     setShowDatePicker(Platform.OS === 'ios'); // Keep open on iOS
     if (selectedDate) {
       setRenewalDate(selectedDate);
@@ -296,7 +294,7 @@ function ServiceHeader({ service, onChangeService }: ServiceHeaderProps) {
         <View>
           <Text style={styles.serviceName}>{service.name}</Text>
           <Text style={styles.serviceCategory}>
-            {service.category.replace('_', ' ').toUpperCase()}
+            {formatCategoryUppercase(service.category)}
           </Text>
         </View>
       </View>
@@ -380,7 +378,7 @@ function CategoryPicker({ value, onChange }: CategoryPickerProps) {
   );
 
   const displayValue = useMemo(() => {
-    return value.replace('_', ' ').replace(/\b\w/g, (l) => l.toUpperCase());
+    return formatCategoryLabel(value);
   }, [value]);
 
   return (
@@ -404,7 +402,7 @@ function CategoryPicker({ value, onChange }: CategoryPickerProps) {
                   value === cat && styles.pickerOptionTextSelected,
                 ]}
               >
-                {cat.replace('_', ' ').replace(/\b\w/g, (l) => l.toUpperCase())}
+                {formatCategoryLabel(cat)}
               </Text>
             </Pressable>
           ))}
