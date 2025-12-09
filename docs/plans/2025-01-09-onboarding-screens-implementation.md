@@ -174,7 +174,7 @@ getStarted: "Get Started"
 
 ---
 
-## Task 1: Commons - Subscription Types & Validation
+## Task 1: Commons - Subscription Types & Validation ✅
 
 **Files:**
 - Create: `commons/src/types/subscription.ts`
@@ -207,7 +207,7 @@ git add . && git commit -m "feat(commons): add subscription types and validation
 
 ---
 
-## Task 2: Commons - Popular Services Data
+## Task 2: Commons - Popular Services Data ✅
 
 **Files:**
 - Create: `commons/src/data/popular-services.ts`
@@ -233,7 +233,7 @@ git add . && git commit -m "feat(commons): add popular services data"
 
 ---
 
-## Task 3: Web - Zustand Subscription Store
+## Task 3: Web - Zustand Subscription Store ✅
 
 **Files:**
 - Create: `klard-web/src/stores/subscription-store.ts`
@@ -258,7 +258,7 @@ git add . && git commit -m "feat(web): add subscription zustand store with persi
 
 ---
 
-## Task 4: Mobile - Zustand Subscription Store
+## Task 4: Mobile - Zustand Subscription Store ✅
 
 **Files:**
 - Create: `klard-mobile/src/stores/subscriptionStore.ts`
@@ -286,7 +286,7 @@ git add . && git commit -m "feat(mobile): add subscription zustand store with pe
 
 ---
 
-## Task 5: Web - SVG Illustrations Components
+## Task 5: Web - SVG Illustrations Components ✅
 
 **Files:**
 - Create: `klard-web/src/components/onboarding/illustrations/track-illustration.tsx`
@@ -317,7 +317,7 @@ git add . && git commit -m "feat(web): add onboarding SVG illustrations"
 
 ---
 
-## Task 6: Mobile - SVG Illustrations Components
+## Task 6: Mobile - SVG Illustrations Components ✅
 
 **Files:**
 - Create: `klard-mobile/src/components/onboarding/illustrations/TrackIllustration.tsx`
@@ -345,7 +345,7 @@ git add . && git commit -m "feat(mobile): add onboarding SVG illustrations"
 
 ---
 
-## Task 7: Web - Screen 5 Welcome Carousel
+## Task 7: Web - Screen 5 Welcome Carousel 🔄
 
 **Files:**
 - Modify: `klard-web/src/app/onboarding/page.tsx` (replace existing)
@@ -386,7 +386,7 @@ git add . && git commit -m "feat(web): implement screen 5 welcome carousel"
 
 ---
 
-## Task 8: Mobile - Screen 5 Welcome Carousel
+## Task 8: Mobile - Screen 5 Welcome Carousel 🔄
 
 **Files:**
 - Modify: `klard-mobile/src/components/onboarding/OnboardingScreen.tsx` (replace existing)
@@ -425,7 +425,7 @@ git add . && git commit -m "feat(mobile): implement screen 5 welcome carousel"
 
 ---
 
-## Task 9: Web - Service Grid Component
+## Task 9: Web - Service Grid Component ✅
 
 **Files:**
 - Create: `klard-web/src/components/onboarding/service-grid.tsx`
@@ -458,7 +458,7 @@ git add . && git commit -m "feat(web): add service grid component"
 
 ---
 
-## Task 10: Mobile - Service Grid Component
+## Task 10: Mobile - Service Grid Component ✅
 
 **Files:**
 - Create: `klard-mobile/src/components/onboarding/ServiceGrid.tsx`
@@ -493,7 +493,7 @@ git add . && git commit -m "feat(mobile): add service grid component"
 
 ---
 
-## Task 11: Web - Screen 6 Subscription Form
+## Task 11: Web - Screen 6 Subscription Form ⏳
 
 **Files:**
 - Create: `klard-web/src/app/onboarding/add-subscription/page.tsx`
@@ -533,7 +533,7 @@ git add . && git commit -m "feat(web): implement screen 6 add subscription form"
 
 ---
 
-## Task 12: Mobile - Screen 6 Subscription Form
+## Task 12: Mobile - Screen 6 Subscription Form ⏳
 
 **Files:**
 - Create: `klard-mobile/src/app/onboarding-subscription.tsx`
@@ -572,7 +572,7 @@ git add . && git commit -m "feat(mobile): implement screen 6 add subscription fo
 
 ---
 
-## Task 13: Web - Screen 7 BurnerCard Tutorial
+## Task 13: Web - Screen 7 BurnerCard Tutorial ⏳
 
 **Files:**
 - Create: `klard-web/src/app/onboarding/burnercard-tutorial/page.tsx`
@@ -608,7 +608,7 @@ git add . && git commit -m "feat(web): implement screen 7 burnercard tutorial"
 
 ---
 
-## Task 14: Mobile - Screen 7 BurnerCard Tutorial
+## Task 14: Mobile - Screen 7 BurnerCard Tutorial ⏳
 
 **Files:**
 - Create: `klard-mobile/src/app/onboarding-burnercard.tsx`
@@ -645,7 +645,7 @@ git add . && git commit -m "feat(mobile): implement screen 7 burnercard tutorial
 
 ---
 
-## Task 15: Integration Testing & Polish
+## Task 15: Integration Testing & Polish ⏳
 
 **Files:**
 - Test: `klard-web/src/__tests__/integration/onboarding-flow.test.tsx`
