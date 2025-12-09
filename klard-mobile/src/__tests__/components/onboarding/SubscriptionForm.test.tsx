@@ -53,7 +53,7 @@ describe('SubscriptionForm', () => {
       expect(getByText('Step 1 of 2 — Add your first subscription')).toBeTruthy();
 
       // Should show headline
-      expect(getByText('What's your first subscription?')).toBeTruthy();
+      expect(getByText("What's your first subscription?")).toBeTruthy();
 
       // Should show search input
       expect(getByPlaceholderText('Search services...')).toBeTruthy();
@@ -136,7 +136,7 @@ describe('SubscriptionForm', () => {
       fireEvent.press(changeButton);
 
       // Should return to service selection
-      expect(getByText('What's your first subscription?')).toBeTruthy();
+      expect(getByText("What's your first subscription?")).toBeTruthy();
       expect(queryByText('Price')).toBeNull();
     });
 
