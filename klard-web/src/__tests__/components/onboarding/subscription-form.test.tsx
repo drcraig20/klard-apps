@@ -38,12 +38,12 @@ describe('SubscriptionForm', () => {
     vi.clearAllMocks();
 
     // Setup router mock
-    (useRouter as any).mockReturnValue({
+    vi.mocked(useRouter).mockReturnValue({
       push: mockPush,
-    });
+    } as ReturnType<typeof useRouter>);
 
     // Setup store mock
-    (useSubscriptionStore as any).mockReturnValue(mockAddSubscription);
+    vi.mocked(useSubscriptionStore).mockReturnValue(mockAddSubscription);
   });
 
   describe('Rendering', () => {
