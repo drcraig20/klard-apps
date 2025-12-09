@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -46,6 +47,11 @@ export function LoginForm() {
 
   const isSubmitting = uiState === 'submitting';
 
+  // Clear any stale error state from previous screens on mount
+  useEffect(() => {
+    reset();
+  }, [reset]);
+
   async function onSubmit(data: LoginInput) {
     try {
       setSubmitting();
@@ -59,6 +65,7 @@ export function LoginForm() {
         throw new Error(result.error.message || 'Invalid email or password');
       }
 
+      reset();
       router.replace('/(tabs)/dashboard');
     } catch (error) {
       setError(

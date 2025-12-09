@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
@@ -47,6 +48,11 @@ export function LoginForm() {
     },
   });
 
+  // Clear any stale error state from previous screens on mount
+  useEffect(() => {
+    reset();
+  }, [reset]);
+
   async function onSubmit(data: LoginFormValues) {
     try {
       setSubmitting();
@@ -60,6 +66,7 @@ export function LoginForm() {
         throw new Error(result.error.message || t('auth.errors.invalidCredentials'));
       }
 
+      reset();
       router.push('/dashboard');
     } catch (error) {
       setError(
