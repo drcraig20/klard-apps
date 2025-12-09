@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -27,6 +27,7 @@ export function SignupForm() {
     setSubmitting,
     setError,
     clearError,
+    reset,
   } = useAuthUIStore();
 
   const {
@@ -46,6 +47,11 @@ export function SignupForm() {
 
   const isSubmitting = uiState === 'submitting';
 
+  // Clear any stale error state from previous screens on mount
+  useEffect(() => {
+    reset();
+  }, [reset]);
+
   async function onSubmit(data: SignupInput) {
     try {
       setSubmitting();
@@ -60,7 +66,7 @@ export function SignupForm() {
         throw new Error(result.error.message || t('auth.errors.signupFailed'));
       }
 
-      // New users need to complete onboarding
+      reset();
       router.replace('/onboarding');
     } catch (error) {
       setError(

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
@@ -28,6 +28,7 @@ export function SignupForm() {
     setSubmitting,
     setError,
     clearError,
+    reset,
   } = useAuthUIStore();
 
   const {
@@ -45,6 +46,11 @@ export function SignupForm() {
     },
   });
 
+  // Clear any stale error state from previous screens on mount
+  useEffect(() => {
+    reset();
+  }, [reset]);
+
   async function onSubmit(data: SignupInput) {
     try {
       setSubmitting();
@@ -59,6 +65,7 @@ export function SignupForm() {
         throw new Error(result.error.message || t('auth.errors.signupFailed'));
       }
 
+      reset();
       router.push('/onboarding');
     } catch (error) {
       setError(
