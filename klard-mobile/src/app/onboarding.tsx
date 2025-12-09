@@ -26,7 +26,6 @@ export default function OnboardingRoute() {
 
   return (
     <OnboardingScreen
-      onComplete={completeOnboarding}
       onSkip={skipOnboarding}
     />
   );
