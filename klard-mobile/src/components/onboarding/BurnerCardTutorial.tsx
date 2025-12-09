@@ -7,26 +7,20 @@ import {
   Text,
   View,
   ScrollView,
-  useWindowDimensions,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
 import * as Haptics from 'expo-haptics';
-import { router } from 'expo-router';
 import { en } from '@klard-apps/commons';
 import { BurnerCardIllustration } from './illustrations';
 import { useOnboarding } from '@/hooks/useOnboarding';
+import { Colors } from '@/styles/colors';
 
-// Klard Design System Colors
+// Use dark theme colors (onboarding is always dark mode)
 const colors = {
-  background: '#0F172A',
-  backgroundElevated: '#1E293B',
-  primary: '#15B5B0',
-  primaryDark: '#0D7C7A',
-  foreground: '#F8FAFC',
-  muted: '#94A3B8',
-  success: '#10B981',
-  border: 'rgba(148, 163, 184, 0.12)',
+  ...Colors.dark,
+  primaryDark: Colors.dark.secondary,
+  backgroundElevated: Colors.dark.muted,
   glassBg: 'rgba(30, 41, 59, 0.6)',
 };
 

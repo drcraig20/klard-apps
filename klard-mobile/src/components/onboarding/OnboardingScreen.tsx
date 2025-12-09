@@ -19,19 +19,13 @@ import {
   ProtectIllustration,
   SaveIllustration,
 } from './illustrations';
+import { Colors } from '@/styles/colors';
 
-// Klard Design System Colors
+// Use dark theme colors (onboarding is always dark mode)
 const colors = {
-  background: '#0F172A',
-  backgroundElevated: '#1E293B',
-  primary: '#15B5B0',
-  primaryDark: '#0D7C7A',
-  foreground: '#F8FAFC',
-  muted: '#94A3B8',
-  success: '#10B981',
-  warning: '#F59E0B',
-  error: '#EF4444',
-  border: 'rgba(148, 163, 184, 0.12)',
+  ...Colors.dark,
+  primaryDark: Colors.dark.secondary,
+  backgroundElevated: Colors.dark.muted,
   glassBg: 'rgba(30, 41, 59, 0.6)',
 };
 

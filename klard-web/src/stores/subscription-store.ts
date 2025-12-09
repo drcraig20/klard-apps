@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import type { Subscription, AddSubscription } from '@klard-apps/commons';
+import { createSubscriptionFromOnboarding } from '@klard-apps/commons';
 
 interface SubscriptionState {
   subscriptions: Subscription[];
@@ -24,20 +25,7 @@ export const useSubscriptionStore = create<SubscriptionStore>()(
       ...initialState,
 
       addSubscription: (data: AddSubscription) => {
-        const subscription: Subscription = {
-          id: crypto.randomUUID(),
-          userId: '', // Will be set by backend after authentication
-          name: data.serviceName,
-          description: undefined,
-          price: data.price,
-          currency: 'USD',
-          billingCycle: data.billingCycle === 'annual' ? 'yearly' : 'monthly',
-          status: 'active',
-          startDate: new Date(),
-          nextBillingDate: new Date(data.nextRenewalDate),
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        };
+        const subscription = createSubscriptionFromOnboarding(data);
 
         set((state) => ({
           subscriptions: [...state.subscriptions, subscription],
