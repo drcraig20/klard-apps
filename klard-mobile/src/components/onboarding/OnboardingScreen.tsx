@@ -12,6 +12,13 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
 import * as Haptics from 'expo-haptics';
+import { router } from 'expo-router';
+import { en } from '@klard-apps/commons';
+import {
+  TrackIllustration,
+  ProtectIllustration,
+  SaveIllustration,
+} from './illustrations';
 
 // Klard Design System Colors
 const colors = {
@@ -31,31 +38,24 @@ const colors = {
 // Slide data (OCP: Extend by adding data, not modifying code)
 const slides = [
   {
-    id: 1,
-    icon: '📊',
-    headline: 'All Your Subscriptions,\nOne Place',
-    body: 'See Netflix, Spotify, and every recurring charge at a glance. Never lose track again.',
+    id: 'track',
+    headline: en.onboarding.welcome.slides.track.headline,
+    body: en.onboarding.welcome.slides.track.body,
+    Illustration: TrackIllustration,
     accentColor: colors.primary,
   },
   {
-    id: 2,
-    icon: '🔔',
-    headline: 'Catch Price\nIncreases Instantly',
-    body: 'Get alerted the moment a service raises prices. Compare alternatives before you overpay.',
-    accentColor: colors.warning,
-  },
-  {
-    id: 3,
-    icon: '🛡️',
-    headline: 'Block Unwanted\nCharges',
-    body: 'Create BurnerCards that auto-lock after free trials. No more surprise renewals.',
+    id: 'protect',
+    headline: en.onboarding.welcome.slides.protect.headline,
+    body: en.onboarding.welcome.slides.protect.body,
+    Illustration: ProtectIllustration,
     accentColor: colors.primary,
   },
   {
-    id: 4,
-    icon: '💰',
-    headline: 'Watch Your\nSavings Grow',
-    body: 'Track every blocked charge and cancelled subscription. See your total savings in real-time.',
+    id: 'save',
+    headline: en.onboarding.welcome.slides.save.headline,
+    body: en.onboarding.welcome.slides.save.body,
+    Illustration: SaveIllustration,
     accentColor: colors.success,
   },
 ];
@@ -118,7 +118,7 @@ function OnboardingSlide({
         ]}
       />
 
-      {/* Icon with native blur effect */}
+      {/* Illustration with native blur effect */}
       <Animated.View
         style={[
           styles.iconWrapper,
@@ -126,7 +126,7 @@ function OnboardingSlide({
         ]}
       >
         <BlurView intensity={40} tint="dark" style={styles.iconGlass}>
-          <Text style={styles.iconEmoji}>{slide.icon}</Text>
+          <slide.Illustration theme="dark" width={200} height={140} />
         </BlurView>
       </Animated.View>
 
@@ -181,12 +181,11 @@ function PaginationDot({ index, scrollX, screenWidth }: PaginationDotProps) {
 }
 
 interface OnboardingScreenProps {
-  onComplete: () => void;
   onSkip: () => void;
 }
 
 // Main Onboarding Component (SRP: Orchestrates onboarding flow)
-export function OnboardingScreen({ onComplete, onSkip }: OnboardingScreenProps) {
+export function OnboardingScreen({ onSkip }: OnboardingScreenProps) {
   // Use reactive dimensions hook instead of static Dimensions.get()
   const { width: screenWidth, height: screenHeight } = useWindowDimensions();
 
@@ -267,11 +266,11 @@ export function OnboardingScreen({ onComplete, onSkip }: OnboardingScreenProps) 
   const handleButtonPress = useCallback(() => {
     if (isLastSlide) {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
-      onComplete();
+      router.push('/onboarding-subscription');
     } else {
       goToNext();
     }
-  }, [isLastSlide, onComplete, goToNext]);
+  }, [isLastSlide, goToNext]);
 
   return (
     <View style={styles.container}>
@@ -393,8 +392,8 @@ const styles = StyleSheet.create({
     marginBottom: 48,
   },
   iconGlass: {
-    width: 120,
-    height: 120,
+    width: 220,
+    height: 160,
     borderRadius: 32,
     alignItems: 'center',
     justifyContent: 'center',
@@ -406,9 +405,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 16,
     elevation: 8,
-  },
-  iconEmoji: {
-    fontSize: 56,
+    paddingHorizontal: 10,
   },
   contentContainer: {
     alignItems: 'center',
