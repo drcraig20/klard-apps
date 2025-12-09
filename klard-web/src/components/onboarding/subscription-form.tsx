@@ -75,9 +75,9 @@ export function SubscriptionForm({ service, onBack }: SubscriptionFormProps) {
 
     if (!result.success) {
       const fieldErrors: Record<string, string> = {};
-      result.error.errors.forEach((err) => {
-        if (err.path[0]) {
-          fieldErrors[err.path[0] as string] = err.message;
+      result.error.issues.forEach((issue) => {
+        if (issue.path[0]) {
+          fieldErrors[issue.path[0] as string] = issue.message;
         }
       });
       setErrors(fieldErrors);
