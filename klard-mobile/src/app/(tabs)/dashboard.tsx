@@ -2,20 +2,21 @@ import { View, Text, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useThemeColors, useAuthRedirect } from '@/hooks';
 import { LoadingScreen } from '@/components/common';
-import { signOut } from '@/lib/auth-client';
+import { signOut, useSession } from '@/lib/auth-client';
 import { typography } from '@/styles';
 import { styles } from '@/styles/screens/dashboard.styles';
 import { t } from '@/lib/i18n';
 
 export default function DashboardScreen() {
   const colors = useThemeColors();
-  const { session, isPending } = useAuthRedirect({ requireAuth: true });
+  const { isPending, isAuthenticated } = useAuthRedirect({ requireAuth: true });
+  const { data: session } = useSession();
 
-  if (isPending || !session) {
+  if (isPending || !isAuthenticated) {
     return <LoadingScreen />;
   }
 
-  const userName = session.user?.name || session.user?.email || 'there';
+  const userName = session?.user?.name || session?.user?.email || 'there';
 
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]}>

@@ -3,34 +3,72 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from '@/lib/auth-client';
+import type { AuthRedirectOptions, AuthRedirectResult } from '@klard-apps/commons';
 
-interface UseAuthRedirectOptions {
-  authenticatedRedirect?: string;
-  unauthenticatedRedirect?: string;
-  requireAuth?: boolean;
-}
-
-export function useAuthRedirect(options: UseAuthRedirectOptions = {}) {
+/**
+ * Hook for handling auth-based redirects.
+ *
+ * SRP: Only handles redirect logic based on auth state
+ * OCP: Extensible via options (routes are configurable)
+ * DIP: All routes are injectable via options
+ * ISP: Returns focused interface with only auth state info
+ *
+ * @example
+ * // Protected page - requires auth
+ * useAuthRedirect({ requireAuth: true });
+ *
+ * @example
+ * // Guest-only page (login/signup) - redirects authenticated users away
+ * useAuthRedirect({ requireAuth: false });
+ *
+ * @example
+ * // Onboarding page - skip onboarding check to avoid infinite redirect
+ * useAuthRedirect({ requireAuth: true, skipOnboardingCheck: true });
+ */
+export function useAuthRedirect(options: AuthRedirectOptions = {}): AuthRedirectResult {
   const {
-    authenticatedRedirect = '/dashboard',
-    unauthenticatedRedirect = '/login',
     requireAuth = false,
+    authenticatedRoute = '/dashboard',
+    unauthenticatedRoute = '/login',
+    onboardingRoute = '/onboarding',
+    skipOnboardingCheck = false,
   } = options;
 
   const router = useRouter();
   const { data: session, isPending } = useSession();
 
+  const isAuthenticated = !!session;
+  const hasOnboarded = session?.user?.hasOnboarded ?? false;
+
   useEffect(() => {
     if (isPending) return;
 
-    if (requireAuth && !session) {
-      router.replace(unauthenticatedRedirect);
-    } else if (!requireAuth && session) {
-      router.replace(authenticatedRedirect);
-    } else if (!requireAuth && !session) {
-      router.replace(unauthenticatedRedirect);
+    if (!isAuthenticated) {
+      // Unauthenticated users always go to login
+      router.replace(unauthenticatedRoute);
+    } else if (!hasOnboarded && !skipOnboardingCheck) {
+      // Authenticated but hasn't completed onboarding → redirect to onboarding
+      router.replace(onboardingRoute);
+    } else if (!requireAuth) {
+      // Authenticated + onboarded user on guest-only page → redirect to dashboard
+      router.replace(authenticatedRoute);
     }
-  }, [session, isPending, router, authenticatedRedirect, unauthenticatedRedirect, requireAuth]);
+    // Authenticated + onboarded user on protected page (requireAuth: true) → stay
+  }, [
+    isPending,
+    isAuthenticated,
+    hasOnboarded,
+    requireAuth,
+    skipOnboardingCheck,
+    router,
+    authenticatedRoute,
+    unauthenticatedRoute,
+    onboardingRoute,
+  ]);
 
-  return { session, isPending, isAuthenticated: !!session };
+  return {
+    isPending,
+    isAuthenticated,
+    hasOnboarded,
+  };
 }

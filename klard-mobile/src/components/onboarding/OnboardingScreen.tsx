@@ -1,19 +1,17 @@
 import { StatusBar } from 'expo-status-bar';
 import { useCallback, useRef, useState, useEffect } from 'react';
 import {
-  Dimensions,
+  Animated,
   Pressable,
   StyleSheet,
   Text,
   View,
   ScrollView,
-  NativeSyntheticEvent,
-  NativeScrollEvent,
-  Animated,
+  useWindowDimensions,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('window');
+import { BlurView } from 'expo-blur';
+import * as Haptics from 'expo-haptics';
 
 // Klard Design System Colors
 const colors = {
@@ -30,7 +28,7 @@ const colors = {
   glassBg: 'rgba(30, 41, 59, 0.6)',
 };
 
-// Slide data
+// Slide data (OCP: Extend by adding data, not modifying code)
 const slides = [
   {
     id: 1,
@@ -62,34 +60,29 @@ const slides = [
   },
 ];
 
-// Single Slide Component
+// Single Slide Component (SRP: Renders one slide only)
+interface OnboardingSlideProps {
+  slide: (typeof slides)[0];
+  index: number;
+  scrollX: Animated.Value;
+  screenWidth: number;
+  screenHeight: number;
+}
+
 function OnboardingSlide({
   slide,
   index,
   scrollX,
-}: {
-  slide: (typeof slides)[0];
-  index: number;
-  scrollX: Animated.Value;
-}) {
+  screenWidth,
+  screenHeight,
+}: OnboardingSlideProps) {
   const inputRange = [
-    (index - 1) * SCREEN_WIDTH,
-    index * SCREEN_WIDTH,
-    (index + 1) * SCREEN_WIDTH,
+    (index - 1) * screenWidth,
+    index * screenWidth,
+    (index + 1) * screenWidth,
   ];
 
-  const opacity = scrollX.interpolate({
-    inputRange,
-    outputRange: [0, 1, 0],
-    extrapolate: 'clamp',
-  });
-
-  const translateY = scrollX.interpolate({
-    inputRange,
-    outputRange: [50, 0, 50],
-    extrapolate: 'clamp',
-  });
-
+  // Icon animations (scale + rotate based on scroll)
   const iconScale = scrollX.interpolate({
     inputRange,
     outputRange: [0.5, 1, 0.5],
@@ -102,38 +95,46 @@ function OnboardingSlide({
     extrapolate: 'clamp',
   });
 
-  return (
-    <View style={styles.slide}>
-      {/* Decorative gradient orb */}
-      <View style={[styles.gradientOrb, { backgroundColor: slide.accentColor }]} />
+  // Content animations (opacity + translateY based on scroll)
+  const contentOpacity = scrollX.interpolate({
+    inputRange,
+    outputRange: [0, 1, 0],
+    extrapolate: 'clamp',
+  });
 
-      {/* Icon */}
+  const contentTranslateY = scrollX.interpolate({
+    inputRange,
+    outputRange: [50, 0, 50],
+    extrapolate: 'clamp',
+  });
+
+  return (
+    <View style={[styles.slide, { width: screenWidth }]}>
+      {/* Decorative gradient orb */}
+      <View
+        style={[
+          styles.gradientOrb,
+          { backgroundColor: slide.accentColor, top: screenHeight * 0.15 },
+        ]}
+      />
+
+      {/* Icon with native blur effect */}
       <Animated.View
         style={[
           styles.iconWrapper,
-          {
-            transform: [{ scale: iconScale }, { rotate: iconRotate }],
-          },
+          { transform: [{ scale: iconScale }, { rotate: iconRotate }] },
         ]}
       >
-        <LinearGradient
-          colors={[colors.glassBg, 'rgba(30, 41, 59, 0.3)']}
-          style={styles.iconGlass}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-        >
+        <BlurView intensity={40} tint="dark" style={styles.iconGlass}>
           <Text style={styles.iconEmoji}>{slide.icon}</Text>
-        </LinearGradient>
+        </BlurView>
       </Animated.View>
 
       {/* Content */}
       <Animated.View
         style={[
           styles.contentContainer,
-          {
-            opacity,
-            transform: [{ translateY }],
-          },
+          { opacity: contentOpacity, transform: [{ translateY: contentTranslateY }] },
         ]}
       >
         <Text style={styles.headline}>{slide.headline}</Text>
@@ -143,27 +144,27 @@ function OnboardingSlide({
   );
 }
 
-// Pagination Dot
-function PaginationDot({
-  index,
-  scrollX,
-}: {
+// Pagination Dot (SRP: Renders one dot only)
+interface PaginationDotProps {
   index: number;
   scrollX: Animated.Value;
-}) {
+  screenWidth: number;
+}
+
+function PaginationDot({ index, scrollX, screenWidth }: PaginationDotProps) {
   const inputRange = [
-    (index - 1) * SCREEN_WIDTH,
-    index * SCREEN_WIDTH,
-    (index + 1) * SCREEN_WIDTH,
+    (index - 1) * screenWidth,
+    index * screenWidth,
+    (index + 1) * screenWidth,
   ];
 
-  const width = scrollX.interpolate({
+  const dotWidth = scrollX.interpolate({
     inputRange,
     outputRange: [8, 32, 8],
     extrapolate: 'clamp',
   });
 
-  const opacity = scrollX.interpolate({
+  const dotOpacity = scrollX.interpolate({
     inputRange,
     outputRange: [0.4, 1, 0.4],
     extrapolate: 'clamp',
@@ -173,11 +174,7 @@ function PaginationDot({
     <Animated.View
       style={[
         styles.dot,
-        {
-          width,
-          opacity,
-          backgroundColor: colors.primary,
-        },
+        { backgroundColor: colors.primary, width: dotWidth, opacity: dotOpacity },
       ]}
     />
   );
@@ -188,19 +185,22 @@ interface OnboardingScreenProps {
   onSkip: () => void;
 }
 
-// Main Onboarding Component
+// Main Onboarding Component (SRP: Orchestrates onboarding flow)
 export function OnboardingScreen({ onComplete, onSkip }: OnboardingScreenProps) {
+  // Use reactive dimensions hook instead of static Dimensions.get()
+  const { width: screenWidth, height: screenHeight } = useWindowDimensions();
+
   const scrollViewRef = useRef<ScrollView>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const scrollX = useRef(new Animated.Value(0)).current;
 
-  // Fade in animations
+  // React Native Animated values
+  const scrollX = useRef(new Animated.Value(0)).current;
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const slideUpAnim = useRef(new Animated.Value(30)).current;
   const buttonScale = useRef(new Animated.Value(1)).current;
 
+  // Entry animations on mount
   useEffect(() => {
-    // Entry animations
     Animated.parallel([
       Animated.timing(fadeAnim, {
         toValue: 1,
@@ -215,45 +215,63 @@ export function OnboardingScreen({ onComplete, onSkip }: OnboardingScreenProps) 
         useNativeDriver: true,
       }),
     ]).start();
-  }, []);
+  }, [fadeAnim, slideUpAnim]);
 
-  const handleScroll = Animated.event(
-    [{ nativeEvent: { contentOffset: { x: scrollX } } }],
-    {
-      useNativeDriver: false,
-      listener: (event: NativeSyntheticEvent<NativeScrollEvent>) => {
-        const offsetX = event.nativeEvent.contentOffset.x;
-        const index = Math.round(offsetX / SCREEN_WIDTH);
-        if (index !== currentIndex && index >= 0 && index < slides.length) {
-          setCurrentIndex(index);
-        }
-      },
-    }
+  // Handle scroll to update current index
+  const handleScroll = useCallback(
+    (event: { nativeEvent: { contentOffset: { x: number } } }) => {
+      const offsetX = event.nativeEvent.contentOffset.x;
+      const index = Math.round(offsetX / screenWidth);
+      if (index !== currentIndex && index >= 0 && index < slides.length) {
+        setCurrentIndex(index);
+      }
+    },
+    [currentIndex, screenWidth]
   );
 
   const goToNext = useCallback(() => {
     if (currentIndex < slides.length - 1) {
       const nextIndex = currentIndex + 1;
-      scrollViewRef.current?.scrollTo({ x: nextIndex * SCREEN_WIDTH, animated: true });
+      scrollViewRef.current?.scrollTo({ x: nextIndex * screenWidth, animated: true });
       setCurrentIndex(nextIndex);
     }
-  }, [currentIndex]);
+  }, [currentIndex, screenWidth]);
 
   const isLastSlide = currentIndex === slides.length - 1;
 
-  const onButtonPressIn = () => {
+  // Haptic feedback handlers with spring animations
+  const onButtonPressIn = useCallback(() => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     Animated.spring(buttonScale, {
       toValue: 0.95,
+      friction: 8,
+      tension: 300,
       useNativeDriver: true,
     }).start();
-  };
+  }, [buttonScale]);
 
-  const onButtonPressOut = () => {
+  const onButtonPressOut = useCallback(() => {
     Animated.spring(buttonScale, {
       toValue: 1,
+      friction: 8,
+      tension: 300,
       useNativeDriver: true,
     }).start();
-  };
+  }, [buttonScale]);
+
+  const handleSkip = useCallback(() => {
+    Haptics.selectionAsync();
+    onSkip();
+  }, [onSkip]);
+
+  const handleButtonPress = useCallback(() => {
+    if (isLastSlide) {
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      onComplete();
+    } else {
+      goToNext();
+    }
+  }, [isLastSlide, onComplete, goToNext]);
 
   return (
     <View style={styles.container}>
@@ -268,49 +286,54 @@ export function OnboardingScreen({ onComplete, onSkip }: OnboardingScreenProps) 
       />
 
       {/* Skip button */}
-      <Animated.View
-        style={[
-          styles.skipContainer,
-          {
-            opacity: fadeAnim,
-          },
-        ]}
-      >
-        <Pressable onPress={onSkip} style={styles.skipButton}>
+      <Animated.View style={[styles.skipContainer, { opacity: fadeAnim }]}>
+        <Pressable onPress={handleSkip} style={styles.skipButton}>
           <Text style={styles.skipText}>Skip</Text>
         </Pressable>
       </Animated.View>
 
       {/* Slides */}
-      <ScrollView
-        ref={scrollViewRef}
+      <Animated.ScrollView
+        ref={scrollViewRef as React.RefObject<ScrollView>}
         horizontal
         pagingEnabled
         showsHorizontalScrollIndicator={false}
-        onScroll={handleScroll}
+        onScroll={Animated.event(
+          [{ nativeEvent: { contentOffset: { x: scrollX } } }],
+          { useNativeDriver: false, listener: handleScroll }
+        )}
         scrollEventThrottle={16}
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
       >
         {slides.map((slide, index) => (
-          <OnboardingSlide key={slide.id} slide={slide} index={index} scrollX={scrollX} />
+          <OnboardingSlide
+            key={slide.id}
+            slide={slide}
+            index={index}
+            scrollX={scrollX}
+            screenWidth={screenWidth}
+            screenHeight={screenHeight}
+          />
         ))}
-      </ScrollView>
+      </Animated.ScrollView>
 
       {/* Bottom section: pagination + button */}
       <Animated.View
         style={[
           styles.bottomSection,
-          {
-            opacity: fadeAnim,
-            transform: [{ translateY: slideUpAnim }],
-          },
+          { opacity: fadeAnim, transform: [{ translateY: slideUpAnim }] },
         ]}
       >
         {/* Pagination dots */}
         <View style={styles.pagination}>
-          {slides.map((_, index) => (
-            <PaginationDot key={index} index={index} scrollX={scrollX} />
+          {slides.map((slide) => (
+            <PaginationDot
+              key={slide.id}
+              index={slides.indexOf(slide)}
+              scrollX={scrollX}
+              screenWidth={screenWidth}
+            />
           ))}
         </View>
 
@@ -319,7 +342,7 @@ export function OnboardingScreen({ onComplete, onSkip }: OnboardingScreenProps) 
           <Pressable
             onPressIn={onButtonPressIn}
             onPressOut={onButtonPressOut}
-            onPress={isLastSlide ? onComplete : goToNext}
+            onPress={handleButtonPress}
             style={styles.buttonPressable}
           >
             <LinearGradient
@@ -349,7 +372,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   slide: {
-    width: SCREEN_WIDTH,
+    // width is set dynamically via screenWidth prop
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
@@ -359,7 +382,7 @@ const styles = StyleSheet.create({
   },
   gradientOrb: {
     position: 'absolute',
-    top: SCREEN_HEIGHT * 0.15,
+    // top is set dynamically via screenHeight prop
     width: 300,
     height: 300,
     borderRadius: 150,
@@ -377,7 +400,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     borderWidth: 1,
     borderColor: colors.border,
-    // Glassmorphism shadow
+    // Native blur handles glassmorphism
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
@@ -456,7 +479,7 @@ const styles = StyleSheet.create({
   },
   button: {
     paddingVertical: 18,
-paddingHorizontal: 32,
+    paddingHorizontal: 32,
     borderRadius: 9999, // Full pill
     alignItems: 'center',
     justifyContent: 'center',

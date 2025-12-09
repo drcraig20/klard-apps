@@ -3,20 +3,21 @@
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { useAuthRedirect } from '@/hooks/use-auth-redirect';
-import { signOut } from '@/lib/auth-client';
+import { signOut, useSession } from '@/lib/auth-client';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 
 export default function DashboardPage() {
   const { t } = useTranslation();
   const router = useRouter();
-  const { session, isPending } = useAuthRedirect({ requireAuth: true });
+  const { isPending, isAuthenticated } = useAuthRedirect({ requireAuth: true });
+  const { data: session } = useSession();
 
   async function handleSignOut() {
     await signOut();
     router.replace('/login');
   }
 
-  if (isPending) {
+  if (isPending || !isAuthenticated) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <LoadingSpinner size="lg" />
@@ -24,11 +25,7 @@ export default function DashboardPage() {
     );
   }
 
-  if (!session) {
-    return null;
-  }
-
-  const userName = session.user?.name ?? session.user?.email ?? '';
+  const userName = session?.user?.name ?? session?.user?.email ?? '';
 
   return (
     <div className="min-h-screen bg-background p-8">

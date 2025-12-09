@@ -1,9 +1,19 @@
 import { createAuthClient } from 'better-auth/react';
-import { magicLinkClient } from 'better-auth/client/plugins';
+import { magicLinkClient, inferAdditionalFields } from 'better-auth/client/plugins';
 
 export const authClient = createAuthClient({
   baseURL: process.env.NEXT_PUBLIC_AUTH_URL || 'http://localhost:3001',
-  plugins: [magicLinkClient()],
+  plugins: [
+    magicLinkClient(),
+    inferAdditionalFields({
+      user: {
+        hasOnboarded: {
+          type: "boolean",
+          required: false,
+        },
+      },
+    }),
+  ],
 });
 
 export const {
@@ -11,4 +21,5 @@ export const {
   signUp,
   signOut,
   useSession,
+  updateUser,
 } = authClient;
