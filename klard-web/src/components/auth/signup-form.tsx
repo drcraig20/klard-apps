@@ -164,7 +164,7 @@ export function SignupForm() {
         />
 
         {/* Submit button */}
-        <SubmitButton isSubmitting={isSubmitting} loadingText={t('auth.signup.submitting')}>
+        <SubmitButton isSubmitting={isSubmitting}>
           {t('auth.signup.submitButton')}
         </SubmitButton>
       </form>
