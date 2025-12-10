@@ -9,6 +9,7 @@ import { Mail, Lock } from 'lucide-react';
 import { LoginSchema, MagicLinkSchema } from '@klard-apps/commons';
 import { signIn } from '@/lib/auth-client';
 import { InputField } from '@/components/ui/input-field';
+import { CheckboxField } from '@/components/ui/checkbox-field';
 import { SocialButtons } from './social-buttons';
 import { MagicLinkSuccess } from './magic-link-success';
 import { KlardLogo } from '@/components/ui/klard-icon';
@@ -39,6 +40,8 @@ export function LoginForm() {
     handleSubmit,
     formState: { errors },
     getValues,
+    watch,
+    setValue,
   } = useForm({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
@@ -47,6 +50,8 @@ export function LoginForm() {
       rememberMe: false,
     },
   });
+
+  const rememberMe = watch('rememberMe');
 
   // Clear any stale error state from previous screens on mount
   useEffect(() => {
@@ -164,17 +169,12 @@ export function LoginForm() {
 
         {/* Remember me & Magic link */}
         <div className="flex items-center justify-between">
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              className="w-4 h-4 rounded border-border text-primary focus:ring-ring"
-              disabled={isSubmitting}
-              {...register('rememberMe')}
-            />
-            <span className="text-sm text-muted-foreground">
-              {t('auth.login.rememberMe')}
-            </span>
-          </label>
+          <CheckboxField
+            checked={rememberMe}
+            onChange={(checked) => setValue('rememberMe', checked)}
+            label={t('auth.login.rememberMe')}
+            disabled={isSubmitting}
+          />
 
           <button
             type="button"

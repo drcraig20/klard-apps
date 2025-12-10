@@ -35,6 +35,8 @@ export function SignupForm() {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
+    setValue,
   } = useForm<SignupInput>({
     resolver: zodResolver(SignupSchema),
     defaultValues: {
@@ -45,6 +47,8 @@ export function SignupForm() {
       agreeToTerms: false,
     },
   });
+
+  const agreeToTerms = watch('agreeToTerms');
 
   // Clear any stale error state from previous screens on mount
   useEffect(() => {
@@ -158,9 +162,10 @@ export function SignupForm() {
         />
 
         <TermsCheckbox
+          checked={agreeToTerms}
+          onChange={(checked) => setValue('agreeToTerms', checked)}
           error={errors.agreeToTerms?.message}
           disabled={isSubmitting}
-          {...register('agreeToTerms')}
         />
 
         {/* Submit button */}

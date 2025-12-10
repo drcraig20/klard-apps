@@ -1,4 +1,5 @@
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
+import { CheckboxField } from '@/components/ui';
 import { useThemeColors } from '@/hooks';
 import { t } from '@/lib/i18n';
 import { styles } from './terms-checkbox.styles';
@@ -20,30 +21,17 @@ export function TermsCheckbox({
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.row}
-        onPress={() => onValueChange(!value)}
-        disabled={disabled}
-        accessibilityRole="checkbox"
-        accessibilityState={{ checked: value, disabled }}
-        accessibilityLabel={t('auth.signup.termsLabel')}
-      >
-        <View
-          style={[
-            styles.checkbox,
-            {
-              borderColor: error ? colors.accentError : colors.border,
-              backgroundColor: value ? colors.primary : 'transparent',
-            },
-          ]}
+      <View style={styles.row}>
+        <CheckboxField
+          checked={value}
+          onChange={onValueChange}
+          disabled={disabled}
+        />
+        <Pressable
+          style={styles.labelContainer}
+          onPress={() => !disabled && onValueChange(!value)}
+          disabled={disabled}
         >
-          {value && (
-            <Text style={[styles.checkmark, { color: colors.primaryForeground }]}>
-              ✓
-            </Text>
-          )}
-        </View>
-        <View style={styles.labelContainer}>
           <Text style={[styles.label, { color: colors.textSecondary }]}>
             I agree to the{' '}
             <Text
@@ -64,8 +52,8 @@ export function TermsCheckbox({
               {t('auth.signup.privacyLink')}
             </Text>
           </Text>
-        </View>
-      </TouchableOpacity>
+        </Pressable>
+      </View>
       {error && (
         <Text style={[styles.error, { color: colors.errorForeground }]}>
           {error}

@@ -10,7 +10,7 @@ import { useThemeColors } from '@/hooks';
 import { useAuthUIStore } from '@/stores';
 import { typography } from '@/styles';
 import { t } from '@/lib/i18n';
-import { Button, InputField } from '@/components/ui';
+import { Button, InputField, CheckboxField } from '@/components/ui';
 import { SocialButtons } from '../social-buttons';
 import { MagicLinkSent } from '../magic-link-sent';
 import { ErrorBanner } from '../error-banner';
@@ -163,31 +163,12 @@ export function LoginForm() {
             control={control}
             name="rememberMe"
             render={({ field: { onChange, value } }) => (
-              <TouchableOpacity
-                onPress={() => onChange(!value)}
-                style={styles.checkboxContainer}
+              <CheckboxField
+                checked={value}
+                onChange={onChange}
+                label={t('auth.login.rememberMe')}
                 disabled={isSubmitting}
-                accessibilityRole="checkbox"
-                accessibilityLabel={t('auth.login.rememberMe')}
-                accessibilityState={{ checked: value }}
-              >
-                <View
-                  style={[
-                    styles.checkbox,
-                    {
-                      borderColor: colors.border,
-                      backgroundColor: value ? colors.primary : 'transparent',
-                    },
-                  ]}
-                >
-                  {value && (
-                    <Text style={{ color: colors.primaryForeground }}>✓</Text>
-                  )}
-                </View>
-                <Text style={[typography.body, { color: colors.textSecondary }]}>
-                  {t('auth.login.rememberMe')}
-                </Text>
-              </TouchableOpacity>
+              />
             )}
           />
 

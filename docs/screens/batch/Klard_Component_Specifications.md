@@ -369,6 +369,7 @@ const PasswordInput = ({ showStrength, strength, requirements, ...props }) => {
 ---
 
 <!-- COMPONENT:START:1.4-checkbox -->
+<!-- DONE:1.4-checkbox -->
 ## 1.4 Checkbox
 
 **Used In:** Screens 17, 29, 31, 47
@@ -469,6 +470,7 @@ const CheckboxField = ({ checked, onChange, label, description, disabled }) => {
 ---
 
 <!-- COMPONENT:START:1.5-switch-toggle -->
+<!-- IN-PROGRESS:1.5-switch-toggle -->
 ## 1.5 Switch/Toggle
 
 **Used In:** Screens 6, 20, 22, 23, 31
@@ -592,6 +594,7 @@ const FallbackSwitch = ({ checked, onChange, disabled }) => (
 ---
 
 <!-- COMPONENT:START:1.6-select-dropdown -->
+<!-- IN-PROGRESS:1.6-select-dropdown -->
 ## 1.6 Select / Dropdown
 
 **Used In:** Screens 8, 11, 13, 20, 27, 29, 31

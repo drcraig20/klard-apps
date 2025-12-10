@@ -1,78 +1,82 @@
 'use client';
 
-import { forwardRef } from 'react';
 import { useTranslation } from 'react-i18next';
+import { CheckboxField } from '@/components/ui/checkbox-field';
 
-interface TermsCheckboxProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface TermsCheckboxProps {
+  checked: boolean;
+  onChange: (checked: boolean) => void;
   error?: string;
+  disabled?: boolean;
 }
 
-export const TermsCheckbox = forwardRef<HTMLInputElement, TermsCheckboxProps>(
-  function TermsCheckbox({ error, className = '', ...props }, ref) {
-    const { t } = useTranslation();
+export function TermsCheckbox({
+  checked,
+  onChange,
+  error,
+  disabled,
+}: TermsCheckboxProps) {
+  const { t } = useTranslation();
 
-    return (
-      <div className="w-full">
-        <label className="flex items-start gap-3 cursor-pointer">
-          <input
-            ref={ref}
-            type="checkbox"
-            className={`
-              mt-0.5 w-4 h-4 rounded
-              border-[var(--border)] text-[var(--primary)]
-              focus:ring-[var(--ring)] focus:ring-2
-              disabled:opacity-50 disabled:cursor-not-allowed
-              ${error ? 'border-[var(--accent-error)]' : ''}
-              ${className}
-            `}
-            aria-invalid={!!error}
-            aria-describedby={error ? 'terms-error' : undefined}
-            {...props}
-          />
-          <span className="text-sm text-[var(--muted-foreground)]">
-            {t('auth.signup.termsLabel').split('Terms of Service').map((part, i) => (
-              i === 0 ? (
-                <span key={i}>
-                  {part}
+  const termsLabel = (
+    <span className="text-sm text-muted-foreground">
+      {t('auth.signup.termsLabel').split('Terms of Service').map((part, i) =>
+        i === 0 ? (
+          <span key={i}>
+            {part}
+            <a
+              href="#"
+              onClick={(e) => e.preventDefault()}
+              className="text-primary hover:underline"
+            >
+              {t('auth.signup.termsLink')}
+            </a>
+          </span>
+        ) : (
+          <span key={i}>
+            {part.split('Privacy Policy').map((subPart, j) =>
+              j === 0 ? (
+                <span key={j}>
+                  {subPart}
                   <a
                     href="#"
                     onClick={(e) => e.preventDefault()}
-                    className="text-[var(--primary)] hover:underline"
+                    className="text-primary hover:underline"
                   >
-                    {t('auth.signup.termsLink')}
+                    {t('auth.signup.privacyLink')}
                   </a>
                 </span>
               ) : (
-                <span key={i}>
-                  {part.split('Privacy Policy').map((subPart, j) => (
-                    j === 0 ? (
-                      <span key={j}>
-                        {subPart}
-                        <a
-                          href="#"
-                          onClick={(e) => e.preventDefault()}
-                          className="text-[var(--primary)] hover:underline"
-                        >
-                          {t('auth.signup.privacyLink')}
-                        </a>
-                      </span>
-                    ) : subPart
-                  ))}
-                </span>
+                subPart
               )
-            ))}
+            )}
           </span>
-        </label>
-        {error && (
-          <p
-            id="terms-error"
-            className="mt-2 text-sm text-[var(--error-foreground)]"
-            role="alert"
-          >
-            {error}
-          </p>
-        )}
-      </div>
-    );
-  }
-);
+        )
+      )}
+    </span>
+  );
+
+  return (
+    <div className="w-full">
+      <CheckboxField
+        checked={checked}
+        onChange={onChange}
+        disabled={disabled}
+      />
+      <label
+        className="flex items-start gap-3 cursor-pointer -mt-6 ml-7"
+        onClick={() => !disabled && onChange(!checked)}
+      >
+        {termsLabel}
+      </label>
+      {error && (
+        <p
+          className="mt-2 text-sm text-destructive"
+          role="alert"
+        >
+          {error}
+        </p>
+      )}
+    </div>
+  );
+}
