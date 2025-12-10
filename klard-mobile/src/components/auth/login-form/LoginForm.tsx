@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'expo-router';
@@ -10,6 +10,7 @@ import { useThemeColors } from '@/hooks';
 import { useAuthUIStore } from '@/stores';
 import { typography } from '@/styles';
 import { t } from '@/lib/i18n';
+import { Button } from '@/components/ui';
 import { InputField } from '../input-field';
 import { SocialButtons } from '../social-buttons';
 import { MagicLinkSent } from '../magic-link-sent';
@@ -204,28 +205,15 @@ export function LoginForm() {
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity
+        <Button
+          variant="primary"
+          size="lg"
+          loading={isSubmitting}
+          fullWidth
           onPress={handleSubmit(onSubmit)}
-          disabled={isSubmitting}
-          style={[
-            styles.submitButton,
-            {
-              backgroundColor: colors.primary,
-              opacity: isSubmitting ? 0.5 : 1,
-            },
-          ]}
-          accessibilityRole="button"
-          accessibilityLabel={t('auth.login.submitButton')}
-          accessibilityState={{ disabled: isSubmitting }}
         >
-          {isSubmitting ? (
-            <ActivityIndicator color={colors.primaryForeground} />
-          ) : (
-            <Text style={[typography.button, { color: colors.primaryForeground }]}>
-              {t('auth.login.submitButton')}
-            </Text>
-          )}
-        </TouchableOpacity>
+          {t('auth.login.submitButton')}
+        </Button>
       </View>
 
       <View style={styles.divider}>

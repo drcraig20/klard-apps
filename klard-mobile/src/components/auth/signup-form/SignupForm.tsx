@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'expo-router';
@@ -9,6 +9,7 @@ import { useThemeColors } from '@/hooks';
 import { useAuthUIStore } from '@/stores';
 import { typography } from '@/styles';
 import { t } from '@/lib/i18n';
+import { Button } from '@/components/ui';
 import { InputField } from '../input-field';
 import { PasswordStrengthIndicator } from '../password-strength-indicator';
 import { TermsCheckbox } from '../terms-checkbox';
@@ -186,28 +187,15 @@ export function SignupForm() {
           )}
         />
 
-        <TouchableOpacity
+        <Button
+          variant="primary"
+          size="lg"
+          loading={isSubmitting}
+          fullWidth
           onPress={handleSubmit(onSubmit)}
-          disabled={isSubmitting}
-          style={[
-            styles.submitButton,
-            {
-              backgroundColor: colors.primary,
-              opacity: isSubmitting ? 0.5 : 1,
-            },
-          ]}
-          accessibilityRole="button"
-          accessibilityLabel={t('auth.signup.submitButton')}
-          accessibilityState={{ disabled: isSubmitting }}
         >
-          {isSubmitting ? (
-            <ActivityIndicator color={colors.primaryForeground} />
-          ) : (
-            <Text style={[typography.button, { color: colors.primaryForeground }]}>
-              {t('auth.signup.submitButton')}
-            </Text>
-          )}
-        </TouchableOpacity>
+          {t('auth.signup.submitButton')}
+        </Button>
       </View>
 
       <View style={styles.divider}>

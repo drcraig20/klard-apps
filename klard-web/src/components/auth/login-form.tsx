@@ -187,7 +187,7 @@ export function LoginForm() {
         </div>
 
         {/* Submit button */}
-        <SubmitButton isSubmitting={isSubmitting} loadingText={t('auth.login.submitting')}>
+        <SubmitButton isSubmitting={isSubmitting}>
           {t('auth.login.submitButton')}
         </SubmitButton>
       </form>
