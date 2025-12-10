@@ -130,7 +130,7 @@ const Button = ({ variant, size, loading, disabled, onPress, children }) => {
 ---
 
 <!-- COMPONENT:START:1.2-input -->
-<!-- IN-PROGRESS:1.2-input -->
+<!-- DONE:1.2-input -->
 ## 1.2 Input
 
 **Used In:** Screens 1-4, 8, 13, 15, 31
@@ -241,6 +241,7 @@ const Input = ({
 ---
 
 <!-- COMPONENT:START:1.3-password-input -->
+<!-- DONE:1.3-password-input -->
 ## 1.3 PasswordInput
 
 **Used In:** Screens 1, 2, 31
