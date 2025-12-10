@@ -9,8 +9,7 @@ import { useThemeColors } from '@/hooks';
 import { useAuthUIStore } from '@/stores';
 import { typography } from '@/styles';
 import { t } from '@/lib/i18n';
-import { Button } from '@/components/ui';
-import { InputField } from '../input-field';
+import { Button, InputField } from '@/components/ui';
 import { PasswordStrengthIndicator } from '../password-strength-indicator';
 import { TermsCheckbox } from '../terms-checkbox';
 import { SocialButtons } from '../social-buttons';
@@ -112,10 +111,9 @@ export function SignupForm() {
           name="email"
           render={({ field: { onChange, onBlur, value } }) => (
             <InputField
+              type="email"
               label={t('auth.signup.emailLabel')}
               placeholder={t('auth.signup.emailPlaceholder')}
-              keyboardType="email-address"
-              autoCapitalize="none"
               autoComplete="email"
               error={errors.email?.message}
               editable={!isSubmitting}
@@ -134,9 +132,9 @@ export function SignupForm() {
           render={({ field: { onChange, onBlur, value } }) => (
             <View>
               <InputField
+                type="password"
                 label={t('auth.signup.passwordLabel')}
                 placeholder={t('auth.signup.passwordPlaceholder')}
-                isPassword
                 autoComplete="new-password"
                 error={errors.password?.message}
                 editable={!isSubmitting}
@@ -159,9 +157,9 @@ export function SignupForm() {
           name="confirmPassword"
           render={({ field: { onChange, onBlur, value } }) => (
             <InputField
+              type="password"
               label={t('auth.signup.confirmPasswordLabel')}
               placeholder={t('auth.signup.confirmPasswordPlaceholder')}
-              isPassword
               autoComplete="new-password"
               error={errors.confirmPassword?.message}
               editable={!isSubmitting}

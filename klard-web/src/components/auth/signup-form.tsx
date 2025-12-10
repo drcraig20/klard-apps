@@ -109,7 +109,7 @@ export function SignupForm() {
           label={t('auth.signup.nameLabel')}
           type="text"
           placeholder={t('auth.signup.namePlaceholder')}
-          icon={<User size={20} />}
+          leftIcon={<User size={20} />}
           error={errors.name?.message}
           disabled={isSubmitting}
           autoComplete="name"
@@ -121,7 +121,7 @@ export function SignupForm() {
           label={t('auth.signup.emailLabel')}
           type="email"
           placeholder={t('auth.signup.emailPlaceholder')}
-          icon={<Mail size={20} />}
+          leftIcon={<Mail size={20} />}
           error={errors.email?.message}
           disabled={isSubmitting}
           autoComplete="email"
@@ -134,7 +134,7 @@ export function SignupForm() {
             label={t('auth.signup.passwordLabel')}
             type="password"
             placeholder={t('auth.signup.passwordPlaceholder')}
-            icon={<Lock size={20} />}
+            leftIcon={<Lock size={20} />}
             error={errors.password?.message}
             disabled={isSubmitting}
             autoComplete="new-password"
@@ -150,7 +150,7 @@ export function SignupForm() {
           label={t('auth.signup.confirmPasswordLabel')}
           type="password"
           placeholder={t('auth.signup.confirmPasswordPlaceholder')}
-          icon={<Lock size={20} />}
+          leftIcon={<Lock size={20} />}
           error={errors.confirmPassword?.message}
           disabled={isSubmitting}
           autoComplete="new-password"

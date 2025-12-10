@@ -10,8 +10,7 @@ import { useThemeColors } from '@/hooks';
 import { useAuthUIStore } from '@/stores';
 import { typography } from '@/styles';
 import { t } from '@/lib/i18n';
-import { Button } from '@/components/ui';
-import { InputField } from '../input-field';
+import { Button, InputField } from '@/components/ui';
 import { SocialButtons } from '../social-buttons';
 import { MagicLinkSent } from '../magic-link-sent';
 import { ErrorBanner } from '../error-banner';
@@ -126,10 +125,9 @@ export function LoginForm() {
           name="email"
           render={({ field: { onChange, onBlur, value } }) => (
             <InputField
+              type="email"
               label={t('auth.login.emailLabel')}
               placeholder={t('auth.login.emailPlaceholder')}
-              keyboardType="email-address"
-              autoCapitalize="none"
               autoComplete="email"
               error={errors.email?.message}
               editable={!isSubmitting}
@@ -147,9 +145,9 @@ export function LoginForm() {
           name="password"
           render={({ field: { onChange, onBlur, value } }) => (
             <InputField
+              type="password"
               label={t('auth.login.passwordLabel')}
               placeholder={t('auth.login.passwordPlaceholder')}
-              isPassword
               autoComplete="password"
               error={errors.password?.message}
               editable={!isSubmitting}
