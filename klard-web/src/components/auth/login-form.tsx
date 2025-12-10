@@ -145,7 +145,7 @@ export function LoginForm() {
           label={t('auth.login.emailLabel')}
           type="email"
           placeholder={t('auth.login.emailPlaceholder')}
-          icon={<Mail size={20} />}
+          leftIcon={<Mail size={20} />}
           error={errors.email?.message}
           disabled={isSubmitting}
           {...register('email')}
@@ -156,7 +156,7 @@ export function LoginForm() {
           label={t('auth.login.passwordLabel')}
           type="password"
           placeholder={t('auth.login.passwordPlaceholder')}
-          icon={<Lock size={20} />}
+          leftIcon={<Lock size={20} />}
           error={errors.password?.message}
           disabled={isSubmitting}
           {...register('password')}
