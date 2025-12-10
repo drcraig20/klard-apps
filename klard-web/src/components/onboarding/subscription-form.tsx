@@ -16,7 +16,7 @@ import { useSubscriptionStore } from '@/stores/subscription-store';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { cn } from '@/lib/utils';
+import { SelectField } from '@/components/ui/select-field';
 
 interface SubscriptionFormProps {
   service: PopularService;
@@ -129,21 +129,16 @@ export function SubscriptionForm({ service, onBack }: SubscriptionFormProps) {
         </FormField>
 
         {/* Billing Cycle */}
-        <FormField
+        <SelectField
+          value={formData.billingCycle || 'monthly'}
+          onChange={(value) => handleChange('billingCycle', value)}
+          options={[
+            { value: 'monthly', label: en.onboarding.addSubscription.billingCycles.monthly },
+            { value: 'annual', label: en.onboarding.addSubscription.billingCycles.annual },
+          ]}
           label={en.onboarding.addSubscription.labels.billingCycle}
           error={errors.billingCycle}
-          required
-        >
-          <Select
-            value={formData.billingCycle || 'monthly'}
-            onChange={(value) => handleChange('billingCycle', value)}
-            options={[
-              { value: 'monthly', label: en.onboarding.addSubscription.billingCycles.monthly },
-              { value: 'annual', label: en.onboarding.addSubscription.billingCycles.annual },
-            ]}
-            aria-invalid={!!errors.billingCycle}
-          />
-        </FormField>
+        />
 
         {/* Next Renewal Date */}
         <FormField
@@ -167,22 +162,17 @@ export function SubscriptionForm({ service, onBack }: SubscriptionFormProps) {
         </FormField>
 
         {/* Category */}
-        <FormField
+        <SelectField
+          value={formData.category || ''}
+          onChange={(value) => handleChange('category', value)}
+          options={SUBSCRIPTION_CATEGORIES.map((cat) => ({
+            value: cat,
+            label: formatCategoryLabel(cat),
+          }))}
           label={en.onboarding.addSubscription.labels.category}
           error={errors.category}
-          helperText={en.onboarding.addSubscription.helperText.autoFilled}
-          required
-        >
-          <Select
-            value={formData.category || ''}
-            onChange={(value) => handleChange('category', value)}
-            options={SUBSCRIPTION_CATEGORIES.map((cat) => ({
-              value: cat,
-              label: formatCategoryLabel(cat),
-            }))}
-            aria-invalid={!!errors.category}
-          />
-        </FormField>
+          placeholder={en.onboarding.addSubscription.helperText.autoFilled}
+        />
 
         {/* Cancellation URL */}
         <FormField
@@ -282,40 +272,6 @@ function FormField({ label, error, helperText, required, children }: FormFieldPr
         <p className="text-sm text-muted-foreground">{helperText}</p>
       )}
     </div>
-  );
-}
-
-/**
- * Select Component
- * Simple styled select element
- */
-interface SelectProps {
-  value: string;
-  onChange: (value: string) => void;
-  options: Array<{ value: string; label: string }>;
-  'aria-invalid'?: boolean;
-}
-
-function Select({ value, onChange, options, 'aria-invalid': ariaInvalid }: SelectProps) {
-  return (
-    <select
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      className={cn(
-        'flex h-9 w-full rounded-[var(--radius-default)] border bg-background px-3 py-2 text-sm',
-        'transition-colors',
-        'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary',
-        'disabled:cursor-not-allowed disabled:opacity-50',
-        ariaInvalid && 'border-destructive'
-      )}
-      aria-invalid={ariaInvalid}
-    >
-      {options.map((option) => (
-        <option key={option.value} value={option.value}>
-          {option.label}
-        </option>
-      ))}
-    </select>
   );
 }
 
