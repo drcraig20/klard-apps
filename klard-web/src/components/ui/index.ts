@@ -11,3 +11,4 @@ export { Card, CardHeader, CardFooter, CardTitle, CardDescription, CardContent }
 export { Alert, AlertTitle, AlertDescription } from './alert';
 export { Checkbox } from './checkbox';
 export { Separator } from './separator';
+export { PasswordInput, type PasswordInputProps } from './password-input';
