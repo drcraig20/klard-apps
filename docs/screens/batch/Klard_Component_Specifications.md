@@ -958,7 +958,7 @@ const Avatar = ({ src, alt, fallback, size, shape = 'circle' }) => {
 ---
 
 <!-- COMPONENT:START:1.9-progress-bar -->
-<!-- IN-PROGRESS:1.9-progress-bar -->
+<!-- DONE:1.9-progress-bar -->
 ## 1.9 ProgressBar
 
 **Used In:** Screens 16, 18, 22, 27, 28, 39
