@@ -7,6 +7,7 @@ import {
   Text,
   View,
   ScrollView,
+  useWindowDimensions,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
@@ -25,7 +26,10 @@ const colors = {
 };
 
 // Feature data (OCP: Extend by adding data, not modifying code)
-const features = en.onboarding.burnerCardTutorial.features;
+type FeatureCopy = { title: string; description: string };
+const features: FeatureCopy[] = en.onboarding.burnerCardTutorial.features.map(
+  (feature) => ({ ...feature })
+);
 
 // Feature Icon Component (SRP: Renders feature icon only)
 interface FeatureIconProps {
@@ -56,7 +60,7 @@ function FeatureIcon({ index }: FeatureIconProps) {
 
 // Feature Row Component (SRP: Renders one feature row)
 interface FeatureRowProps {
-  feature: (typeof features)[0];
+  feature: FeatureCopy;
   index: number;
 }
 
