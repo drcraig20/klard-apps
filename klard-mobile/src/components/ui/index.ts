@@ -5,3 +5,9 @@ export { CheckboxField, type CheckboxFieldProps } from './CheckboxField';
 export { SelectField, type SelectFieldProps, type SelectOption } from './SelectField';
 export { Badge, type BadgeProps } from './Badge';
 export { Avatar, type AvatarProps, type AvatarShape, type AvatarSize } from './Avatar';
+export {
+  ProgressBar,
+  type ProgressBarProps,
+  type ProgressBarSize,
+  type ProgressBarVariant,
+} from './ProgressBar';
