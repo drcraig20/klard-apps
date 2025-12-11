@@ -77,6 +77,9 @@ export function BurnerCardTutorial({
     await onSkip();
   }, [onSkip]);
 
+  const primaryLabel = en.onboarding.burnerCardTutorial.buttons.createBurnerCard;
+  const secondaryLabel = en.onboarding.burnerCardTutorial.buttons.exploreDashboard;
+
   return (
     <div className="min-h-screen flex flex-col bg-background">
       {/* Skip button */}
@@ -146,11 +149,15 @@ export function BurnerCardTutorial({
             onClick={handleCreateBurnerCard}
             disabled={isUpdating}
             className="w-full"
+            aria-label={primaryLabel}
           >
             {isUpdating ? (
-              <LoadingSpinner size="sm" />
+              <>
+                <LoadingSpinner size="sm" aria-hidden="true" />
+                <span className="sr-only">{primaryLabel}</span>
+              </>
             ) : (
-              en.onboarding.burnerCardTutorial.buttons.createBurnerCard
+              primaryLabel
             )}
           </Button>
 
@@ -161,8 +168,9 @@ export function BurnerCardTutorial({
             onClick={handleExploreDashboard}
             disabled={isUpdating}
             className="w-full"
+            aria-label={secondaryLabel}
           >
-            {en.onboarding.burnerCardTutorial.buttons.exploreDashboard}
+            {secondaryLabel}
           </Button>
         </div>
       </div>

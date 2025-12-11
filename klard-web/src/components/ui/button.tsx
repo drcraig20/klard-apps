@@ -67,16 +67,45 @@ function Button({
   children,
   ...props
 }: ButtonProps) {
-  const Comp = asChild ? Slot : "button"
+  const baseClassName = cn(
+    buttonVariants({ variant, size }),
+    fullWidth && "w-full",
+    className
+  )
   const isDisabled = disabled || loading
+
+  if (asChild && React.isValidElement(children)) {
+    const childElement = children as React.ReactElement<{ className?: string }>
+    const childClassName = childElement.props.className
+    const content = (
+      <>
+        {iconPosition === "left" && !loading && icon}
+        {loading ? (
+          <Loader2 className="size-4 animate-spin" aria-hidden="true" />
+        ) : (
+          childElement.props.children
+        )}
+        {iconPosition === "right" && !loading && icon}
+      </>
+    )
+
+    return (
+      <Slot
+        data-slot="button"
+        className={cn(baseClassName, childClassName)}
+        {...props}
+      >
+        {React.cloneElement(childElement, { disabled: isDisabled }, content)}
+      </Slot>
+    )
+  }
+
+  const Comp = asChild ? Slot : "button"
 
   return (
     <Comp
       data-slot="button"
-      className={cn(
-        buttonVariants({ variant, size, className }),
-        fullWidth && "w-full"
-      )}
+      className={baseClassName}
       disabled={isDisabled}
       {...props}
     >

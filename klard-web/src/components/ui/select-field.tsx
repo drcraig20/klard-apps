@@ -31,6 +31,8 @@ export interface SelectFieldProps {
   label?: string;
   /** Error message - displays in red below select */
   error?: string;
+  /** Helper text displayed below the select when no error */
+  helperText?: string;
   /** Disables the select */
   disabled?: boolean;
   /** Additional className for the container */
@@ -46,6 +48,7 @@ export function SelectField({
   placeholder = 'Select...',
   label,
   error,
+  helperText,
   disabled = false,
   className,
   id: providedId,
@@ -110,6 +113,9 @@ export function SelectField({
         >
           {error}
         </p>
+      )}
+      {!error && helperText && (
+        <p className="mt-2 text-sm text-muted-foreground">{helperText}</p>
       )}
     </div>
   );

@@ -56,7 +56,7 @@ describe('SubscriptionForm', () => {
       render(<SubscriptionForm service={testService} onBack={mockOnBack} />);
 
       expect(screen.getByText(testService.name)).toBeTruthy();
-      expect(screen.getByText('Streaming')).toBeTruthy(); // Formatted category
+      expect(screen.getAllByText('Streaming').length).toBeGreaterThan(0); // Formatted category
     });
 
     it('should render change button in service header', () => {

@@ -176,8 +176,8 @@ describe('BurnerCardTutorial', () => {
       />
     );
 
-    // LoadingSpinner renders an SVG with specific classes
-    const spinner = container.querySelector('svg.animate-spin');
+    // LoadingSpinner renders an element with animate-spin class
+    const spinner = container.querySelector('.animate-spin');
     expect(spinner).toBeTruthy();
   });
 

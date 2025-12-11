@@ -162,6 +162,7 @@ function ServiceChip({ service, isSelected, onClick }: ServiceChipProps) {
         className="h-3 w-3 rounded-full shadow-sm"
         style={{ backgroundColor: service.color }}
         aria-hidden="true"
+        role="presentation"
       />
       <span className="text-center text-xs font-medium leading-tight">
         {service.name}

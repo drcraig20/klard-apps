@@ -81,6 +81,9 @@ export function WelcomeCarousel({
   const slides = slidesProp || defaultSlides;
   const isLastSlide = currentIndex === slides.length - 1;
   const currentSlide = slides[currentIndex];
+  const ctaLabel = isLastSlide
+    ? en.onboarding.navigation.getStarted
+    : en.onboarding.navigation.next;
 
   const handleNext = useCallback(() => {
     if (currentIndex < slides.length - 1) {
@@ -170,9 +173,13 @@ export function WelcomeCarousel({
             onClick={handleButtonClick}
             disabled={isUpdating}
             className="w-full"
+            aria-label={ctaLabel}
           >
             {isUpdating ? (
-              <LoadingSpinner size="sm" />
+              <>
+                <LoadingSpinner size="sm" aria-hidden="true" />
+                <span className="sr-only">{ctaLabel}</span>
+              </>
             ) : isLastSlide ? (
               en.onboarding.navigation.getStarted
             ) : (

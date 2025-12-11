@@ -13,7 +13,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, fireEvent, within } from '@testing-library/react';
+import { render, screen, fireEvent, within, waitFor } from '@testing-library/react';
 import { ServiceGrid } from '@/components/onboarding/service-grid';
 import { POPULAR_SERVICES, type PopularService } from '@klard-apps/commons';
 
@@ -32,17 +32,16 @@ describe('ServiceGrid', () => {
       expect(searchInput).toBeTruthy();
     });
 
-    it('should render all 12 services initially on desktop', () => {
+    it('should render all 12 services initially on desktop', async () => {
       // Mock desktop viewport
       mockWindowWidth(1920);
 
       const { container } = render(<ServiceGrid onSelect={mockOnSelect} />);
 
-      // Wait for resize effect to complete
-      setTimeout(() => {
+      await waitFor(() => {
         const buttons = container.querySelectorAll('button[aria-pressed]');
         expect(buttons.length).toBe(12);
-      }, 100);
+      });
     });
 
     it('should render service names correctly', () => {
@@ -210,28 +209,26 @@ describe('ServiceGrid', () => {
       vi.restoreAllMocks();
     });
 
-    it('should show all 12 services on desktop (lg+)', () => {
+    it('should show all 12 services on desktop (lg+)', async () => {
       mockWindowWidth(1920);
 
       const { container } = render(<ServiceGrid onSelect={mockOnSelect} />);
 
-      // Give time for resize listener to trigger
-      setTimeout(() => {
+      await waitFor(() => {
         const buttons = container.querySelectorAll('button[aria-pressed]');
         expect(buttons.length).toBe(12);
-      }, 100);
+      });
     });
 
-    it('should limit to 8 services on mobile (<lg)', () => {
+    it('should limit to 8 services on mobile (<lg)', async () => {
       mockWindowWidth(768);
 
       const { container } = render(<ServiceGrid onSelect={mockOnSelect} />);
 
-      // Give time for resize listener to trigger
-      setTimeout(() => {
+      await waitFor(() => {
         const buttons = container.querySelectorAll('button[aria-pressed]');
         expect(buttons.length).toBeLessThanOrEqual(8);
-      }, 100);
+      });
     });
   });
 

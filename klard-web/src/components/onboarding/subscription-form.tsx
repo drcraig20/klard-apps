@@ -53,14 +53,17 @@ export function SubscriptionForm({ service, onBack }: SubscriptionFormProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showToast, setShowToast] = useState(false);
 
-  function handleChange(field: keyof AddSubscription, value: string | number) {
+  function handleChange(
+    field: keyof AddSubscription,
+    value: string | number | undefined
+  ) {
     setFormData((prev) => ({ ...prev, [field]: value }));
-    // Clear error for this field when user starts typing
+
     if (errors[field]) {
       setErrors((prev) => {
-        const newErrors = { ...prev };
-        delete newErrors[field];
-        return newErrors;
+        const nextErrors = { ...prev };
+        delete nextErrors[field];
+        return nextErrors;
       });
     }
   }
@@ -69,6 +72,15 @@ export function SubscriptionForm({ service, onBack }: SubscriptionFormProps) {
     e.preventDefault();
     setIsSubmitting(true);
     setErrors({});
+
+    const priceValue =
+      formData.price === undefined ? undefined : Number(formData.price);
+
+    if (priceValue === undefined || !Number.isFinite(priceValue) || priceValue <= 0) {
+      setErrors({ price: 'Price must be greater than 0' });
+      setIsSubmitting(false);
+      return;
+    }
 
     // Validate with Zod schema
     const result = AddSubscriptionSchema.safeParse(formData);
@@ -98,6 +110,12 @@ export function SubscriptionForm({ service, onBack }: SubscriptionFormProps) {
     router.push('/onboarding/burnercard-tutorial');
   }
 
+  const priceError =
+    errors.price ??
+    (formData.price !== undefined && Number(formData.price) <= 0
+      ? 'Price must be greater than 0'
+      : undefined);
+
   return (
     <div className="mx-auto w-full max-w-md space-y-6">
       {/* Service Header */}
@@ -108,7 +126,7 @@ export function SubscriptionForm({ service, onBack }: SubscriptionFormProps) {
         {/* Price */}
         <FormField
           label={en.onboarding.addSubscription.labels.price}
-          error={errors.price}
+          error={priceError}
           required
         >
           <div className="relative">
@@ -119,10 +137,13 @@ export function SubscriptionForm({ service, onBack }: SubscriptionFormProps) {
               type="number"
               step="0.01"
               min="0"
-              value={formData.price || ''}
-              onChange={(e) => handleChange('price', parseFloat(e.target.value))}
+              value={formData.price ?? ''}
+              onChange={(e) => {
+                const { value } = e.target;
+                handleChange('price', value === '' ? undefined : parseFloat(value));
+              }}
               className="pl-7"
-              aria-invalid={!!errors.price}
+              aria-invalid={!!priceError}
               required
             />
           </div>
@@ -171,6 +192,7 @@ export function SubscriptionForm({ service, onBack }: SubscriptionFormProps) {
           }))}
           label={en.onboarding.addSubscription.labels.category}
           error={errors.category}
+          helperText={en.onboarding.addSubscription.helperText.autoFilled}
           placeholder={en.onboarding.addSubscription.helperText.autoFilled}
         />
 
