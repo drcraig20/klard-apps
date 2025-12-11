@@ -40,7 +40,12 @@ describe('SubscriptionForm', () => {
     // Setup router mock
     vi.mocked(useRouter).mockReturnValue({
       push: mockPush,
-    } as ReturnType<typeof useRouter>);
+      back: vi.fn(),
+      forward: vi.fn(),
+      refresh: vi.fn(),
+      replace: vi.fn(),
+      prefetch: vi.fn(),
+    } as unknown as ReturnType<typeof useRouter>);
 
     // Setup store mock
     vi.mocked(useSubscriptionStore).mockReturnValue(mockAddSubscription);
