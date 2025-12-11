@@ -15,3 +15,4 @@ export { PasswordInput, type PasswordInputProps } from './password-input';
 export { CheckboxField, type CheckboxFieldProps } from './checkbox-field';
 export { SelectField, type SelectFieldProps, type SelectOption } from './select-field';
 export { Badge, badgeVariants, type BadgeProps } from './badge';
+export { Avatar, type AvatarProps, type AvatarShape, type AvatarSize } from './avatar';
