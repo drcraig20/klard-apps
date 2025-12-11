@@ -853,7 +853,7 @@ const Badge = ({ variant, size = 'md', icon, removable, onRemove, children }) =>
 ---
 
 <!-- COMPONENT:START:1.8-avatar -->
-<!-- IN-PROGRESS:1.8-avatar -->
+<!-- DONE:1.8-avatar -->
 ## 1.8 Avatar
 
 **Used In:** Screens 10, 31
