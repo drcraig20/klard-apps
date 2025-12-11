@@ -1076,7 +1076,7 @@ const ProgressBar = ({ value, max = 100, variant = 'default', size = 'md', showL
 ---
 
 <!-- COMPONENT:START:1.10-spinner-loading -->
-<!-- IN-PROGRESS:1.10-spinner-loading -->
+<!-- DONE:1.10-spinner-loading -->
 ## 1.10 Spinner / Loading
 
 **Used In:** All screens (loading states)
@@ -1140,7 +1140,7 @@ const Spinner = ({ size = 'md', color = '#0D7C7A', label }) => {
 ---
 
 <!-- COMPONENT:START:1.11-slider -->
-<!-- IN-PROGRESS:1.11-slider -->
+<!-- DONE:1.11-slider -->
 ## 1.11 Slider
 
 **Used In:** Screens 20, 23, 39
@@ -1259,7 +1259,7 @@ const SliderField = ({ value, onChange, min = 0, max = 100, label, showValue }) 
 ---
 
 <!-- COMPONENT:START:2.1-form-field -->
-<!-- IN-PROGRESS:2.1-form-field -->
+<!-- DONE:2.1-form-field -->
 ## 2.1 FormField
 
 **Used In:** All form screens
@@ -1320,6 +1320,7 @@ const FormField = ({ label, required, error, helperText, children }) => (
 ---
 
 <!-- COMPONENT:START:2.2-currency-input -->
+<!-- IN-PROGRESS:2.2-currency-input -->
 ## 2.2 CurrencyInput
 
 **Used In:** Screens 8, 13, 20, 23
@@ -1403,6 +1404,7 @@ const CurrencyInput = ({ value, onChange, currency = 'USD', label, error }) => {
 ---
 
 <!-- COMPONENT:START:2.3-date-picker -->
+<!-- IN-PROGRESS:2.3-date-picker -->
 ## 2.3 DatePicker
 
 **Used In:** Screens 8, 13, 14, 20, 27, 29
@@ -1557,6 +1559,7 @@ const DatePicker = ({ value, onChange, label, error, minDate, maxDate, placehold
 ---
 
 <!-- COMPONENT:START:2.4-search-input -->
+<!-- IN-PROGRESS:2.4-search-input -->
 ## 2.4 SearchInput
 
 **Used In:** Screens 8, 11, 13, 30, 33
@@ -1653,6 +1656,7 @@ const SearchInput = ({ value, onChange, onSearch, placeholder, loading }) => {
 ---
 
 <!-- COMPONENT:START:2.5-segmented-control -->
+<!-- IN-PROGRESS:2.5-segmented-control -->
 ## 2.5 SegmentedControl
 
 **Used In:** Screens 6, 11, 14, 19, 27
@@ -1801,6 +1805,7 @@ const FallbackSegmentedControl = ({ value, onChange, options }) => {
 ---
 
 <!-- COMPONENT:START:3.1-card -->
+<!-- IN-PROGRESS:3.1-card -->
 ## 3.1 Card
 
 **Used In:** All screens
@@ -1892,6 +1897,7 @@ const Card = ({ variant = 'default', padding = 'md', children, onPress }) => {
 ---
 
 <!-- COMPONENT:START:3.2-modal-dialog -->
+<!-- IN-PROGRESS:3.2-modal-dialog -->
 ## 3.2 Modal / Dialog
 
 **Used In:** Screens 9, 13, 19-21, 23, 29
@@ -2016,6 +2022,7 @@ const Modal = ({ open, onClose, title, description, children, footer }) => {
 ---
 
 <!-- COMPONENT:START:3.3-bottom-sheet -->
+<!-- IN-PROGRESS:3.3-bottom-sheet -->
 ## 3.3 BottomSheet (Mobile Only)
 
 **Used In:** Mobile versions of Screens 11, 13, 17, 22, 24
@@ -2108,6 +2115,7 @@ const KlardBottomSheet = ({
 ---
 
 <!-- COMPONENT:START:3.4-tabs -->
+<!-- IN-PROGRESS:3.4-tabs -->
 ## 3.4 Tabs
 
 **Used In:** Screens 11, 18, 24, 48
@@ -2194,6 +2202,7 @@ const TabBar = ({ value, onChange, tabs }) => (
 ---
 
 <!-- COMPONENT:START:3.5-sidebar -->
+<!-- IN-PROGRESS:3.5-sidebar -->
 ## 3.5 Sidebar (Web Only)
 
 **Used In:** Web versions of Screens 10-34
@@ -2252,6 +2261,7 @@ export function AppSidebar({ items, activeItem }) {
 ---
 
 <!-- COMPONENT:START:3.6-tab-bar -->
+<!-- IN-PROGRESS:3.6-tab-bar -->
 ## 3.6 TabBar (Mobile Only)
 
 **Used In:** Mobile versions of Screens 10-34
@@ -2387,6 +2397,7 @@ const CustomTabBar = ({ tabs, activeTab, onTabPress }) => {
 ---
 
 <!-- COMPONENT:START:3.7-stepper-progress-indicator -->
+<!-- IN-PROGRESS:3.7-stepper-progress-indicator -->
 ## 3.7 Stepper / Progress Indicator
 
 **Used In:** Screens 5, 19-21
@@ -2492,6 +2503,7 @@ const Stepper = ({ steps, currentStep }) => (
 ---
 
 <!-- COMPONENT:START:4.1-toast-notification -->
+<!-- IN-PROGRESS:4.1-toast-notification -->
 ## 4.1 Toast / Notification
 
 **Used In:** All screens (feedback)
@@ -2588,6 +2600,7 @@ const showToast = ({ type, title, description }) => {
 ---
 
 <!-- COMPONENT:START:4.2-alert-banner -->
+<!-- IN-PROGRESS:4.2-alert-banner -->
 ## 4.2 Alert / Banner
 
 **Used In:** Screens 4, 17, 21, 25, 32
@@ -2668,6 +2681,7 @@ const Alert = ({ type, title, children, dismissable, onDismiss, action }) => {
 ---
 
 <!-- COMPONENT:START:4.3-empty-state -->
+<!-- IN-PROGRESS:4.3-empty-state -->
 ## 4.3 EmptyState
 
 **Used In:** Screen 34 (all variants)
@@ -2754,6 +2768,7 @@ const EmptyState = ({ illustration, title, description, primaryAction, secondary
 ---
 
 <!-- COMPONENT:START:4.4-skeleton -->
+<!-- IN-PROGRESS:4.4-skeleton -->
 ## 4.4 Skeleton
 
 **Used In:** All screens (loading states)
@@ -2848,6 +2863,7 @@ const Skeleton = ({ variant = 'rectangular', width, height, style }) => {
 ---
 
 <!-- COMPONENT:START:4.5-tooltip -->
+<!-- IN-PROGRESS:4.5-tooltip -->
 ## 4.5 Tooltip
 
 **Used In:** Screens 7, 10, 14, 18
@@ -2919,6 +2935,7 @@ const Tooltip = ({ content, children }) => {
 ---
 
 <!-- COMPONENT:START:5.1-service-logo -->
+<!-- IN-PROGRESS:5.1-service-logo -->
 ## 5.1 ServiceLogo
 
 **Used In:** Screens 8, 11-13, 17, 25, 26, 30
@@ -2986,6 +3003,7 @@ const ServiceLogo = ({ service, size }) => {
 ---
 
 <!-- COMPONENT:START:5.2-subscription-card -->
+<!-- IN-PROGRESS:5.2-subscription-card -->
 ## 5.2 SubscriptionCard
 
 **Used In:** Screens 10, 11, 12, 17, 25, 26
