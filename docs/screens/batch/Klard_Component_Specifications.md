@@ -743,6 +743,7 @@ const BottomSheetSelect = ({ value, onChange, options, label }) => {
 ---
 
 <!-- COMPONENT:START:1.7-badge-chip -->
+<!-- DONE:1.7-badge-chip -->
 ## 1.7 Badge / Chip
 
 **Used In:** Screens 10-12, 17, 18, 22, 24-26
@@ -852,6 +853,7 @@ const Badge = ({ variant, size = 'md', icon, removable, onRemove, children }) =>
 ---
 
 <!-- COMPONENT:START:1.8-avatar -->
+<!-- IN-PROGRESS:1.8-avatar -->
 ## 1.8 Avatar
 
 **Used In:** Screens 10, 31
@@ -956,6 +958,7 @@ const Avatar = ({ src, alt, fallback, size, shape = 'circle' }) => {
 ---
 
 <!-- COMPONENT:START:1.9-progress-bar -->
+<!-- IN-PROGRESS:1.9-progress-bar -->
 ## 1.9 ProgressBar
 
 **Used In:** Screens 16, 18, 22, 27, 28, 39
@@ -1073,6 +1076,7 @@ const ProgressBar = ({ value, max = 100, variant = 'default', size = 'md', showL
 ---
 
 <!-- COMPONENT:START:1.10-spinner-loading -->
+<!-- IN-PROGRESS:1.10-spinner-loading -->
 ## 1.10 Spinner / Loading
 
 **Used In:** All screens (loading states)
@@ -1136,6 +1140,7 @@ const Spinner = ({ size = 'md', color = '#0D7C7A', label }) => {
 ---
 
 <!-- COMPONENT:START:1.11-slider -->
+<!-- IN-PROGRESS:1.11-slider -->
 ## 1.11 Slider
 
 **Used In:** Screens 20, 23, 39
@@ -1254,6 +1259,7 @@ const SliderField = ({ value, onChange, min = 0, max = 100, label, showValue }) 
 ---
 
 <!-- COMPONENT:START:2.1-form-field -->
+<!-- IN-PROGRESS:2.1-form-field -->
 ## 2.1 FormField
 
 **Used In:** All form screens
