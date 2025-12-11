@@ -12,6 +12,11 @@ console.warn = (...args: unknown[]) => {
   originalWarn(...args);
 };
 
+// Mock expo vector icons to avoid ESM transform issues in tests
+jest.mock('@expo/vector-icons', () => ({
+  Ionicons: () => null,
+}));
+
 // Mock react-native-safe-area-context
 jest.mock('react-native-safe-area-context', () => {
   const inset = { top: 0, right: 0, bottom: 0, left: 0 };

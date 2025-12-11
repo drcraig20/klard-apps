@@ -54,6 +54,12 @@ export interface ButtonProps
   fullWidth?: boolean
 }
 
+type ChildElementProps = {
+  className?: string
+  children?: React.ReactNode
+  disabled?: boolean
+}
+
 function Button({
   className,
   variant,
@@ -75,7 +81,7 @@ function Button({
   const isDisabled = disabled || loading
 
   if (asChild && React.isValidElement(children)) {
-    const childElement = children as React.ReactElement<{ className?: string }>
+    const childElement = children as React.ReactElement<ChildElementProps>
     const childClassName = childElement.props.className
     const content = (
       <>

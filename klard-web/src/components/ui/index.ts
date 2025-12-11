@@ -1,6 +1,7 @@
 export { InputField } from './input-field';
 export { KlardIcon, KlardLogo } from './klard-icon';
-export { LoadingSpinner } from './loading-spinner';
+export { LoadingSpinner } from "./loading-spinner"
+export { Spinner, type SpinnerProps } from "./spinner"
 export { ErrorBanner } from './error-banner';
 export { SocialButton } from './social-button';
 export { SubmitButton } from './submit-button';
@@ -17,9 +18,12 @@ export { SelectField, type SelectFieldProps, type SelectOption } from './select-
 export { Badge, badgeVariants, type BadgeProps } from './badge';
 export { Avatar, type AvatarProps, type AvatarShape, type AvatarSize } from './avatar';
 export { Progress } from './progress';
+export { FormField, type FormFieldProps } from './form-field';
 export {
   ProgressBar,
   type ProgressBarProps,
   type ProgressBarSize,
   type ProgressBarVariant,
 } from './progress-bar';
+export { Slider } from './slider';
+export { SliderField, type SliderFieldProps } from './slider-field';

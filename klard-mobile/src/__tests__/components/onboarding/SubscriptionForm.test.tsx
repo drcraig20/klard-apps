@@ -40,9 +40,12 @@ describe('SubscriptionForm', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
-    (useSubscriptionStore as unknown as jest.Mock).mockReturnValue({
-      addSubscription: mockAddSubscription,
-    });
+    (useSubscriptionStore as unknown as jest.Mock).mockImplementation(
+      (selector: (state: { addSubscription: typeof mockAddSubscription }) => unknown) =>
+        selector({
+          addSubscription: mockAddSubscription,
+        }),
+    );
   });
 
   describe('Initial State - Service Selection', () => {
