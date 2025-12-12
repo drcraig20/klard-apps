@@ -2768,7 +2768,7 @@ const EmptyState = ({ illustration, title, description, primaryAction, secondary
 ---
 
 <!-- COMPONENT:START:4.4-skeleton -->
-<!-- IN-PROGRESS:4.4-skeleton -->
+<!-- DONE:4.4-skeleton -->
 ## 4.4 Skeleton
 
 **Used In:** All screens (loading states)
