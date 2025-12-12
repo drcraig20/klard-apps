@@ -5,26 +5,71 @@ import {
   TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
+  Platform,
 } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
+import * as AppleAuthentication from 'expo-apple-authentication';
+import * as Haptics from 'expo-haptics';
 import { useThemeColors } from '@/hooks';
 import { signIn } from '@/lib/auth-client';
 
 interface SocialButtonsProps {
   disabled?: boolean;
   onError?: (error: string) => void;
+  onSuccess?: () => void;
 }
 
-export function SocialButtons({ disabled, onError }: SocialButtonsProps) {
+export function SocialButtons({ disabled, onError, onSuccess }: SocialButtonsProps) {
   const [loadingProvider, setLoadingProvider] = useState<string | null>(null);
   const colors = useThemeColors();
 
-  async function handleSocialLogin(provider: 'google' | 'apple') {
+  async function handleGoogleLogin() {
+    if (disabled || loadingProvider) return;
+
     try {
-      setLoadingProvider(provider);
-      await signIn.social({ provider });
+      await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      setLoadingProvider('google');
+      await signIn.social({ provider: 'google' });
+      onSuccess?.();
     } catch {
-      onError?.(`Failed to sign in with ${provider}. Please try again.`);
+      onError?.('Failed to sign in with google. Please try again.');
+    } finally {
+      setLoadingProvider(null);
+    }
+  }
+
+  async function handleAppleLogin() {
+    if (disabled || loadingProvider) return;
+
+    try {
+      await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+      setLoadingProvider('apple');
+
+      if (Platform.OS === 'ios') {
+        const credential = await AppleAuthentication.signInAsync({
+          requestedScopes: [
+            AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+            AppleAuthentication.AppleAuthenticationScope.EMAIL,
+          ],
+        });
+
+        // Send credential to backend via signIn.social
+        await signIn.social({
+          provider: 'apple',
+          idToken: credential.identityToken,
+        });
+      } else {
+        // Android fallback - use web-based OAuth
+        await signIn.social({ provider: 'apple' });
+      }
+      onSuccess?.();
+    } catch (error: unknown) {
+      const errorWithCode = error as Error & { code?: string };
+      if (errorWithCode?.code === 'ERR_REQUEST_CANCELED') {
+        // User cancelled - don't show error
+        return;
+      }
+      onError?.('Failed to sign in with apple. Please try again.');
     } finally {
       setLoadingProvider(null);
     }
@@ -34,8 +79,9 @@ export function SocialButtons({ disabled, onError }: SocialButtonsProps) {
 
   return (
     <View style={styles.container}>
+      {/* Google Button */}
       <TouchableOpacity
-        onPress={() => handleSocialLogin('google')}
+        onPress={handleGoogleLogin}
         disabled={isDisabled}
         style={[
           styles.button,
@@ -44,6 +90,8 @@ export function SocialButtons({ disabled, onError }: SocialButtonsProps) {
             opacity: isDisabled ? 0.5 : 1,
           },
         ]}
+        accessibilityRole="button"
+        accessibilityLabel="Sign in with Google"
       >
         {loadingProvider === 'google' ? (
           <ActivityIndicator size="small" color={colors.foreground} />
@@ -57,28 +105,42 @@ export function SocialButtons({ disabled, onError }: SocialButtonsProps) {
         )}
       </TouchableOpacity>
 
-      <TouchableOpacity
-        onPress={() => handleSocialLogin('apple')}
-        disabled={isDisabled}
-        style={[
-          styles.button,
-          {
-            borderColor: colors.border,
-            opacity: isDisabled ? 0.5 : 1,
-          },
-        ]}
-      >
-        {loadingProvider === 'apple' ? (
-          <ActivityIndicator size="small" color={colors.foreground} />
-        ) : (
-          <View style={styles.buttonContent}>
-            <AppleIcon color={colors.foreground} />
-            <Text style={[styles.buttonText, { color: colors.foreground }]}>
-              Apple
-            </Text>
-          </View>
-        )}
-      </TouchableOpacity>
+      {/* Apple Button - Native on iOS, Custom on Android */}
+      {Platform.OS === 'ios' ? (
+        <AppleAuthentication.AppleAuthenticationButton
+          buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
+          buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
+          cornerRadius={12}
+          style={[styles.appleButton, { opacity: isDisabled ? 0.5 : 1 }]}
+          onPress={handleAppleLogin}
+          testID="apple-native-button"
+        />
+      ) : (
+        <TouchableOpacity
+          onPress={handleAppleLogin}
+          disabled={isDisabled}
+          style={[
+            styles.button,
+            {
+              borderColor: colors.border,
+              opacity: isDisabled ? 0.5 : 1,
+            },
+          ]}
+          accessibilityRole="button"
+          accessibilityLabel="Sign in with Apple"
+        >
+          {loadingProvider === 'apple' ? (
+            <ActivityIndicator size="small" color={colors.foreground} />
+          ) : (
+            <View style={styles.buttonContent}>
+              <AppleIcon color={colors.foreground} />
+              <Text style={[styles.buttonText, { color: colors.foreground }]}>
+                Apple
+              </Text>
+            </View>
+          )}
+        </TouchableOpacity>
+      )}
     </View>
   );
 }
@@ -126,6 +188,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  appleButton: {
+    flex: 1,
+    height: 48,
   },
   buttonContent: {
     flexDirection: 'row',
