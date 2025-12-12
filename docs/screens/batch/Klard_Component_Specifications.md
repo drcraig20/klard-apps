@@ -3078,7 +3078,7 @@ const BurnerCardVisual = ({ card, size = 'md' }) => {
 ---
 
 <!-- COMPONENT:START:5.4-status-badge -->
-<!-- IN-PROGRESS:5.4-status-badge -->
+<!-- DONE:5.4-status-badge -->
 ## 5.4 StatusBadge
 
 **Used In:** Screens 11, 12, 18, 22, 24
