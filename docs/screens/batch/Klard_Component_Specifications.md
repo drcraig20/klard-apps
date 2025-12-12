@@ -2022,7 +2022,7 @@ const Modal = ({ open, onClose, title, description, children, footer }) => {
 ---
 
 <!-- COMPONENT:START:3.3-bottom-sheet -->
-<!-- IN-PROGRESS:3.3-bottom-sheet -->
+<!-- DONE:3.3-bottom-sheet -->
 ## 3.3 BottomSheet (Mobile Only)
 
 **Used In:** Mobile versions of Screens 11, 13, 17, 22, 24
