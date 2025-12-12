@@ -88,3 +88,4 @@ export {
   TooltipWrapper,
   type TooltipWrapperProps,
 } from './tooltip';
+export { ServiceLogo, type ServiceLogoProps, type Service, type ServiceLogoSize } from './service-logo';
