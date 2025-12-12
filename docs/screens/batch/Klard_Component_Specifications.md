@@ -3570,7 +3570,7 @@ export const formatCardNumber = (lastFour: string) => {
 ---
 
 <!-- SECTION:START:8.2-shared-hooks -->
-<!-- IN-PROGRESS:8.2-shared-hooks -->
+<!-- DONE:8.2-shared-hooks -->
 ## 8.2 Shared Hooks
 
 ```typescript
