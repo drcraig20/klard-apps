@@ -3016,7 +3016,7 @@ const ServiceLogo = ({ service, size }) => {
 ---
 
 <!-- COMPONENT:START:5.3-burner-card-visual -->
-<!-- IN-PROGRESS:5.3-burner-card-visual -->
+<!-- DONE:5.3-burner-card-visual -->
 ## 5.3 BurnerCardVisual
 
 **Used In:** Screens 18, 21, 22
