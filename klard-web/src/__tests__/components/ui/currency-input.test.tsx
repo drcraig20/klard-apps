@@ -232,23 +232,17 @@ describe('CurrencyInput', () => {
     });
   });
 
-  describe('Size Variants', () => {
-    it('should apply sm size variant', () => {
-      render(<CurrencyInput value={1} onChange={mockOnChange} size="sm" />);
-      const input = screen.getByRole('textbox');
-      expect(input.className).toMatch(/h-9/);
-    });
-
-    it('should apply md size variant by default', () => {
+  describe('Styling', () => {
+    it('should apply shared form field styles', () => {
       render(<CurrencyInput value={1} onChange={mockOnChange} />);
       const input = screen.getByRole('textbox');
-      expect(input.className).toMatch(/h-10/);
+      expect(input.className).toMatch(/h-12/); // shared styles use h-12
     });
 
-    it('should apply lg size variant', () => {
-      render(<CurrencyInput value={1} onChange={mockOnChange} size="lg" />);
+    it('should apply left icon padding for currency symbol', () => {
+      render(<CurrencyInput value={1} onChange={mockOnChange} />);
       const input = screen.getByRole('textbox');
-      expect(input.className).toMatch(/h-11/);
+      expect(input.className).toMatch(/pl-11/); // hasLeftIcon variant
     });
   });
 

@@ -1,47 +1,18 @@
 'use client';
 
 import { useId } from 'react';
-import { cva, type VariantProps } from 'class-variance-authority';
+import { type VariantProps } from 'class-variance-authority';
 import { FormField } from '@/components/ui/form-field';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
-
-const currencyInputVariants = cva(
-  [
-    'w-full',
-    'text-slate-700 dark:text-slate-200',
-    'placeholder:text-slate-400 dark:placeholder:text-slate-500',
-    'bg-transparent dark:bg-input/30',
-    'border-input',
-    'focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px]',
-  ],
-  {
-    variants: {
-      size: {
-        sm: 'h-9 pl-8 pr-3 text-sm',
-        md: 'h-10 pl-9 pr-3.5 text-base',
-        lg: 'h-11 pl-10 pr-4 text-base',
-      },
-      hasError: {
-        true: 'aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40',
-        false: '',
-      },
-      isDisabled: {
-        true: 'opacity-50 cursor-not-allowed',
-        false: '',
-      },
-    },
-    defaultVariants: {
-      size: 'md',
-      hasError: false,
-      isDisabled: false,
-    },
-  }
-);
+import {
+  inputFieldVariants,
+  leftIconStyles,
+  inputContainerStyles,
+} from '@/lib/form-field-styles';
 
 export interface CurrencyInputProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange' | 'size'>,
-    VariantProps<typeof currencyInputVariants> {
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange'> {
   /** The numeric value */
   value: number;
   /** Callback when value changes */
@@ -137,7 +108,6 @@ export function CurrencyInput({
   required,
   id: providedId,
   className,
-  size,
   ...props
 }: CurrencyInputProps) {
   const generatedId = useId();
@@ -164,8 +134,8 @@ export function CurrencyInput({
       helperText={helperText}
       className="w-full"
     >
-      <div data-slot="currency-input" className="relative w-full">
-        <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-500 dark:text-slate-400">
+      <div data-slot="currency-input" className={inputContainerStyles}>
+        <span className={leftIconStyles}>
           {symbol}
         </span>
         <Input
@@ -179,12 +149,11 @@ export function CurrencyInput({
           aria-invalid={!!error}
           aria-describedby={describedBy}
           className={cn(
-            currencyInputVariants({
-              size,
+            inputFieldVariants({
               hasError: !!error,
-              isDisabled: disabled,
+              disabled,
+              hasLeftIcon: true,
             }),
-            'pr-3',
             className
           )}
           {...props}
