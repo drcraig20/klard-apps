@@ -10,6 +10,12 @@ import {
 } from '@/components/ui/select';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
+import {
+  inputFieldVariants,
+  labelStyles,
+  errorStyles,
+  helperTextStyles,
+} from '@/lib/form-field-styles';
 
 export interface SelectOption {
   value: string;
@@ -62,7 +68,7 @@ export function SelectField({
       {label && (
         <Label
           htmlFor={id}
-          className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2"
+          className={labelStyles}
         >
           {label}
         </Label>
@@ -77,16 +83,10 @@ export function SelectField({
           aria-describedby={error ? errorId : undefined}
           aria-label={label}
           aria-invalid={!!error}
-          className={cn(
-            'w-full h-12 px-4 text-base',
-            'bg-white dark:bg-slate-900',
-            'border rounded-xl',
-            'transition-all duration-150',
-            'focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary',
-            !error && 'border-slate-300 dark:border-slate-700 hover:border-slate-400 dark:hover:border-slate-600',
-            error && 'border-destructive focus:ring-destructive/30 focus:border-destructive',
-            disabled && 'opacity-50 cursor-not-allowed bg-slate-50 dark:bg-slate-800'
-          )}
+          className={inputFieldVariants({
+            hasError: !!error,
+            disabled,
+          })}
         >
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
@@ -108,14 +108,14 @@ export function SelectField({
       {error && (
         <p
           id={errorId}
-          className="mt-2 text-sm text-destructive"
+          className={errorStyles}
           role="alert"
         >
           {error}
         </p>
       )}
       {!error && helperText && (
-        <p className="mt-2 text-sm text-muted-foreground">{helperText}</p>
+        <p className={helperTextStyles}>{helperText}</p>
       )}
     </div>
   );
