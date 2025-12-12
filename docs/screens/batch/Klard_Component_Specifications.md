@@ -1897,7 +1897,7 @@ const Card = ({ variant = 'default', padding = 'md', children, onPress }) => {
 ---
 
 <!-- COMPONENT:START:3.2-modal-dialog -->
-<!-- IN-PROGRESS:3.2-modal-dialog -->
+<!-- DONE:3.2-modal-dialog -->
 ## 3.2 Modal / Dialog
 
 **Used In:** Screens 9, 13, 19-21, 23, 29
