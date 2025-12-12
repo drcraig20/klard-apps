@@ -94,7 +94,7 @@ export interface Subscription {
   logoUrl?: string;
 }
 
-export interface Alert {
+export interface AlertNotification {
   id: string;
   type: AlertType;
   title: string;
@@ -107,7 +107,7 @@ export interface Alert {
 }
 
 export interface AlertCardProps extends VariantProps<typeof alertCardVariants> {
-  alert: Alert;
+  alert: AlertNotification;
   onPress: () => void;
   onDismiss?: () => void;
   className?: string;
