@@ -1404,7 +1404,7 @@ const CurrencyInput = ({ value, onChange, currency = 'USD', label, error }) => {
 ---
 
 <!-- COMPONENT:START:2.3-date-picker -->
-<!-- IN-PROGRESS:2.3-date-picker -->
+<!-- DONE:2.3-date-picker -->
 ## 2.3 DatePicker
 
 **Used In:** Screens 8, 13, 14, 20, 27, 29
