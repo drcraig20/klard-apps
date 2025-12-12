@@ -16,5 +16,7 @@ export {
   type ProgressBarSize,
   type ProgressBarVariant,
 } from './ProgressBar';
+export { DatePicker, type DatePickerProps } from './DatePicker';
 export { Spinner, type SpinnerProps } from './Spinner';
 export { SliderField, type SliderFieldProps } from './SliderField';
+export { SearchInput, type SearchInputProps } from './SearchInput';
