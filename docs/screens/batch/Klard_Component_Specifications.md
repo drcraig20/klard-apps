@@ -1656,7 +1656,7 @@ const SearchInput = ({ value, onChange, onSearch, placeholder, loading }) => {
 ---
 
 <!-- COMPONENT:START:2.5-segmented-control -->
-<!-- IN-PROGRESS:2.5-segmented-control -->
+<!-- DONE:2.5-segmented-control -->
 ## 2.5 SegmentedControl
 
 **Used In:** Screens 6, 11, 14, 19, 27
