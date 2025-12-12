@@ -1,68 +1,13 @@
 'use client';
 
 import * as React from 'react';
-import { cva, type VariantProps } from 'class-variance-authority';
-import { Bell, RefreshCw, Ban, AlertCircle, DollarSign, Info } from 'lucide-react';
+import { type VariantProps } from 'class-variance-authority';
 import Image from 'next/image';
 
 import { cn } from '@/lib/utils';
-import { Button } from './button';
-
-// Alert type configuration
-const alertTypeConfig = {
-  renewal: {
-    icon: RefreshCw,
-    tone: 'info' as const,
-  },
-  payment_failed: {
-    icon: AlertCircle,
-    tone: 'error' as const,
-  },
-  service_blocked: {
-    icon: Ban,
-    tone: 'error' as const,
-  },
-  new_charge: {
-    icon: DollarSign,
-    tone: 'warning' as const,
-  },
-  card_expiring: {
-    icon: AlertCircle,
-    tone: 'warning' as const,
-  },
-  system: {
-    icon: Info,
-    tone: 'info' as const,
-  },
-};
-
-// CVA variants
-const alertCardVariants = cva(
-  'flex gap-3 rounded-xl border bg-card p-4 transition-all duration-200',
-  {
-    variants: {
-      tone: {
-        info: 'border-blue-200 bg-blue-50/50 dark:border-blue-900/40 dark:bg-blue-950/20',
-        warning:
-          'border-amber-200 bg-amber-50/50 dark:border-amber-900/40 dark:bg-amber-950/20',
-        error: 'border-red-200 bg-red-50/50 dark:border-red-900/40 dark:bg-red-950/20',
-      },
-      size: {
-        md: 'p-4',
-        sm: 'p-3 gap-2',
-      },
-      interactive: {
-        true: 'cursor-pointer hover:shadow-md hover:border-primary/30',
-        false: '',
-      },
-    },
-    defaultVariants: {
-      tone: 'info',
-      size: 'md',
-      interactive: false,
-    },
-  }
-);
+import { Button } from '../button';
+import { alertTypeConfig, type AlertType } from './alert-card.constants';
+import { alertCardVariants } from './alert-card.styles';
 
 // Helper: Format relative time
 function formatRelativeTime(date: Date): string {
@@ -81,13 +26,7 @@ function formatRelativeTime(date: Date): string {
 }
 
 // Types
-export type AlertType =
-  | 'renewal'
-  | 'payment_failed'
-  | 'service_blocked'
-  | 'new_charge'
-  | 'card_expiring'
-  | 'system';
+export type { AlertType };
 
 export interface Subscription {
   name: string;
@@ -241,4 +180,4 @@ function AlertCard({
   );
 }
 
-export { AlertCard, alertCardVariants };
+export { AlertCard };
