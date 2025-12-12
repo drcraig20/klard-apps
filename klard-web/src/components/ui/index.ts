@@ -80,3 +80,11 @@ export {
   type TextLineSkeletonProps,
   type SubscriptionCardSkeletonProps,
 } from './skeleton-presets';
+export {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  TooltipProvider,
+  TooltipWrapper,
+  type TooltipWrapperProps,
+} from './tooltip';
