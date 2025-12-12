@@ -20,3 +20,8 @@ export { DatePicker, type DatePickerProps } from './DatePicker';
 export { Spinner, type SpinnerProps } from './Spinner';
 export { SliderField, type SliderFieldProps } from './SliderField';
 export { SearchInput, type SearchInputProps } from './SearchInput';
+export {
+  SegmentedControl,
+  type SegmentedControlProps,
+  type SegmentedControlOption,
+} from './SegmentedControl';
