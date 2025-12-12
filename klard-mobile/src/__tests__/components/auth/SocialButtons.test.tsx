@@ -165,7 +165,7 @@ describe('SocialButtons (Mobile)', () => {
         expect(AppleAuthentication.signInAsync).toHaveBeenCalled();
         expect(signIn.social).toHaveBeenCalledWith({
           provider: 'apple',
-          idToken: 'test-token',
+          idToken: { token: 'test-token' },
         });
       });
     });

@@ -53,10 +53,14 @@ export function SocialButtons({ disabled, onError, onSuccess }: SocialButtonsPro
           ],
         });
 
+        if (!credential.identityToken) {
+          throw new Error('No identity token received from Apple');
+        }
+
         // Send credential to backend via signIn.social
         await signIn.social({
           provider: 'apple',
-          idToken: credential.identityToken,
+          idToken: { token: credential.identityToken },
         });
       } else {
         // Android fallback - use web-based OAuth
