@@ -1320,7 +1320,7 @@ const FormField = ({ label, required, error, helperText, children }) => (
 ---
 
 <!-- COMPONENT:START:2.2-currency-input -->
-<!-- IN-PROGRESS:2.2-currency-input -->
+<!-- DONE:2.2-currency-input -->
 ## 2.2 CurrencyInput
 
 **Used In:** Screens 8, 13, 20, 23
