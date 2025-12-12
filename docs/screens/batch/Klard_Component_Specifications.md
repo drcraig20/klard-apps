@@ -1559,7 +1559,7 @@ const DatePicker = ({ value, onChange, label, error, minDate, maxDate, placehold
 ---
 
 <!-- COMPONENT:START:2.4-search-input -->
-<!-- IN-PROGRESS:2.4-search-input -->
+<!-- DONE:2.4-search-input -->
 ## 2.4 SearchInput
 
 **Used In:** Screens 8, 11, 13, 30, 33

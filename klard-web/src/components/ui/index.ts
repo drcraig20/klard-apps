@@ -30,3 +30,9 @@ export {
 export { Slider } from './slider';
 export { SliderField, type SliderFieldProps } from './slider-field';
 export { SearchInput, type SearchInputProps } from './search-input';
+export {
+  SegmentedControl,
+  segmentedControlVariants,
+  type SegmentedControlProps,
+  type SegmentedControlOption,
+} from './segmented-control';
