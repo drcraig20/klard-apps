@@ -2681,7 +2681,7 @@ const Alert = ({ type, title, children, dismissable, onDismiss, action }) => {
 ---
 
 <!-- COMPONENT:START:4.3-empty-state -->
-<!-- IN-PROGRESS:4.3-empty-state -->
+<!-- DONE:4.3-empty-state -->
 ## 4.3 EmptyState
 
 **Used In:** Screen 34 (all variants)
