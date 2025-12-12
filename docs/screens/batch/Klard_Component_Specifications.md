@@ -3122,7 +3122,7 @@ const StatusBadge = ({ status }) => {
 ---
 
 <!-- COMPONENT:START:5.5-price-display -->
-<!-- IN-PROGRESS:5.5-price-display -->
+<!-- DONE:5.5-price-display -->
 ## 5.5 PriceDisplay
 
 **Used In:** Screens 8, 11, 12, 13, 25, 27, 30
