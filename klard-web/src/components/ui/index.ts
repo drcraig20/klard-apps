@@ -89,3 +89,9 @@ export {
   type TooltipWrapperProps,
 } from './tooltip';
 export { ServiceLogo, type ServiceLogoProps, type Service, type ServiceLogoSize } from './service-logo';
+export {
+  SubscriptionCard,
+  subscriptionCardVariants,
+  type SubscriptionCardProps,
+  type SubscriptionData,
+} from './subscription-card';
