@@ -9,12 +9,19 @@ import Toast from "react-native-toast-message";
 import * as Haptics from "expo-haptics";
 
 // Mock react-native-toast-message
-jest.mock("react-native-toast-message", () => ({
-  show: jest.fn(),
-  hide: jest.fn(),
-  __esModule: true,
-  default: jest.fn(() => null),
-}));
+jest.mock("react-native-toast-message", () => {
+  const mockShow = jest.fn();
+  const mockHide = jest.fn();
+  return {
+    __esModule: true,
+    default: {
+      show: mockShow,
+      hide: mockHide,
+    },
+    show: mockShow,
+    hide: mockHide,
+  };
+});
 
 // Mock expo-haptics
 jest.mock("expo-haptics", () => ({
