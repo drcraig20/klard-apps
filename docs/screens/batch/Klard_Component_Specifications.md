@@ -2600,7 +2600,7 @@ const showToast = ({ type, title, description }) => {
 ---
 
 <!-- COMPONENT:START:4.2-alert-banner -->
-<!-- IN-PROGRESS:4.2-alert-banner -->
+<!-- DONE:4.2-alert-banner -->
 ## 4.2 Alert / Banner
 
 **Used In:** Screens 4, 17, 21, 25, 32
