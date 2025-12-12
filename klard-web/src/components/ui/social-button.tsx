@@ -21,6 +21,7 @@ export function SocialButton({
   return (
     <button
       type="button"
+      data-slot="social-button"
       onClick={onClick}
       disabled={disabled || isLoading}
       className={cn(
