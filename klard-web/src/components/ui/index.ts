@@ -36,3 +36,10 @@ export {
   type SegmentedControlProps,
   type SegmentedControlOption,
 } from './segmented-control';
+export {
+  KlardCard,
+  klardCardVariants,
+  type KlardCardProps,
+  type KlardCardVariant,
+  type KlardCardPadding,
+} from './klard-card';
