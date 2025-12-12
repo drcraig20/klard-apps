@@ -2397,7 +2397,7 @@ const CustomTabBar = ({ tabs, activeTab, onTabPress }) => {
 ---
 
 <!-- COMPONENT:START:3.7-stepper-progress-indicator -->
-<!-- IN-PROGRESS:3.7-stepper-progress-indicator -->
+<!-- DONE:3.7-stepper-progress-indicator -->
 ## 3.7 Stepper / Progress Indicator
 
 **Used In:** Screens 5, 19-21
