@@ -44,3 +44,18 @@ export {
   type KlardCardPadding,
 } from './klard-card';
 export { Modal, type ModalProps, type ModalSize } from './modal';
+export {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
+  TabsContainer,
+  type TabItem,
+  type TabsContainerProps,
+} from './tabs';
+export {
+  AppSidebar,
+  type AppSidebarProps,
+  type SidebarNavItem,
+  type AppSidebarSkeletonProps,
+} from './app-sidebar';
