@@ -3003,7 +3003,7 @@ const ServiceLogo = ({ service, size }) => {
 ---
 
 <!-- COMPONENT:START:5.2-subscription-card -->
-<!-- IN-PROGRESS:5.2-subscription-card -->
+<!-- DONE:5.2-subscription-card -->
 ## 5.2 SubscriptionCard
 
 **Used In:** Screens 10, 11, 12, 17, 25, 26
