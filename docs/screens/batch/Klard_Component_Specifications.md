@@ -3016,6 +3016,7 @@ const ServiceLogo = ({ service, size }) => {
 ---
 
 <!-- COMPONENT:START:5.3-burner-card-visual -->
+<!-- IN-PROGRESS:5.3-burner-card-visual -->
 ## 5.3 BurnerCardVisual
 
 **Used In:** Screens 18, 21, 22
@@ -3077,6 +3078,7 @@ const BurnerCardVisual = ({ card, size = 'md' }) => {
 ---
 
 <!-- COMPONENT:START:5.4-status-badge -->
+<!-- IN-PROGRESS:5.4-status-badge -->
 ## 5.4 StatusBadge
 
 **Used In:** Screens 11, 12, 18, 22, 24
@@ -3120,6 +3122,7 @@ const StatusBadge = ({ status }) => {
 ---
 
 <!-- COMPONENT:START:5.5-price-display -->
+<!-- IN-PROGRESS:5.5-price-display -->
 ## 5.5 PriceDisplay
 
 **Used In:** Screens 8, 11, 12, 13, 25, 27, 30
@@ -3181,6 +3184,7 @@ const PriceDisplay = ({ amount, currency = 'USD', billingCycle, size = 'md', sho
 ---
 
 <!-- COMPONENT:START:5.6-alert-card -->
+<!-- IN-PROGRESS:5.6-alert-card -->
 ## 5.6 AlertCard
 
 **Used In:** Screens 24, 25, 26
@@ -3293,6 +3297,7 @@ const AlertCard = ({ alert, onPress, onDismiss }) => {
 ---
 
 <!-- COMPONENT:START:5.7-stat-card -->
+<!-- IN-PROGRESS:5.7-stat-card -->
 ## 5.7 StatCard
 
 **Used In:** Screens 10, 27, 28
@@ -3380,6 +3385,7 @@ const StatCard = ({ label, value, trend, icon, onClick }) => (
 ---
 
 <!-- COMPONENT:START:6.1-oauth-social-login -->
+<!-- IN-PROGRESS:6.1-oauth-social-login -->
 ## 6.1 OAuth / Social Login
 
 **Used In:** Screens 1, 2, 15
@@ -3486,6 +3492,7 @@ const SocialLoginButtons = () => (
 ---
 
 <!-- SECTION:START:7-component-index -->
+<!-- IN-PROGRESS:7-component-index -->
 ## Quick Reference: Components Used Per Screen
 
 | Screen | Key Components |
@@ -3533,6 +3540,7 @@ const SocialLoginButtons = () => (
 ---
 
 <!-- SECTION:START:8.1-format-utilities -->
+<!-- IN-PROGRESS:8.1-format-utilities -->
 ## 8.1 Format Utilities
 
 ```typescript
@@ -3562,6 +3570,7 @@ export const formatCardNumber = (lastFour: string) => {
 ---
 
 <!-- SECTION:START:8.2-shared-hooks -->
+<!-- IN-PROGRESS:8.2-shared-hooks -->
 ## 8.2 Shared Hooks
 
 ```typescript
@@ -3594,6 +3603,7 @@ export const useHaptics = () => ({
 ---
 
 <!-- SECTION:START:8.3-theme-constants -->
+<!-- IN-PROGRESS:8.3-theme-constants -->
 ## 8.3 Theme Constants
 
 ```typescript
