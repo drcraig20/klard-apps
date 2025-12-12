@@ -41,7 +41,7 @@ describe('Skeleton', () => {
       render(<Skeleton />);
 
       const container = screen.getByTestId('skeleton-container');
-      expect(container.props.style).toMatchObject({ borderRadius: 6 });
+      expect(container.props.style[1]).toMatchObject({ borderRadius: 6 });
     });
 
     it('should apply circular variant', () => {
@@ -49,14 +49,14 @@ describe('Skeleton', () => {
 
       const container = screen.getByTestId('skeleton-container');
       // Circular should have borderRadius = width/2
-      expect(container.props.style).toMatchObject({ borderRadius: 24 });
+      expect(container.props.style[1]).toMatchObject({ borderRadius: 24 });
     });
 
     it('should apply text variant with default height', () => {
       render(<Skeleton variant="text" />);
 
       const container = screen.getByTestId('skeleton-container');
-      expect(container.props.style).toMatchObject({ height: 16 });
+      expect(container.props.style[1]).toMatchObject({ height: 16 });
     });
   });
 
@@ -65,21 +65,21 @@ describe('Skeleton', () => {
       render(<Skeleton width={100} />);
 
       const container = screen.getByTestId('skeleton-container');
-      expect(container.props.style).toMatchObject({ width: 100 });
+      expect(container.props.style[1]).toMatchObject({ width: 100 });
     });
 
     it('should accept height prop', () => {
       render(<Skeleton height={50} />);
 
       const container = screen.getByTestId('skeleton-container');
-      expect(container.props.style).toMatchObject({ height: 50 });
+      expect(container.props.style[1]).toMatchObject({ height: 50 });
     });
 
     it('should accept percentage width as string', () => {
       render(<Skeleton width="100%" />);
 
       const container = screen.getByTestId('skeleton-container');
-      expect(container.props.style).toMatchObject({ width: '100%' });
+      expect(container.props.style[1]).toMatchObject({ width: '100%' });
     });
   });
 
