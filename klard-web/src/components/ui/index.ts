@@ -20,6 +20,7 @@ export { Badge, badgeVariants, type BadgeProps } from './badge';
 export { Avatar, type AvatarProps, type AvatarShape, type AvatarSize } from './avatar';
 export { Progress } from './progress';
 export { FormField, type FormFieldProps } from './form-field';
+export { DatePicker, type DatePickerProps } from './date-picker';
 export {
   ProgressBar,
   type ProgressBarProps,
@@ -28,3 +29,4 @@ export {
 } from './progress-bar';
 export { Slider } from './slider';
 export { SliderField, type SliderFieldProps } from './slider-field';
+export { SearchInput, type SearchInputProps } from './search-input';
