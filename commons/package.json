@@ -20,6 +20,7 @@
     "test:watch": "vitest"
   },
   "dependencies": {
+    "date-fns": "^4.1.0",
     "zod": "^4.1.13"
   },
   "devDependencies": {
