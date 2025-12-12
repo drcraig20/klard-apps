@@ -4,6 +4,11 @@ import { forwardRef, useCallback, useRef, useEffect } from 'react';
 import { Search, X, Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input';
+import {
+  leftIconStyles,
+  iconButtonStyles,
+  inputContainerStyles,
+} from '@/lib/form-field-styles';
 
 export interface SearchInputProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'type'> {
@@ -80,11 +85,11 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
     const showClearButton = !loading && value.length > 0;
 
     return (
-      <div data-slot="search-input" className={cn('relative', className)}>
+      <div data-slot="search-input" className={cn(inputContainerStyles, className)}>
         {/* Search icon */}
         <div
           data-slot="search-icon"
-          className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 pointer-events-none"
+          className={leftIconStyles}
         >
           <Search className="h-4 w-4" />
         </div>
@@ -121,10 +126,7 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
             onClick={handleClear}
             disabled={disabled}
             className={cn(
-              'absolute right-3 top-1/2 -translate-y-1/2',
-              'text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300',
-              'transition-colors p-1 rounded',
-              'focus:outline-none focus:ring-2 focus:ring-primary/30',
+              iconButtonStyles,
               disabled && 'pointer-events-none opacity-50'
             )}
             aria-label="Clear search"
