@@ -1,47 +1,15 @@
 'use client';
 
 import * as React from 'react';
-import { cva, type VariantProps } from 'class-variance-authority';
+import { type VariantProps } from 'class-variance-authority';
 import { format } from 'date-fns';
 
 import { cn } from '@/lib/utils';
-import { Avatar } from './avatar';
-import { Badge } from './badge';
+import { Avatar } from '../avatar';
+import { Badge } from '../badge';
 
-const subscriptionCardVariants = cva(
-  'flex items-center gap-4 rounded-xl border bg-card p-4 transition-colors',
-  {
-    variants: {
-      variant: {
-        default: '',
-        compact: 'p-3',
-        detailed: 'p-5',
-      },
-      interactive: {
-        true: 'cursor-pointer hover:bg-accent/50 hover:border-primary/30',
-        false: '',
-      },
-    },
-    defaultVariants: {
-      variant: 'default',
-      interactive: false,
-    },
-  }
-);
-
-const statusConfig = {
-  active: { label: 'Active', variant: 'success' as const },
-  trial: { label: 'Trial', variant: 'warning' as const },
-  paused: { label: 'Paused', variant: 'default' as const },
-  cancelled: { label: 'Cancelled', variant: 'default' as const },
-  expired: { label: 'Expired', variant: 'error' as const },
-};
-
-const billingCycleLabels = {
-  monthly: '/mo',
-  quarterly: '/qtr',
-  yearly: '/yr',
-};
+import { subscriptionCardVariants } from './subscription-card.styles';
+import { statusConfig, billingCycleLabels } from './subscription-card.constants';
 
 export interface SubscriptionData {
   id: string;
@@ -157,4 +125,4 @@ function SubscriptionCard({
   );
 }
 
-export { SubscriptionCard, subscriptionCardVariants };
+export { SubscriptionCard };
