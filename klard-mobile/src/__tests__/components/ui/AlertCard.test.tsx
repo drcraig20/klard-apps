@@ -65,7 +65,7 @@ describe('AlertCard (Mobile)', () => {
 
       expect(screen.getByText('Netflix renewal')).toBeTruthy();
       expect(screen.getByText('Renews in 3 days')).toBeTruthy();
-      expect(screen.getByText('1 day ago')).toBeTruthy();
+      expect(screen.getByText('yesterday')).toBeTruthy();
       expect(screen.getByLabelText(/unread/i)).toBeTruthy();
     });
 
