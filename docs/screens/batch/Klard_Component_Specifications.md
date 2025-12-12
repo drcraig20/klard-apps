@@ -2261,7 +2261,7 @@ export function AppSidebar({ items, activeItem }) {
 ---
 
 <!-- COMPONENT:START:3.6-tab-bar -->
-<!-- IN-PROGRESS:3.6-tab-bar -->
+<!-- DONE:3.6-tab-bar -->
 ## 3.6 TabBar (Mobile Only)
 
 **Used In:** Mobile versions of Screens 10-34
