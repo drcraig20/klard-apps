@@ -2863,7 +2863,7 @@ const Skeleton = ({ variant = 'rectangular', width, height, style }) => {
 ---
 
 <!-- COMPONENT:START:4.5-tooltip -->
-<!-- IN-PROGRESS:4.5-tooltip -->
+<!-- DONE:4.5-tooltip -->
 ## 4.5 Tooltip
 
 **Used In:** Screens 7, 10, 14, 18
