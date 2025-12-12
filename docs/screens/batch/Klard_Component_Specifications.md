@@ -2503,7 +2503,7 @@ const Stepper = ({ steps, currentStep }) => (
 ---
 
 <!-- COMPONENT:START:4.1-toast-notification -->
-<!-- IN-PROGRESS:4.1-toast-notification -->
+<!-- DONE:4.1-toast-notification -->
 ## 4.1 Toast / Notification
 
 **Used In:** All screens (feedback)
