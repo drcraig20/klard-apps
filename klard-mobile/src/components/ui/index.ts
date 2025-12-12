@@ -62,3 +62,5 @@ export {
   type StatusType,
 } from './StatusBadge';
 export { PriceDisplay, type PriceDisplayProps } from './PriceDisplay';
+export { StatCard, type StatCardProps } from './StatCard';
+export { AlertCard, type AlertCardProps, type Alert } from './AlertCard';
