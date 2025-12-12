@@ -109,3 +109,5 @@ export {
   type StatusBadgeProps,
   type StatusType,
 } from './status-badge';
+export { PriceDisplay, priceDisplayVariants, type PriceDisplayProps } from './price-display';
+export { StatCard, statCardVariants, type StatCardProps } from './stat-card';
