@@ -2115,7 +2115,7 @@ const KlardBottomSheet = ({
 ---
 
 <!-- COMPONENT:START:3.4-tabs -->
-<!-- IN-PROGRESS:3.4-tabs -->
+<!-- DONE:3.4-tabs -->
 ## 3.4 Tabs
 
 **Used In:** Screens 11, 18, 24, 48
