@@ -59,3 +59,4 @@ export {
   type SidebarNavItem,
   type AppSidebarSkeletonProps,
 } from './app-sidebar';
+export { Stepper, type StepperProps, type Step } from './stepper';
