@@ -2935,7 +2935,7 @@ const Tooltip = ({ content, children }) => {
 ---
 
 <!-- COMPONENT:START:5.1-service-logo -->
-<!-- IN-PROGRESS:5.1-service-logo -->
+<!-- DONE:5.1-service-logo -->
 ## 5.1 ServiceLogo
 
 **Used In:** Screens 8, 11-13, 17, 25, 26, 30
