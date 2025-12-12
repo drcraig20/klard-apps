@@ -3540,7 +3540,7 @@ const SocialLoginButtons = () => (
 ---
 
 <!-- SECTION:START:8.1-format-utilities -->
-<!-- IN-PROGRESS:8.1-format-utilities -->
+<!-- DONE:8.1-format-utilities -->
 ## 8.1 Format Utilities
 
 ```typescript
@@ -3603,7 +3603,7 @@ export const useHaptics = () => ({
 ---
 
 <!-- SECTION:START:8.3-theme-constants -->
-<!-- IN-PROGRESS:8.3-theme-constants -->
+<!-- DONE:8.3-theme-constants -->
 ## 8.3 Theme Constants
 
 ```typescript
