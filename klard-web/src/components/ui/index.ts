@@ -63,3 +63,11 @@ export { Stepper, type StepperProps, type Step } from './stepper';
 export { Toaster } from './sonner';
 export { showToast, type ToastProps, type ToastType, type ToastAction } from './toast';
 export { AlertBanner, type AlertBannerProps } from './alert-banner';
+export {
+  EmptyState,
+  EmptyStateMedia,
+  EmptyStateTitle,
+  EmptyStateDescription,
+  EmptyStateActions,
+  type EmptyStateProps,
+} from './empty-state';
