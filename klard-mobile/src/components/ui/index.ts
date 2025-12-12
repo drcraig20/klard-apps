@@ -61,3 +61,4 @@ export {
   type StatusBadgeProps,
   type StatusType,
 } from './StatusBadge';
+export { PriceDisplay, type PriceDisplayProps } from './PriceDisplay';
