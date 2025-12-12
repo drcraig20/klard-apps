@@ -31,3 +31,5 @@ export {
   type CardVariant,
   type CardPadding,
 } from './Card';
+export { BottomSheet, type BottomSheetProps } from './BottomSheet';
+export { Modal, type ModalProps } from './Modal';
