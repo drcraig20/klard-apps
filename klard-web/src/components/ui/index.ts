@@ -112,3 +112,4 @@ export {
 } from './status-badge';
 export { PriceDisplay, priceDisplayVariants, type PriceDisplayProps } from './price-display';
 export { StatCard, statCardVariants, type StatCardProps } from './stat-card';
+export { FormLabel, type FormLabelProps } from './form-label';
