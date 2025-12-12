@@ -3297,7 +3297,7 @@ const AlertCard = ({ alert, onPress, onDismiss }) => {
 ---
 
 <!-- COMPONENT:START:5.7-stat-card -->
-<!-- IN-PROGRESS:5.7-stat-card -->
+<!-- DONE:5.7-stat-card -->
 ## 5.7 StatCard
 
 **Used In:** Screens 10, 27, 28
