@@ -3385,7 +3385,7 @@ const StatCard = ({ label, value, trend, icon, onClick }) => (
 ---
 
 <!-- COMPONENT:START:6.1-oauth-social-login -->
-<!-- IN-PROGRESS:6.1-oauth-social-login -->
+<!-- DONE:6.1-oauth-social-login -->
 ## 6.1 OAuth / Social Login
 
 **Used In:** Screens 1, 2, 15
