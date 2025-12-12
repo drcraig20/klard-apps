@@ -25,3 +25,9 @@ export {
   type SegmentedControlProps,
   type SegmentedControlOption,
 } from './SegmentedControl';
+export {
+  Card,
+  type CardProps,
+  type CardVariant,
+  type CardPadding,
+} from './Card';
