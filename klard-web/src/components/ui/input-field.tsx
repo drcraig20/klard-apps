@@ -3,6 +3,15 @@
 import { forwardRef, useState, useId } from 'react';
 import { Eye, EyeOff, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import {
+  inputFieldVariants,
+  labelStyles,
+  errorStyles,
+  helperTextStyles,
+  iconButtonStyles,
+  leftIconStyles,
+  inputContainerStyles,
+} from '@/lib/form-field-styles';
 
 export interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   /** Input type - affects keyboard on mobile and validation */
@@ -75,17 +84,14 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
     return (
       <div className="w-full">
         {label && (
-          <label
-            htmlFor={id}
-            className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2"
-          >
+          <label htmlFor={id} className={labelStyles}>
             {label}
             {required && <span className="text-red-500 ml-1" aria-hidden="true">*</span>}
           </label>
         )}
-        <div className="relative">
+        <div className={inputContainerStyles}>
           {leftIcon && (
-            <div className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 pointer-events-none">
+            <div className={leftIconStyles}>
               {leftIcon}
             </div>
           )}
@@ -101,24 +107,12 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
             aria-required={required}
             aria-describedby={describedBy}
             className={cn(
-              // Base styles
-              'w-full h-12 px-4 text-base',
-              'bg-white dark:bg-slate-900',
-              'text-slate-900 dark:text-slate-100',
-              'border rounded-xl',
-              'placeholder:text-slate-400 dark:placeholder:text-slate-500',
-              'transition-all duration-150',
-              // Focus styles
-              'focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary',
-              // Default border
-              !error && 'border-slate-300 dark:border-slate-700 hover:border-slate-400 dark:hover:border-slate-600',
-              // Error styles
-              error && 'border-red-500 focus:ring-red-500/30 focus:border-red-500',
-              // Disabled styles
-              disabled && 'opacity-50 cursor-not-allowed bg-slate-50 dark:bg-slate-800',
-              // Icon padding
-              leftIcon && 'pl-11',
-              (hasRightAction || showRightIcon) && 'pr-11',
+              inputFieldVariants({
+                hasError: !!error,
+                disabled: !!disabled,
+                hasLeftIcon: !!leftIcon,
+                hasRightIcon: !!(hasRightAction || showRightIcon),
+              }),
               className
             )}
             {...props}
@@ -129,13 +123,7 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
               type="button"
               onClick={() => setShowPassword(!showPassword)}
               disabled={disabled}
-              className={cn(
-                'absolute right-3 top-1/2 -translate-y-1/2',
-                'text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300',
-                'transition-colors p-1 rounded',
-                'focus:outline-none focus:ring-2 focus:ring-primary/30',
-                disabled && 'pointer-events-none'
-              )}
+              className={cn(iconButtonStyles, disabled && 'pointer-events-none')}
               aria-label={showPassword ? 'Hide password' : 'Show password'}
             >
               {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
@@ -147,13 +135,7 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
               type="button"
               onClick={handleClear}
               disabled={disabled}
-              className={cn(
-                'absolute right-3 top-1/2 -translate-y-1/2',
-                'text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300',
-                'transition-colors p-1 rounded',
-                'focus:outline-none focus:ring-2 focus:ring-primary/30',
-                disabled && 'pointer-events-none'
-              )}
+              className={cn(iconButtonStyles, disabled && 'pointer-events-none')}
               aria-label="Clear search"
             >
               <X size={18} />
@@ -168,20 +150,13 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
         </div>
         {/* Error message */}
         {error && (
-          <p
-            id={`${id}-error`}
-            className="mt-2 text-sm text-red-500"
-            role="alert"
-          >
+          <p id={`${id}-error`} className={errorStyles} role="alert">
             {error}
           </p>
         )}
         {/* Helper text */}
         {helperText && !error && (
-          <p
-            id={`${id}-helper`}
-            className="mt-2 text-sm text-slate-500 dark:text-slate-400"
-          >
+          <p id={`${id}-helper`} className={helperTextStyles}>
             {helperText}
           </p>
         )}
