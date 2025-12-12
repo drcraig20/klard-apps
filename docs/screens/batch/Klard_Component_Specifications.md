@@ -1805,7 +1805,7 @@ const FallbackSegmentedControl = ({ value, onChange, options }) => {
 ---
 
 <!-- COMPONENT:START:3.1-card -->
-<!-- IN-PROGRESS:3.1-card -->
+<!-- DONE:3.1-card -->
 ## 3.1 Card
 
 **Used In:** All screens
