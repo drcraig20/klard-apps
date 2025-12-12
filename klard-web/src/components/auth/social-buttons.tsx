@@ -15,15 +15,17 @@ type ProviderId = typeof SOCIAL_PROVIDERS[number]['id'];
 interface SocialButtonsProps {
   disabled?: boolean;
   onError?: (error: string) => void;
+  onSuccess?: () => void;
 }
 
-export function SocialButtons({ disabled, onError }: SocialButtonsProps) {
+export function SocialButtons({ disabled, onError, onSuccess }: SocialButtonsProps) {
   const [loadingProvider, setLoadingProvider] = useState<ProviderId | null>(null);
 
   async function handleSocialLogin(providerId: ProviderId) {
     try {
       setLoadingProvider(providerId);
       await signIn.social({ provider: providerId });
+      onSuccess?.();
     } catch {
       onError?.(`Failed to sign in with ${providerId}. Please try again.`);
     } finally {
