@@ -43,3 +43,4 @@ export {
   type KlardCardVariant,
   type KlardCardPadding,
 } from './klard-card';
+export { Modal, type ModalProps, type ModalSize } from './modal';
