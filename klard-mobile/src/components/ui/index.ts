@@ -38,3 +38,4 @@ export { Stepper, type StepperProps, type Step } from './Stepper';
 export { showToast, hideToast, type ToastProps, type ToastType, type ToastAction } from './Toast';
 export { toastConfig } from './ToastConfig';
 export { AlertBanner, type AlertBannerProps } from './AlertBanner';
+export { EmptyState, type EmptyStateProps, type EmptyStateAction } from './EmptyState';
