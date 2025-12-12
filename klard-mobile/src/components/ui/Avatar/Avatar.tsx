@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { Image } from 'expo-image';
 import { useThemeColors } from '@/hooks';
-import { styles } from './avatar.styles';
+import { styles, getContainerStyle } from './avatar.styles';
 
 const sizeMap = {
   xs: 24,
@@ -54,16 +54,8 @@ export function Avatar({
   const dimension = sizeMap[size];
   const borderRadius = shape === 'circle' ? dimension / 2 : 8;
   const showFallback = !src || hasError;
-  const containerStyle = StyleSheet.flatten([
-    styles.container,
-    {
-      width: dimension,
-      height: dimension,
-      borderRadius,
-      backgroundColor: colors.muted,
-    },
-    style,
-  ]);
+  const dynamicContainerStyle = getContainerStyle(dimension, borderRadius, colors.muted);
+  const containerStyle = StyleSheet.flatten([styles.container, dynamicContainerStyle, style]);
 
   return (
     <View

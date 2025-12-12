@@ -1,4 +1,18 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, type ViewStyle } from 'react-native';
+
+// Style generator for dynamic container styles (SoC compliance)
+export function getContainerStyle(
+  dimension: number,
+  borderRadius: number,
+  backgroundColor: string
+): ViewStyle {
+  return {
+    width: dimension,
+    height: dimension,
+    borderRadius,
+    backgroundColor,
+  };
+}
 
 export const styles = StyleSheet.create({
   container: {
