@@ -3,12 +3,13 @@ import {
   View,
   Text,
   Pressable,
-  StyleSheet,
   type ViewStyle,
   type StyleProp,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
+import { styles } from './stat-card.styles';
+import { trendConfig, sizeConfig } from './stat-card.constants';
 
 export interface StatCardProps {
   /** Label describing the metric */
@@ -33,27 +34,6 @@ export interface StatCardProps {
   /** Test ID for testing */
   testID?: string;
 }
-
-const trendConfig = {
-  up: {
-    iconName: 'trending-up' as const,
-    color: '#059669', // green-600 (light) / #10B981 (dark - handled via theme)
-  },
-  down: {
-    iconName: 'trending-down' as const,
-    color: '#DC2626', // red-600 (light) / #EF4444 (dark - handled via theme)
-  },
-  neutral: {
-    iconName: 'remove' as const,
-    color: '#64748B', // slate-500 (light) / #CBD5E1 (dark - handled via theme)
-  },
-} as const;
-
-const sizeConfig = {
-  sm: { padding: 12, fontSize: 14, valueFontSize: 18, iconSize: 16 },
-  md: { padding: 16, fontSize: 16, valueFontSize: 24, iconSize: 18 },
-  lg: { padding: 20, fontSize: 18, valueFontSize: 28, iconSize: 20 },
-};
 
 export function StatCard({
   label,
@@ -137,61 +117,3 @@ export function StatCard({
     </Container>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    gap: 16,
-    backgroundColor: '#FFFFFF', // Light mode
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: 'rgba(15,23,42,0.08)',
-    shadowColor: '#0F172A',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
-  },
-  pressed: {
-    borderColor: '#0D7C7A', // primary accent
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
-  },
-  muted: {
-    opacity: 0.75,
-    borderColor: '#E2E8F0',
-  },
-  content: {
-    flex: 1,
-    gap: 4,
-  },
-  label: {
-    color: '#475569', // muted text (light)
-    fontWeight: '400',
-  },
-  value: {
-    color: '#0F172A', // foreground (light)
-    fontWeight: '600',
-    letterSpacing: -0.5,
-  },
-  mutedText: {
-    opacity: 0.7,
-  },
-  trendContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-    marginTop: 4,
-  },
-  trendValue: {
-    fontWeight: '500',
-  },
-  iconContainer: {
-    backgroundColor: '#CCFBF1', // teal-100 (light)
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
