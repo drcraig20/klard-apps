@@ -64,3 +64,4 @@ export {
 export { PriceDisplay, type PriceDisplayProps } from './PriceDisplay';
 export { StatCard, type StatCardProps } from './StatCard';
 export { AlertCard, type AlertCardProps, type Alert } from './AlertCard';
+export { Switch, SwitchField, type SwitchProps, type SwitchFieldProps } from './Switch';
