@@ -1,5 +1,6 @@
 export { Button, type ButtonProps } from './Button';
 export { InputField, type InputFieldProps } from './InputField';
+export { CurrencyInput, type CurrencyInputProps } from './CurrencyInput';
 export { PasswordInput, type PasswordInputProps } from './PasswordInput';
 export { CheckboxField, type CheckboxFieldProps } from './CheckboxField';
 export { SelectField, type SelectFieldProps, type SelectOption } from './SelectField';
