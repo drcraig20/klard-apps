@@ -2202,7 +2202,7 @@ const TabBar = ({ value, onChange, tabs }) => (
 ---
 
 <!-- COMPONENT:START:3.5-sidebar -->
-<!-- IN-PROGRESS:3.5-sidebar -->
+<!-- DONE:3.5-sidebar -->
 ## 3.5 Sidebar (Web Only)
 
 **Used In:** Web versions of Screens 10-34
