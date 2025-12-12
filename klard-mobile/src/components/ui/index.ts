@@ -55,3 +55,9 @@ export {
   type CardType,
   type CardSize,
 } from './BurnerCardVisual';
+export {
+  StatusBadge,
+  statusConfig,
+  type StatusBadgeProps,
+  type StatusType,
+} from './StatusBadge';
