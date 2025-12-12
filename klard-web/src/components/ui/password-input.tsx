@@ -4,6 +4,14 @@ import { forwardRef, useState, useId } from 'react';
 import { Eye, EyeOff, Check, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { calculatePasswordStrength } from '@klard-apps/commons';
+import {
+  inputFieldVariants,
+  labelStyles,
+  errorStyles,
+  helperTextStyles,
+  iconButtonStyles,
+  inputContainerStyles,
+} from '@/lib/form-field-styles';
 
 // ============================================================================
 // Types
@@ -167,7 +175,7 @@ export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
         {label && (
           <label
             htmlFor={id}
-            className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2"
+            className={labelStyles}
           >
             {label}
             {required && <span className="text-red-500 ml-1" aria-hidden="true">*</span>}
@@ -175,7 +183,7 @@ export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
         )}
 
         {/* Input with toggle */}
-        <div className="relative">
+        <div className={inputContainerStyles}>
           <input
             ref={ref}
             id={id}
@@ -189,21 +197,11 @@ export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
             aria-describedby={describedBy}
             autoComplete="current-password"
             className={cn(
-              // Base styles
-              'w-full h-12 px-4 pr-12 text-base',
-              'bg-white dark:bg-slate-900',
-              'text-slate-900 dark:text-slate-100',
-              'border rounded-xl',
-              'placeholder:text-slate-400 dark:placeholder:text-slate-500',
-              'transition-all duration-150',
-              // Focus styles
-              'focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary',
-              // Default border
-              !error && 'border-slate-300 dark:border-slate-700 hover:border-slate-400 dark:hover:border-slate-600',
-              // Error styles
-              error && 'border-red-500 focus:ring-red-500/30 focus:border-red-500',
-              // Disabled styles
-              disabled && 'opacity-50 cursor-not-allowed bg-slate-50 dark:bg-slate-800',
+              inputFieldVariants({
+                hasError: !!error,
+                disabled: !!disabled,
+                hasRightIcon: true,
+              }),
               className
             )}
             {...props}
@@ -215,10 +213,7 @@ export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
             onClick={() => setShowPassword(!showPassword)}
             disabled={disabled}
             className={cn(
-              'absolute right-3 top-1/2 -translate-y-1/2',
-              'text-slate-400 hover:text-slate-600 dark:text-slate-500 dark:hover:text-slate-300',
-              'transition-colors p-1 rounded',
-              'focus:outline-none focus:ring-2 focus:ring-primary/30',
+              iconButtonStyles,
               disabled && 'pointer-events-none'
             )}
             aria-label={showPassword ? 'Hide password' : 'Show password'}
@@ -231,7 +226,7 @@ export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
         {error && (
           <p
             id={`${id}-error`}
-            className="mt-2 text-sm text-red-500"
+            className={errorStyles}
             role="alert"
           >
             {error}
@@ -242,7 +237,7 @@ export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
         {helperText && !error && (
           <p
             id={`${id}-helper`}
-            className="mt-2 text-sm text-slate-500 dark:text-slate-400"
+            className={helperTextStyles}
           >
             {helperText}
           </p>
