@@ -33,3 +33,4 @@ export {
 } from './Card';
 export { BottomSheet, type BottomSheetProps } from './BottomSheet';
 export { Modal, type ModalProps } from './Modal';
+export { TabBar, type TabBarProps, type TabItem } from './TabBar';
