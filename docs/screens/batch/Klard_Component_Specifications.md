@@ -3184,7 +3184,7 @@ const PriceDisplay = ({ amount, currency = 'USD', billingCycle, size = 'md', sho
 ---
 
 <!-- COMPONENT:START:5.6-alert-card -->
-<!-- IN-PROGRESS:5.6-alert-card -->
+<!-- DONE:5.6-alert-card -->
 ## 5.6 AlertCard
 
 **Used In:** Screens 24, 25, 26
