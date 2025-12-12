@@ -71,3 +71,4 @@ export {
   EmptyStateActions,
   type EmptyStateProps,
 } from './empty-state';
+export { Skeleton, type SkeletonProps, type SkeletonVariant } from './skeleton';
