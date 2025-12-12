@@ -60,3 +60,5 @@ export {
   type AppSidebarSkeletonProps,
 } from './app-sidebar';
 export { Stepper, type StepperProps, type Step } from './stepper';
+export { Toaster } from './sonner';
+export { showToast, type ToastProps, type ToastType, type ToastAction } from './toast';
