@@ -17,7 +17,7 @@ export function SocialButton({
   disabled,
   onClick,
   className
-}: SocialButtonProps) {
+}: Readonly<SocialButtonProps>) {
   return (
     <button
       type="button"

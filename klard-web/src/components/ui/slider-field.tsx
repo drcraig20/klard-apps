@@ -27,7 +27,7 @@ function SliderField({
   showValue = false,
   disabled = false,
   className,
-}: SliderFieldProps) {
+}: Readonly<SliderFieldProps>) {
   return (
     <div className={cn('space-y-2', className)}>
       {(label || showValue) && (

@@ -3,7 +3,7 @@ interface IllustrationProps {
   className?: string;
 }
 
-export function TrackIllustration({ theme = 'dark', className }: IllustrationProps) {
+export function TrackIllustration({ theme = 'dark', className }: Readonly<IllustrationProps>) {
   const primaryColor = theme === 'dark' ? '#15B5B0' : '#0D7C7A';
   const backgroundColor = theme === 'dark' ? '#0F172A' : '#FFFFFF';
   const cardBg = theme === 'dark' ? 'rgba(30, 41, 59, 0.6)' : 'rgba(241, 245, 249, 0.8)';

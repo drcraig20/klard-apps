@@ -42,7 +42,7 @@ export function BurnerCardTutorial({
   onComplete,
   onSkip,
   isUpdating = false,
-}: BurnerCardTutorialProps) {
+}: Readonly<BurnerCardTutorialProps>) {
   // Default features data (OCP: extend by passing custom features)
   const features: Feature[] = [
     {
@@ -191,7 +191,7 @@ interface FeatureItemProps {
   description: string;
 }
 
-function FeatureItem({ icon: Icon, title, description }: FeatureItemProps) {
+function FeatureItem({ icon: Icon, title, description }: Readonly<FeatureItemProps>) {
   return (
     <div className="flex items-start gap-4">
       {/* Icon with teal accent */}

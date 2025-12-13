@@ -21,7 +21,7 @@ const LEVEL_WIDTHS: Record<PasswordStrength['level'], string> = {
   strong: 'w-full',
 };
 
-export function PasswordStrengthIndicator({ password }: PasswordStrengthIndicatorProps) {
+export function PasswordStrengthIndicator({ password }: Readonly<PasswordStrengthIndicatorProps>) {
   const { t } = useTranslation();
   const strength = calculatePasswordStrength(password);
 

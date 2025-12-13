@@ -33,7 +33,7 @@ function Button({
   disabled,
   children,
   ...props
-}: ButtonProps) {
+}: Readonly<ButtonProps>) {
   const baseClassName = cn(
     buttonVariants({ variant, size }),
     fullWidth && "w-full",

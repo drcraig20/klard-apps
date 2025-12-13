@@ -29,7 +29,7 @@ export function FormField({
   children,
   id: providedId,
   className,
-}: FormFieldProps) {
+}: Readonly<FormFieldProps>) {
   const generatedId = useId();
   const id = providedId ?? generatedId;
 

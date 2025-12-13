@@ -17,7 +17,7 @@ export interface ServiceLogoProps {
   className?: string;
 }
 
-function ServiceLogo({ service, size, className }: ServiceLogoProps) {
+function ServiceLogo({ service, size, className }: Readonly<ServiceLogoProps>) {
   const fallback = service.name.charAt(0).toUpperCase();
 
   return (

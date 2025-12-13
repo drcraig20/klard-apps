@@ -5,7 +5,7 @@ export interface FormLabelProps extends React.LabelHTMLAttributes<HTMLLabelEleme
   children: React.ReactNode;
 }
 
-export function FormLabel({ required, children, className, ...props }: FormLabelProps) {
+export function FormLabel({ required, children, className, ...props }: Readonly<FormLabelProps>) {
   return (
     <label
       className={cn(

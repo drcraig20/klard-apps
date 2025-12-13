@@ -28,7 +28,7 @@ function PriceDisplay({
   showChange,
   className,
   ...props
-}: PriceDisplayProps) {
+}: Readonly<PriceDisplayProps>) {
   const formatter = React.useMemo(
     () =>
       new Intl.NumberFormat("en-US", {

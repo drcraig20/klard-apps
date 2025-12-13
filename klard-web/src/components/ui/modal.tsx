@@ -45,7 +45,7 @@ function Modal({
   footer,
   closeOnOverlay = true,
   className,
-}: ModalProps) {
+}: Readonly<ModalProps>) {
   return (
     <Dialog open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
       <DialogPortal>

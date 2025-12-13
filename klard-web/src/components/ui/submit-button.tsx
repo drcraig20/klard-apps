@@ -11,7 +11,7 @@ export function SubmitButton({
   isSubmitting,
   children,
   className
-}: SubmitButtonProps) {
+}: Readonly<SubmitButtonProps>) {
   return (
     <Button
       type="submit"

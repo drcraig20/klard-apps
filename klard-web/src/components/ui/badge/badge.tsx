@@ -26,7 +26,7 @@ function Badge({
   onRemove,
   children,
   ...props
-  }: BadgeProps) {
+  }: Readonly<BadgeProps>) {
   const baseClassName = badgeVariants({ variant, size })
 
   if (asChild && React.isValidElement(children)) {

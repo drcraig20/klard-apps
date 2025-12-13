@@ -45,7 +45,7 @@ export interface StatusBadgeProps
   status: StatusType
 }
 
-export function StatusBadge({ status, className, ...props }: StatusBadgeProps) {
+export function StatusBadge({ status, className, ...props }: Readonly<StatusBadgeProps>) {
   const config = statusConfig[status]
   const Icon = config.icon
 

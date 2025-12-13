@@ -7,7 +7,7 @@ interface ErrorBannerProps {
   className?: string;
 }
 
-export function ErrorBanner({ message, onDismiss, className }: ErrorBannerProps) {
+export function ErrorBanner({ message, onDismiss, className }: Readonly<ErrorBannerProps>) {
   return (
     <div
       className={cn(

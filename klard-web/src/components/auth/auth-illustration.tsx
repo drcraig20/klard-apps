@@ -2,7 +2,7 @@ import { KlardLogo } from '@/components/ui/klard-icon';
 
 export function AuthIllustration() {
   return (
-    <div className="hidden md:flex flex-col items-center justify-center h-full bg-gradient-to-b from-white to-[#F8FAFC] dark:from-[#0F172A] dark:to-[#1E293B] p-12">
+    <div className="hidden md:flex flex-col items-center justify-center h-full bg-gradient-to-b from-background to-muted p-12">
       {/* Geometric shapes */}
       <div className="relative w-80 h-80 mb-12">
         {/* Large teal circle */}

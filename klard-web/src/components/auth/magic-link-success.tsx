@@ -8,7 +8,7 @@ interface MagicLinkSuccessProps {
   onBack: () => void;
 }
 
-export function MagicLinkSuccess({ email, onBack }: MagicLinkSuccessProps) {
+export function MagicLinkSuccess({ email, onBack }: Readonly<MagicLinkSuccessProps>) {
   const { t } = useTranslation();
 
   return (

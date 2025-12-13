@@ -58,7 +58,7 @@ export function SelectField({
   disabled = false,
   className,
   id: providedId,
-}: SelectFieldProps) {
+}: Readonly<SelectFieldProps>) {
   const generatedId = useId();
   const id = providedId ?? generatedId;
   const errorId = `${id}-error`;

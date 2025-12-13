@@ -32,7 +32,7 @@ function Avatar({
   size,
   shape = 'circle',
   className,
-}: AvatarProps) {
+}: Readonly<AvatarProps>) {
   const [hasError, setHasError] = React.useState(false);
   const showImage = Boolean(src) && !hasError;
 

@@ -15,7 +15,7 @@ export function LoadingSpinner({
   size = "md",
   variant = "primary",
   className = "",
-}: LoadingSpinnerProps) {
+}: Readonly<LoadingSpinnerProps>) {
   const colorClass = variant === "white" ? "text-white" : "text-primary"
 
   return (

@@ -30,7 +30,7 @@ export function AlertBanner({
   icon,
   className,
   ...props
-}: AlertBannerProps) {
+}: Readonly<AlertBannerProps>) {
   const Icon = icons[type];
   const handleDismiss = () => {
     onDismiss?.();

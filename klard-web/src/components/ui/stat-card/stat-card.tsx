@@ -33,7 +33,7 @@ function StatCard({
   muted,
   className,
   ...props
-}: StatCardProps) {
+}: Readonly<StatCardProps>) {
   const isClickable = !!onClick
   const Component = isClickable ? "button" : "div"
 

@@ -26,7 +26,7 @@ function Skeleton({
   animated = true,
   style,
   ...props
-}: SkeletonProps) {
+}: Readonly<SkeletonProps>) {
   const dimensionStyle: React.CSSProperties = {
     ...style,
     width: typeof width === 'number' ? `${width}px` : width,

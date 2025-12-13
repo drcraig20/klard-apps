@@ -13,7 +13,7 @@ function EmptyState({
   size,
   children,
   ...props
-}: EmptyStateProps) {
+}: Readonly<EmptyStateProps>) {
   return (
     <div
       data-slot="empty-state"

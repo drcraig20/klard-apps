@@ -35,7 +35,7 @@ interface SubscriptionFormProps {
  *
  * Single Responsibility: Handle subscription form state and validation
  */
-export function SubscriptionForm({ service, onBack }: SubscriptionFormProps) {
+export function SubscriptionForm({ service, onBack }: Readonly<SubscriptionFormProps>) {
   const router = useRouter();
   const addSubscription = useSubscriptionStore((state) => state.addSubscription);
 
@@ -247,7 +247,7 @@ interface ServiceHeaderProps {
   onBack: () => void;
 }
 
-function ServiceHeader({ service, onBack }: ServiceHeaderProps) {
+function ServiceHeader({ service, onBack }: Readonly<ServiceHeaderProps>) {
   return (
     <div className="flex items-center justify-between rounded-lg border bg-card/60 p-4 backdrop-blur-sm">
       <div className="flex items-center gap-3">
@@ -281,7 +281,7 @@ interface FormFieldProps {
   children: React.ReactNode;
 }
 
-function FormField({ label, error, helperText, required, children }: FormFieldProps) {
+function FormField({ label, error, helperText, required, children }: Readonly<FormFieldProps>) {
   return (
     <div className="space-y-2">
       <Label>
@@ -305,7 +305,7 @@ interface ToastProps {
   message: string;
 }
 
-function Toast({ message }: ToastProps) {
+function Toast({ message }: Readonly<ToastProps>) {
   return (
     <div
       className="fixed bottom-8 left-1/2 z-50 -translate-x-1/2 animate-in slide-in-from-bottom-2"

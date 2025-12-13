@@ -9,7 +9,7 @@ export interface AvatarSkeletonProps {
   className?: string;
 }
 
-export function AvatarSkeleton({ size = 40, className }: AvatarSkeletonProps) {
+export function AvatarSkeleton({ size = 40, className }: Readonly<AvatarSkeletonProps>) {
   return (
     <Skeleton
       variant="circular"
@@ -28,7 +28,7 @@ export interface TextLineSkeletonProps {
 export function TextLineSkeleton({
   width = '100%',
   className,
-}: TextLineSkeletonProps) {
+}: Readonly<TextLineSkeletonProps>) {
   return <Skeleton variant="text" width={width} className={className} />;
 }
 
@@ -38,7 +38,7 @@ export interface SubscriptionCardSkeletonProps {
 
 export function SubscriptionCardSkeleton({
   className,
-}: SubscriptionCardSkeletonProps) {
+}: Readonly<SubscriptionCardSkeletonProps>) {
   return (
     <div
       data-slot="skeleton.subscription-card"

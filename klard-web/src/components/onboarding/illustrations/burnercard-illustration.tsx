@@ -3,7 +3,7 @@ interface IllustrationProps {
   className?: string;
 }
 
-export function BurnerCardIllustration({ theme = 'dark', className }: IllustrationProps) {
+export function BurnerCardIllustration({ theme = 'dark', className }: Readonly<IllustrationProps>) {
   const primaryColor = theme === 'dark' ? '#15B5B0' : '#0D7C7A';
   const backgroundColor = theme === 'dark' ? '#0F172A' : '#FFFFFF';
   const cardGradientStart = theme === 'dark' ? '#1E293B' : '#F1F5F9';

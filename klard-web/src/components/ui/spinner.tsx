@@ -14,7 +14,7 @@ export interface SpinnerProps
   label?: string
 }
 
-function Spinner({ className, size = "md", label, ...props }: SpinnerProps) {
+function Spinner({ className, size = "md", label, ...props }: Readonly<SpinnerProps>) {
   const spinner = (
     <LoaderIcon
       role="status"

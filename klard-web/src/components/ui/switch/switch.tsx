@@ -11,7 +11,7 @@ export interface SwitchProps
   extends React.ComponentPropsWithoutRef<typeof SwitchPrimitive.Root>,
     VariantProps<typeof switchVariants> {}
 
-function Switch({ className, size, ...props }: SwitchProps) {
+function Switch({ className, size, ...props }: Readonly<SwitchProps>) {
   return (
     <SwitchPrimitive.Root
       data-slot="switch"

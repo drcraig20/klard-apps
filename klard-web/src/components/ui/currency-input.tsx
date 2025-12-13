@@ -110,7 +110,7 @@ export function CurrencyInput({
   name,
   className,
   ...props
-}: CurrencyInputProps) {
+}: Readonly<CurrencyInputProps>) {
   const { inputId, describedBy } = useFormFieldIds(
     providedId,
     name ?? 'currency',

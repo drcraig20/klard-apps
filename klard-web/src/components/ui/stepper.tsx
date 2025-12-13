@@ -49,7 +49,7 @@ function Stepper({
   orientation = 'horizontal',
   ariaLabel,
   className,
-}: StepperProps) {
+}: Readonly<StepperProps>) {
   // Return null for empty steps
   if (!steps || steps.length === 0) {
     if (process.env.NODE_ENV === 'development') {

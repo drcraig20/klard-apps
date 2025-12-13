@@ -49,7 +49,7 @@ interface PasswordStrengthBarProps {
   password: string;
 }
 
-function PasswordStrengthBar({ password }: PasswordStrengthBarProps) {
+function PasswordStrengthBar({ password }: Readonly<PasswordStrengthBarProps>) {
   const strength = calculatePasswordStrength(password);
 
   if (!password) return null;
@@ -104,7 +104,7 @@ interface PasswordRequirementsListProps {
   requirements: PasswordRequirementsState;
 }
 
-function PasswordRequirementsList({ requirements }: PasswordRequirementsListProps) {
+function PasswordRequirementsList({ requirements }: Readonly<PasswordRequirementsListProps>) {
   const requirementLabels: Record<keyof PasswordRequirementsState, string> = {
     minLength: 'At least 8 characters',
     hasUppercase: 'One uppercase letter',

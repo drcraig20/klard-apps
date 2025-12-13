@@ -94,7 +94,7 @@ function TabsContainer({
   size = "md",
   fullWidth = false,
   className,
-}: TabsContainerProps) {
+}: Readonly<TabsContainerProps>) {
   return (
     <TabsPrimitive.Root
       data-slot="tabs"

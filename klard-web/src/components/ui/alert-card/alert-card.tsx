@@ -59,7 +59,7 @@ function AlertCard({
   tone: toneProp,
   size = 'md',
   className,
-}: AlertCardProps) {
+}: Readonly<AlertCardProps>) {
   const config = alertTypeConfig[alert.type];
   const Icon = config.icon;
   const tone = toneProp ?? config.tone;

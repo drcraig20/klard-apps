@@ -15,7 +15,7 @@ export function TermsCheckbox({
   onChange,
   error,
   disabled,
-}: TermsCheckboxProps) {
+}: Readonly<TermsCheckboxProps>) {
   const { t } = useTranslation();
 
   const termsLabel = (

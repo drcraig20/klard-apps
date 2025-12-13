@@ -37,7 +37,7 @@ function SubscriptionCard({
   showActions = false,
   onPress,
   className,
-}: SubscriptionCardProps) {
+}: Readonly<SubscriptionCardProps>) {
   const {
     name,
     logoUrl,

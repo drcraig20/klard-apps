@@ -32,7 +32,7 @@ export function SwitchField({
   size = 'md',
   className,
   id: providedId,
-}: SwitchFieldProps) {
+}: Readonly<SwitchFieldProps>) {
   const generatedId = useId();
   const id = providedId ?? generatedId;
   const descriptionId = `${id}-description`;

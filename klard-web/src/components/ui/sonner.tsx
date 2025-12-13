@@ -9,7 +9,7 @@ interface ToasterProps {
 /**
  * Klard-styled Toaster component
  */
-export function Toaster({ position = "bottom-right" }: ToasterProps) {
+export function Toaster({ position = "bottom-right" }: Readonly<ToasterProps>) {
   return (
     <SonnerToaster
       position={position}

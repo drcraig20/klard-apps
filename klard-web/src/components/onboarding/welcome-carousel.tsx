@@ -49,7 +49,7 @@ export function WelcomeCarousel({
   onComplete,
   onSkip,
   isUpdating = false,
-}: WelcomeCarouselProps) {
+}: Readonly<WelcomeCarouselProps>) {
   const router = useRouter();
   const [currentIndex, setCurrentIndex] = useState(0);
 

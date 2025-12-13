@@ -3,7 +3,7 @@ interface IllustrationProps {
   className?: string;
 }
 
-export function SaveIllustration({ theme = 'dark', className }: IllustrationProps) {
+export function SaveIllustration({ theme = 'dark', className }: Readonly<IllustrationProps>) {
   const successColor = theme === 'dark' ? '#10B981' : '#059669';
   const backgroundColor = theme === 'dark' ? '#0F172A' : '#FFFFFF';
   const accentColor = theme === 'dark' ? '#15B5B0' : '#0D7C7A';

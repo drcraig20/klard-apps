@@ -34,7 +34,7 @@ export function SegmentedControl({
   fullWidth,
   disabled = false,
   className,
-}: SegmentedControlProps) {
+}: Readonly<SegmentedControlProps>) {
   return (
     <Tabs
       value={value}

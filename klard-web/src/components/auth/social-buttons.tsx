@@ -18,7 +18,7 @@ interface SocialButtonsProps {
   onSuccess?: () => void;
 }
 
-export function SocialButtons({ disabled, onError, onSuccess }: SocialButtonsProps) {
+export function SocialButtons({ disabled, onError, onSuccess }: Readonly<SocialButtonsProps>) {
   const [loadingProvider, setLoadingProvider] = useState<ProviderId | null>(null);
 
   async function handleSocialLogin(providerId: ProviderId) {

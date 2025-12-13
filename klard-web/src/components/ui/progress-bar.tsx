@@ -41,7 +41,7 @@ function ProgressBar({
   label,
   animated = true,
   className,
-}: ProgressBarProps) {
+}: Readonly<ProgressBarProps>) {
   const percentage = Math.min(Math.max((value / max) * 100, 0), 100);
 
   return (

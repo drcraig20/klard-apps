@@ -25,7 +25,7 @@ interface ServiceGridProps {
  * @param onSelect - Callback when a service is selected
  * @param selectedServiceId - ID of currently selected service
  */
-export function ServiceGrid({ onSelect, selectedServiceId }: ServiceGridProps) {
+export function ServiceGrid({ onSelect, selectedServiceId }: Readonly<ServiceGridProps>) {
   const [searchQuery, setSearchQuery] = useState('');
   const isLargeScreen = useIsLargeScreen();
 
@@ -82,7 +82,7 @@ interface SearchInputProps {
   onChange: (value: string) => void;
 }
 
-function SearchInput({ value, onChange }: SearchInputProps) {
+function SearchInput({ value, onChange }: Readonly<SearchInputProps>) {
   return (
     <div className="relative">
       <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
@@ -111,7 +111,7 @@ function ServiceChipGrid({
   services,
   selectedServiceId,
   onSelect,
-}: ServiceChipGridProps) {
+}: Readonly<ServiceChipGridProps>) {
   return (
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
       {services.map((service) => (
@@ -136,7 +136,7 @@ interface ServiceChipProps {
   onClick: () => void;
 }
 
-function ServiceChip({ service, isSelected, onClick }: ServiceChipProps) {
+function ServiceChip({ service, isSelected, onClick }: Readonly<ServiceChipProps>) {
   return (
     <button
       type="button"

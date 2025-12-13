@@ -21,7 +21,7 @@ function KlardCard({
   disabled = false,
   children,
   ...props
-}: KlardCardProps) {
+}: Readonly<KlardCardProps>) {
   const cardClassName = cn(
     klardCardVariants({ variant, padding }),
     disabled && 'opacity-50 cursor-not-allowed',

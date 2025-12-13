@@ -23,7 +23,7 @@ export function CheckboxField({
   disabled = false,
   indeterminate = false,
   className,
-}: CheckboxFieldProps) {
+}: Readonly<CheckboxFieldProps>) {
   const id = useId();
   const descriptionId = useId();
 

@@ -66,7 +66,7 @@ interface HeaderProps {
   onSkip: () => void;
 }
 
-function Header({ onSkip }: HeaderProps) {
+function Header({ onSkip }: Readonly<HeaderProps>) {
   return (
     <div className="flex items-start justify-between">
       <StepIndicator />
@@ -104,7 +104,7 @@ interface SelectionStateProps {
   onSkip: () => void;
 }
 
-function SelectionState({ onSelect, onSkip }: SelectionStateProps) {
+function SelectionState({ onSelect, onSkip }: Readonly<SelectionStateProps>) {
   return (
     <div className="mx-auto max-w-2xl space-y-8">
       {/* Headline */}

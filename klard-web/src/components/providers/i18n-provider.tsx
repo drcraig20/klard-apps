@@ -18,7 +18,7 @@ function getServerSnapshot() {
   return true;
 }
 
-export function I18nProvider({ children }: { children: React.ReactNode }) {
+export function I18nProvider({ children }: Readonly<{ children: React.ReactNode }>) {
   const isReady = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
   if (!isReady) return null;

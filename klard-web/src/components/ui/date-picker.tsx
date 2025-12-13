@@ -59,7 +59,7 @@ export function DatePicker({
   required = false,
   id: providedId,
   className,
-}: DatePickerProps) {
+}: Readonly<DatePickerProps>) {
   const { inputId, errorId } = useFormFieldIds(providedId, 'date-picker', error);
   const [open, setOpen] = useState(false);
 

@@ -48,7 +48,7 @@ function BurnerCardVisual({
   card,
   size = 'md',
   className,
-}: BurnerCardVisualProps) {
+}: Readonly<BurnerCardVisualProps>) {
   const {
     nickname,
     type,

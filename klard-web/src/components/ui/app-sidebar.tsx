@@ -53,7 +53,7 @@ function AppSidebar({
   footer,
   className,
   collapsible = 'offcanvas',
-}: AppSidebarProps) {
+}: Readonly<AppSidebarProps>) {
   return (
     <SidebarProvider>
       <Sidebar data-testid="app-sidebar" className={className} collapsible={collapsible}>
@@ -104,7 +104,7 @@ function AppSidebar({
   );
 }
 
-function AppSidebarSkeleton({ count = 4 }: AppSidebarSkeletonProps) {
+function AppSidebarSkeleton({ count = 4 }: Readonly<AppSidebarSkeletonProps>) {
   return (
     <SidebarProvider>
       <Sidebar data-testid="app-sidebar">
