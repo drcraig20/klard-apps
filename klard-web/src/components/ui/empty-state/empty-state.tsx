@@ -1,23 +1,8 @@
 import * as React from "react"
-import { cva, type VariantProps } from "class-variance-authority"
+import { type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
-
-const emptyStateVariants = cva(
-  "flex flex-col items-center justify-center text-center",
-  {
-    variants: {
-      size: {
-        sm: "py-6 gap-3",
-        md: "py-12 gap-4",
-        lg: "py-16 gap-6",
-      },
-    },
-    defaultVariants: {
-      size: "md",
-    },
-  }
-)
+import { emptyStateVariants } from "./empty-state.styles"
 
 export interface EmptyStateProps
   extends React.HTMLAttributes<HTMLDivElement>,
