@@ -14,14 +14,14 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.klard.app"
+      "bundleIdentifier": "io.klard.app"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#0F172A"
       },
-      "package": "com.klard.app"
+      "package": "io.klard.app"
     },
     "web": {
       "favicon": "./assets/favicon.png",
