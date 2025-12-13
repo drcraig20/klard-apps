@@ -1,58 +1,90 @@
-import { StyleSheet, type ViewStyle, type TextStyle } from 'react-native';
+import { sva } from '@/styles/sva';
+import { StyleSheet } from 'react-native';
 
-export const styles = StyleSheet.create({
-  scrollView: {
-    flexGrow: 0,
-  } as ViewStyle,
-  contentContainer: {
-    paddingHorizontal: 16,
-    gap: 8,
-  } as ViewStyle,
-  tab: {
+export const tabContainerStyles = sva({
+  base: {
     flexDirection: 'row',
     alignItems: 'center',
     paddingVertical: 8,
     paddingHorizontal: 16,
     borderRadius: 8,
-    backgroundColor: 'transparent',
     gap: 8,
-  } as ViewStyle,
-  activeTab: {
-    backgroundColor: '#F1F5F9', // slate-100
-    borderBottomWidth: 2,
-    borderBottomColor: '#0D7C7A', // primary teal
-  } as ViewStyle,
-  disabledTab: {
-    opacity: 0.5,
-  } as ViewStyle,
-  pressedTab: {
-    opacity: 0.7,
-  } as ViewStyle,
-  iconContainer: {
-    marginRight: 4,
-  } as ViewStyle,
-  tabLabel: {
+  },
+  variants: {
+    state: {
+      default: {
+        backgroundColor: 'transparent',
+      },
+      active: (colors) => ({
+        backgroundColor: colors.activeBackground,
+        borderBottomWidth: 2,
+        borderBottomColor: colors.primary,
+      }),
+      disabled: {
+        opacity: 0.5,
+      },
+      pressed: {
+        opacity: 0.7,
+      },
+    },
+  },
+  defaultVariants: {
+    state: 'default',
+  },
+});
+
+export const tabLabelStyles = sva({
+  base: {
     fontSize: 14,
     fontWeight: '500',
-    color: '#64748B', // slate-500
-  } as TextStyle,
-  activeTabLabel: {
-    color: '#0D7C7A', // primary teal
-    fontWeight: '600',
-  } as TextStyle,
-  disabledTabLabel: {
-    color: '#94A3B8', // slate-400
-  } as TextStyle,
-  badge: {
-    backgroundColor: '#F1F5F9', // slate-100
+  },
+  variants: {
+    state: {
+      default: (colors) => ({
+        color: colors.mutedForeground,
+      }),
+      active: (colors) => ({
+        color: colors.primary,
+        fontWeight: '600',
+      }),
+      disabled: (colors) => ({
+        color: colors.textDisabled,
+      }),
+    },
+  },
+  defaultVariants: {
+    state: 'default',
+  },
+});
+
+export const badgeStyles = sva({
+  base: (colors) => ({
+    backgroundColor: colors.muted,
     borderRadius: 9999,
     paddingHorizontal: 6,
     paddingVertical: 2,
     marginLeft: 4,
-  } as ViewStyle,
-  badgeText: {
+  }),
+});
+
+export const badgeTextStyles = sva({
+  base: (colors) => ({
     fontSize: 12,
     fontWeight: '500',
-    color: '#64748B', // slate-500
-  } as TextStyle,
+    color: colors.mutedForeground,
+  }),
+});
+
+// Static layout styles (not themed)
+export const layoutStyles = StyleSheet.create({
+  scrollView: {
+    flexGrow: 0,
+  },
+  contentContainer: {
+    paddingHorizontal: 16,
+    gap: 8,
+  },
+  iconContainer: {
+    marginRight: 4,
+  },
 });

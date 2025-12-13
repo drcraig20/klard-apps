@@ -4,11 +4,18 @@ import {
   ScrollView,
   Pressable,
   Text,
+  useColorScheme,
   type ViewStyle,
 } from 'react-native';
 import * as Haptics from 'expo-haptics';
 
-import { styles } from './tab-bar.styles';
+import {
+  tabContainerStyles,
+  tabLabelStyles,
+  badgeStyles,
+  badgeTextStyles,
+  layoutStyles,
+} from './tab-bar.styles';
 
 export interface TabItem {
   value: string;
@@ -26,6 +33,8 @@ export interface TabBarProps {
 }
 
 export function TabBar({ value, onChange, tabs, style }: TabBarProps) {
+  const isDark = useColorScheme() === 'dark';
+
   const handlePress = async (tab: TabItem) => {
     if (tab.disabled) return;
 
@@ -38,13 +47,24 @@ export function TabBar({ value, onChange, tabs, style }: TabBarProps) {
       testID="tab-bar-scroll"
       horizontal
       showsHorizontalScrollIndicator={false}
-      style={[styles.scrollView, style]}
-      contentContainerStyle={styles.contentContainer}
+      style={[layoutStyles.scrollView, style]}
+      contentContainerStyle={layoutStyles.contentContainer}
       accessibilityRole="tablist"
     >
       {tabs.map((tab) => {
         const isActive = value === tab.value;
         const isDisabled = tab.disabled;
+
+        // Determine tab state
+        const getTabState = (pressed: boolean) => {
+          if (isDisabled) return 'disabled';
+          if (pressed) return 'pressed';
+          if (isActive) return 'active';
+          return 'default';
+        };
+
+        // Determine label state (no pressed state for text)
+        const labelState = isDisabled ? 'disabled' : isActive ? 'active' : 'default';
 
         return (
           <Pressable
@@ -54,26 +74,15 @@ export function TabBar({ value, onChange, tabs, style }: TabBarProps) {
             disabled={isDisabled}
             accessibilityRole="tab"
             accessibilityState={{ selected: isActive, disabled: isDisabled }}
-            style={({ pressed }) => [
-              styles.tab,
-              isActive && styles.activeTab,
-              isDisabled && styles.disabledTab,
-              pressed && !isDisabled && styles.pressedTab,
-            ]}
+            style={({ pressed }) => tabContainerStyles(isDark, { state: getTabState(pressed) })}
           >
-            {tab.icon && <View style={styles.iconContainer}>{tab.icon}</View>}
-            <Text
-              style={[
-                styles.tabLabel,
-                isActive && styles.activeTabLabel,
-                isDisabled && styles.disabledTabLabel,
-              ]}
-            >
+            {tab.icon && <View style={layoutStyles.iconContainer}>{tab.icon}</View>}
+            <Text style={tabLabelStyles(isDark, { state: labelState })}>
               {tab.label}
             </Text>
             {tab.badge !== undefined && (
-              <View style={styles.badge}>
-                <Text style={styles.badgeText}>{tab.badge}</Text>
+              <View style={badgeStyles(isDark, {})}>
+                <Text style={badgeTextStyles(isDark, {})}>{tab.badge}</Text>
               </View>
             )}
           </Pressable>
