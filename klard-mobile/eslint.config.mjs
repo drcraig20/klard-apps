@@ -16,6 +16,9 @@ export default [
         ecmaFeatures: {
           jsx: true,
         },
+        // Enable type-aware linting for rules that need type information
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
       },
       globals: {
         console: 'readonly',
@@ -40,6 +43,36 @@ export default [
       // TypeScript rules
       '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
       '@typescript-eslint/no-explicit-any': 'warn',
+      // Enforce read-only props for immutability in React components
+      '@typescript-eslint/prefer-readonly-parameter-types': [
+        'warn',
+        {
+          checkParameterProperties: true,
+          ignoreInferredTypes: true, // Don't flag when type is inferred
+          allow: [
+            // Web API types
+            'RequestInit',
+            'AbortController',
+            'FormData',
+            // React Native / Animated types
+            'Animated.Value',
+            'Animated.SharedValue',
+            'SharedValue',
+            // Date is commonly passed but rarely mutated
+            'Date',
+            // Event types
+            'GestureResponderEvent',
+            'NativeSyntheticEvent',
+            'LayoutChangeEvent',
+            // React refs and callbacks
+            'RefObject',
+            'MutableRefObject',
+            // Common mutable patterns
+            'Error',
+            'RegExp',
+          ],
+        },
+      ],
 
       // React rules
       'react/react-in-jsx-scope': 'off',
