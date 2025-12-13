@@ -63,7 +63,7 @@ export { Stepper, type StepperProps, type Step } from './stepper';
 export { Toaster } from './sonner';
 export { showToast, type ToastProps, type ToastType, type ToastAction } from './toast';
 export { AlertBanner, type AlertBannerProps } from './alert-banner';
-export { AlertCard, type AlertCardProps, type AlertNotification } from './alert-card';
+export { AlertCard, alertCardVariants, type AlertCardProps, type AlertNotification } from './alert-card';
 export {
   EmptyState,
   EmptyStateMedia,
