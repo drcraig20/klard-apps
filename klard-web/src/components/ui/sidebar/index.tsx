@@ -29,4 +29,6 @@ export {
   SidebarMenuSubButton,
 } from "./sidebar-menu"
 
+export { sidebarMenuButtonVariants } from "./sidebar-menu.styles"
+
 export type * from "./sidebar-types"
