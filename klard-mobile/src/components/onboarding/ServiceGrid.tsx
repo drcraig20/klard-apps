@@ -1,7 +1,14 @@
 import { useState } from 'react';
-import { View, TextInput, Pressable, Text, StyleSheet } from 'react-native';
+import { View, TextInput, Pressable, Text, useColorScheme } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import { POPULAR_SERVICES, type PopularService, en } from '@klard-apps/commons';
+import { useThemeColors } from '@/hooks/useThemeColors';
+import {
+  searchInputStyles,
+  chipStyles,
+  chipTextStyles,
+  layoutStyles,
+} from './service-grid.styles';
 
 /**
  * ServiceGrid component for selecting popular services during onboarding.
@@ -19,8 +26,11 @@ export interface ServiceGridProps {
   selectedServiceId?: string;
 }
 
-export function ServiceGrid({ onSelect, selectedServiceId }: ServiceGridProps) {
+export function ServiceGrid({ onSelect, selectedServiceId }: Readonly<ServiceGridProps>) {
   const [searchQuery, setSearchQuery] = useState('');
+  const colorScheme = useColorScheme();
+  const isDark = colorScheme === 'dark';
+  const colors = useThemeColors();
 
   // Filter services based on search query and limit to 8 for mobile
   const filteredServices = POPULAR_SERVICES.filter(service =>
@@ -33,23 +43,24 @@ export function ServiceGrid({ onSelect, selectedServiceId }: ServiceGridProps) {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={layoutStyles.container}>
       <TextInput
         placeholder={en.onboarding.addSubscription.searchPlaceholder}
         value={searchQuery}
         onChangeText={setSearchQuery}
-        style={styles.searchInput}
-        placeholderTextColor="#94A3B8"
+        style={searchInputStyles(isDark, {})}
+        placeholderTextColor={colors.mutedForeground}
         autoCapitalize="none"
         autoCorrect={false}
       />
-      <View style={styles.grid}>
+      <View style={layoutStyles.grid}>
         {filteredServices.map(service => (
           <ServiceChip
             key={service.id}
             service={service}
             isSelected={selectedServiceId === service.id}
             onPress={() => handleSelect(service)}
+            isDark={isDark}
           />
         ))}
       </View>
@@ -65,75 +76,30 @@ interface ServiceChipProps {
   service: PopularService;
   isSelected: boolean;
   onPress: () => void;
+  isDark: boolean;
 }
 
-function ServiceChip({ service, isSelected, onPress }: ServiceChipProps) {
+function ServiceChip({ service, isSelected, onPress, isDark }: Readonly<ServiceChipProps>) {
   return (
     <Pressable
       onPress={onPress}
       style={({ pressed }) => [
-        styles.chip,
-        isSelected && styles.chipSelected,
-        pressed && styles.chipPressed,
+        ...chipStyles(isDark, {
+          selected: isSelected ? 'true' : undefined,
+          pressed: pressed ? 'true' : undefined,
+        }),
       ]}
       accessibilityRole="button"
       accessibilityLabel={`Select ${service.name}`}
       accessibilityState={{ selected: isSelected }}
     >
-      <View style={[styles.colorDot, { backgroundColor: service.color }]} />
-      <Text style={styles.chipText} numberOfLines={2}>
+      <View style={[layoutStyles.colorDot, { backgroundColor: service.color }]} />
+      <Text
+        style={chipTextStyles(isDark, { selected: isSelected ? 'true' : undefined })}
+        numberOfLines={2}
+      >
         {service.name}
       </Text>
     </Pressable>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-  },
-  searchInput: {
-    backgroundColor: 'rgba(30, 41, 59, 0.6)',
-    borderRadius: 12,
-    padding: 16,
-    color: '#F8FAFC',
-    borderWidth: 1,
-    borderColor: 'rgba(148, 163, 184, 0.12)',
-    fontSize: 16,
-  },
-  grid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginTop: 16,
-    gap: 12,
-  },
-  chip: {
-    width: '23%', // ~4 per row with gaps
-    minHeight: 44,
-    backgroundColor: 'rgba(30, 41, 59, 0.6)',
-    borderRadius: 12,
-    padding: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 1,
-    borderColor: 'rgba(148, 163, 184, 0.12)',
-  },
-  chipSelected: {
-    backgroundColor: '#15B5B0',
-    borderColor: '#15B5B0',
-  },
-  chipPressed: {
-    opacity: 0.7,
-  },
-  colorDot: {
-    width: 12,
-    height: 12,
-    borderRadius: 6,
-    marginBottom: 8,
-  },
-  chipText: {
-    color: '#F8FAFC',
-    fontSize: 12,
-    textAlign: 'center',
-  },
-});
