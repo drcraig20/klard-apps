@@ -1,13 +1,37 @@
+import { sva } from '@/styles/sva';
 import { StyleSheet } from 'react-native';
 
-// Color constants aligned with Klard design system
-export const colors = {
-  error: '#DC2626',
-  textSecondary: '#475569',
-  textMuted: '#64748B',
-};
+export const labelStyles = sva({
+  base: (colors) => ({
+    fontSize: 14,
+    fontWeight: '500',
+    color: colors.mutedForeground,
+  }),
+});
 
-export const styles = StyleSheet.create({
+export const requiredStyles = sva({
+  base: (colors) => ({
+    fontSize: 14,
+    color: colors.error,
+  }),
+});
+
+export const errorStyles = sva({
+  base: (colors) => ({
+    fontSize: 14,
+    color: colors.error,
+  }),
+});
+
+export const helperStyles = sva({
+  base: (colors) => ({
+    fontSize: 14,
+    color: colors.textSecondary,
+  }),
+});
+
+// Static layout styles
+export const layoutStyles = StyleSheet.create({
   container: {
     width: '100%',
     gap: 8,
@@ -16,22 +40,5 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-  },
-  label: {
-    fontSize: 14,
-    fontWeight: '500',
-    color: colors.textSecondary,
-  },
-  required: {
-    fontSize: 14,
-    color: colors.error,
-  },
-  error: {
-    fontSize: 14,
-    color: colors.error,
-  },
-  helper: {
-    fontSize: 14,
-    color: colors.textMuted,
   },
 });

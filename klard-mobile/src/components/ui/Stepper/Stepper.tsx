@@ -1,8 +1,14 @@
 import React from 'react';
-import { View, Text, type StyleProp, type ViewStyle } from 'react-native';
+import { View, Text, useColorScheme, type StyleProp, type ViewStyle } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { useThemeColors } from '@/hooks';
-import { styles } from './stepper.styles';
+import {
+  circleStyles,
+  circleTextStyles,
+  labelStyles,
+  descriptionStyles,
+  connectorStyles,
+  layoutStyles,
+} from './stepper.styles';
 
 export interface Step {
   label: string;
@@ -54,7 +60,7 @@ export function Stepper({
   accessibilityLabel,
   style,
 }: StepperProps) {
-  const colors = useThemeColors();
+  const isDark = useColorScheme() === 'dark';
 
   // Return null for empty steps
   if (!steps || steps.length === 0) {
@@ -65,31 +71,6 @@ export function Stepper({
   }
 
   const isHorizontal = orientation === 'horizontal';
-
-  const getCircleStyle = (state: StepState): ViewStyle => {
-    const baseStyle: ViewStyle = {
-      ...styles.circle,
-      backgroundColor: state === 'upcoming' ? colors.muted : colors.primary,
-    };
-
-    if (state === 'current') {
-      return { ...baseStyle, ...styles.circleActive };
-    }
-
-    return baseStyle;
-  };
-
-  const getCircleTextColor = (state: StepState): string => {
-    return state === 'upcoming' ? colors.mutedForeground : '#FFFFFF';
-  };
-
-  const getLabelColor = (state: StepState): string => {
-    return state === 'upcoming' ? colors.textSecondary : colors.textPrimary;
-  };
-
-  const getConnectorColor = (index: number): string => {
-    return index < currentStep ? colors.primary : colors.muted;
-  };
 
   // Calculate safeCurrent for accessibility value (must be within bounds)
   const safeCurrent = Math.min(Math.max(currentStep, 0), steps.length - 1);
@@ -106,7 +87,7 @@ export function Stepper({
         text: `Step ${safeCurrent + 1} of ${steps.length}`,
       }}
       style={[
-        isHorizontal ? styles.container : styles.containerVertical,
+        isHorizontal ? layoutStyles.container : layoutStyles.containerVertical,
         style,
       ]}
     >
@@ -120,12 +101,13 @@ export function Stepper({
           step.description,
           state
         );
+        const isConnectorCompleted = index < currentStep;
 
         return (
           <React.Fragment key={index}>
             <View
               style={[
-                isHorizontal ? styles.stepWrapper : styles.stepWrapperVertical,
+                isHorizontal ? layoutStyles.stepWrapper : layoutStyles.stepWrapperVertical,
                 isHorizontal && !isLast && { flex: 1 },
               ]}
             >
@@ -140,10 +122,10 @@ export function Stepper({
                     ? 'step-active'
                     : 'step-pending'
                 }
-                style={isHorizontal ? styles.stepContent : styles.stepContentVertical}
+                style={isHorizontal ? layoutStyles.stepContent : layoutStyles.stepContentVertical}
               >
                 {/* Step Circle */}
-                <View style={getCircleStyle(state)}>
+                <View style={circleStyles(isDark, { state })}>
                   {state === 'completed' ? (
                     <Ionicons
                       name="checkmark"
@@ -151,35 +133,19 @@ export function Stepper({
                       color="#FFFFFF"
                     />
                   ) : (
-                    <Text
-                      style={[
-                        styles.circleNumber,
-                        { color: getCircleTextColor(state) },
-                      ]}
-                    >
+                    <Text style={circleTextStyles(isDark, { state })}>
                       {index + 1}
                     </Text>
                   )}
                 </View>
 
                 {/* Step Label */}
-                <View style={styles.labelContainer}>
-                  <Text
-                    style={[
-                      styles.label,
-                      state === 'current' && styles.labelActive,
-                      { color: getLabelColor(state) },
-                    ]}
-                  >
+                <View style={layoutStyles.labelContainer}>
+                  <Text style={labelStyles(isDark, { state })}>
                     {step.label}
                   </Text>
                   {step.description && (
-                    <Text
-                      style={[
-                        styles.description,
-                        { color: colors.textSecondary },
-                      ]}
-                    >
+                    <Text style={descriptionStyles(isDark, {})}>
                       {step.description}
                     </Text>
                   )}
@@ -191,8 +157,8 @@ export function Stepper({
                 <View
                   testID="step-connector"
                   style={[
-                    styles.connectorHorizontal,
-                    { backgroundColor: getConnectorColor(index) },
+                    layoutStyles.connectorHorizontal,
+                    ...connectorStyles(isDark, { completed: isConnectorCompleted ? 'true' : 'false' }),
                   ]}
                 />
               )}
@@ -203,8 +169,8 @@ export function Stepper({
               <View
                 testID="step-connector"
                 style={[
-                  styles.connectorVertical,
-                  { backgroundColor: getConnectorColor(index) },
+                  layoutStyles.connectorVertical,
+                  ...connectorStyles(isDark, { completed: isConnectorCompleted ? 'true' : 'false' }),
                 ]}
               />
             )}

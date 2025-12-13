@@ -4,12 +4,22 @@ import {
   Text,
   Pressable,
   Platform,
+  useColorScheme,
   type StyleProp,
   type ViewStyle,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
-import { styles, colors } from './date-picker.styles';
+import {
+  labelStyles,
+  requiredStyles,
+  triggerStyles,
+  valueStyles,
+  pickerContainerStyles,
+  errorStyles,
+  getIconColor,
+  layoutStyles,
+} from './date-picker.styles';
 import { isValidDate, getDisplayedComponents } from './date-picker.utils';
 
 // Platform-specific imports
@@ -64,6 +74,7 @@ export function DatePicker({
   required = false,
   containerStyle,
 }: DatePickerProps) {
+  const isDark = useColorScheme() === 'dark';
   const [showPicker, setShowPicker] = useState(false);
 
   const validValue = isValidDate(value) ? value : null;
@@ -97,13 +108,14 @@ export function DatePicker({
   };
 
   const displayedComponents = getDisplayedComponents(mode);
+  const iconColor = getIconColor(disabled, isDark);
 
   return (
-    <View style={[styles.container, containerStyle]}>
+    <View style={[layoutStyles.container, containerStyle]}>
       {label ? (
-        <Text style={[styles.label, disabled && styles.labelDisabled]}>
+        <Text style={labelStyles(isDark, { disabled: disabled ? 'true' : undefined })}>
           {label}
-          {required ? <Text style={styles.required}> *</Text> : null}
+          {required ? <Text style={requiredStyles(isDark, {})}> *</Text> : null}
         </Text>
       ) : null}
 
@@ -114,30 +126,28 @@ export function DatePicker({
         accessibilityLabel={label}
         accessibilityRole="button"
         accessibilityState={{ disabled }}
-        style={[
-          styles.trigger,
-          { borderColor: error ? colors.error : colors.border, borderWidth: error ? 2 : 1 },
-          disabled && styles.triggerDisabled,
-        ]}
+        style={triggerStyles(isDark, {
+          error: error ? 'true' : undefined,
+          disabled: disabled ? 'true' : undefined,
+        })}
       >
         <Ionicons
           name="calendar-outline"
           size={20}
-          color={disabled ? colors.iconDisabled : colors.icon}
+          color={iconColor}
         />
         <Text
-          style={[
-            styles.value,
-            !validValue && styles.placeholder,
-            disabled && styles.valueDisabled,
-          ]}
+          style={valueStyles(isDark, {
+            placeholder: !validValue ? 'true' : undefined,
+            disabled: disabled ? 'true' : undefined,
+          })}
         >
           {displayValue ?? placeholder}
         </Text>
       </Pressable>
 
       {showPicker && Platform.OS === 'ios' && SwiftUIDateTimePicker && Host ? (
-        <View style={styles.pickerContainer} testID="date-picker-modal">
+        <View style={pickerContainerStyles(isDark, {})} testID="date-picker-modal">
           <Host matchContents>
             <SwiftUIDateTimePicker
               onDateSelected={handleDateSelected}
@@ -164,7 +174,7 @@ export function DatePicker({
       ) : null}
 
       {error ? (
-        <Text style={styles.error} accessibilityRole="alert">
+        <Text style={errorStyles(isDark, {})} accessibilityRole="alert">
           {error}
         </Text>
       ) : null}

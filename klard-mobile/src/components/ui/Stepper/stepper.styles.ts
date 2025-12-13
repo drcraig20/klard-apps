@@ -1,15 +1,91 @@
+import { sva } from '@/styles/sva';
 import { StyleSheet } from 'react-native';
 
-/**
- * Stepper component styles
- *
- * Design tokens:
- * - Circle size: 32px
- * - Icon size: 16px
- * - Gap: 8px (horizontal), 12px (vertical)
- * - Connector thickness: 2px
- */
-export const styles = StyleSheet.create({
+export const circleStyles = sva({
+  base: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  variants: {
+    state: {
+      completed: (colors) => ({ backgroundColor: colors.primary }),
+      current: (colors) => ({
+        backgroundColor: colors.primary,
+        shadowColor: colors.glowPrimary,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.3,
+        shadowRadius: 8,
+        elevation: 4,
+      }),
+      upcoming: (colors) => ({ backgroundColor: colors.muted }),
+    },
+  },
+  defaultVariants: {
+    state: 'upcoming',
+  },
+});
+
+export const circleTextStyles = sva({
+  base: {
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  variants: {
+    state: {
+      completed: { color: '#FFFFFF' },
+      current: { color: '#FFFFFF' },
+      upcoming: (colors) => ({ color: colors.mutedForeground }),
+    },
+  },
+  defaultVariants: {
+    state: 'upcoming',
+  },
+});
+
+export const labelStyles = sva({
+  base: {
+    fontSize: 14,
+  },
+  variants: {
+    state: {
+      completed: (colors) => ({ color: colors.textPrimary }),
+      current: (colors) => ({ color: colors.textPrimary, fontWeight: '500' }),
+      upcoming: (colors) => ({ color: colors.textSecondary }),
+    },
+  },
+  defaultVariants: {
+    state: 'upcoming',
+  },
+});
+
+export const descriptionStyles = sva({
+  base: (colors) => ({
+    fontSize: 12,
+    marginTop: 2,
+    color: colors.textSecondary,
+  }),
+});
+
+export const connectorStyles = sva({
+  base: {
+    borderRadius: 999,
+  },
+  variants: {
+    completed: {
+      true: (colors) => ({ backgroundColor: colors.primary }),
+      false: (colors) => ({ backgroundColor: colors.muted }),
+    },
+  },
+  defaultVariants: {
+    completed: 'false',
+  },
+});
+
+// Static layout styles (not themed)
+export const layoutStyles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -36,50 +112,19 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 12,
   },
-  circle: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  circleActive: {
-    // Ring effect via shadow (iOS) and elevation (Android)
-    shadowColor: '#0D7C7A',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 4,
-  },
-  circleNumber: {
-    fontSize: 14,
-    fontWeight: '500',
-  },
   labelContainer: {
     flexDirection: 'column',
-    flexShrink: 1, // Allow wrapping
-  },
-  label: {
-    fontSize: 14,
-  },
-  labelActive: {
-    fontWeight: '500',
-  },
-  description: {
-    fontSize: 12,
-    marginTop: 2,
+    flexShrink: 1,
   },
   connectorHorizontal: {
     height: 2,
     flex: 1,
     marginHorizontal: 16,
-    borderRadius: 999, // Fully rounded
   },
   connectorVertical: {
     width: 2,
     height: 32,
-    marginLeft: 15, // Center under 32px circle
+    marginLeft: 15,
     marginVertical: 8,
-    borderRadius: 999, // Fully rounded
   },
 });

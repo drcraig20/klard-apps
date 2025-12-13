@@ -2,10 +2,17 @@ import React from 'react';
 import {
   View,
   Text,
+  useColorScheme,
   type StyleProp,
   type ViewStyle,
 } from 'react-native';
-import { styles } from './form-field.styles';
+import {
+  labelStyles,
+  requiredStyles,
+  errorStyles,
+  helperStyles,
+  layoutStyles,
+} from './form-field.styles';
 
 export interface FormFieldProps {
   /** Label text displayed above the input */
@@ -30,29 +37,31 @@ export function FormField({
   children,
   containerStyle,
 }: FormFieldProps) {
+  const isDark = useColorScheme() === 'dark';
+
   return (
     <View
       testID="form-field"
-      style={[styles.container, containerStyle]}
+      style={[layoutStyles.container, containerStyle]}
     >
       {label && (
-        <View style={styles.labelRow} testID="form-field-label">
-          <Text style={styles.label}>{label}</Text>
-          {required && <Text style={styles.required}>*</Text>}
+        <View style={layoutStyles.labelRow} testID="form-field-label">
+          <Text style={labelStyles(isDark, {})}>{label}</Text>
+          {required && <Text style={requiredStyles(isDark, {})}>*</Text>}
         </View>
       )}
       {children}
       {error && (
         <Text
           testID="form-field-error"
-          style={styles.error}
+          style={errorStyles(isDark, {})}
           accessibilityRole="alert"
         >
           {error}
         </Text>
       )}
       {helperText && !error && (
-        <Text testID="form-field-helper" style={styles.helper}>
+        <Text testID="form-field-helper" style={helperStyles(isDark, {})}>
           {helperText}
         </Text>
       )}

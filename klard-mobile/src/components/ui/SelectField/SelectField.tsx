@@ -5,12 +5,28 @@ import {
   Pressable,
   Modal,
   FlatList,
+  useColorScheme,
   type StyleProp,
   type ViewStyle,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
-import { styles, colors } from './select-field.styles';
+import {
+  labelStyles,
+  triggerStyles,
+  triggerTextStyles,
+  errorStyles,
+  overlayStyles,
+  modalContentStyles,
+  modalHeaderStyles,
+  modalTitleStyles,
+  optionStyles,
+  optionTextStyles,
+  getIconColor,
+  getCloseIconColor,
+  getPrimaryColor,
+  layoutStyles,
+} from './select-field.styles';
 
 export interface SelectOption {
   value: string;
@@ -48,6 +64,7 @@ export function SelectField({
   disabled = false,
   containerStyle,
 }: SelectFieldProps) {
+  const isDark = useColorScheme() === 'dark';
   const [isOpen, setIsOpen] = useState(false);
 
   const selectedOption = options.find((opt) => opt.value === value);
@@ -69,16 +86,15 @@ export function SelectField({
     setIsOpen(false);
   };
 
-  const getBorderColor = () => {
-    if (error) return colors.error;
-    return colors.border;
-  };
+  const chevronColor = getIconColor(disabled, isDark);
+  const closeIconColor = getCloseIconColor(isDark);
+  const primaryColor = getPrimaryColor(isDark);
 
   return (
-    <View style={[styles.container, containerStyle]}>
+    <View style={[layoutStyles.container, containerStyle]}>
       {/* Label */}
       {label && (
-        <Text style={[styles.label, disabled && styles.labelDisabled]}>
+        <Text style={labelStyles(isDark, { disabled: disabled ? 'true' : undefined })}>
           {label}
         </Text>
       )}
@@ -91,31 +107,29 @@ export function SelectField({
         accessibilityRole="combobox"
         accessibilityLabel={label}
         accessibilityState={{ disabled, expanded: isOpen }}
-        style={[
-          styles.trigger,
-          { borderColor: getBorderColor() },
-          disabled && styles.triggerDisabled,
-        ]}
+        style={triggerStyles(isDark, {
+          error: error ? 'true' : undefined,
+          disabled: disabled ? 'true' : undefined,
+        })}
       >
         <Text
-          style={[
-            styles.triggerText,
-            !selectedOption && styles.placeholder,
-            disabled && styles.textDisabled,
-          ]}
+          style={triggerTextStyles(isDark, {
+            placeholder: !selectedOption ? 'true' : undefined,
+            disabled: disabled ? 'true' : undefined,
+          })}
         >
           {displayText}
         </Text>
         <Ionicons
           name="chevron-down"
           size={20}
-          color={disabled ? colors.icon : colors.textSecondary}
+          color={chevronColor}
         />
       </Pressable>
 
       {/* Error message */}
       {error && (
-        <Text style={styles.error} accessibilityRole="alert">
+        <Text style={errorStyles(isDark, {})} accessibilityRole="alert">
           {error}
         </Text>
       )}
@@ -129,12 +143,12 @@ export function SelectField({
           onRequestClose={handleClose}
           testID="select-modal"
         >
-          <Pressable style={styles.overlay} onPress={handleClose}>
-            <View style={styles.modalContent}>
-              <View style={styles.modalHeader}>
-                <Text style={styles.modalTitle}>{label || 'Select'}</Text>
-                <Pressable onPress={handleClose} style={styles.closeButton}>
-                  <Ionicons name="close" size={24} color={colors.text} />
+          <Pressable style={overlayStyles(isDark, {})} onPress={handleClose}>
+            <View style={modalContentStyles(isDark, {})}>
+              <View style={modalHeaderStyles(isDark, {})}>
+                <Text style={modalTitleStyles(isDark, {})}>{label || 'Select'}</Text>
+                <Pressable onPress={handleClose} style={layoutStyles.closeButton}>
+                  <Ionicons name="close" size={24} color={closeIconColor} />
                 </Pressable>
               </View>
               <FlatList
@@ -145,24 +159,22 @@ export function SelectField({
                     testID={`select-option-${item.value}`}
                     onPress={() => !item.disabled && handleSelect(item.value)}
                     disabled={item.disabled}
-                    style={[
-                      styles.option,
-                      item.value === value && styles.optionSelected,
-                      item.disabled && styles.optionDisabled,
-                    ]}
+                    style={optionStyles(isDark, {
+                      selected: item.value === value ? 'true' : undefined,
+                      disabled: item.disabled ? 'true' : undefined,
+                    })}
                   >
-                    {item.icon && <View style={styles.optionIcon}>{item.icon}</View>}
+                    {item.icon && <View style={layoutStyles.optionIcon}>{item.icon}</View>}
                     <Text
-                      style={[
-                        styles.optionText,
-                        item.value === value && styles.optionTextSelected,
-                        item.disabled && styles.optionTextDisabled,
-                      ]}
+                      style={optionTextStyles(isDark, {
+                        selected: item.value === value ? 'true' : undefined,
+                        disabled: item.disabled ? 'true' : undefined,
+                      })}
                     >
                       {item.label}
                     </Text>
                     {item.value === value && (
-                      <Ionicons name="checkmark" size={20} color={colors.primary} />
+                      <Ionicons name="checkmark" size={20} color={primaryColor} />
                     )}
                   </Pressable>
                 )}

@@ -4,12 +4,18 @@ import {
   Text,
   Pressable,
   Animated,
+  useColorScheme,
   ViewStyle,
   TextStyle,
   AccessibilityInfo,
 } from 'react-native';
 import * as Haptics from 'expo-haptics';
-import { styles } from './tooltip.styles';
+import {
+  tooltipStyles,
+  tooltipTextStyles,
+  arrowStyles,
+  layoutStyles,
+} from './tooltip.styles';
 
 export interface TooltipProps {
   /** Content to display in the tooltip */
@@ -46,6 +52,7 @@ export function Tooltip({
   style,
   textStyle,
 }: TooltipProps) {
+  const isDark = useColorScheme() === 'dark';
   const [visible, setVisible] = useState(false);
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const hideTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -108,13 +115,13 @@ export function Tooltip({
 
   const renderContent = () => {
     if (typeof content === 'string') {
-      return <Text style={[styles.tooltipText, textStyle]}>{content}</Text>;
+      return <Text style={[...tooltipTextStyles(isDark, {}), textStyle]}>{content}</Text>;
     }
     return content;
   };
 
   return (
-    <View testID={testID} style={styles.container}>
+    <View testID={testID} style={layoutStyles.container}>
       <Pressable
         onLongPress={handleLongPress}
         accessibilityLabel={accessibilityLabel}
@@ -126,7 +133,7 @@ export function Tooltip({
       {visible && (
         <Animated.View
           style={[
-            styles.tooltip,
+            ...tooltipStyles(isDark, {}),
             style,
             {
               opacity: fadeAnim,
@@ -144,7 +151,7 @@ export function Tooltip({
           accessibilityLiveRegion="polite"
         >
           {renderContent()}
-          <View style={styles.arrow} />
+          <View style={arrowStyles(isDark, {})} />
         </Animated.View>
       )}
     </View>

@@ -2,12 +2,20 @@ import React, { useMemo } from 'react';
 import {
   View,
   Text,
+  useColorScheme,
   type ViewStyle,
   type StyleProp,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { styles, amountSizeStyles, cycleSizeStyles, changeSizeStyles } from './price-display.styles';
-import { cycleLabels, changeColors, changeSizes } from './price-display.constants';
+import {
+  amountStyles,
+  cycleLabelStyles,
+  changeAmountStyles,
+  getChangeColor,
+  changeSizes,
+  cycleLabels,
+  layoutStyles,
+} from './price-display.styles';
 
 export interface PriceDisplayProps {
   amount: number;
@@ -31,6 +39,8 @@ export function PriceDisplay({
   style,
   testID,
 }: PriceDisplayProps) {
+  const isDark = useColorScheme() === 'dark';
+
   const formatter = useMemo(
     () =>
       new Intl.NumberFormat('en-US', {
@@ -43,37 +53,36 @@ export function PriceDisplay({
   const formattedAmount = formatter.format(amount);
   const cycleLabel = billingCycle ? cycleLabels[billingCycle] : '';
   const changeAmount = showChange ? Math.abs(amount - showChange.from) : 0;
+  const changeColor = showChange ? getChangeColor(showChange.direction, isDark) : undefined;
 
   return (
     <View
-      style={[styles.container, style]}
+      style={[layoutStyles.container, style]}
       testID={testID}
       accessibilityRole="text"
     >
-      <Text style={[styles.amount, amountSizeStyles[size]]}>
+      <Text style={amountStyles(isDark, { size })}>
         {formattedAmount}
       </Text>
       {cycleLabel && (
-        <Text style={[styles.cycleLabel, cycleSizeStyles[size]]}>
+        <Text style={cycleLabelStyles(isDark, { size })}>
           {cycleLabel}
         </Text>
       )}
       {showChange && (
         <View
-          style={styles.changeContainer}
+          style={layoutStyles.changeContainer}
           testID="price-change-indicator"
         >
           <Ionicons
             name={showChange.direction === 'increase' ? 'arrow-up' : 'arrow-down'}
             size={changeSizes[size].iconSize}
-            color={changeColors[showChange.direction]}
+            color={changeColor}
             testID={showChange.direction === 'increase' ? 'arrow-up-icon' : 'arrow-down-icon'}
           />
           <Text
             style={[
-              styles.changeAmount,
-              changeSizeStyles[size],
-              { color: changeColors[showChange.direction] },
+              ...changeAmountStyles(isDark, { size, direction: showChange.direction }),
             ]}
           >
             {formatter.format(changeAmount)}
