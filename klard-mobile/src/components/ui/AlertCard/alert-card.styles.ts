@@ -1,20 +1,37 @@
+import { sva } from '@/styles/sva';
 import { StyleSheet } from 'react-native';
 
-export const styles = StyleSheet.create({
-  container: {
+export type AlertType = 'renewal' | 'price-increase' | 'price-decrease' | 'blocked' | 'savings' | 'system';
+
+export const containerStyles = sva({
+  base: (colors) => ({
     flexDirection: 'row',
     gap: 12,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: 'rgba(148,163,184,0.3)',
-    backgroundColor: 'rgba(255,255,255,0.95)',
+    borderColor: colors.border,
+    backgroundColor: colors.card,
     position: 'relative',
+  }),
+  variants: {
+    size: {
+      md: { padding: 14 },
+      sm: { padding: 10, gap: 10 },
+    },
+    pressed: {
+      true: {
+        opacity: 0.95,
+        transform: [{ scale: 0.99 }],
+      },
+    },
   },
-  pressed: {
-    opacity: 0.95,
-    transform: [{ scale: 0.99 }],
+  defaultVariants: {
+    size: 'md',
   },
-  iconBubble: {
+});
+
+export const iconBubbleStyles = sva({
+  base: {
     width: 36,
     height: 36,
     borderRadius: 18,
@@ -22,6 +39,148 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 2,
   },
+  variants: {
+    type: {
+      renewal: (colors) => ({ backgroundColor: colors.primaryBackground }),
+      'price-increase': (colors) => ({ backgroundColor: colors.warningBackground }),
+      'price-decrease': (colors) => ({ backgroundColor: colors.successBackground }),
+      blocked: (colors) => ({ backgroundColor: colors.errorBackground }),
+      savings: (colors) => ({ backgroundColor: colors.successBackground }),
+      system: (colors) => ({ backgroundColor: colors.muted }),
+    },
+  },
+  defaultVariants: {
+    type: 'system',
+  },
+});
+
+export const titleStyles = sva({
+  base: (colors) => ({
+    fontWeight: '600',
+    color: colors.foreground,
+    flex: 1,
+  }),
+  variants: {
+    size: {
+      md: { fontSize: 15 },
+      sm: { fontSize: 14 },
+    },
+  },
+  defaultVariants: {
+    size: 'md',
+  },
+});
+
+export const bodyStyles = sva({
+  base: (colors) => ({
+    color: colors.mutedForeground,
+    lineHeight: 20,
+  }),
+  variants: {
+    size: {
+      md: { fontSize: 14 },
+      sm: { fontSize: 13 },
+    },
+  },
+  defaultVariants: {
+    size: 'md',
+  },
+});
+
+export const timeStyles = sva({
+  base: (colors) => ({
+    fontSize: 12,
+    color: colors.textSecondary,
+  }),
+});
+
+export const unreadDotStyles = sva({
+  base: (colors) => ({
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: colors.secondary,
+  }),
+});
+
+export const subscriptionChipStyles = sva({
+  base: (colors) => ({
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    backgroundColor: colors.muted,
+    borderRadius: 999,
+  }),
+});
+
+export const subscriptionTextStyles = sva({
+  base: (colors) => ({
+    fontSize: 12,
+    fontWeight: '600',
+    color: colors.foreground,
+  }),
+});
+
+export const subscriptionFallbackStyles = sva({
+  base: (colors) => ({
+    backgroundColor: colors.muted,
+    alignItems: 'center',
+    justifyContent: 'center',
+  }),
+});
+
+export const subscriptionInitialStyles = sva({
+  base: (colors) => ({
+    fontSize: 10,
+    fontWeight: '600',
+    color: colors.foreground,
+  }),
+});
+
+export const ctaStyles = sva({
+  base: (colors) => ({
+    paddingHorizontal: 10,
+    paddingVertical: 6,
+    backgroundColor: colors.muted,
+    borderRadius: 10,
+  }),
+});
+
+export const ctaTextStyles = sva({
+  base: (colors) => ({
+    fontSize: 12,
+    fontWeight: '600',
+    color: colors.primary,
+  }),
+});
+
+// Helper to get icon color by type
+export function getIconColor(type: AlertType, isDark: boolean): string {
+  const colors = {
+    light: {
+      renewal: '#0D7C7A',
+      'price-increase': '#D97706',
+      'price-decrease': '#059669',
+      blocked: '#DC2626',
+      savings: '#059669',
+      system: '#475569',
+    },
+    dark: {
+      renewal: '#15B5B0',
+      'price-increase': '#F59E0B',
+      'price-decrease': '#10B981',
+      blocked: '#EF4444',
+      savings: '#10B981',
+      system: '#94A3B8',
+    },
+  };
+  return isDark ? colors.dark[type] : colors.light[type];
+}
+
+// Static layout styles (not themed)
+export const layoutStyles = StyleSheet.create({
   content: {
     flex: 1,
     gap: 6,
@@ -31,70 +190,16 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 6,
   },
-  title: {
-    fontWeight: '600',
-    color: '#0F172A',
-    flex: 1,
-  },
-  unreadDot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: '#15B5B0',
-  },
-  body: {
-    color: '#475569',
-    lineHeight: 20,
-  },
   footer: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
     flexWrap: 'wrap',
   },
-  time: {
-    fontSize: 12,
-    color: '#64748B',
-  },
-  subscription: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    backgroundColor: 'rgba(148,163,184,0.15)',
-    borderRadius: 999,
-  },
   subscriptionLogo: {
     width: 20,
     height: 20,
     borderRadius: 10,
-  },
-  subscriptionFallback: {
-    backgroundColor: '#E2E8F0',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  subscriptionInitial: {
-    fontSize: 10,
-    fontWeight: '600',
-    color: '#0F172A',
-  },
-  subscriptionText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#0F172A',
-  },
-  cta: {
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    backgroundColor: '#E2E8F0',
-    borderRadius: 10,
-  },
-  ctaText: {
-    fontSize: 12,
-    fontWeight: '600',
-    color: '#0D7C7A',
   },
   dismissButton: {
     position: 'absolute',
@@ -103,37 +208,3 @@ export const styles = StyleSheet.create({
     padding: 4,
   },
 });
-
-export const variantStyles = StyleSheet.create({
-  renewal: { backgroundColor: 'rgba(13,124,122,0.15)' },
-  'price-increase': { backgroundColor: 'rgba(245,158,11,0.15)' },
-  'price-decrease': { backgroundColor: 'rgba(16,185,129,0.15)' },
-  blocked: { backgroundColor: 'rgba(239,68,68,0.15)' },
-  savings: { backgroundColor: 'rgba(16,185,129,0.15)' },
-  system: { backgroundColor: 'rgba(71,85,105,0.15)' },
-});
-
-export const iconColors: Record<string, string> = {
-  renewal: '#0D7C7A',
-  'price-increase': '#F59E0B',
-  'price-decrease': '#10B981',
-  blocked: '#EF4444',
-  savings: '#10B981',
-  system: '#475569',
-};
-
-export const sizeStyles = StyleSheet.create({
-  md: { padding: 14 },
-  sm: { padding: 10, gap: 10 },
-});
-
-export const textSizeStyles = {
-  md: StyleSheet.create({
-    title: { fontSize: 15 },
-    body: { fontSize: 14 },
-  }),
-  sm: StyleSheet.create({
-    title: { fontSize: 14 },
-    body: { fontSize: 13 },
-  }),
-};

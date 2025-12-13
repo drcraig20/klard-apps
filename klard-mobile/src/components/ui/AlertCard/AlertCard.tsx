@@ -3,13 +3,30 @@ import {
   View,
   Text,
   Pressable,
+  useColorScheme,
   type StyleProp,
   type ViewStyle,
 } from 'react-native';
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
-import { styles, variantStyles, iconColors, sizeStyles, textSizeStyles } from './alert-card.styles';
+import {
+  containerStyles,
+  iconBubbleStyles,
+  titleStyles,
+  bodyStyles,
+  timeStyles,
+  unreadDotStyles,
+  subscriptionChipStyles,
+  subscriptionTextStyles,
+  subscriptionFallbackStyles,
+  subscriptionInitialStyles,
+  ctaStyles,
+  ctaTextStyles,
+  getIconColor,
+  layoutStyles,
+  type AlertType,
+} from './alert-card.styles';
 
 // Shared relative time helper
 function formatRelative(date: Date, now = new Date()): string {
@@ -27,8 +44,6 @@ function formatRelative(date: Date, now = new Date()): string {
   const days = Math.round(diff / 86400000);
   return new Intl.RelativeTimeFormat('en', { numeric: 'auto' }).format(days, 'day');
 }
-
-type AlertType = 'renewal' | 'price-increase' | 'price-decrease' | 'blocked' | 'savings' | 'system';
 
 interface TypeConfig {
   icon: keyof typeof Ionicons.glyphMap;
@@ -71,9 +86,12 @@ export function AlertCard({
   style,
   testID,
 }: AlertCardProps) {
+  const isDark = useColorScheme() === 'dark';
   const { icon } = typeConfig[alert.type];
   const timeText = formatRelative(alert.timestamp);
   const iconSize = size === 'sm' ? 16 : 20;
+  const iconColor = getIconColor(alert.type, isDark);
+  const dismissIconColor = isDark ? '#64748B' : '#94A3B8';
 
   const handlePress = async () => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -91,36 +109,34 @@ export function AlertCard({
       accessibilityRole="button"
       accessibilityLabel={alert.title}
       style={({ pressed }) => [
-        styles.container,
-        sizeStyles[size],
-        pressed && styles.pressed,
+        ...containerStyles(isDark, { size, pressed: pressed ? 'true' : undefined }),
         style,
       ]}
       testID={testID}
     >
       {/* Icon bubble */}
-      <View style={[styles.iconBubble, variantStyles[alert.type]]}>
+      <View style={iconBubbleStyles(isDark, { type: alert.type })}>
         <Ionicons
           name={icon}
           size={iconSize}
-          color={iconColors[alert.type]}
+          color={iconColor}
           testID="alert-icon"
         />
       </View>
 
       {/* Content */}
-      <View style={styles.content}>
+      <View style={layoutStyles.content}>
         {/* Title row */}
-        <View style={styles.titleRow}>
+        <View style={layoutStyles.titleRow}>
           <Text
-            style={[styles.title, textSizeStyles[size].title]}
+            style={titleStyles(isDark, { size })}
             numberOfLines={1}
           >
             {alert.title}
           </Text>
           {!alert.read && (
             <View
-              style={styles.unreadDot}
+              style={unreadDotStyles(isDark, {})}
               accessibilityLabel="unread"
             />
           )}
@@ -128,34 +144,34 @@ export function AlertCard({
 
         {/* Body */}
         <Text
-          style={[styles.body, textSizeStyles[size].body]}
+          style={bodyStyles(isDark, { size })}
           numberOfLines={2}
         >
           {alert.body}
         </Text>
 
         {/* Footer */}
-        <View style={styles.footer}>
-          <Text style={styles.time}>{timeText}</Text>
+        <View style={layoutStyles.footer}>
+          <Text style={timeStyles(isDark, {})}>{timeText}</Text>
 
           {/* Subscription chip */}
           {alert.subscription && (
-            <View style={styles.subscription}>
+            <View style={subscriptionChipStyles(isDark, {})}>
               {alert.subscription.logoUrl ? (
                 <Image
                   source={alert.subscription.logoUrl}
-                  style={styles.subscriptionLogo}
+                  style={layoutStyles.subscriptionLogo}
                   contentFit="cover"
                   accessibilityLabel={alert.subscription.name}
                 />
               ) : (
-                <View style={[styles.subscriptionLogo, styles.subscriptionFallback]}>
-                  <Text style={styles.subscriptionInitial}>
+                <View style={[layoutStyles.subscriptionLogo, ...subscriptionFallbackStyles(isDark, {})]}>
+                  <Text style={subscriptionInitialStyles(isDark, {})}>
                     {alert.subscription.name[0]}
                   </Text>
                 </View>
               )}
-              <Text style={styles.subscriptionText}>{alert.subscription.name}</Text>
+              <Text style={subscriptionTextStyles(isDark, {})}>{alert.subscription.name}</Text>
             </View>
           )}
 
@@ -166,10 +182,10 @@ export function AlertCard({
                 e.stopPropagation?.();
                 handlePress();
               }}
-              style={styles.cta}
+              style={ctaStyles(isDark, {})}
               accessibilityLabel={alert.actionLabel}
             >
-              <Text style={styles.ctaText}>{alert.actionLabel}</Text>
+              <Text style={ctaTextStyles(isDark, {})}>{alert.actionLabel}</Text>
             </Pressable>
           )}
         </View>
@@ -179,14 +195,16 @@ export function AlertCard({
       {onDismiss && (
         <Pressable
           onPress={handleDismiss}
-          style={styles.dismissButton}
+          style={layoutStyles.dismissButton}
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           accessibilityLabel={`Dismiss ${alert.title}`}
           accessibilityRole="button"
         >
-          <Ionicons name="close" size={16} color="#94A3B8" />
+          <Ionicons name="close" size={16} color={dismissIconColor} />
         </Pressable>
       )}
     </Pressable>
   );
 }
+
+export type { AlertType };
