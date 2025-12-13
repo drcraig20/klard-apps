@@ -1,9 +1,10 @@
 'use client';
 
-import { useId, useState } from 'react';
+import { useState } from 'react';
 import { format, isValid } from 'date-fns';
 import { Calendar as CalendarIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useFormFieldIds } from '@/hooks';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -59,8 +60,7 @@ export function DatePicker({
   id: providedId,
   className,
 }: DatePickerProps) {
-  const generatedId = useId();
-  const id = providedId ?? generatedId;
+  const { inputId, errorId } = useFormFieldIds(providedId, 'date-picker', error);
   const [open, setOpen] = useState(false);
 
   const validValue = isValidDate(value) ? value : null;
@@ -102,7 +102,7 @@ export function DatePicker({
     <div className={cn('w-full', className)}>
       {label ? (
         <label
-          htmlFor={id}
+          htmlFor={inputId}
           className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300"
         >
           {label}
@@ -117,7 +117,7 @@ export function DatePicker({
       <Popover open={open} onOpenChange={handleOpenChange}>
         <PopoverTrigger asChild>
           <Button
-            id={id}
+            id={inputId}
             type="button"
             variant="outline"
             disabled={disabled}
@@ -126,7 +126,7 @@ export function DatePicker({
             aria-haspopup="dialog"
             aria-expanded={open}
             aria-required={required}
-            aria-describedby={error ? `${id}-error` : undefined}
+            aria-describedby={error ? errorId : undefined}
             className={cn(
               'h-12 w-full justify-start text-left font-normal',
               !displayValue && 'text-slate-500 dark:text-slate-400',
@@ -152,7 +152,7 @@ export function DatePicker({
       </Popover>
 
       {error ? (
-        <p id={`${id}-error`} className="mt-2 text-sm text-red-500" role="alert">
+        <p id={errorId} className="mt-2 text-sm text-red-500" role="alert">
           {error}
         </p>
       ) : null}

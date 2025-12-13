@@ -1,8 +1,9 @@
 'use client';
 
-import { forwardRef, useState, useId } from 'react';
+import { forwardRef, useState } from 'react';
 import { Eye, EyeOff, Check, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useFormFieldIds } from '@/hooks';
 import { calculatePasswordStrength } from '@klard-apps/commons';
 import {
   inputFieldVariants,
@@ -159,22 +160,20 @@ export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
     },
     ref
   ) {
-    const generatedId = useId();
-    const id = providedId ?? generatedId;
+    const { inputId, errorId, helperId, describedBy } = useFormFieldIds(
+      providedId,
+      props.name ?? 'password',
+      error,
+      helperText
+    );
     const [showPassword, setShowPassword] = useState(false);
-
-    // Build aria-describedby for accessibility
-    const describedBy = [
-      error ? `${id}-error` : null,
-      helperText && !error ? `${id}-helper` : null,
-    ].filter(Boolean).join(' ') || undefined;
 
     return (
       <div className="w-full">
         {/* Label */}
         {label && (
           <label
-            htmlFor={id}
+            htmlFor={inputId}
             className={labelStyles}
           >
             {label}
@@ -186,7 +185,7 @@ export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
         <div className={inputContainerStyles}>
           <input
             ref={ref}
-            id={id}
+            id={inputId}
             type={showPassword ? 'text' : 'password'}
             value={value}
             onChange={onChange}
@@ -225,7 +224,7 @@ export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
         {/* Error message */}
         {error && (
           <p
-            id={`${id}-error`}
+            id={errorId}
             className={errorStyles}
             role="alert"
           >
@@ -236,7 +235,7 @@ export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
         {/* Helper text */}
         {helperText && !error && (
           <p
-            id={`${id}-helper`}
+            id={helperId}
             className={helperTextStyles}
           >
             {helperText}

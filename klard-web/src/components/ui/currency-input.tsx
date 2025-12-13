@@ -1,10 +1,10 @@
 'use client';
 
-import { useId } from 'react';
 import { type VariantProps } from 'class-variance-authority';
 import { FormField } from '@/components/ui/form-field';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
+import { useFormFieldIds } from '@/hooks';
 import {
   inputFieldVariants,
   leftIconStyles,
@@ -107,15 +107,16 @@ export function CurrencyInput({
   disabled,
   required,
   id: providedId,
+  name,
   className,
   ...props
 }: CurrencyInputProps) {
-  const generatedId = useId();
-  const id = providedId ?? generatedId;
-  const describedBy =
-    [error ? `${id}-error` : null, helperText && !error ? `${id}-helper` : null]
-      .filter(Boolean)
-      .join(' ') || undefined;
+  const { inputId, describedBy } = useFormFieldIds(
+    providedId,
+    name ?? 'currency',
+    error,
+    helperText
+  );
   const symbol = getCurrencySymbol(currency);
   const formattedValue = formatValue(value);
 
@@ -127,7 +128,7 @@ export function CurrencyInput({
 
   return (
     <FormField
-      id={id}
+      id={inputId}
       label={label}
       required={required}
       error={error}
@@ -139,7 +140,7 @@ export function CurrencyInput({
           {symbol}
         </span>
         <Input
-          id={id}
+          id={inputId}
           value={formattedValue}
           onChange={handleChange}
           disabled={disabled}

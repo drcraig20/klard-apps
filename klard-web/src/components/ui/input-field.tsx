@@ -1,8 +1,9 @@
 'use client';
 
-import { forwardRef, useState, useId } from 'react';
+import { forwardRef, useState } from 'react';
 import { Eye, EyeOff, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { useFormFieldIds } from '@/hooks';
 import {
   inputFieldVariants,
   labelStyles,
@@ -52,8 +53,12 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
     },
     ref
   ) {
-    const generatedId = useId();
-    const id = providedId ?? generatedId;
+    const { inputId, errorId, helperId, describedBy } = useFormFieldIds(
+      providedId,
+      props.name ?? 'input',
+      error,
+      helperText
+    );
     const [showPassword, setShowPassword] = useState(false);
 
     const isPassword = type === 'password';
@@ -75,16 +80,10 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
       onClear?.();
     };
 
-    // Build aria-describedby for accessibility
-    const describedBy = [
-      error ? `${id}-error` : null,
-      helperText && !error ? `${id}-helper` : null,
-    ].filter(Boolean).join(' ') || undefined;
-
     return (
       <div className="w-full">
         {label && (
-          <label htmlFor={id} className={labelStyles}>
+          <label htmlFor={inputId} className={labelStyles}>
             {label}
             {required && <span className="text-red-500 ml-1" aria-hidden="true">*</span>}
           </label>
@@ -97,7 +96,7 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
           )}
           <input
             ref={ref}
-            id={id}
+            id={inputId}
             type={inputType}
             value={value}
             onChange={onChange}
@@ -150,13 +149,13 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
         </div>
         {/* Error message */}
         {error && (
-          <p id={`${id}-error`} className={errorStyles} role="alert">
+          <p id={errorId} className={errorStyles} role="alert">
             {error}
           </p>
         )}
         {/* Helper text */}
         {helperText && !error && (
-          <p id={`${id}-helper`} className={helperTextStyles}>
+          <p id={helperId} className={helperTextStyles}>
             {helperText}
           </p>
         )}
