@@ -69,7 +69,37 @@ export const en = {
   dashboard: {
     title: "Dashboard",
     signOut: "Sign out",
-    welcome: "Welcome back, {{name}}! Your subscription management dashboard is coming soon."
+    welcome: "Welcome back, {{name}}! Your subscription management dashboard is coming soon.",
+    greeting: "Hey, {{name}}",
+    subtitle: "Here's your subscription overview",
+    stats: {
+      monthlySpend: "Monthly Spend",
+      activeSubscriptions: "Active",
+      totalSavings: "Savings",
+      upcomingRenewals: "Upcoming"
+    },
+    tabs: {
+      all: "All",
+      active: "Active",
+      paused: "Paused",
+      expiring: "Expiring Soon"
+    },
+    alerts: {
+      welcomeTip: "Pro tip: Create a BurnerCard for trial subscriptions to auto-block charges.",
+      trialExpiring: "{{name}} trial ends in {{days}} days. Cancel now to avoid charges."
+    },
+    actions: {
+      addSubscription: "Add Subscription",
+      createBurnerCard: "Create BurnerCard"
+    },
+    sections: {
+      recentSubscriptions: "Recent Subscriptions",
+      quickActions: "Quick Actions"
+    },
+    empty: {
+      title: "No subscriptions yet",
+      description: "Start tracking your subscriptions to see insights here."
+    }
   },
   common: {
     loading: "Loading...",
