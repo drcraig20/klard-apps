@@ -2,11 +2,12 @@ import React from 'react';
 import {
   View,
   Pressable,
+  useColorScheme,
   type ViewStyle,
   type StyleProp,
 } from 'react-native';
 import * as Haptics from 'expo-haptics';
-import { styles, variantStyles, paddingStyles } from './card.styles';
+import { cardStyles, staticStyles } from './card.styles';
 
 export type CardVariant = 'default' | 'elevated' | 'ghost' | 'interactive';
 export type CardPadding = 'none' | 'sm' | 'md' | 'lg';
@@ -30,6 +31,8 @@ export function Card({
   style,
   testID,
 }: CardProps) {
+  const isDark = useColorScheme() === 'dark';
+
   const handlePress = () => {
     if (disabled || !onPress) return;
     // Fire haptics non-blocking for better UX
@@ -37,11 +40,10 @@ export function Card({
     onPress();
   };
 
+  const baseStyles = cardStyles(isDark, { variant, padding });
   const cardStyle = [
-    styles.base,
-    variantStyles[variant],
-    paddingStyles[padding],
-    disabled && styles.disabled,
+    ...baseStyles,
+    disabled && staticStyles.disabled,
     style,
   ];
 
@@ -52,7 +54,7 @@ export function Card({
         disabled={disabled}
         style={({ pressed }) => [
           ...cardStyle,
-          pressed && !disabled && styles.pressed,
+          pressed && !disabled && staticStyles.pressed,
         ]}
         testID={testID}
         accessibilityRole="button"
