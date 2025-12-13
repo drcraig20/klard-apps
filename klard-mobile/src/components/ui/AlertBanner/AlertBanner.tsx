@@ -9,10 +9,22 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
-import { styles, sizeStyles } from './alert-banner.styles';
-import { typeIconMap, getTypeColors, type AlertType } from './alert-banner.constants';
+import {
+  alertContainerStyles,
+  alertTextStyles,
+  getIconColor,
+  layoutStyles,
+  type AlertType,
+} from './alert-banner.styles';
 
 type AlertSize = 'default' | 'compact';
+
+const typeIconMap: Record<AlertType, keyof typeof Ionicons.glyphMap> = {
+  success: 'checkmark-circle',
+  error: 'alert-circle',
+  warning: 'warning',
+  info: 'information-circle',
+};
 
 export interface AlertBannerProps {
   type: AlertType;
@@ -38,10 +50,9 @@ export function AlertBanner({
   icon,
   style,
   testID,
-}: AlertBannerProps) {
-  const colorScheme = useColorScheme() ?? 'light';
-  const typeColors = getTypeColors(type, colorScheme);
-  const padding = sizeStyles[size];
+}: Readonly<AlertBannerProps>) {
+  const isDark = useColorScheme() === 'dark';
+  const iconColor = getIconColor(type, isDark);
 
   const handleDismiss = async () => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -50,24 +61,30 @@ export function AlertBanner({
 
   return (
     <View
-      style={[styles.container, typeColors.container, padding, style]}
+      style={[...alertContainerStyles(isDark, { type, size }), style]}
       accessibilityRole="alert"
       testID={testID}
     >
-      <View style={styles.iconWrapper}>
+      <View style={layoutStyles.iconWrapper}>
         {icon ?? (
           <Ionicons
             testID="alert-icon"
             name={typeIconMap[type]}
             size={20}
-            color={typeColors.iconColor}
+            color={iconColor}
           />
         )}
       </View>
-      <View style={styles.content}>
-        {title ? <Text style={[styles.title, { color: typeColors.textColor }]}>{title}</Text> : null}
-        <Text style={[styles.description, { color: typeColors.textColor }]}>{children}</Text>
-        {action ? <View style={styles.actionWrapper}>{action}</View> : null}
+      <View style={layoutStyles.content}>
+        {title ? (
+          <Text style={alertTextStyles(isDark, { type, textType: 'title' })}>
+            {title}
+          </Text>
+        ) : null}
+        <Text style={alertTextStyles(isDark, { type, textType: 'description' })}>
+          {children}
+        </Text>
+        {action ? <View style={layoutStyles.actionWrapper}>{action}</View> : null}
       </View>
       {dismissible ? (
         <Pressable
@@ -75,11 +92,13 @@ export function AlertBanner({
           accessibilityRole="button"
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
           onPress={handleDismiss}
-          style={styles.dismiss}
+          style={layoutStyles.dismiss}
         >
-          <Ionicons name="close" size={18} color={typeColors.iconColor} />
+          <Ionicons name="close" size={18} color={iconColor} />
         </Pressable>
       ) : null}
     </View>
   );
 }
+
+export type { AlertType };
