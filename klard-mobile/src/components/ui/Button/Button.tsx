@@ -3,18 +3,13 @@ import {
   Pressable,
   Text,
   ActivityIndicator,
+  useColorScheme,
   type ViewStyle,
   type StyleProp,
 } from 'react-native';
 import * as Haptics from 'expo-haptics';
 
-import {
-  styles,
-  variantStyles,
-  sizeStyles,
-  textStyles,
-  textSizeStyles,
-} from './button.styles';
+import { buttonContainerStyles, buttonTextStyles } from './button.styles';
 
 export interface ButtonProps {
   variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'destructive' | 'link';
@@ -41,6 +36,9 @@ export function Button({
   onPress,
   style,
 }: ButtonProps) {
+  const colorScheme = useColorScheme();
+  const isDark = colorScheme === 'dark';
+
   const handlePress = async () => {
     if (disabled || loading) return;
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -53,7 +51,7 @@ export function Button({
     if (variant === 'primary' || variant === 'destructive' || variant === 'secondary') {
       return '#FFFFFF';
     }
-    return '#0D7C7A';
+    return isDark ? '#15B5B0' : '#0D7C7A';
   };
 
   return (
@@ -61,12 +59,13 @@ export function Button({
       onPress={handlePress}
       disabled={isDisabled}
       style={({ pressed }) => [
-        styles.base,
-        variantStyles[variant],
-        sizeStyles[size],
-        fullWidth && styles.fullWidth,
-        pressed && !isDisabled && styles.pressed,
-        isDisabled && styles.disabled,
+        ...buttonContainerStyles(isDark, {
+          variant,
+          size,
+          fullWidth: fullWidth ? 'true' : undefined,
+          pressed: (pressed && !isDisabled) ? 'true' : undefined,
+          disabled: isDisabled ? 'true' : undefined,
+        }),
         style,
       ]}
       accessibilityRole="button"
@@ -76,7 +75,7 @@ export function Button({
       {loading ? (
         <ActivityIndicator color={getActivityIndicatorColor()} size="small" />
       ) : (
-        <Text style={[styles.text, textStyles[variant], textSizeStyles[size]]}>
+        <Text style={buttonTextStyles(isDark, { variant, size })}>
           {children}
         </Text>
       )}
