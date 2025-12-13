@@ -1,5 +1,6 @@
 // klard-mobile/src/components/ui/BottomSheet/BottomSheet.tsx
 import React, { useRef, useEffect, useCallback, useMemo } from 'react';
+import { useColorScheme } from 'react-native';
 import BottomSheetLib, {
   BottomSheetView,
   BottomSheetBackdrop,
@@ -7,7 +8,12 @@ import BottomSheetLib, {
 } from '@gorhom/bottom-sheet';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
-import { styles, backdropColor } from './bottom-sheet.styles';
+import {
+  handleIndicatorStyles,
+  backgroundStyles,
+  getBackdropColor,
+  layoutStyles,
+} from './bottom-sheet.styles';
 
 export interface BottomSheetProps {
   /** Whether the bottom sheet is open */
@@ -31,6 +37,7 @@ export function BottomSheet({
 }: BottomSheetProps) {
   const bottomSheetRef = useRef<BottomSheetLib>(null);
   const insets = useSafeAreaInsets();
+  const isDark = useColorScheme() === 'dark';
 
   const snaps = useMemo(() => snapPoints ?? ['50%'], [snapPoints]);
 
@@ -60,11 +67,11 @@ export function BottomSheet({
         appearsOnIndex={0}
         opacity={0.5}
         pressBehavior="close"
-        style={[props.style, { backgroundColor: backdropColor }]}
+        style={[props.style, { backgroundColor: getBackdropColor(isDark) }]}
         {...({ testID: 'bottom-sheet-backdrop' } as any)}
       />
     ),
-    []
+    [isDark]
   );
 
   return (
@@ -76,11 +83,11 @@ export function BottomSheet({
       onChange={handleSheetChanges}
       enableDynamicSizing={false}
       backdropComponent={renderBackdrop}
-      handleIndicatorStyle={styles.handleIndicator}
-      backgroundStyle={styles.background}
+      handleIndicatorStyle={handleIndicatorStyles(isDark, {})[0]}
+      backgroundStyle={backgroundStyles(isDark, {})[0]}
     >
       <BottomSheetView
-        style={[styles.contentContainer, { paddingBottom: insets.bottom + 16 }]}
+        style={[layoutStyles.contentContainer, { paddingBottom: insets.bottom + 16 }]}
       >
         {children}
       </BottomSheetView>

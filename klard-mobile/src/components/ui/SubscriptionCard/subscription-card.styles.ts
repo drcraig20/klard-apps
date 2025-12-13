@@ -1,44 +1,98 @@
+import { sva } from '@/styles/sva';
 import { StyleSheet } from 'react-native';
 
-export const styles = StyleSheet.create({
-  card: {
+export const cardStyles = sva({
+  base: (colors) => ({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 16,
     padding: 16,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: colors.card,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: '#E2E8F0',
+    borderColor: colors.border,
+  }),
+  variants: {
+    variant: {
+      default: {},
+      compact: { padding: 12, gap: 12 },
+      detailed: { padding: 20 },
+    },
+    pressed: {
+      true: (colors) => ({
+        backgroundColor: colors.muted,
+        borderColor: colors.primaryBorder,
+      }),
+    },
   },
-  cardCompact: {
-    padding: 12,
-    gap: 12,
+  defaultVariants: {
+    variant: 'default',
   },
-  cardDetailed: {
-    padding: 20,
-  },
-  cardPressed: {
-    backgroundColor: '#F8FAFC',
-    borderColor: 'rgba(13, 124, 122, 0.3)',
-  },
+});
+
+export const logoFallbackStyles = sva({
+  base: (colors) => ({
+    backgroundColor: colors.primaryBackground,
+    borderRadius: 9999,
+    alignItems: 'center',
+    justifyContent: 'center',
+  }),
+});
+
+export const logoFallbackTextStyles = sva({
+  base: (colors) => ({
+    color: colors.primary,
+    fontWeight: '600',
+    fontSize: 16,
+  }),
+});
+
+export const nameStyles = sva({
+  base: (colors) => ({
+    fontSize: 16,
+    fontWeight: '500',
+    color: colors.foreground,
+  }),
+});
+
+export const categoryStyles = sva({
+  base: (colors) => ({
+    fontSize: 12,
+    color: colors.mutedForeground,
+    textTransform: 'capitalize',
+  }),
+});
+
+export const dateStyles = sva({
+  base: (colors) => ({
+    fontSize: 14,
+    color: colors.mutedForeground,
+  }),
+});
+
+export const priceStyles = sva({
+  base: (colors) => ({
+    fontSize: 16,
+    fontWeight: '600',
+    color: colors.foreground,
+  }),
+});
+
+export const cycleStyles = sva({
+  base: (colors) => ({
+    fontSize: 14,
+    color: colors.mutedForeground,
+  }),
+});
+
+// Static layout styles
+export const layoutStyles = StyleSheet.create({
   logoContainer: {
     borderRadius: 9999,
     overflow: 'hidden',
   },
   logo: {
     borderRadius: 9999,
-  },
-  logoFallback: {
-    backgroundColor: '#CCFBF1',
-    borderRadius: 9999,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  logoFallbackText: {
-    color: '#0D7C7A',
-    fontWeight: '600',
-    fontSize: 16,
   },
   content: {
     flex: 1,
@@ -49,30 +103,22 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 8,
   },
-  name: {
-    fontSize: 16,
-    fontWeight: '500',
-    color: '#0F172A',
-  },
-  category: {
-    fontSize: 12,
-    color: '#64748B',
-    textTransform: 'capitalize',
-  },
-  date: {
-    fontSize: 14,
-    color: '#64748B',
-  },
   priceContainer: {
     alignItems: 'flex-end',
   },
-  price: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#0F172A',
-  },
-  cycle: {
-    fontSize: 14,
-    color: '#64748B',
-  },
 });
+
+// Re-export constants
+export const statusConfig = {
+  active: { label: 'Active', variant: 'success' as const },
+  trial: { label: 'Trial', variant: 'warning' as const },
+  paused: { label: 'Paused', variant: 'default' as const },
+  cancelled: { label: 'Cancelled', variant: 'default' as const },
+  expired: { label: 'Expired', variant: 'error' as const },
+};
+
+export const billingCycleLabels = {
+  monthly: '/mo',
+  quarterly: '/qtr',
+  yearly: '/yr',
+};

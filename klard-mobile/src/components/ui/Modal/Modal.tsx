@@ -6,13 +6,23 @@ import {
   Pressable,
   KeyboardAvoidingView,
   Platform,
+  useColorScheme,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 
-import { colors, spacing } from "@/constants/theme";
-import { styles } from "./modal.styles";
+import { spacing } from "@/constants/theme";
+import {
+  overlayStyles,
+  contentStyles,
+  handleStyles,
+  titleStyles,
+  descriptionStyles,
+  footerStyles,
+  getCloseIconColor,
+  layoutStyles,
+} from "./modal.styles";
 
 export interface ModalProps {
   open: boolean;
@@ -35,6 +45,7 @@ function Modal({
   closeOnOverlay = true,
   testID = "modal",
 }: ModalProps) {
+  const isDark = useColorScheme() === "dark";
   const insets = useSafeAreaInsets();
 
   const handleClose = async () => {
@@ -59,27 +70,30 @@ function Modal({
     >
       <KeyboardAvoidingView
         behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={styles.container}
+        style={layoutStyles.container}
       >
         {closeOnOverlay ? (
           <Pressable
-            style={styles.overlay}
+            style={overlayStyles(isDark, {})}
             onPress={handleOverlayPress}
             testID="modal-overlay"
           />
         ) : (
-          <View style={styles.overlay} testID="modal-overlay" />
+          <View style={overlayStyles(isDark, {})} testID="modal-overlay" />
         )}
 
         <View
-          style={[styles.content, { paddingBottom: insets.bottom + spacing.md }]}
+          style={[
+            contentStyles(isDark, {}),
+            { paddingBottom: insets.bottom + spacing.md },
+          ]}
         >
-          <View style={styles.handle} testID="modal-handle" />
+          <View style={handleStyles(isDark, {})} testID="modal-handle" />
 
-          <View style={styles.header}>
+          <View style={layoutStyles.header}>
             {title && (
               <Text
-                style={styles.title}
+                style={titleStyles(isDark, {})}
                 testID="modal-title"
                 accessibilityRole="header"
               >
@@ -88,24 +102,28 @@ function Modal({
             )}
             <Pressable
               onPress={handleClose}
-              style={styles.closeButton}
+              style={layoutStyles.closeButton}
               accessibilityLabel="Close modal"
               accessibilityRole="button"
             >
-              <Ionicons name="close" size={24} color={colors.slate[500]} />
+              <Ionicons
+                name="close"
+                size={24}
+                color={getCloseIconColor(isDark)}
+              />
             </Pressable>
           </View>
 
           {description && (
-            <Text style={styles.description} testID="modal-description">
+            <Text style={descriptionStyles(isDark, {})} testID="modal-description">
               {description}
             </Text>
           )}
 
-          <View style={styles.body}>{children}</View>
+          <View style={layoutStyles.body}>{children}</View>
 
           {footer && (
-            <View style={styles.footer} testID="modal-footer">
+            <View style={footerStyles(isDark, {})} testID="modal-footer">
               {footer}
             </View>
           )}

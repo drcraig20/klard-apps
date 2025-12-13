@@ -3,6 +3,7 @@ import {
   View,
   Text,
   Pressable,
+  useColorScheme,
   type ViewStyle,
   type StyleProp,
 } from 'react-native';
@@ -11,8 +12,19 @@ import * as Haptics from 'expo-haptics';
 import { format } from 'date-fns';
 
 import { Badge } from '../Badge';
-import { styles } from './subscription-card.styles';
-import { statusConfig, billingCycleLabels } from './subscription-card.constants';
+import {
+  cardStyles,
+  logoFallbackStyles,
+  logoFallbackTextStyles,
+  nameStyles,
+  categoryStyles,
+  dateStyles,
+  priceStyles,
+  cycleStyles,
+  layoutStyles,
+  statusConfig,
+  billingCycleLabels,
+} from './subscription-card.styles';
 
 export interface SubscriptionData {
   id: string;
@@ -43,6 +55,7 @@ export function SubscriptionCard({
   style,
   testID,
 }: SubscriptionCardProps) {
+  const isDark = useColorScheme() === 'dark';
   const [logoError, setLogoError] = useState(false);
 
   const {
@@ -80,11 +93,11 @@ export function SubscriptionCard({
   const content = (
     <>
       {/* Service Logo */}
-      <View style={[styles.logoContainer, { width: logoSize, height: logoSize }]}>
+      <View style={[layoutStyles.logoContainer, { width: logoSize, height: logoSize }]}>
         {logoUrl && !logoError ? (
           <Image
             source={logoUrl}
-            style={[styles.logo, { width: logoSize, height: logoSize }]}
+            style={[layoutStyles.logo, { width: logoSize, height: logoSize }]}
             contentFit="cover"
             placeholder={{ blurhash }}
             transition={200}
@@ -92,8 +105,8 @@ export function SubscriptionCard({
             accessibilityLabel={`${name} logo`}
           />
         ) : (
-          <View style={[styles.logoFallback, { width: logoSize, height: logoSize }]}>
-            <Text style={styles.logoFallbackText}>
+          <View style={[logoFallbackStyles(isDark), { width: logoSize, height: logoSize }]}>
+            <Text style={logoFallbackTextStyles(isDark)}>
               {name.charAt(0).toUpperCase()}
             </Text>
           </View>
@@ -101,9 +114,9 @@ export function SubscriptionCard({
       </View>
 
       {/* Content */}
-      <View style={styles.content}>
-        <View style={styles.nameRow}>
-          <Text style={styles.name} numberOfLines={1}>
+      <View style={layoutStyles.content}>
+        <View style={layoutStyles.nameRow}>
+          <Text style={nameStyles(isDark)} numberOfLines={1}>
             {name}
           </Text>
           {!isCompact && (
@@ -114,19 +127,19 @@ export function SubscriptionCard({
         </View>
 
         {isDetailed && category && (
-          <Text style={styles.category}>{category}</Text>
+          <Text style={categoryStyles(isDark)}>{category}</Text>
         )}
 
-        <Text style={styles.date}>
+        <Text style={dateStyles(isDark)}>
           {isCompact ? formattedDate : `Next: ${formattedDate}`}
         </Text>
       </View>
 
       {/* Price */}
       {!isCompact && (
-        <View style={styles.priceContainer}>
-          <Text style={styles.price}>{formattedPrice}</Text>
-          <Text style={styles.cycle}>{billingCycleLabels[billingCycle]}</Text>
+        <View style={layoutStyles.priceContainer}>
+          <Text style={priceStyles(isDark)}>{formattedPrice}</Text>
+          <Text style={cycleStyles(isDark)}>{billingCycleLabels[billingCycle]}</Text>
         </View>
       )}
     </>
@@ -137,10 +150,7 @@ export function SubscriptionCard({
       <Pressable
         onPress={handlePress}
         style={({ pressed }) => [
-          styles.card,
-          isCompact && styles.cardCompact,
-          isDetailed && styles.cardDetailed,
-          pressed && styles.cardPressed,
+          cardStyles(isDark, { variant, pressed: pressed ? 'true' : undefined }),
           style,
         ]}
         testID={testID}
@@ -155,9 +165,7 @@ export function SubscriptionCard({
   return (
     <View
       style={[
-        styles.card,
-        isCompact && styles.cardCompact,
-        isDetailed && styles.cardDetailed,
+        cardStyles(isDark, { variant }),
         style,
       ]}
       testID={testID}

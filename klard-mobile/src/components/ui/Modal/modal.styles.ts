@@ -1,72 +1,83 @@
-import { StyleSheet, type ViewStyle, type TextStyle } from "react-native";
-import { colors, spacing, borderRadius } from "@/constants/theme";
+import { sva } from '@/styles/sva';
+import { StyleSheet } from 'react-native';
 
-interface Styles {
-  container: ViewStyle;
-  overlay: ViewStyle;
-  content: ViewStyle;
-  handle: ViewStyle;
-  header: ViewStyle;
-  title: TextStyle;
-  closeButton: ViewStyle;
-  description: TextStyle;
-  body: ViewStyle;
-  footer: ViewStyle;
-}
-
-export const styles = StyleSheet.create<Styles>({
-  container: {
-    flex: 1,
-    justifyContent: "flex-end",
-  },
-  overlay: {
+export const overlayStyles = sva({
+  base: (colors) => ({
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(15, 23, 42, 0.5)",
-  },
-  content: {
-    backgroundColor: colors.white,
-    borderTopLeftRadius: borderRadius.xl,
-    borderTopRightRadius: borderRadius.xl,
-    paddingHorizontal: spacing.lg,
-    paddingTop: spacing.sm,
-    maxHeight: "90%",
-  },
-  handle: {
+    backgroundColor: colors.overlay,
+  }),
+});
+
+export const contentStyles = sva({
+  base: (colors) => ({
+    backgroundColor: colors.card,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    paddingHorizontal: 20,
+    paddingTop: 12,
+    maxHeight: '90%',
+  }),
+});
+
+export const handleStyles = sva({
+  base: (colors) => ({
     width: 40,
     height: 4,
-    backgroundColor: colors.slate[300],
+    backgroundColor: colors.muted,
     borderRadius: 2,
-    alignSelf: "center",
-    marginBottom: spacing.md,
+    alignSelf: 'center',
+    marginBottom: 16,
+  }),
+});
+
+export const titleStyles = sva({
+  base: (colors) => ({
+    fontSize: 18,
+    fontWeight: '600',
+    color: colors.foreground,
+    flex: 1,
+  }),
+});
+
+export const descriptionStyles = sva({
+  base: (colors) => ({
+    fontSize: 14,
+    color: colors.mutedForeground,
+    marginBottom: 16,
+  }),
+});
+
+export const footerStyles = sva({
+  base: (colors) => ({
+    paddingTop: 16,
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
+    marginTop: 16,
+  }),
+});
+
+// Helper to get close icon color
+export function getCloseIconColor(isDark: boolean): string {
+  return isDark ? '#94A3B8' : '#64748B';
+}
+
+// Static layout styles
+export const layoutStyles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'flex-end',
   },
   header: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginBottom: spacing.sm,
-  },
-  title: {
-    fontSize: 18,
-    fontWeight: "600",
-    color: colors.slate[900],
-    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
   },
   closeButton: {
-    padding: spacing.xs,
-    marginLeft: spacing.sm,
-  },
-  description: {
-    fontSize: 14,
-    color: colors.slate[500],
-    marginBottom: spacing.md,
+    padding: 4,
+    marginLeft: 12,
   },
   body: {
     flex: 1,
-  },
-  footer: {
-    paddingTop: spacing.md,
-    borderTopWidth: 1,
-    borderTopColor: colors.slate[200],
-    marginTop: spacing.md,
   },
 });

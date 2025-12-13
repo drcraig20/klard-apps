@@ -4,12 +4,19 @@ import {
   TextInput,
   Pressable,
   ActivityIndicator,
+  useColorScheme,
   type TextInputProps,
   type StyleProp,
   type ViewStyle,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { styles, colors } from './search-input.styles';
+import {
+  containerStyles,
+  inputStyles,
+  getIconColor,
+  getPlaceholderColor,
+  layoutStyles,
+} from './search-input.styles';
 
 export interface SearchInputProps extends Omit<TextInputProps, 'onChangeText'> {
   /** Current search value (controlled) */
@@ -39,8 +46,12 @@ export function SearchInput({
   containerStyle,
   ...props
 }: SearchInputProps) {
+  const isDark = useColorScheme() === 'dark';
   const [isFocused, setIsFocused] = useState(false);
   const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const iconColor = getIconColor(isDark);
+  const placeholderColor = getPlaceholderColor(isDark);
 
   useEffect(() => {
     return () => {
@@ -101,15 +112,16 @@ export function SearchInput({
     <View
       testID="search-input-container"
       style={[
-        styles.container,
-        isFocused && styles.containerFocused,
-        disabled && styles.containerDisabled,
+        ...containerStyles(isDark, {
+          focused: isFocused ? 'true' : undefined,
+          disabled: disabled ? 'true' : undefined,
+        }),
         containerStyle,
       ]}
     >
       {/* Search icon */}
-      <View style={styles.iconContainer} testID="search-icon">
-        <Ionicons name="search" size={20} color={colors.icon} />
+      <View style={layoutStyles.iconContainer} testID="search-icon">
+        <Ionicons name="search" size={20} color={iconColor} />
       </View>
 
       {/* TextInput */}
@@ -121,23 +133,22 @@ export function SearchInput({
         onBlur={handleBlur}
         onSubmitEditing={handleSubmitEditing}
         placeholder={placeholder}
-        placeholderTextColor={colors.placeholder}
+        placeholderTextColor={placeholderColor}
         editable={editable}
         returnKeyType="search"
         autoCapitalize="none"
         autoCorrect={false}
-        style={[
-          styles.input,
-          (loading || showClearButton) && styles.inputWithAction,
-          disabled && styles.inputDisabled,
-        ]}
+        style={inputStyles(isDark, {
+          withAction: loading || showClearButton ? 'true' : undefined,
+          disabled: disabled ? 'true' : undefined,
+        })}
         {...props}
       />
 
       {/* Loading indicator */}
       {loading && (
-        <View style={styles.actionContainer} testID="loading-indicator">
-          <ActivityIndicator size="small" color={colors.icon} />
+        <View style={layoutStyles.actionContainer} testID="loading-indicator">
+          <ActivityIndicator size="small" color={iconColor} />
         </View>
       )}
 
@@ -146,11 +157,11 @@ export function SearchInput({
         <Pressable
           onPress={handleClear}
           disabled={disabled}
-          style={styles.actionContainer}
+          style={layoutStyles.actionContainer}
           accessibilityLabel="Clear search"
           accessibilityRole="button"
         >
-          <Ionicons name="close-circle" size={20} color={colors.icon} />
+          <Ionicons name="close-circle" size={20} color={iconColor} />
         </Pressable>
       )}
     </View>

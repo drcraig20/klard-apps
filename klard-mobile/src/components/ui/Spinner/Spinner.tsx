@@ -3,11 +3,11 @@ import {
   ActivityIndicator,
   Text,
   View,
+  useColorScheme,
   type StyleProp,
   type ViewStyle,
 } from "react-native";
-import { styles } from "./spinner.styles";
-import { sizeMap, DEFAULT_SPINNER_COLOR } from "./spinner.constants";
+import { labelStyles, getSpinnerColor, sizeMap, layoutStyles } from "./spinner.styles";
 
 export interface SpinnerProps {
   size?: "sm" | "md" | "lg";
@@ -19,22 +19,25 @@ export interface SpinnerProps {
 
 export function Spinner({
   size = "md",
-  color = DEFAULT_SPINNER_COLOR,
+  color,
   label,
   style,
   testID,
 }: SpinnerProps) {
+  const colorScheme = useColorScheme();
+  const isDark = colorScheme === "dark";
+  const spinnerColor = color ?? getSpinnerColor(isDark);
   const activityIndicatorSize = sizeMap[size];
 
   if (label) {
     return (
-      <View style={[styles.container, style]}>
+      <View style={[layoutStyles.container, style]}>
         <ActivityIndicator
           size={activityIndicatorSize}
-          color={color}
+          color={spinnerColor}
           testID={testID}
         />
-        <Text style={styles.label}>{label}</Text>
+        <Text style={labelStyles(isDark, {})}>{label}</Text>
       </View>
     );
   }
@@ -42,7 +45,7 @@ export function Spinner({
   return (
     <ActivityIndicator
       size={activityIndicatorSize}
-      color={color}
+      color={spinnerColor}
       testID={testID}
       style={style}
     />

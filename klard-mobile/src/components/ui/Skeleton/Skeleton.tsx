@@ -2,13 +2,13 @@ import { useEffect, useRef } from 'react';
 import {
   View,
   Animated,
+  useColorScheme,
   type StyleProp,
   type ViewStyle,
   type DimensionValue,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useThemeColors } from '@/hooks';
-import { styles } from './skeleton.styles';
+import { skeletonStyles, layoutStyles, getShimmerColors } from './skeleton.styles';
 
 export type SkeletonVariant = 'rectangular' | 'circular' | 'text';
 
@@ -27,7 +27,7 @@ export function Skeleton({
   animated = true,
   style,
 }: SkeletonProps) {
-  const colors = useThemeColors();
+  const isDark = useColorScheme() === 'dark';
   const animatedValue = useRef(new Animated.Value(0)).current;
   const shouldAnimate = animated && process.env.NODE_ENV !== 'test';
 
@@ -60,25 +60,28 @@ export function Skeleton({
     }
   }, [shouldAnimate, animatedValue]);
 
-  const containerStyle: ViewStyle = {
-    backgroundColor: colors.muted,
-    borderRadius: getBorderRadius(),
-    width: resolvedWidth,
-    height: resolvedHeight,
-  };
+  const shimmerColors = getShimmerColors(isDark);
 
   return (
     <View
       testID="skeleton-container"
       accessibilityRole="none"
       accessibilityLabel="Loading"
-      style={[styles.container, containerStyle, style]}
+      style={[
+        ...skeletonStyles(isDark, {}),
+        {
+          borderRadius: getBorderRadius(),
+          width: resolvedWidth,
+          height: resolvedHeight,
+        },
+        style,
+      ]}
     >
       {animated && (
         <Animated.View
           testID="skeleton-shimmer"
           style={[
-            styles.shimmer,
+            layoutStyles.shimmer,
             {
               transform: [
                 {
@@ -92,10 +95,10 @@ export function Skeleton({
           ]}
         >
           <LinearGradient
-            colors={['transparent', 'rgba(255,255,255,0.3)', 'transparent']}
+            colors={shimmerColors}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
-            style={styles.gradient}
+            style={layoutStyles.gradient}
           />
         </Animated.View>
       )}

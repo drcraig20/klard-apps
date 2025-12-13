@@ -1,50 +1,65 @@
+import { sva } from '@/styles/sva';
 import { StyleSheet } from 'react-native';
 
-export const colors = {
-  primary: '#0D7C7A',
-  border: '#CBD5E1',
-  borderFocused: '#0D7C7A',
-  placeholder: '#94A3B8',
-  icon: '#64748B',
-  text: '#0F172A',
-  background: '#FFFFFF',
-  backgroundDisabled: '#F1F5F9',
-};
-
-export const styles = StyleSheet.create({
-  container: {
+export const containerStyles = sva({
+  base: (colors) => ({
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: colors.background,
+    backgroundColor: colors.input,
     borderWidth: 1,
     borderColor: colors.border,
     borderRadius: 12,
     height: 48,
+  }),
+  variants: {
+    focused: {
+      true: (colors) => ({
+        borderWidth: 2,
+        borderColor: colors.primary,
+      }),
+    },
+    disabled: {
+      true: (colors) => ({
+        backgroundColor: colors.muted,
+        opacity: 0.7,
+      }),
+    },
   },
-  containerFocused: {
-    borderWidth: 2,
-    borderColor: colors.borderFocused,
-  },
-  containerDisabled: {
-    backgroundColor: colors.backgroundDisabled,
-    opacity: 0.7,
-  },
-  iconContainer: {
-    paddingLeft: 12,
-    paddingRight: 8,
-  },
-  input: {
+});
+
+export const inputStyles = sva({
+  base: (colors) => ({
     flex: 1,
     height: '100%',
     fontSize: 16,
-    color: colors.text,
+    color: colors.foreground,
     paddingRight: 12,
+  }),
+  variants: {
+    withAction: {
+      true: { paddingRight: 8 },
+    },
+    disabled: {
+      true: (colors) => ({ color: colors.textSecondary }),
+    },
   },
-  inputWithAction: {
+});
+
+// Helper to get icon color
+export function getIconColor(isDark: boolean): string {
+  return isDark ? '#94A3B8' : '#64748B';
+}
+
+// Helper to get placeholder color
+export function getPlaceholderColor(isDark: boolean): string {
+  return isDark ? '#64748B' : '#94A3B8';
+}
+
+// Static layout styles
+export const layoutStyles = StyleSheet.create({
+  iconContainer: {
+    paddingLeft: 12,
     paddingRight: 8,
-  },
-  inputDisabled: {
-    color: colors.icon,
   },
   actionContainer: {
     paddingHorizontal: 12,

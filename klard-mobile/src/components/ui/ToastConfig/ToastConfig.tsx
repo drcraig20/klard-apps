@@ -1,9 +1,16 @@
 import React from "react";
-import { View, Text, Pressable } from "react-native";
+import { View, Text, Pressable, useColorScheme } from "react-native";
 import { BaseToastProps } from "react-native-toast-message";
 import { Ionicons } from "@expo/vector-icons";
-import { styles } from "./toast-config.styles";
-import { colors, icons } from "./toast-config.constants";
+import {
+  containerStyles,
+  titleStyles,
+  descriptionStyles,
+  actionButtonStyles,
+  getIconColor,
+  icons,
+  layoutStyles
+} from "./toast-config.styles";
 
 interface CustomToastProps extends BaseToastProps {
   props?: {
@@ -17,9 +24,10 @@ interface CustomToastProps extends BaseToastProps {
 /**
  * Create a styled toast component for a specific type
  */
-function createToastComponent(type: keyof typeof colors) {
+function createToastComponent(type: 'success' | 'error' | 'warning' | 'info') {
   return function CustomToast({ text1, text2, props }: CustomToastProps) {
-    const color = colors[type];
+    const colorScheme = useColorScheme();
+    const isDark = colorScheme === 'dark';
     const iconName = icons[type];
 
     // Build accessibility label
@@ -34,16 +42,21 @@ function createToastComponent(type: keyof typeof colors) {
 
     return (
       <View
-        style={[styles.container, { backgroundColor: color.bg, borderLeftColor: color.border }]}
+        style={containerStyles(isDark, { type })}
         accessible
         accessibilityLabel={accessibilityLabel}
         accessibilityRole="alert"
       >
-        <Ionicons name={iconName} size={24} color={color.icon} style={styles.icon} />
-        <View style={styles.content}>
+        <Ionicons
+          name={iconName}
+          size={24}
+          color={getIconColor(type, isDark)}
+          style={layoutStyles.icon}
+        />
+        <View style={layoutStyles.content}>
           {text1 && (
             <Text
-              style={[styles.title, { color: color.text }]}
+              style={titleStyles(isDark, { type })}
               numberOfLines={2}
               testID="toast-title"
             >
@@ -52,7 +65,7 @@ function createToastComponent(type: keyof typeof colors) {
           )}
           {text2 && (
             <Text
-              style={[styles.description, { color: color.text }]}
+              style={descriptionStyles(isDark, { type })}
               numberOfLines={3}
               testID="toast-description"
             >
@@ -64,14 +77,14 @@ function createToastComponent(type: keyof typeof colors) {
           <Pressable
             onPress={props.action.onClick}
             style={({ pressed }) => [
-              styles.actionButton,
-              { backgroundColor: color.border, opacity: pressed ? 0.8 : 1 },
+              actionButtonStyles(isDark, { type }),
+              { opacity: pressed ? 0.8 : 1 },
             ]}
             accessibilityRole="button"
             accessibilityLabel={props.action.label}
             testID="toast-action"
           >
-            <Text style={styles.actionText}>{props.action.label}</Text>
+            <Text style={layoutStyles.actionText}>{props.action.label}</Text>
           </Pressable>
         )}
       </View>

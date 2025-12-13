@@ -3,12 +3,18 @@ import {
   View,
   Text,
   Pressable,
+  useColorScheme,
   type ViewStyle,
   type StyleProp,
 } from 'react-native';
 import * as Haptics from 'expo-haptics';
 
-import { styles, sizeStyles } from './segmented-control.styles';
+import {
+  containerStyles,
+  segmentStyles,
+  labelStyles,
+  layoutStyles,
+} from './segmented-control.styles';
 
 export interface SegmentedControlOption {
   value: string;
@@ -37,6 +43,8 @@ export function SegmentedControl({
   style,
   testID,
 }: SegmentedControlProps) {
+  const isDark = useColorScheme() === 'dark';
+
   const handlePress = async (optionValue: string) => {
     if (disabled || optionValue === value) return;
 
@@ -47,18 +55,15 @@ export function SegmentedControl({
   return (
     <View
       style={[
-        styles.container,
-        sizeStyles[size].container,
-        fullWidth && styles.fullWidth,
+        containerStyles(isDark, { size }),
+        fullWidth && layoutStyles.fullWidth,
         style,
       ]}
       testID={testID}
       accessibilityRole="tablist"
     >
-      {options.map((option, index) => {
+      {options.map((option) => {
         const isSelected = option.value === value;
-        const isFirst = index === 0;
-        const isLast = index === options.length - 1;
 
         return (
           <Pressable
@@ -69,26 +74,24 @@ export function SegmentedControl({
             accessibilityRole="tab"
             accessibilityState={{ selected: isSelected, disabled }}
             style={({ pressed }) => [
-              styles.segment,
-              sizeStyles[size].segment,
-              fullWidth && styles.segmentFullWidth,
-              isFirst && styles.firstSegment,
-              isLast && styles.lastSegment,
-              isSelected && styles.selectedSegment,
-              pressed && !disabled && styles.pressedSegment,
-              disabled && styles.disabledSegment,
+              segmentStyles(isDark, {
+                size,
+                selected: isSelected ? 'true' : undefined,
+                pressed: pressed ? 'true' : undefined,
+                disabled: disabled ? 'true' : undefined,
+              }),
+              fullWidth && layoutStyles.segmentFullWidth,
             ]}
           >
             {option.icon && (
-              <View style={styles.iconContainer}>{option.icon}</View>
+              <View style={layoutStyles.iconContainer}>{option.icon}</View>
             )}
             <Text
-              style={[
-                styles.label,
-                sizeStyles[size].label,
-                isSelected && styles.selectedLabel,
-                disabled && styles.disabledLabel,
-              ]}
+              style={labelStyles(isDark, {
+                size,
+                selected: isSelected ? 'true' : undefined,
+                disabled: disabled ? 'true' : undefined,
+              })}
             >
               {option.label}
             </Text>

@@ -1,6 +1,15 @@
+import { sva } from '@/styles/sva';
 import { StyleSheet } from 'react-native';
 
-export const styles = StyleSheet.create({
+export const skeletonStyles = sva({
+  base: (colors) => ({
+    backgroundColor: colors.muted,
+    overflow: 'hidden',
+  }),
+});
+
+// Static layout styles (not themed)
+export const layoutStyles = StyleSheet.create({
   container: {
     overflow: 'hidden',
   },
@@ -15,3 +24,11 @@ export const styles = StyleSheet.create({
     flex: 1,
   },
 });
+
+// Shimmer gradient colors (theme-aware)
+export function getShimmerColors(isDark: boolean): [string, string, string] {
+  if (isDark) {
+    return ['transparent', 'rgba(255,255,255,0.1)', 'transparent'];
+  }
+  return ['transparent', 'rgba(255,255,255,0.3)', 'transparent'];
+}

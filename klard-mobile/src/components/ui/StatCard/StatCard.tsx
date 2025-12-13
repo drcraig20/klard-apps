@@ -3,13 +3,23 @@ import {
   View,
   Text,
   Pressable,
+  useColorScheme,
   type ViewStyle,
   type StyleProp,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
-import { styles } from './stat-card.styles';
-import { trendConfig, sizeConfig } from './stat-card.constants';
+import {
+  containerStyles,
+  labelStyles,
+  valueStyles,
+  trendValueStyles,
+  iconContainerStyles,
+  getTrendColor,
+  trendIconNames,
+  sizeConfig,
+  layoutStyles,
+} from './stat-card.styles';
 
 export interface StatCardProps {
   /** Label describing the metric */
@@ -46,6 +56,7 @@ export function StatCard({
   style,
   testID,
 }: StatCardProps) {
+  const isDark = useColorScheme() === 'dark';
   const isClickable = !!onClick;
   const sizeStyles = sizeConfig[size];
 
@@ -61,43 +72,39 @@ export function StatCard({
     ? {
         onPress: handlePress,
         style: ({ pressed }: { pressed: boolean }) => [
-          styles.container,
+          containerStyles(isDark, { pressed: pressed ? 'true' : undefined, muted: muted ? 'true' : undefined }),
           { padding: sizeStyles.padding },
-          pressed && styles.pressed,
-          muted && styles.muted,
           style,
         ],
       }
     : {
         style: [
-          styles.container,
+          containerStyles(isDark, { muted: muted ? 'true' : undefined }),
           { padding: sizeStyles.padding },
-          muted && styles.muted,
           style,
         ],
       };
 
   return (
     <Container testID={testID} accessibilityRole={isClickable ? 'button' : undefined} {...containerProps}>
-      <View style={styles.content}>
-        <Text style={[styles.label, { fontSize: sizeStyles.fontSize }, muted && styles.mutedText]}>
+      <View style={layoutStyles.content}>
+        <Text style={[labelStyles(isDark, { muted: muted ? 'true' : undefined }), { fontSize: sizeStyles.fontSize }]}>
           {label}
         </Text>
-        <Text style={[styles.value, { fontSize: sizeStyles.valueFontSize }, muted && styles.mutedText]}>
+        <Text style={[valueStyles(isDark, { muted: muted ? 'true' : undefined }), { fontSize: sizeStyles.valueFontSize }]}>
           {value}
         </Text>
         {trend && (
-          <View style={styles.trendContainer} testID="trend-container">
+          <View style={layoutStyles.trendContainer} testID="trend-container">
             <Ionicons
-              name={trendConfig[trend.direction].iconName}
+              name={trendIconNames[trend.direction]}
               size={sizeStyles.iconSize}
-              color={trendConfig[trend.direction].color}
+              color={getTrendColor(trend.direction, isDark)}
             />
             <Text
               style={[
-                styles.trendValue,
+                trendValueStyles(isDark, { direction: trend.direction }),
                 { fontSize: sizeStyles.fontSize },
-                { color: trendConfig[trend.direction].color },
               ]}
             >
               {trend.value}
@@ -106,7 +113,7 @@ export function StatCard({
         )}
       </View>
       {icon && (
-        <View style={[styles.iconContainer, {
+        <View style={[iconContainerStyles(isDark), {
           width: sizeStyles.iconSize * 3,
           height: sizeStyles.iconSize * 3,
           borderRadius: sizeStyles.iconSize * 1.5,
