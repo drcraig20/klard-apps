@@ -29,6 +29,7 @@ export const Colors = {
 
     // ===== SURFACE COLORS =====
     surface: 'rgba(255, 255, 255, 0.8)',
+    surfaceSubtle: 'rgba(255, 255, 255, 0.6)',
     surfaceStrong: 'rgba(255, 255, 255, 0.95)',
     surface1: '#FFFFFF',
     surface2: '#F8FAFC',
@@ -127,6 +128,16 @@ export const Colors = {
     burnerLocked: '#64748B',
     burnerBlocked: '#DC2626',
     burnerExpired: '#94A3B8',
+
+    // ===== BURNER CARD GRADIENTS =====
+    burnerActiveGradientStart: '#0D7C7A',
+    burnerActiveGradientEnd: '#085E5C',
+    burnerLockedGradientStart: '#D97706',
+    burnerLockedGradientEnd: '#B45309',
+    burnerExpiredGradientStart: '#64748B',
+    burnerExpiredGradientEnd: '#475569',
+    burnerUsedGradientStart: '#475569',
+    burnerUsedGradientEnd: '#334155',
   },
 
   dark: {
@@ -158,6 +169,7 @@ export const Colors = {
 
     // ===== SURFACE COLORS =====
     surface: 'rgba(30, 41, 59, 0.6)',
+    surfaceSubtle: 'rgba(30, 41, 59, 0.4)',
     surfaceStrong: 'rgba(12, 19, 36, 0.9)',
     surface1: '#0F172A',
     surface2: '#1E293B',
@@ -256,6 +268,16 @@ export const Colors = {
     burnerLocked: '#94A3B8',
     burnerBlocked: '#EF4444',
     burnerExpired: '#64748B',
+
+    // ===== BURNER CARD GRADIENTS =====
+    burnerActiveGradientStart: '#15B5B0',
+    burnerActiveGradientEnd: '#0D7C7A',
+    burnerLockedGradientStart: '#F59E0B',
+    burnerLockedGradientEnd: '#D97706',
+    burnerExpiredGradientStart: '#94A3B8',
+    burnerExpiredGradientEnd: '#64748B',
+    burnerUsedGradientStart: '#64748B',
+    burnerUsedGradientEnd: '#475569',
   },
 } as const;
 
