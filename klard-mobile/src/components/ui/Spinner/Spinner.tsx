@@ -1,35 +1,30 @@
-import React from "react"
+import React from "react";
 import {
   ActivityIndicator,
-  StyleSheet,
   Text,
   View,
   type StyleProp,
   type ViewStyle,
-} from "react-native"
+} from "react-native";
+import { styles } from "./spinner.styles";
+import { sizeMap, DEFAULT_SPINNER_COLOR } from "./spinner.constants";
 
 export interface SpinnerProps {
-  size?: "sm" | "md" | "lg"
-  color?: string
-  label?: string
-  style?: StyleProp<ViewStyle>
-  testID?: string
-}
-
-const sizeMap = {
-  sm: "small" as const,
-  md: "small" as const,
-  lg: "large" as const,
+  size?: "sm" | "md" | "lg";
+  color?: string;
+  label?: string;
+  style?: StyleProp<ViewStyle>;
+  testID?: string;
 }
 
 export function Spinner({
   size = "md",
-  color = "#0D7C7A",
+  color = DEFAULT_SPINNER_COLOR,
   label,
   style,
   testID,
 }: SpinnerProps) {
-  const activityIndicatorSize = sizeMap[size]
+  const activityIndicatorSize = sizeMap[size];
 
   if (label) {
     return (
@@ -41,7 +36,7 @@ export function Spinner({
         />
         <Text style={styles.label}>{label}</Text>
       </View>
-    )
+    );
   }
 
   return (
@@ -51,17 +46,5 @@ export function Spinner({
       testID={testID}
       style={style}
     />
-  )
+  );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-  },
-  label: {
-    fontSize: 14,
-    color: "#475569",
-  },
-})
