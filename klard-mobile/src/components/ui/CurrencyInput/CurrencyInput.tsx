@@ -60,7 +60,7 @@ export function CurrencyInput({
   onBlur,
   accessibilityLabel,
   ...props
-}: CurrencyInputProps) {
+}: Readonly<CurrencyInputProps>) {
   const [isFocused, setIsFocused] = useState(false);
   const isDisabled = disabled || !editable;
   const symbol = getCurrencySymbol(currency);

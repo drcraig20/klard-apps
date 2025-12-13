@@ -51,7 +51,7 @@ export function Tooltip({
   accessibilityLabel,
   style,
   textStyle,
-}: TooltipProps) {
+}: Readonly<TooltipProps>) {
   const isDark = useColorScheme() === 'dark';
   const [visible, setVisible] = useState(false);
   const fadeAnim = useRef(new Animated.Value(0)).current;

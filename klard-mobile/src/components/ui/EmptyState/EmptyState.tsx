@@ -39,7 +39,7 @@ export function EmptyState({
   secondaryAction,
   testID,
   style,
-}: EmptyStateProps) {
+}: Readonly<EmptyStateProps>) {
   // Resolve illustration source from key or use directly if ImageSource
   const illustrationSource = illustration
     ? typeof illustration === 'string'

@@ -11,7 +11,7 @@ interface PlaceholderScreenProps {
 export function PlaceholderScreen({
   title,
   subtitle = 'Coming soon...'
-}: PlaceholderScreenProps) {
+}: Readonly<PlaceholderScreenProps>) {
   const colors = useThemeColors();
 
   return (

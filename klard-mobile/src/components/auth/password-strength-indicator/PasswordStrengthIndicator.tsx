@@ -15,7 +15,7 @@ const LEVEL_WIDTHS: Record<PasswordStrength['level'], DimensionValue> = {
   strong: '100%',
 };
 
-export function PasswordStrengthIndicator({ password }: PasswordStrengthIndicatorProps) {
+export function PasswordStrengthIndicator({ password }: Readonly<PasswordStrengthIndicatorProps>) {
   const colors = useThemeColors();
   const strength = calculatePasswordStrength(password);
 

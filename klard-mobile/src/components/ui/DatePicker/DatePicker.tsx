@@ -73,7 +73,7 @@ export function DatePicker({
   disabled = false,
   required = false,
   containerStyle,
-}: DatePickerProps) {
+}: Readonly<DatePickerProps>) {
   const isDark = useColorScheme() === 'dark';
   const [showPicker, setShowPicker] = useState(false);
 

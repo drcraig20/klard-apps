@@ -10,7 +10,7 @@ export interface StatusBadgeProps {
   testID?: string;
 }
 
-export function StatusBadge({ status, style, testID }: StatusBadgeProps) {
+export function StatusBadge({ status, style, testID }: Readonly<StatusBadgeProps>) {
   const config = statusConfig[status];
   const color = variantIconColors[config.variant ?? "default"];
 

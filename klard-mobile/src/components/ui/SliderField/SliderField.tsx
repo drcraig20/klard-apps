@@ -30,7 +30,7 @@ export function SliderField({
   showValue = false,
   disabled = false,
   style,
-}: SliderFieldProps) {
+}: Readonly<SliderFieldProps>) {
   const colors = useThemeColors();
 
   // Normalize value to 0-1 range for @expo/ui Slider

@@ -42,7 +42,7 @@ export function SegmentedControl({
   disabled = false,
   style,
   testID,
-}: SegmentedControlProps) {
+}: Readonly<SegmentedControlProps>) {
   const isDark = useColorScheme() === 'dark';
 
   const handlePress = async (optionValue: string) => {

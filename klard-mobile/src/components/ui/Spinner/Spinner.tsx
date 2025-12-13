@@ -23,7 +23,7 @@ export function Spinner({
   label,
   style,
   testID,
-}: SpinnerProps) {
+}: Readonly<SpinnerProps>) {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === "dark";
   const spinnerColor = color ?? getSpinnerColor(isDark);

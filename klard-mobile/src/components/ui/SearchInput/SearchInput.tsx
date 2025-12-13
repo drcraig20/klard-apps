@@ -45,7 +45,7 @@ export function SearchInput({
   editable = true,
   containerStyle,
   ...props
-}: SearchInputProps) {
+}: Readonly<SearchInputProps>) {
   const isDark = useColorScheme() === 'dark';
   const [isFocused, setIsFocused] = useState(false);
   const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);

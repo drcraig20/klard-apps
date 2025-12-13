@@ -23,7 +23,7 @@ export function InputField({
   isPassword,
   style,
   ...props
-}: InputFieldProps) {
+}: Readonly<InputFieldProps>) {
   const [showPassword, setShowPassword] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
   const colors = useThemeColors();

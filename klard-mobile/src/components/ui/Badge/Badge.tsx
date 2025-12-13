@@ -31,7 +31,7 @@ export function Badge({
   children,
   style,
   testID,
-}: BadgeProps) {
+}: Readonly<BadgeProps>) {
   const handleRemove = async () => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     onRemove?.();

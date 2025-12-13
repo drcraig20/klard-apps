@@ -10,6 +10,7 @@ import {
 import * as Haptics from 'expo-haptics';
 
 import { buttonContainerStyles, buttonTextStyles } from './button.styles';
+import { useThemeColors } from '@/hooks/useThemeColors';
 
 export interface ButtonProps {
   variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'destructive' | 'link';
@@ -35,9 +36,10 @@ export function Button({
   children,
   onPress,
   style,
-}: ButtonProps) {
+}: Readonly<ButtonProps>) {
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
+  const colors = useThemeColors();
 
   const handlePress = async () => {
     if (disabled || loading) return;
@@ -49,9 +51,9 @@ export function Button({
 
   const getActivityIndicatorColor = () => {
     if (variant === 'primary' || variant === 'destructive' || variant === 'secondary') {
-      return '#FFFFFF';
+      return colors.primaryForeground;
     }
-    return isDark ? '#15B5B0' : '#0D7C7A';
+    return colors.primary;
   };
 
   return (

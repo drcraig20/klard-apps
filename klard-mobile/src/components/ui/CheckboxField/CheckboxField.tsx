@@ -19,7 +19,7 @@ export function CheckboxField({
   label,
   description,
   disabled = false,
-}: CheckboxFieldProps) {
+}: Readonly<CheckboxFieldProps>) {
   const colors = useThemeColors();
 
   const handleChange = async (value: boolean) => {

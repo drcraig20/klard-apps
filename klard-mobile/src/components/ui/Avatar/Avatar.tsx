@@ -47,7 +47,7 @@ export function Avatar({
   size,
   shape = 'circle',
   style,
-}: AvatarProps) {
+}: Readonly<AvatarProps>) {
   const colors = useThemeColors();
   const [hasError, setHasError] = useState(false);
 

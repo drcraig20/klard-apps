@@ -10,6 +10,7 @@ import {
 import { Image } from 'expo-image';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
+import { useThemeColors } from '@/hooks/useThemeColors';
 import {
   containerStyles,
   iconBubbleStyles,
@@ -85,13 +86,14 @@ export function AlertCard({
   size = 'md',
   style,
   testID,
-}: AlertCardProps) {
+}: Readonly<AlertCardProps>) {
   const isDark = useColorScheme() === 'dark';
+  const colors = useThemeColors();
   const { icon } = typeConfig[alert.type];
   const timeText = formatRelative(alert.timestamp);
   const iconSize = size === 'sm' ? 16 : 20;
   const iconColor = getIconColor(alert.type, isDark);
-  const dismissIconColor = isDark ? '#64748B' : '#94A3B8';
+  const dismissIconColor = colors.mutedForeground;
 
   const handlePress = async () => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);

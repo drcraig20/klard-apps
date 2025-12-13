@@ -30,7 +30,7 @@ export function Card({
   disabled = false,
   style,
   testID,
-}: CardProps) {
+}: Readonly<CardProps>) {
   const isDark = useColorScheme() === 'dark';
 
   const handlePress = () => {

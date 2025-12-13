@@ -2,12 +2,10 @@ import { View, ActivityIndicator, StyleSheet } from 'react-native';
 import { useAuthRedirect } from '@/hooks/useAuthRedirect';
 import { useOnboarding } from '@/hooks/useOnboarding';
 import { OnboardingScreen } from '@/components/onboarding/OnboardingScreen';
+import { Colors } from '@/styles/colors';
 
-// Klard Design System Colors
-const colors = {
-  background: '#0F172A',
-  primary: '#15B5B0',
-};
+// Use dark theme colors (onboarding is always dark mode)
+const colors = Colors.dark;
 
 export default function OnboardingRoute() {
   const { isPending: authPending } = useAuthRedirect({

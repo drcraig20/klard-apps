@@ -11,7 +11,7 @@ export function TrackIllustration({
   theme = 'dark',
   width = 280,
   height = 200
-}: IllustrationProps) {
+}: Readonly<IllustrationProps>) {
   const primaryColor = theme === 'dark' ? '#15B5B0' : '#0D7C7A';
   const cardBg = theme === 'dark' ? '#1E293B' : '#FFFFFF';
   const borderColor = theme === 'dark' ? '#334155' : '#E2E8F0';

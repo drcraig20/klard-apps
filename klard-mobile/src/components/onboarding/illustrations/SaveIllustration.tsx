@@ -11,7 +11,7 @@ export function SaveIllustration({
   theme = 'dark',
   width = 280,
   height = 200
-}: IllustrationProps) {
+}: Readonly<IllustrationProps>) {
   const primaryColor = theme === 'dark' ? '#15B5B0' : '#0D7C7A';
   const successColor = theme === 'dark' ? '#10B981' : '#059669';
   const bgColor = theme === 'dark' ? '#0F172A' : '#FFFFFF';

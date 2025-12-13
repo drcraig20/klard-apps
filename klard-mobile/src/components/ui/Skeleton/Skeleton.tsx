@@ -26,7 +26,7 @@ export function Skeleton({
   height,
   animated = true,
   style,
-}: SkeletonProps) {
+}: Readonly<SkeletonProps>) {
   const isDark = useColorScheme() === 'dark';
   const animatedValue = useRef(new Animated.Value(0)).current;
   const shouldAnimate = animated && process.env.NODE_ENV !== 'test';

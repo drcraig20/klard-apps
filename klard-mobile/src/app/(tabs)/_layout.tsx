@@ -12,7 +12,7 @@ interface TabBarIconProps {
   focused: boolean;
 }
 
-function TabBarIcon({ name, color, focused }: TabBarIconProps) {
+function TabBarIcon({ name, color, focused }: Readonly<TabBarIconProps>) {
   return (
     <Ionicons
       name={name}

@@ -251,7 +251,7 @@ export default function DashboardScreen() {
               <Button
                 variant="secondary"
                 style={styles.actionButton}
-                icon={<Ionicons name="card-outline" size={18} color="#FFFFFF" />}
+                icon={<Ionicons name="card-outline" size={18} color={colors.secondaryForeground} />}
                 onPress={handleCreateBurnerCard}
               >
                 {t('dashboard.actions.createBurnerCard')}

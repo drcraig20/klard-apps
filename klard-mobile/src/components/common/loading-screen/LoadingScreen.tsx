@@ -7,7 +7,7 @@ interface LoadingScreenProps {
   message?: string;
 }
 
-export function LoadingScreen({ message }: LoadingScreenProps) {
+export function LoadingScreen({ message }: Readonly<LoadingScreenProps>) {
   const colors = useThemeColors();
 
   return (

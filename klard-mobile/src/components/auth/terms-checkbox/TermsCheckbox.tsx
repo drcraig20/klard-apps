@@ -16,7 +16,7 @@ export function TermsCheckbox({
   onValueChange,
   error,
   disabled,
-}: TermsCheckboxProps) {
+}: Readonly<TermsCheckboxProps>) {
   const colors = useThemeColors();
 
   return (

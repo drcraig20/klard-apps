@@ -26,7 +26,6 @@ const colors = {
   ...Colors.dark,
   primaryDark: Colors.dark.secondary,
   backgroundElevated: Colors.dark.muted,
-  glassBg: 'rgba(30, 41, 59, 0.6)',
 };
 
 // Slide data (OCP: Extend by adding data, not modifying code)
@@ -69,7 +68,7 @@ function OnboardingSlide({
   scrollX,
   screenWidth,
   screenHeight,
-}: OnboardingSlideProps) {
+}: Readonly<OnboardingSlideProps>) {
   const inputRange = [
     (index - 1) * screenWidth,
     index * screenWidth,
@@ -145,7 +144,7 @@ interface PaginationDotProps {
   screenWidth: number;
 }
 
-function PaginationDot({ index, scrollX, screenWidth }: PaginationDotProps) {
+function PaginationDot({ index, scrollX, screenWidth }: Readonly<PaginationDotProps>) {
   const inputRange = [
     (index - 1) * screenWidth,
     index * screenWidth,
@@ -179,7 +178,7 @@ interface OnboardingScreenProps {
 }
 
 // Main Onboarding Component (SRP: Orchestrates onboarding flow)
-export function OnboardingScreen({ onSkip }: OnboardingScreenProps) {
+export function OnboardingScreen({ onSkip }: Readonly<OnboardingScreenProps>) {
   // Use reactive dimensions hook instead of static Dimensions.get()
   const { width: screenWidth, height: screenHeight } = useWindowDimensions();
 
@@ -396,7 +395,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
     // Native blur handles glassmorphism
-    shadowColor: '#000',
+    shadowColor: colors.shadowColor,
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
     shadowRadius: 16,

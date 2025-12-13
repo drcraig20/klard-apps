@@ -63,7 +63,7 @@ export function SelectField({
   error,
   disabled = false,
   containerStyle,
-}: SelectFieldProps) {
+}: Readonly<SelectFieldProps>) {
   const isDark = useColorScheme() === 'dark';
   const [isOpen, setIsOpen] = useState(false);
 

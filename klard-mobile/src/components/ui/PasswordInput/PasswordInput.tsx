@@ -52,7 +52,7 @@ interface PasswordStrengthBarProps {
   colors: ReturnType<typeof useThemeColors>;
 }
 
-function PasswordStrengthBar({ password, colors }: PasswordStrengthBarProps) {
+function PasswordStrengthBar({ password, colors }: Readonly<PasswordStrengthBarProps>) {
   const strength = calculatePasswordStrength(password);
 
   if (!password) return null;
@@ -96,7 +96,7 @@ interface PasswordRequirementsListProps {
   colors: ReturnType<typeof useThemeColors>;
 }
 
-function PasswordRequirementsList({ requirements, colors }: PasswordRequirementsListProps) {
+function PasswordRequirementsList({ requirements, colors }: Readonly<PasswordRequirementsListProps>) {
   return (
     <View style={reqStyles.container} testID="password-requirements">
       {(Object.entries(requirements) as [keyof PasswordRequirementsState, boolean][]).map(
@@ -139,7 +139,7 @@ export function PasswordInput({
   editable = true,
   testID = 'password-input',
   ...props
-}: PasswordInputProps) {
+}: Readonly<PasswordInputProps>) {
   const colors = useThemeColors();
   const [showPassword, setShowPassword] = useState(false);
   const [isFocused, setIsFocused] = useState(false);

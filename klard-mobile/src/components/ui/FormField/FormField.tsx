@@ -36,7 +36,7 @@ export function FormField({
   helperText,
   children,
   containerStyle,
-}: FormFieldProps) {
+}: Readonly<FormFieldProps>) {
   const isDark = useColorScheme() === 'dark';
 
   return (

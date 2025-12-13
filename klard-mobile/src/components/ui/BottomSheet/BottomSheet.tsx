@@ -34,7 +34,7 @@ export function BottomSheet({
   snapPoints,
   children,
   enableDrag = true,
-}: BottomSheetProps) {
+}: Readonly<BottomSheetProps>) {
   const bottomSheetRef = useRef<BottomSheetLib>(null);
   const insets = useSafeAreaInsets();
   const isDark = useColorScheme() === 'dark';

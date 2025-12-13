@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View, Text, type StyleProp, type ViewStyle } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { styles, sizeMap } from './burner-card-visual.styles';
+import { useThemeColors } from '@/hooks/useThemeColors';
 
 export type CardStatus = 'active' | 'locked' | 'expired' | 'used';
 export type CardType = 'single-use' | 'recurring';
@@ -25,13 +26,6 @@ export interface BurnerCardVisualProps {
   testID?: string;
 }
 
-const statusGradients: Record<CardStatus, [string, string]> = {
-  active: ['#0D7C7A', '#085E5C'],
-  locked: ['#D97706', '#B45309'],
-  expired: ['#64748B', '#475569'],
-  used: ['#475569', '#334155'],
-};
-
 function formatCurrency(amount: number): string {
   return `$${amount.toFixed(2)}`;
 }
@@ -47,7 +41,8 @@ function BurnerCardVisual({
   size = 'md',
   style,
   testID,
-}: BurnerCardVisualProps) {
+}: Readonly<BurnerCardVisualProps>) {
+  const colors = useThemeColors();
   const {
     nickname,
     type,
@@ -58,6 +53,14 @@ function BurnerCardVisual({
     spentAmount,
     spendLimit,
   } = card;
+
+  // Theme-aware status gradients
+  const statusGradients = useMemo<Record<CardStatus, [string, string]>>(() => ({
+    active: [colors.burnerActiveGradientStart, colors.burnerActiveGradientEnd],
+    locked: [colors.burnerLockedGradientStart, colors.burnerLockedGradientEnd],
+    expired: [colors.burnerExpiredGradientStart, colors.burnerExpiredGradientEnd],
+    used: [colors.burnerUsedGradientStart, colors.burnerUsedGradientEnd],
+  }), [colors]);
 
   const dimensions = sizeMap[size];
   const gradientColors = statusGradients[status];

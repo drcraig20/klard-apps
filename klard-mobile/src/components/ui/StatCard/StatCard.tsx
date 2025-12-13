@@ -55,7 +55,7 @@ export function StatCard({
   muted = false,
   style,
   testID,
-}: StatCardProps) {
+}: Readonly<StatCardProps>) {
   const isDark = useColorScheme() === 'dark';
   const isClickable = !!onClick;
   const sizeStyles = sizeConfig[size];

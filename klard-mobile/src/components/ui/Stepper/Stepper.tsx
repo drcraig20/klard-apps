@@ -9,6 +9,7 @@ import {
   connectorStyles,
   layoutStyles,
 } from './stepper.styles';
+import { useThemeColors } from '@/hooks/useThemeColors';
 
 export interface Step {
   label: string;
@@ -59,8 +60,9 @@ export function Stepper({
   orientation = 'horizontal',
   accessibilityLabel,
   style,
-}: StepperProps) {
+}: Readonly<StepperProps>) {
   const isDark = useColorScheme() === 'dark';
+  const colors = useThemeColors();
 
   // Return null for empty steps
   if (!steps || steps.length === 0) {
@@ -130,7 +132,7 @@ export function Stepper({
                     <Ionicons
                       name="checkmark"
                       size={16}
-                      color="#FFFFFF"
+                      color={colors.primaryForeground}
                     />
                   ) : (
                     <Text style={circleTextStyles(isDark, { state })}>

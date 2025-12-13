@@ -30,7 +30,7 @@ export function Switch({
   size = 'md',
   style,
   ...props
-}: SwitchProps) {
+}: Readonly<SwitchProps>) {
   const handleChange = (value: boolean) => {
     if (!disabled) {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -80,7 +80,7 @@ export function SwitchField({
   size = 'md',
   containerStyle,
   ...props
-}: SwitchFieldProps) {
+}: Readonly<SwitchFieldProps>) {
   const handleChange = (value: boolean) => {
     if (!disabled) {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);

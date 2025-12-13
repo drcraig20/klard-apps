@@ -54,7 +54,7 @@ export function SubscriptionCard({
   onPress,
   style,
   testID,
-}: SubscriptionCardProps) {
+}: Readonly<SubscriptionCardProps>) {
   const isDark = useColorScheme() === 'dark';
   const [logoError, setLogoError] = useState(false);
 

@@ -32,7 +32,7 @@ export function ProgressBar({
   label,
   animated = true,
   style,
-}: ProgressBarProps) {
+}: Readonly<ProgressBarProps>) {
   const colors = useThemeColors();
   const animatedWidth = useRef(new Animated.Value(0)).current;
 

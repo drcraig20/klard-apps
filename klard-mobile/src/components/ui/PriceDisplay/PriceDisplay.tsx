@@ -38,7 +38,7 @@ export function PriceDisplay({
   showChange,
   style,
   testID,
-}: PriceDisplayProps) {
+}: Readonly<PriceDisplayProps>) {
   const isDark = useColorScheme() === 'dark';
 
   const formatter = useMemo(

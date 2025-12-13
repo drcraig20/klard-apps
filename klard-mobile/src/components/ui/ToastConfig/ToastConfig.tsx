@@ -25,7 +25,7 @@ interface CustomToastProps extends BaseToastProps {
  * Create a styled toast component for a specific type
  */
 function createToastComponent(type: 'success' | 'error' | 'warning' | 'info') {
-  return function CustomToast({ text1, text2, props }: CustomToastProps) {
+  return function CustomToast({ text1, text2, props }: Readonly<CustomToastProps>) {
     const colorScheme = useColorScheme();
     const isDark = colorScheme === 'dark';
     const iconName = icons[type];

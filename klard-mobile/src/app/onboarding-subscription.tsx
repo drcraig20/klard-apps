@@ -2,11 +2,12 @@ import { View, StyleSheet } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SubscriptionForm } from '@/components/onboarding/SubscriptionForm';
+import { Colors } from '@/styles/colors';
 
-// Klard Design System Colors
+// Use dark theme colors (onboarding is always dark mode)
 const colors = {
-  background: '#0F172A',
-  backgroundElevated: '#1E293B',
+  ...Colors.dark,
+  backgroundElevated: Colors.dark.muted,
 };
 
 /**

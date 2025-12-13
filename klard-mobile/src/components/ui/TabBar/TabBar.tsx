@@ -32,7 +32,7 @@ export interface TabBarProps {
   style?: ViewStyle;
 }
 
-export function TabBar({ value, onChange, tabs, style }: TabBarProps) {
+export function TabBar({ value, onChange, tabs, style }: Readonly<TabBarProps>) {
   const isDark = useColorScheme() === 'dark';
 
   const handlePress = async (tab: TabItem) => {

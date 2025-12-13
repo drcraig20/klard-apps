@@ -9,7 +9,7 @@ interface MagicLinkSentProps {
   onBack: () => void;
 }
 
-export function MagicLinkSent({ email, onBack }: MagicLinkSentProps) {
+export function MagicLinkSent({ email, onBack }: Readonly<MagicLinkSentProps>) {
   const colors = useThemeColors();
 
   return (

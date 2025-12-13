@@ -22,7 +22,6 @@ const colors = {
   ...Colors.dark,
   primaryDark: Colors.dark.secondary,
   backgroundElevated: Colors.dark.muted,
-  glassBg: 'rgba(30, 41, 59, 0.6)',
 };
 
 // Feature data (OCP: Extend by adding data, not modifying code)
@@ -36,7 +35,7 @@ interface FeatureIconProps {
   index: number;
 }
 
-function FeatureIcon({ index }: FeatureIconProps) {
+function FeatureIcon({ index }: Readonly<FeatureIconProps>) {
   // Different icons for each feature
   const iconPaths = [
     // Block icon (circle with X)
@@ -64,7 +63,7 @@ interface FeatureRowProps {
   index: number;
 }
 
-function FeatureRow({ feature, index }: FeatureRowProps) {
+function FeatureRow({ feature, index }: Readonly<FeatureRowProps>) {
   return (
     <View style={styles.featureRow}>
       <FeatureIcon index={index} />
@@ -81,7 +80,7 @@ interface BurnerCardTutorialProps {
 }
 
 // Main BurnerCard Tutorial Component (SRP: Orchestrates tutorial screen)
-export function BurnerCardTutorial({ onSkip }: BurnerCardTutorialProps) {
+export function BurnerCardTutorial({ onSkip }: Readonly<BurnerCardTutorialProps>) {
   const { width: screenWidth } = useWindowDimensions();
   const { completeOnboarding, isUpdating } = useOnboarding();
 
@@ -389,7 +388,7 @@ const styles = StyleSheet.create({
     borderRadius: 9999,
     borderWidth: 1.5,
     borderColor: colors.border,
-    backgroundColor: 'rgba(30, 41, 59, 0.4)',
+    backgroundColor: colors.surfaceSubtle,
     width: '100%',
     maxWidth: 320,
     alignItems: 'center',

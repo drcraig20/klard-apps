@@ -14,7 +14,7 @@ export interface ServiceLogoProps {
   style?: StyleProp<ViewStyle>;
 }
 
-export function ServiceLogo({ service, size, style }: ServiceLogoProps) {
+export function ServiceLogo({ service, size, style }: Readonly<ServiceLogoProps>) {
   const fallback = service.name.charAt(0).toUpperCase();
 
   return (

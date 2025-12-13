@@ -33,7 +33,6 @@ import { Colors } from '@/styles/colors';
 const colors = {
   ...Colors.dark,
   primaryDark: Colors.dark.secondary,
-  glassBg: 'rgba(30, 41, 59, 0.6)',
   error: Colors.dark.accentError,
 };
 
@@ -286,7 +285,7 @@ interface ServiceHeaderProps {
   onChangeService: () => void;
 }
 
-function ServiceHeader({ service, onChangeService }: ServiceHeaderProps) {
+function ServiceHeader({ service, onChangeService }: Readonly<ServiceHeaderProps>) {
   return (
     <BlurView intensity={40} tint="dark" style={styles.serviceHeader}>
       <View style={styles.serviceInfo}>
@@ -316,7 +315,7 @@ interface FormFieldProps {
   children: React.ReactNode;
 }
 
-function FormField({ label, error, helperText, children }: FormFieldProps) {
+function FormField({ label, error, helperText, children }: Readonly<FormFieldProps>) {
   return (
     <View style={styles.fieldContainer}>
       <Text style={styles.label}>{label}</Text>
@@ -338,7 +337,7 @@ interface CycleButtonProps {
   onPress: () => void;
 }
 
-function CycleButton({ label, selected, onPress }: CycleButtonProps) {
+function CycleButton({ label, selected, onPress }: Readonly<CycleButtonProps>) {
   const handlePress = useCallback(() => {
     Haptics.selectionAsync();
     onPress();
@@ -365,7 +364,7 @@ interface CategoryPickerProps {
   onChange: (value: SubscriptionCategory) => void;
 }
 
-function CategoryPicker({ value, onChange }: CategoryPickerProps) {
+function CategoryPicker({ value, onChange }: Readonly<CategoryPickerProps>) {
   const [isOpen, setIsOpen] = useState(false);
 
   const handleSelect = useCallback(
@@ -502,7 +501,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   input: {
-    backgroundColor: colors.glassBg,
+    backgroundColor: colors.glassBackground,
     borderRadius: 12,
     padding: 16,
     color: colors.foreground,
@@ -526,7 +525,7 @@ const styles = StyleSheet.create({
   },
   cycleButton: {
     flex: 1,
-    backgroundColor: colors.glassBg,
+    backgroundColor: colors.glassBackground,
     borderRadius: 12,
     padding: 16,
     alignItems: 'center',
@@ -546,7 +545,7 @@ const styles = StyleSheet.create({
     color: colors.foreground,
   },
   dateButton: {
-    backgroundColor: colors.glassBg,
+    backgroundColor: colors.glassBackground,
     borderRadius: 12,
     padding: 16,
     borderWidth: 1,
@@ -557,7 +556,7 @@ const styles = StyleSheet.create({
     color: colors.foreground,
   },
   pickerButton: {
-    backgroundColor: colors.glassBg,
+    backgroundColor: colors.glassBackground,
     borderRadius: 12,
     padding: 16,
     borderWidth: 1,
@@ -587,7 +586,7 @@ const styles = StyleSheet.create({
     borderBottomColor: colors.border,
   },
   pickerOptionSelected: {
-    backgroundColor: 'rgba(21, 181, 176, 0.2)',
+    backgroundColor: colors.selectedBackground,
   },
   pickerOptionText: {
     fontSize: 16,

@@ -50,7 +50,7 @@ export function InputField({
   containerStyle,
   editable = true,
   ...props
-}: InputFieldProps) {
+}: Readonly<InputFieldProps>) {
   const [showPassword, setShowPassword] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
 

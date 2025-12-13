@@ -44,7 +44,7 @@ function Modal({
   footer,
   closeOnOverlay = true,
   testID = "modal",
-}: ModalProps) {
+}: Readonly<ModalProps>) {
   const isDark = useColorScheme() === "dark";
   const insets = useSafeAreaInsets();
 
