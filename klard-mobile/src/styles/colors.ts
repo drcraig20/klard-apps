@@ -6,6 +6,8 @@ export const Colors = {
     primaryForeground: '#FFFFFF',
     primaryHover: '#0A6866',
     primaryPressed: '#085756',
+    primaryBackground: '#E6F5F5',
+    primaryBorder: 'rgba(13, 124, 122, 0.2)',
 
     // ===== SECONDARY COLORS =====
     secondary: '#15B5B0',
@@ -133,6 +135,8 @@ export const Colors = {
     primaryForeground: '#FFFFFF',
     primaryHover: '#1DCDC7',
     primaryPressed: '#25E5DE',
+    primaryBackground: 'rgba(21, 181, 176, 0.1)',
+    primaryBorder: 'rgba(21, 181, 176, 0.2)',
 
     // ===== SECONDARY COLORS =====
     secondary: '#0D7C7A',
