@@ -50,6 +50,19 @@ Load from `docs/agile/stories/*-<feature>-stories.md`
 
 ---
 
+## Agent Timeout Strategy
+
+When dispatching parallel agents:
+
+1. **Initial dispatch:** Use shorter timeout (30-45s) with `block=false`
+2. **While waiting:** Continue with independent work (file reads, local analysis)
+3. **Check progress:** Use `TaskOutput(task_id, block=false)` periodically
+4. **Final wait:** Use `block=true` only when ready to process results
+
+**Why:** Prevents idle waiting and uses time efficiently.
+
+---
+
 ## Task Generation (Writing-Plans Format)
 
 For each story, generate tasks following the `superpowers:writing-plans` bite-sized format:

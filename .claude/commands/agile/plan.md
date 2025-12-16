@@ -26,7 +26,7 @@ Use `Skill(superpowers:brainstorming)` tool if complexity warrants it.
 Dispatch in parallel (single message with multiple Task tool calls):
 ```
 Task 1: feature-dev:code-explorer - "Analyze codebase for patterns related to [feature]"
-Task 2: Explore agent - "Research existing implementations in docs/"
+Task 2: Explore agent - "Research existing implementations in docs/ directory do not read or include unrelated docs"
 ```
 
 ### Step 4 - PROCEED
@@ -69,6 +69,36 @@ docs/agile/
 ```
 
 Create any missing directories with .gitkeep files.
+
+---
+
+## Agent Timeout Strategy
+
+When dispatching parallel agents:
+
+1. **Initial dispatch:** Use shorter timeout (30-45s) with `block=false`
+2. **While waiting:** Continue with independent work (file reads, local analysis)
+3. **Check progress:** Use `TaskOutput(task_id, block=false)` periodically
+4. **Final wait:** Use `block=true` only when ready to process results
+
+**Example:**
+```
+# Dispatch agents (non-blocking)
+agent_1 = Task(..., run_in_background=true)
+agent_2 = Task(..., run_in_background=true)
+
+# Do other work while waiting...
+Read file_1
+Read file_2
+
+# Check if ready
+TaskOutput(agent_1, block=false)
+
+# When ready to process
+TaskOutput(agent_1, block=true, timeout=60000)
+```
+
+**Why:** Prevents idle waiting and uses time efficiently.
 
 ---
 
@@ -267,6 +297,33 @@ Save to `docs/agile/context/$ARGUMENTS.feature-plan-summary.md`:
 
 ---
 
+## Phase Gate: Design Validation
+
+Before saving plan, present to user for validation:
+
+```
+🎯 ARCHITECT VALIDATION GATE
+
+**Design Summary:**
+- Approach: [approach name]
+- Component reuse: [% of existing components]
+- New components: [count]
+- SOLID compliance: [status]
+
+**Ready for PRD phase?**
+
+**Options:**
+- **Yes, save plan** - Proceed to `/agile:prd`
+- **Refine design** - Go back to brainstorming questions
+- **Adjust scope** - Modify in/out of scope items
+```
+
+Wait for explicit user approval before proceeding.
+
+---
+
 ## Next Phase
 
-"✅ Plan complete. Run `/agile:prd` to generate the Product Requirements Document."
+✅ Upon user approval: "Plan complete and saved to `docs/agile/plans/YYYY-MM-DD-$ARGUMENTS.feature-plan.md`.
+
+Ready for PRD phase? Run `/agile:prd`"

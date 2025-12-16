@@ -136,6 +136,22 @@ Identify 2-3 areas for improvement:
 
 ---
 
+## Context Persistence Checklist
+
+Before ending reflection, save session context:
+
+- [ ] Summary saved to `docs/agile/context/<feature>-<phase>-summary.md`
+- [ ] Decision log saved to `docs/agile/context/<feature>-decisions.md`
+- [ ] Key findings documented for future sessions
+- [ ] Recommendations captured for next phase
+
+**Context files enable:**
+- Session continuity across multiple chat sessions
+- Handoff information for PRD → Arch → Stories → Tasks phases
+- Future reference without re-reading files
+
+---
+
 ## Output Summary
 
 ```
