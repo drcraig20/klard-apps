@@ -1,10 +1,26 @@
 ---
-name: status
+name: agile:status
 description: Show current agile workflow status and progress
 model: haiku
 ---
 
 # Workflow Status
+
+## Skill-Aware Status
+
+When showing recommended actions, include the skills that will be activated:
+
+| Current State | Recommended Action | Skills Activated | Parallel Agents |
+|---------------|-------------------|------------------|-----------------|
+| No artifacts | `/agile:plan <feature>` | brainstorming (conditional), code-explorer | ✅ explorer + docs |
+| Plan exists | `/agile:prd` | brainstorming (conditional), code-explorer | ✅ codebase + requirements |
+| PRD exists | `/agile:arch` | code-architect, solid-design-principles, brainstorming (conditional) | ✅ architect + explorer |
+| Architecture exists | `/agile:stories` | solid-design-principles, brainstorming (conditional) | ✅ PRD + architecture |
+| Stories exist | `/agile:tasks` | writing-plans, brainstorming (conditional) | ✅ stories + code |
+| Tasks exist | `/agile:impl <task-id>` | test-driven-development, verification | ✅ context (TDD sequential) |
+| All tasks done | `/agile:qa` | code-review, verification | ✅ multiple reviewers |
+| QA passed | `/agile:release <version>` | finishing-branch | ❌ sequential |
+| Any phase done | `/agile:reflect` | conversation analysis | ❌ sequential |
 
 ## Check Artifacts
 
@@ -54,30 +70,6 @@ Check for:
 - Tasks stuck in "In Progress" for >2 days
 - Dependencies not resolved
 - QA failures not addressed
-
-## Recommendations
-
-Based on current state, suggest next action:
-
-| Current State | Recommended Action |
-|---------------|-------------------|
-| No artifacts | `/plan <feature>` |
-| Plan exists | `/prd` |
-| PRD exists | `/arch` |
-| Architecture exists | `/stories` |
-| Stories exist | `/tasks` |
-| Tasks exist | `/impl <task-id>` |
-| All tasks done | `/qa` |
-| QA passed | `/release <version>` |
-
-## Quick Actions
-
-```
-/plan <feature>  - Start new feature
-/board           - View task board
-/impl <task-id>  - Work on task
-/status          - Refresh status
-```
 
 ## Recent Activity
 
