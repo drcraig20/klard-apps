@@ -210,6 +210,63 @@ Include:
 
 ---
 
+## Context Persistence (MANDATORY)
+
+Before proceeding to the next phase, save context for continuity:
+
+### 1. Decision Log
+Append to `docs/agile/context/$ARGUMENTS.feature-decisions.md`:
+```markdown
+## Plan Phase Decisions - [DATE]
+
+| Decision | Options Considered | Chosen | Rationale |
+|----------|-------------------|--------|-----------|
+| [decision] | [options] | [choice] | [user's reasoning] |
+
+**Key Constraints Identified:**
+- [constraint 1]
+- [constraint 2]
+```
+
+### 2. Session Summary
+Save to `docs/agile/context/$ARGUMENTS.feature-plan-summary.md`:
+```markdown
+# Plan Phase Summary: $ARGUMENTS.feature
+
+**Date:** [DATE]
+**Phase:** Planning
+
+## Problem Statement
+[User's words verbatim]
+
+## Chosen Approach
+[Approach name]: [brief description]
+
+## Key Decisions
+1. [decision 1]
+2. [decision 2]
+
+## Open Questions for PRD Phase
+- [question 1]
+- [question 2]
+
+## Files Touched
+- Created: `docs/agile/plans/[filename]`
+
+## Handoff Context
+```json
+{
+  "feature": "$ARGUMENTS.feature",
+  "phase": "plan",
+  "approach": "[chosen approach]",
+  "next_phase": "prd",
+  "open_questions": ["q1", "q2"]
+}
+```
+```
+
+---
+
 ## Next Phase
 
 "✅ Plan complete. Run `/agile:prd` to generate the Product Requirements Document."

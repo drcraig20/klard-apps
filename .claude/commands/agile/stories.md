@@ -163,6 +163,71 @@ Include:
 
 ---
 
+## Context Persistence (MANDATORY)
+
+Before proceeding to the next phase, save context for continuity:
+
+### 1. Decision Log
+Append to `docs/agile/context/<feature>-decisions.md`:
+```markdown
+## Stories Phase Decisions - [DATE]
+
+| Decision | Options Considered | Chosen | Rationale |
+|----------|-------------------|--------|-----------|
+| Story scope | [options] | [choice] | [user's reasoning] |
+| Prioritization | [options] | [choice] | [user's reasoning] |
+
+**Stories Created:**
+| ID | Title | Priority | Size |
+|----|-------|----------|------|
+| STORY-001 | [title] | P0 | M |
+```
+
+### 2. Session Summary
+Save to `docs/agile/context/<feature>-stories-summary.md`:
+```markdown
+# Stories Phase Summary: <feature>
+
+**Date:** [DATE]
+**Phase:** Stories
+
+## Story Map
+[Epic structure summary]
+
+## Stories by Priority
+**P0 (Must Have):**
+- STORY-001: [title]
+
+**P1 (Should Have):**
+- STORY-002: [title]
+
+## SOLID Story Check Results
+[summary of any stories that needed splitting]
+
+## Dependencies Identified
+- STORY-002 depends on STORY-001
+
+## Open Questions for Tasks Phase
+- [question 1]
+
+## Files Touched
+- Created: `docs/agile/stories/[filename]`
+- Updated: `docs/agile/context/<feature>-decisions.md`
+
+## Handoff Context
+```json
+{
+  "feature": "<feature>",
+  "phase": "stories",
+  "stories": ["STORY-001", "STORY-002"],
+  "priority_order": ["STORY-001", "STORY-002"],
+  "next_phase": "tasks"
+}
+```
+```
+
+---
+
 ## Next Phase
 
 "✅ Stories complete. Run `/agile:tasks` to break down into implementable tasks."

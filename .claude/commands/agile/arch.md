@@ -240,6 +240,71 @@ Include:
 
 ---
 
+## Context Persistence (MANDATORY)
+
+Before proceeding to the next phase, save context for continuity:
+
+### 1. Decision Log
+Append to `docs/agile/context/<feature>-decisions.md`:
+```markdown
+## Architecture Phase Decisions - [DATE]
+
+| ADR | Decision | Options Considered | Chosen | Rationale |
+|-----|----------|-------------------|--------|-----------|
+| ADR-001 | [title] | [options] | [choice] | [user's reasoning] |
+
+**SOLID Compliance Status:**
+- SRP: [status]
+- OCP: [status]
+- LSP: [status]
+- ISP: [status]
+- DIP: [status]
+```
+
+### 2. Session Summary
+Save to `docs/agile/context/<feature>-arch-summary.md`:
+```markdown
+# Architecture Phase Summary: <feature>
+
+**Date:** [DATE]
+**Phase:** Architecture
+
+## Diagrams Created
+- System Context: [approved/pending]
+- Sequence: [approved/pending]
+- ER Diagram: [approved/pending]
+
+## ADRs Recorded
+1. ADR-001: [title] → [decision]
+2. ADR-002: [title] → [decision]
+
+## SOLID Compliance
+[summary of compliance status]
+
+## Technology Stack Decisions
+- [tech]: [version] - [why]
+
+## Open Questions for Stories Phase
+- [question 1]
+
+## Files Touched
+- Created: `docs/agile/architecture/[filename]`
+- Updated: `docs/agile/context/<feature>-decisions.md`
+
+## Handoff Context
+```json
+{
+  "feature": "<feature>",
+  "phase": "arch",
+  "adrs": ["ADR-001", "ADR-002"],
+  "tech_stack": {"key": "value"},
+  "next_phase": "stories"
+}
+```
+```
+
+---
+
 ## Next Phase
 
 "✅ Architecture complete. Run `/agile:stories` to create user stories."

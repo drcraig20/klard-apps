@@ -208,6 +208,50 @@ Only mark complete AFTER showing evidence.
 
 ---
 
+## Context Persistence (Per Task)
+
+After each task completion, update context:
+
+### 1. Decision Log (if decisions made)
+Append to `docs/agile/context/<feature>-decisions.md`:
+```markdown
+## Implementation Decision - $ARGUMENTS.task_id - [DATE]
+
+| Decision | Options | Chosen | Rationale |
+|----------|---------|--------|-----------|
+| [implementation choice] | [options] | [choice] | [why] |
+```
+
+### 2. Update Handoff Context
+Update `docs/agile/context/<feature>-impl-progress.md`:
+```markdown
+# Implementation Progress: <feature>
+
+**Last Updated:** [DATE]
+**Current Task:** $ARGUMENTS.task_id
+
+## Completed Tasks
+| Task ID | Status | Files Changed | Notes |
+|---------|--------|---------------|-------|
+| FEAT-001-01 | ✅ | [files] | [notes] |
+
+## In Progress
+- $ARGUMENTS.task_id: [current status]
+
+## Patterns Established
+- [pattern 1]: [where used]
+- [pattern 2]: [where used]
+
+## Libraries Used (Context7)
+- [library]: [version] - [why]
+
+## Technical Debt / Follow-ups
+- [ ] [item 1]
+- [ ] [item 2]
+```
+
+---
+
 ## Update Task Board
 
 After verification:

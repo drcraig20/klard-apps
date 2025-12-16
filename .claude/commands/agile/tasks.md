@@ -156,6 +156,70 @@ Which execution approach?
 
 ---
 
+## Context Persistence (MANDATORY)
+
+Before proceeding to implementation, save context for continuity:
+
+### 1. Decision Log
+Append to `docs/agile/context/<feature>-decisions.md`:
+```markdown
+## Tasks Phase Decisions - [DATE]
+
+| Decision | Options Considered | Chosen | Rationale |
+|----------|-------------------|--------|-----------|
+| Task granularity | [options] | [choice] | [user's reasoning] |
+| Execution approach | [options] | [choice] | [user's reasoning] |
+
+**Tasks Created:**
+| ID | Title | Story | Estimate |
+|----|-------|-------|----------|
+| FEAT-001-01 | [title] | STORY-001 | 2h |
+```
+
+### 2. Session Summary
+Save to `docs/agile/context/<feature>-tasks-summary.md`:
+```markdown
+# Tasks Phase Summary: <feature>
+
+**Date:** [DATE]
+**Phase:** Tasks
+
+## Task Breakdown
+| Story | Tasks | Total Estimate |
+|-------|-------|----------------|
+| STORY-001 | 3 | 6h |
+| STORY-002 | 2 | 4h |
+
+## Dependency Graph Summary
+[Key dependencies noted]
+
+## Execution Plan
+[Chosen approach: subagent-driven / parallel session]
+
+## Implementation Order
+1. FEAT-001-01 (no dependencies)
+2. FEAT-001-02 (depends on 01)
+
+## Files Touched
+- Created: `docs/agile/tasks/[filename]`
+- Created: `docs/agile/boards/<feature>-board.md`
+- Updated: `docs/agile/context/<feature>-decisions.md`
+
+## Handoff Context
+```json
+{
+  "feature": "<feature>",
+  "phase": "tasks",
+  "tasks": ["FEAT-001-01", "FEAT-001-02"],
+  "first_task": "FEAT-001-01",
+  "execution_approach": "subagent-driven",
+  "next_phase": "impl"
+}
+```
+```
+
+---
+
 ## Next Phase
 
 "✅ Tasks created. Run `/agile:impl <task-id>` to start implementing with TDD."

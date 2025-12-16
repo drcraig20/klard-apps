@@ -426,6 +426,69 @@ Which approach?
 
 ---
 
+## Context Persistence (MANDATORY)
+
+Before finalizing, save context for continuity:
+
+### 1. Decision Log
+Append to `docs/agile/context/<feature>-decisions.md`:
+```markdown
+## PRD Phase Decisions - [DATE]
+
+| Decision | Options Considered | Chosen | Rationale |
+|----------|-------------------|--------|-----------|
+| [Architecture approach] | [options] | [choice] | [user's reasoning] |
+| [Data model] | [options] | [choice] | [user's reasoning] |
+| [API design] | [options] | [choice] | [user's reasoning] |
+
+**Technical Constraints Confirmed:**
+- [constraint 1]
+- [constraint 2]
+```
+
+### 2. Session Summary
+Save to `docs/agile/context/<feature>-prd-summary.md`:
+```markdown
+# PRD Phase Summary: <feature>
+
+**Date:** [DATE]
+**Phase:** PRD
+
+## Requirements Captured
+- [req 1]
+- [req 2]
+
+## Key Architecture Decisions
+1. [decision 1]
+2. [decision 2]
+
+## Diagrams Approved
+- [ ] System Context
+- [ ] Sequence
+- [ ] ER Diagram
+
+## Open Questions for Architecture Phase
+- [question 1]
+- [question 2]
+
+## Files Touched
+- Created: `docs/agile/prds/[filename]`
+- Updated: `docs/agile/context/<feature>-decisions.md`
+
+## Handoff Context
+```json
+{
+  "feature": "<feature>",
+  "phase": "prd",
+  "diagrams_approved": ["context", "sequence", "er"],
+  "next_phase": "arch",
+  "open_questions": ["q1", "q2"]
+}
+```
+```
+
+---
+
 ## ✔️ Completion Checklist
 
 Before finalizing:

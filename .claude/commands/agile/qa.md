@@ -185,6 +185,74 @@ Save to: `docs/agile/qa/YYYY-MM-DD-<feature>-qa-report.md`
 
 ---
 
+## Context Persistence (MANDATORY)
+
+Before proceeding to release, save context:
+
+### 1. Decision Log
+Append to `docs/agile/context/<feature>-decisions.md`:
+```markdown
+## QA Phase Decisions - [DATE]
+
+| Decision | Options | Chosen | Rationale |
+|----------|---------|--------|-----------|
+| QA status | PASS/FAIL | [choice] | [user's reasoning] |
+| Issues to fix | [list] | [chosen fixes] | [priority reasoning] |
+
+**Code Review Summary:**
+- Frontend: [status]
+- Backend: [status]
+- Tests: [status]
+
+**SOLID Compliance:** [status]
+```
+
+### 2. Session Summary
+Save to `docs/agile/context/<feature>-qa-summary.md`:
+```markdown
+# QA Phase Summary: <feature>
+
+**Date:** [DATE]
+**Phase:** QA
+**Status:** PASS / FAIL
+
+## Test Results
+| Suite | Passed | Failed | Coverage |
+|-------|--------|--------|----------|
+| Unit | X | X | X% |
+| Integration | X | X | X% |
+
+## Code Review Findings
+**Critical Issues:** [count]
+**Warnings:** [count]
+**Resolved:** [count]
+
+## Acceptance Criteria Status
+[X/Y criteria passed]
+
+## Issues Deferred to Future
+- [ ] [issue 1]
+- [ ] [issue 2]
+
+## Files Touched
+- Created: `docs/agile/qa/[filename]`
+- Updated: `docs/agile/context/<feature>-decisions.md`
+
+## Handoff Context
+```json
+{
+  "feature": "<feature>",
+  "phase": "qa",
+  "status": "PASS",
+  "coverage": "85%",
+  "issues_deferred": ["issue1"],
+  "next_phase": "release"
+}
+```
+```
+
+---
+
 ## Next Phase
 
 If user says PASS:
