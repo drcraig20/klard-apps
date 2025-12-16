@@ -125,6 +125,113 @@ Implemented full signup flow for web and mobile with password strength indicator
 
 ---
 
+## Onboarding Screens
+
+Designed three-screen onboarding flow for new users after signup. Each screen guides users through key app features with progressive disclosure and accessible navigation.
+
+| | |
+|---|---|
+| **Date** | 2025-01-09 |
+| **Platforms** | Web, Mobile |
+| **Source** | `2025-01-09-onboarding-screens-design.md` |
+
+**Screens:**
+1. **Welcome** - App overview, key benefits
+2. **Subscriptions** - Pricing tiers, plan selection
+3. **Confirmation** - Summary and CTA
+
+**Design:** Consistent with Klard design system, glassmorphism elements, responsive layouts
+
+---
+
+## Mobile Refactoring: Separation of Concerns (In Progress)
+
+Plan to refactor 21 mobile components for separation of concerns, extracting common styles, hooks, and patterns. Eliminates ~150 lines of duplicated code across components.
+
+| | |
+|---|---|
+| **Date** | 2025-12-12 |
+| **Platforms** | Mobile |
+| **Source** | `2025-12-12-soc-dry-refactoring-plan.md` |
+
+**Scope:** AlertBanner, AlertCard, Button, Card, DatePicker, Modal, SelectField, TabBar, and 13+ more components
+
+**Extraction Areas:**
+- Shared style utilities and constants
+- Custom hooks for common patterns (useThemeColors, useFormState)
+- Reusable component composites
+- Error handling and validation patterns
+
+---
+
+## Web Refactoring: SOLID & DRY (In Progress)
+
+Plan to refactor 14 web components for SOLID compliance and DRY principles. Targets Tailwind color tokens and semantic component composition.
+
+| | |
+|---|---|
+| **Date** | 2025-12-12 |
+| **Platforms** | Web |
+| **Source** | `2025-12-12-web-soc-dry-refactoring-plan.md` |
+
+**Scope:** LoginForm, SignupForm, Modal, Card, PricingCard, Dashboard, and 8+ more components
+
+**Focus Areas:**
+- Single Responsibility Principle (SRP) - Decompose god components
+- Open/Closed Principle (OCP) - Use composition over conditional rendering
+- Dependency Inversion - Extract and mock external deps
+- Replace hardcoded colors with semantic Tailwind tokens
+
+---
+
+## Theme System: Style Variance Authority (In Progress)
+
+Comprehensive theme system for mobile to replace 122+ hardcoded colors. Implements CVA-like API with automatic light/dark theme switching using React Native's `useColorScheme()` hook.
+
+| | |
+|---|---|
+| **Date** | 2025-12-13 |
+| **Platforms** | Mobile, Web (secondary) |
+| **Source** | `2025-12-13-sva-theme-system.md` |
+
+**Architecture:**
+- `sva.ts` - Theme-aware style compiler (pre-compiles both themes at import time)
+- `colors.ts` - 79 semantic tokens per theme (light/dark)
+- Component migration to SVA-based styling
+- ESLint rule to prevent hardcoded colors
+
+**Components Affected:** 24 mobile components, ~10 web components
+
+**Status:** Infrastructure phase (sva.ts, colors.ts) ready; component migration in progress
+
+---
+
+## Agile Workflow Enhancement (In Progress)
+
+Enhancement of agile workflow commands with skill integration, parallel sub-agents, and context engineering. Creates namespaced `/agile:*` commands with mandatory skill activation.
+
+| | |
+|---|---|
+| **Date** | 2025-12-15 |
+| **Platforms** | Development Workflow |
+| **Source** | `2025-12-15-agile-workflow-enhancement.md` |
+
+**New Commands:**
+- `/agile:plan` - Feature planning with brainstorming
+- `/agile:prd` - PRD generation with user-as-lead principle
+- `/agile:arch` - Architecture design with SOLID validation
+- `/agile:stories` - User story creation
+- `/agile:tasks` - Task breakdown with writing-plans format
+- `/agile:impl` - TDD-based implementation
+- `/agile:qa` - Quality assurance with parallel reviewers
+- `/agile:release` - Release preparation
+- `/agile:status` / `/agile:board` - Progress tracking
+- `/agile:reflect` - End-of-phase analysis
+
+**Key Features:** Parallel sub-agents, conditional brainstorming, context engineering, skill activation map, Context7 MCP integration
+
+---
+
 <!--
 ## [Feature Name]
 
