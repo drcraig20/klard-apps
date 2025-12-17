@@ -36,6 +36,7 @@ Dispatch in parallel (single message with multiple Task tool calls):
 Task 1: Explore agent - "Search task files for $ARGUMENTS.task_id details using Grep"
 Task 2: feature-dev:code-explorer - "Analyze files that will be modified/created using Grep patterns"
 Task 3: Explore agent - "Find related tests and patterns using Grep"
+Task 4: Explore agent - "Find existing UI components that can be reused for this task (check klard-web/src/components and klard-mobile/src/components)"
 ```
 
 ### Step 4 - CONTEXT7 LIBRARY LOOKUP (BLOCKING)
@@ -157,7 +158,13 @@ Using context from dispatched agents:
 - [ ] Understand acceptance criteria
 - [ ] Know which files to modify/create
 - [ ] **Library docs fetched via Context7 MCP** (MANDATORY if using libraries)
+- [ ] **Existing components identified for reuse** (NO DRY violations)
 - [ ] Test framework identified
+
+♻️ REUSABLE COMPONENTS FOR THIS TASK:
+| Component | Path | How to Use |
+|-----------|------|------------|
+| [component] | [path] | [usage] |
 
 🎯 DEVELOPER CONFIRMATION:
 Ready to proceed?
