@@ -14,7 +14,10 @@
     },
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "io.klard.app"
+      "bundleIdentifier": "io.klard.app",
+      "infoPlist": {
+        "NSFaceIDUsageDescription": "Klard uses Face ID for secure passwordless login"
+      }
     },
     "android": {
       "adaptiveIcon": {
