@@ -38,9 +38,37 @@ Task 2: feature-dev:code-explorer - "Analyze files that will be modified/created
 Task 3: Explore agent - "Find related tests and patterns using Grep"
 ```
 
-### Step 4 - PROCEED
+### Step 4 - CONTEXT7 LIBRARY LOOKUP (BLOCKING)
 
-Only after activating skills and receiving context from parallel agents, continue below.
+**⚠️ DO NOT proceed to TDD until this step is complete.**
+
+1. **Identify libraries** from task description
+2. **Resolve each library ID:**
+   ```
+   mcp__context7__resolve-library-id: libraryName="[library]"
+   ```
+3. **Fetch documentation:**
+   ```
+   mcp__context7__get-library-docs: context7CompatibleLibraryID="[id]" topic="[topic]"
+   ```
+4. **Present to user:**
+   ```
+   📚 CONTEXT7 LIBRARY DOCUMENTATION
+
+   **Libraries for $ARGUMENTS.task_id:**
+   | Library | Topic | Key API Pattern |
+   |---------|-------|-----------------|
+   | [lib] | [topic] | [pattern from docs] |
+
+   🎯 DEVELOPER CONFIRMATION:
+   Library patterns loaded. Ready to proceed with TDD?
+   ```
+
+**Why blocking:** Training data may have outdated APIs. Context7 ensures CURRENT patterns.
+
+### Step 5 - PROCEED
+
+Only after activating skills, receiving context from parallel agents, AND fetching Context7 docs, continue below.
 
 ---
 
