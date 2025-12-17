@@ -1,426 +1,292 @@
 ---
 name: agile:impl
-description: Implement a task using Test-Driven Development (red-green-refactor)
+description: Execute all tasks from the task document using parallel sub-agents for independent tasks
 arguments:
-  - name: task_id
-    description: Task ID to implement (e.g., AUTH-001-01)
-    required: true
-model: sonnet
+  - name: feature
+    description: Feature name (auto-detects from most recent task document if omitted)
+    required: false
+model: opus
 ---
 
-# Implement Task: $ARGUMENTS.task_id
+# Implement Feature: Parallel Sub-Agent Execution
 
-## Mandatory Skill Activation
+## Mandatory Skills
 
-### Step 1 - EVALUATE
+Activate these skills FIRST:
+- `Skill(superpowers:dispatching-parallel-agents)` - For parallel task execution
+- `Skill(superpowers:verification-before-completion)` - For verification
 
-- `superpowers:using-git-worktrees` - YES - Isolate implementation in worktree (MANDATORY)
-- `superpowers:subagent-driven-development` - YES - Fresh subagent per task with code review
-- `superpowers:dispatching-parallel-agents` - CONDITIONAL - If implementing 3+ independent tasks
-- `superpowers:test-driven-development` - YES - TDD workflow
-- `superpowers:verification-before-completion` - YES - Verify before claiming done
-- `superpowers:testing-anti-patterns` - YES - Avoid testing mistakes
-- `solid-design-principles` - YES - Write SOLID code
-- `superpowers:brainstorming` - CONDITIONAL - If implementation approach unclear
+---
 
-### Step 2 - ACTIVATE
+## Step 1: Load Task Document
 
-**⚠️ WORKTREE ISOLATION REQUIRED:**
-Use `Skill(superpowers:using-git-worktrees)` tool FIRST - create isolated worktree before any implementation.
+1. Find task document:
+   - If `$ARGUMENTS.feature` provided: `docs/agile/tasks/*-$ARGUMENTS.feature-tasks.md`
+   - Otherwise: Most recent file in `docs/agile/tasks/`
 
-**⚠️ PARALLEL IMPLEMENTATION (if multiple independent tasks):**
-Use `Skill(superpowers:dispatching-parallel-agents)` if implementing 3+ independent tasks.
-Use `Skill(superpowers:subagent-driven-development)` for subagent-per-task workflow.
+2. Parse the document and extract:
+   - All **Tasks** with their IDs, descriptions, dependencies
+   - Group tasks by **Epic** for reporting
+   - Build **dependency graph**
 
-Then activate remaining skills:
-Use `Skill(superpowers:test-driven-development)` tool NOW.
-Use `Skill(superpowers:testing-anti-patterns)` tool NOW.
-Use `Skill(solid-design-principles)` tool NOW.
-Use `Skill(superpowers:brainstorming)` tool if approach needs exploration.
-
-### Step 3 - PARALLEL AGENT DISPATCH (Context Gathering Only)
-
-**TDD cycle is sequential** (red → green → refactor), BUT context gathering happens in parallel BEFORE:
-
-Dispatch in parallel (single message with multiple Task tool calls):
+3. Display overview:
 ```
-Task 1: Explore agent - "Search task files for $ARGUMENTS.task_id details using Grep"
-Task 2: feature-dev:code-explorer - "Analyze files that will be modified/created using Grep patterns"
-Task 3: Explore agent - "Find related tests and patterns using Grep"
-Task 4: Explore agent - "Find existing UI components that can be reused for this task (check klard-web/src/components and klard-mobile/src/components)"
-```
+📋 IMPLEMENTATION PLAN
 
-### Step 4 - CONTEXT7 LIBRARY LOOKUP (BLOCKING)
+**Feature:** [Feature Name]
+**Task Document:** [path]
 
-**⚠️ DO NOT proceed to TDD until this step is complete.**
-
-1. **Identify libraries** from task description
-2. **Resolve each library ID:**
-   ```
-   mcp__context7__resolve-library-id: libraryName="[library]"
-   ```
-3. **Fetch documentation:**
-   ```
-   mcp__context7__get-library-docs: context7CompatibleLibraryID="[id]" topic="[topic]"
-   ```
-4. **Present to user:**
-   ```
-   📚 CONTEXT7 LIBRARY DOCUMENTATION
-
-   **Libraries for $ARGUMENTS.task_id:**
-   | Library | Topic | Key API Pattern |
-   |---------|-------|-----------------|
-   | [lib] | [topic] | [pattern from docs] |
-
-   🎯 DEVELOPER CONFIRMATION:
-   Library patterns loaded. Ready to proceed with TDD?
-   ```
-
-**Why blocking:** Training data may have outdated APIs. Context7 ensures CURRENT patterns.
-
-### Step 5 - PROCEED
-
-Only after activating skills, receiving context from parallel agents, AND fetching Context7 docs, continue below.
-
----
-
-## Your Role: Assistant (NOT Lead)
-
-**The user is the lead Developer.** You assist with TDD, but they:
-- Confirm readiness before each phase
-- Validate test approaches
-- Decide when implementation is "good enough"
-- Approve refactoring changes
-
----
-
-## Context Engineering Rules
-
-**NEVER read entire files.** Use intelligent, sectional reading:
-
-1. **Use Grep to find relevant sections:**
-   ```
-   Grep: pattern="class.*ComponentName" path="src/"
-   Grep: pattern="function.*methodName" path="src/"
-   Grep: pattern="import.*from" path="src/file.ts"
-   ```
-
-2. **Use Read with offset/limit for specific lines:**
-   ```
-   Read: file_path="src/file.ts" offset=45 limit=30
-   ```
-
-3. **Summarize, don't dump:**
-   - Present key signatures and interfaces
-   - Show only relevant code blocks
-   - Provide condensed context
-
----
-
-## Find Task Context (via Parallel Agents)
-
-Using context from dispatched agents:
-1. Task details from `docs/agile/tasks/`
-2. Load task description, files, subtasks
-3. Find related story from `docs/agile/stories/`
-4. Check architecture notes from `docs/agile/architecture/`
-
----
-
-## Fetch Library Documentation (MANDATORY)
-
-**BEFORE writing any code that uses external libraries, you MUST:**
-
-1. **Resolve library ID:**
-   ```
-   mcp__context7__resolve-library-id: libraryName="[library-name]"
-   ```
-
-2. **Fetch current documentation:**
-   ```
-   mcp__context7__get-library-docs:
-     context7CompatibleLibraryID="[resolved-id]"
-     topic="[relevant-topic]"
-     mode="code"
-   ```
-
-3. **Present key patterns to user:**
-   ```
-   📚 LIBRARY DOCUMENTATION (Context7)
-
-   **[Library Name] - Latest Patterns:**
-   - [Key API pattern 1]
-   - [Key API pattern 2]
-
-   🎯 DEVELOPER CONFIRMATION:
-   Ready to proceed with these patterns?
-   ```
-
-**DO NOT skip this step.** Training data may have outdated patterns.
-
----
-
-## Pre-Implementation Checklist
-
-```
-✅ PRE-IMPLEMENTATION CHECK
-
-- [ ] **Working in isolated git worktree** (MANDATORY - verify with `git worktree list`)
-- [ ] Task dependencies are complete
-- [ ] Understand acceptance criteria
-- [ ] Know which files to modify/create
-- [ ] **Library docs fetched via Context7 MCP** (MANDATORY if using libraries)
-- [ ] **Existing components identified for reuse** (NO DRY violations)
-- [ ] Test framework identified
-
-♻️ REUSABLE COMPONENTS FOR THIS TASK:
-| Component | Path | How to Use |
-|-----------|------|------------|
-| [component] | [path] | [usage] |
-
-🎯 DEVELOPER CONFIRMATION:
-Ready to proceed?
+| Epic | Tasks | Est. Hours |
+|------|-------|------------|
+| Epic 1: [name] | Y | Zh |
+| Epic 2: [name] | Y | Zh |
+| **TOTAL** | **Y** | **Zh** |
 ```
 
 ---
 
-## Parallel Sub-Agent Implementation (When Applicable)
+## Step 2: Identify ALL Independent Tasks
 
-**Use parallel sub-agents when:**
-- Implementing 3+ tasks with **no file overlap**
-- Tasks are in **different packages** (e.g., klard-auth, klard-web, klard-mobile)
-- Tasks can be verified **independently**
-
-**Do NOT use parallel when:**
-- Tasks modify the same files
-- Tasks have sequential dependencies (e.g., AUTH-001-02 depends on AUTH-001-01)
-- Tasks share database migrations or schema changes
-
-### Parallel Dispatch Pattern
+Analyze the ENTIRE task document and identify ALL tasks that can run NOW (no unmet dependencies):
 
 ```
-🚀 PARALLEL IMPLEMENTATION MODE
+🔍 DEPENDENCY ANALYSIS
 
-Identified [N] independent tasks for parallel execution:
+**Ready to execute (no dependencies):**
+| Task ID | Epic | Package | Files |
+|---------|------|---------|-------|
+| AUTH-001-01 | 1 | klard-auth | package.json |
+| AUTH-008-01 | 2 | klard-mobile | hooks/useShakeAnimation.ts |
+| AUTH-008-03 | 2 | klard-web | hooks/useShakeAnimation.ts |
+| AUTH-010-01 | 2 | klard-mobile | components/NetworkErrorSheet |
+| AUTH-010-02 | 2 | klard-mobile | utils/error-helpers.ts |
+| AUTH-011-01 | 3 | klard-auth | .well-known/assetlinks.json |
+| AUTH-011-02 | 3 | klard-auth | .well-known/apple-app-site-association |
+| AUTH-012-01 | 3 | klard-mobile | app.json |
+| AUTH-013-01 | 3 | klard-auth | .env.example, README |
 
-| Task ID | Package | Files | Can Parallelize? |
-|---------|---------|-------|------------------|
-| AUTH-001-01 | klard-auth | package.json | ✅ Independent |
-| AUTH-008-01 | klard-mobile | hooks/useShakeAnimation.ts | ✅ Independent |
-| AUTH-010-01 | klard-mobile | components/auth/NetworkErrorSheet.tsx | ✅ Independent |
+**Blocked (waiting on dependencies):**
+- AUTH-001-02 → blocked by AUTH-001-01
+- AUTH-001-03 → blocked by AUTH-001-02
+- ... [X more tasks]
 
-Dispatching sub-agents in parallel...
+Dispatching [N] independent tasks in parallel...
 ```
 
-**Dispatch format (single message with multiple Task tool calls):**
+---
 
-```
-Task 1 (general-purpose):
-  description: "Implement AUTH-001-01"
-  prompt: |
-    You are implementing AUTH-001-01 from docs/agile/tasks/[task-file].md
+## Step 3: Dispatch ALL Independent Tasks in Parallel
 
-    MANDATORY FIRST STEPS:
-    1. Use Skill(superpowers:using-git-worktrees) to create worktree: impl/AUTH-001-01
-    2. Use Skill(superpowers:test-driven-development) for TDD
-    3. Fetch Context7 docs for any libraries used
+Send a **single message with multiple Task tool calls** - one for each independent task:
 
-    Your job:
-    1. Read task details from the task file
-    2. Create isolated worktree for this task
-    3. Implement using TDD (red → green → refactor)
-    4. Verify with tests, lint, tsc
-    5. Commit changes in worktree
-    6. Report: files changed, test results, any issues
-
-    Work directory: /path/to/klard-apps
-
-Task 2 (general-purpose):
-  description: "Implement AUTH-008-01"
-  prompt: [same structure, different task]
-
-Task 3 (general-purpose):
-  description: "Implement AUTH-010-01"
-  prompt: [same structure, different task]
+```typescript
+// ALL independent tasks dispatched simultaneously
+Task 1 (general-purpose): "Implement AUTH-001-01"
+Task 2 (general-purpose): "Implement AUTH-008-01"
+Task 3 (general-purpose): "Implement AUTH-008-03"
+Task 4 (general-purpose): "Implement AUTH-010-01"
+Task 5 (general-purpose): "Implement AUTH-010-02"
+Task 6 (general-purpose): "Implement AUTH-011-01"
+Task 7 (general-purpose): "Implement AUTH-011-02"
+Task 8 (general-purpose): "Implement AUTH-012-01"
+Task 9 (general-purpose): "Implement AUTH-013-01"
 ```
 
-### After Parallel Completion
+**Sub-agent prompt template:**
+```
+You are implementing [TASK-ID] from docs/agile/tasks/[task-file].md
 
-1. **Collect sub-agent reports**
-2. **Dispatch code reviewers** (can also be parallel):
-   ```
-   Task (superpowers:code-reviewer): Review AUTH-001-01 implementation
-   Task (superpowers:code-reviewer): Review AUTH-008-01 implementation
-   Task (superpowers:code-reviewer): Review AUTH-010-01 implementation
-   ```
-3. **Fix any Critical/Important issues** (sequential - may conflict)
-4. **Merge worktrees** to main implementation branch
-5. **Run full test suite** to verify integration
+## MANDATORY REQUIREMENTS
 
-### Worktree Merge Strategy
+1. **Context7 Library Lookup (BLOCKING)**
+   Before writing ANY code using external libraries:
+   - `mcp__context7__resolve-library-id`: libraryName="[library]"
+   - `mcp__context7__get-library-docs`: context7CompatibleLibraryID="[id]" topic="[topic]"
 
+2. **Test-Driven Development**
+   - RED: Write failing test first
+   - GREEN: Write minimal code to pass
+   - REFACTOR: Clean up while tests pass
+
+3. **SOLID Principles**
+   - Validate against SRP, OCP, LSP, ISP, DIP
+
+## TASK DETAILS
+
+Read the task document section for [TASK-ID]. Find it by searching for "#### Task [TASK-ID]".
+
+Implement exactly what the task specifies:
+- Files to modify/create
+- Step-by-step instructions
+- Acceptance criteria
+
+## VERIFICATION (MANDATORY)
+
+Run and report actual output:
 ```bash
-# After all parallel tasks complete and pass review:
-cd /path/to/klard-apps
-
-# Merge each worktree's branch
-git merge impl/AUTH-001-01 --no-ff -m "feat(auth): AUTH-001-01 - Install passkey dependency"
-git merge impl/AUTH-008-01 --no-ff -m "feat(mobile): AUTH-008-01 - Create useShakeAnimation hook"
-git merge impl/AUTH-010-01 --no-ff -m "feat(mobile): AUTH-010-01 - Create NetworkErrorSheet"
-
-# Clean up worktrees
-git worktree remove impl/AUTH-001-01
-git worktree remove impl/AUTH-008-01
-git worktree remove impl/AUTH-010-01
-
-# Run full verification
-pnpm test --run
+pnpm test [test-path] --run  # If task has tests
 pnpm lint
 pnpm exec tsc --noEmit
 ```
 
----
-
-## TDD Cycle: Red → Green → Refactor (Sequential Mode)
-
-### 1. RED: Write Failing Tests
-
-**Following superpowers:test-driven-development skill:**
-
-Write tests FIRST that describe expected behavior.
-
-```
-🔴 RED PHASE
-
-Writing failing test for: [behavior]
-
-[Show complete test code]
-
-Running: `pnpm test path/to/test.ts --run`
-Expected: FAIL with "[specific error]"
-
-🎯 Actual result: [show output]
-```
-
-### 2. GREEN: Write Minimum Code
-
-```
-🟢 GREEN PHASE
-
-Implementing minimal code to pass:
-
-[Show implementation]
-
-Running: `pnpm test path/to/test.ts --run`
-Expected: PASS
-
-🎯 Actual result: [show output]
-```
-
-### 3. REFACTOR: Clean Up
-
-```
-🔵 REFACTOR PHASE
-
-Improvements:
-- [what was improved]
-
-Running tests: STILL PASSING ✅
-Running lint: PASSING ✅
-```
-
----
-
-## Verification Before Completion
-
-**Following superpowers:verification-before-completion skill:**
-
-```
-✅ VERIFICATION CHECKLIST
-
-Run these commands and confirm output:
-
-- [ ] `pnpm test path/to/test.ts --run` → PASS
-- [ ] `pnpm lint` → No errors
-- [ ] `pnpm exec tsc --noEmit` → No errors
-
-🎯 VERIFICATION RESULTS:
-[Show actual output from each command]
-
-Only mark complete AFTER showing evidence.
-```
-
----
-
-## Context Persistence (Per Task)
-
-After each task completion, update context:
-
-### 1. Decision Log (if decisions made)
-Append to `docs/agile/context/<feature>-decisions.md`:
-```markdown
-## Implementation Decision - $ARGUMENTS.task_id - [DATE]
-
-| Decision | Options | Chosen | Rationale |
-|----------|---------|--------|-----------|
-| [implementation choice] | [options] | [choice] | [why] |
-```
-
-### 2. Update Handoff Context
-Update `docs/agile/context/<feature>-impl-progress.md`:
-```markdown
-# Implementation Progress: <feature>
-
-**Last Updated:** [DATE]
-**Current Task:** $ARGUMENTS.task_id
-
-## Completed Tasks
-| Task ID | Status | Files Changed | Notes |
-|---------|--------|---------------|-------|
-| FEAT-001-01 | ✅ | [files] | [notes] |
-
-## In Progress
-- $ARGUMENTS.task_id: [current status]
-
-## Patterns Established
-- [pattern 1]: [where used]
-- [pattern 2]: [where used]
-
-## Libraries Used (Context7)
-- [library]: [version] - [why]
-
-## Technical Debt / Follow-ups
-- [ ] [item 1]
-- [ ] [item 2]
-```
-
----
-
-## Update Task Board
-
-After verification:
-1. Open `docs/agile/boards/<feature>-board.md`
-2. Move task to "Done"
-3. Add completion marker: `✓`
-
----
-
-## Commit Changes
+## COMMIT
 
 ```bash
 git add [files]
-git commit -m "<type>(<scope>): <description>
+git commit -m "[type]([scope]): [description]
 
-Refs: $ARGUMENTS.task_id"
+Refs: [TASK-ID]"
+```
+
+## REPORT BACK
+
+Return a structured report:
+1. **Task ID:** [TASK-ID]
+2. **Status:** Success/Failed
+3. **Files changed:** [list]
+4. **Tests:** [results]
+5. **Verification:** [lint, tsc results]
+6. **Commit SHA:** [hash]
+7. **Issues:** [any problems encountered]
+
+Work directory: /Users/drcraig/Desktop/PersonalProjects/klard-apps
 ```
 
 ---
 
-## Next Steps
+## Step 4: Collect Results & Find Newly Unblocked Tasks
+
+After ALL parallel sub-agents complete:
+
+1. **Collect all reports**
+2. **Update dependency graph** - mark completed tasks
+3. **Find newly unblocked tasks** - tasks whose dependencies are now met
+4. **Run integration verification:**
+   ```bash
+   pnpm test --run
+   pnpm lint
+   pnpm exec tsc --noEmit
+   ```
 
 ```
-✅ Task $ARGUMENTS.task_id complete.
+📊 BATCH COMPLETE
 
-Next task: Run `/agile:board` to see remaining tasks.
-All tasks done? Run `/agile:qa` to start quality assurance.
+**Completed Tasks:**
+| Task ID | Status | Files | Commit |
+|---------|--------|-------|--------|
+| AUTH-001-01 | ✅ | 2 | abc123 |
+| AUTH-008-01 | ✅ | 3 | def456 |
+| AUTH-010-01 | ❌ Failed | - | - |
+| ... | ... | ... | ... |
+
+**Integration Verification:**
+- Tests: 47/47 passing ✅
+- Lint: Clean ✅
+- TypeScript: No errors ✅
+
+**Newly Unblocked Tasks:**
+| Task ID | Was Blocked By | Now Ready |
+|---------|----------------|-----------|
+| AUTH-001-02 | AUTH-001-01 ✅ | ✅ Ready |
+| AUTH-001-03 | AUTH-001-02 | ⏸️ Still blocked |
 ```
+
+---
+
+## Step 5: Epic Checkpoint
+
+When ALL tasks in an Epic are complete, provide summary and **ASK to continue**:
+
+```
+## ✅ EPIC 1 COMPLETE: Backend Passkey Plugin
+
+### Tasks Completed
+| Task ID | Title | Status |
+|---------|-------|--------|
+| AUTH-001-01 | Install dependency | ✅ |
+| AUTH-001-02 | Configure env vars | ✅ |
+| AUTH-001-03 | Add plugin config | ✅ |
+| AUTH-001-04 | Run migration | ✅ |
+| AUTH-001-05 | Add rate limiting | ✅ |
+
+### Verification
+- All 5 tasks passing
+- Integration tests: Green
+- No lint errors
+
+### Overall Progress
+| Epic | Status | Tasks |
+|------|--------|-------|
+| ✅ Epic 1: Backend Plugin | Complete | 5/5 |
+| 🔄 Epic 2: Error Handling | In Progress | 3/8 |
+| ⏸️ Epic 3: Infrastructure | Blocked | 0/7 |
+
+**Continue to remaining tasks?** (Y/n)
+```
+
+**WAIT for user confirmation before dispatching next batch.**
+
+---
+
+## Step 6: Repeat Until All Tasks Complete
+
+Loop:
+1. Find all independent tasks (no unmet dependencies)
+2. Dispatch ALL of them in parallel
+3. Collect results
+4. At epic boundaries: summarize and ask to continue
+5. Repeat until no tasks remain
+
+---
+
+## Step 7: Feature Complete
+
+When ALL tasks are done:
+
+```
+## 🎉 FEATURE IMPLEMENTATION COMPLETE
+
+**Feature:** [Name]
+**Total Tasks:** [X]
+
+### Final Verification
+- Tests: X/Y passing ✅
+- Lint: Clean ✅
+- TypeScript: No errors ✅
+
+### Summary by Epic
+| Epic | Tasks | Status |
+|------|-------|--------|
+| Epic 1: Backend Plugin | 5 | ✅ |
+| Epic 2: Error Handling | 8 | ✅ |
+| Epic 3: Infrastructure | 7 | ✅ |
+
+### Next Steps
+1. `/agile:qa` - Run quality assurance
+2. Create PR for review
+```
+
+---
+
+## Error Handling
+
+### If a sub-agent fails:
+1. Note the failure in batch results
+2. Continue with other tasks (don't block the batch)
+3. After batch: ask "Retry failed tasks?" or "Skip and continue?"
+
+### If integration tests fail:
+1. Identify which task broke tests
+2. Dispatch fix sub-agent
+3. Re-verify before continuing
+
+---
+
+## Key Principles
+
+1. **Maximum parallelism** - ALL independent tasks run simultaneously
+2. **Dependency-aware** - Only dispatch tasks with met dependencies
+3. **Epic checkpoints** - Pause and summarize at epic boundaries
+4. **Context7 mandatory** - All sub-agents fetch library docs first
+5. **TDD enforced** - All sub-agents follow red-green-refactor
+6. **User confirmation** - Wait for approval between epics
