@@ -138,6 +138,16 @@ git commit -m "[type]([scope]): [description]
 Refs: [TASK-ID]"
 ```
 
+## ACCEPTANCE VERIFICATION (MANDATORY)
+
+Before reporting success, verify your changes:
+1. [ ] File changes match task requirements (not just formatting/imports)
+2. [ ] Core functionality is implemented (not placeholder code)
+3. [ ] Acceptance criteria from task document are met
+4. [ ] `git diff --stat` shows meaningful changes to required files
+
+**FAIL the task if only formatting, import reordering, or trivial changes were made.**
+
 ## REPORT BACK
 
 Return a structured report:
@@ -147,18 +157,41 @@ Return a structured report:
 4. **Tests:** [results]
 5. **Verification:** [lint, tsc results]
 6. **Commit SHA:** [hash]
-7. **Issues:** [any problems encountered]
+7. **Acceptance criteria met:** [yes/no with details]
+8. **Issues:** [any problems encountered]
 
-Work directory: /Users/drcraig/Desktop/PersonalProjects/klard-apps
+## CRITICAL: WORKING DIRECTORY
+
+**ALL commands MUST run in the feature worktree, NOT the main repo.**
+
+Before ANY file operations or git commands:
+```bash
+cd [WORKTREE_PATH]  # e.g., /Users/.../klard-apps/.worktrees/passkey-impl
+pwd  # Verify you're in the worktree
+```
+
+If the task document mentions a worktree, use that path. If unsure, ASK before proceeding.
 ```
 
 ---
 
 ## Step 4: Collect Results & Find Newly Unblocked Tasks
 
+After dispatching sub-agents, use **blocking calls** to collect results:
+
+```typescript
+// Use blocking mode with extended timeout (avoid repeated polling)
+TaskOutput(task_id, block=true, timeout=180000)  // 3 minutes per task
+```
+
+**Why blocking over polling:**
+- Polling consumes context with repeated checks
+- Blocking waits efficiently without context growth
+- Timeout ensures tasks don't hang indefinitely
+
 After ALL parallel sub-agents complete:
 
-1. **Collect all reports**
+1. **Collect all reports** using blocking TaskOutput
 2. **Update dependency graph** - mark completed tasks
 3. **Find newly unblocked tasks** - tasks whose dependencies are now met
 4. **Run integration verification:**
