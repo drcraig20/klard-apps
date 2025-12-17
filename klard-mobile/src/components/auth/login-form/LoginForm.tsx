@@ -1,12 +1,13 @@
-import { useEffect } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
+import Animated from 'react-native-reanimated';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'expo-router';
 import * as Linking from 'expo-linking';
 import { LoginSchema, MagicLinkSchema, type LoginInput } from '@klard-apps/commons';
 import { signIn } from '@/lib/auth-client';
-import { useThemeColors } from '@/hooks';
+import { useThemeColors, useShakeAnimation } from '@/hooks';
 import { useAuthUIStore } from '@/stores';
 import { typography } from '@/styles';
 import { t } from '@/lib/i18n';
@@ -14,11 +15,14 @@ import { Button, InputField, CheckboxField } from '@/components/ui';
 import { SocialButtons } from '../social-buttons';
 import { MagicLinkSent } from '../magic-link-sent';
 import { ErrorBanner } from '../error-banner';
+import { NetworkErrorSheet } from '../network-error-sheet';
+import { isNetworkError } from '@/utils/error-helpers';
 import { styles } from './login-form.styles';
 
 export function LoginForm() {
   const router = useRouter();
   const colors = useThemeColors();
+  const { animatedStyle, shake } = useShakeAnimation();
 
   const {
     formState: uiState,
@@ -68,6 +72,7 @@ export function LoginForm() {
       reset();
       router.replace('/(tabs)/dashboard');
     } catch (error) {
+      shake();
       setError(
         error instanceof Error ? error.message : 'An unexpected error occurred'
       );
@@ -79,6 +84,7 @@ export function LoginForm() {
     const validation = MagicLinkSchema.safeParse({ email });
 
     if (!validation.success) {
+      shake();
       setError('Please enter a valid email to receive a magic link');
       return;
     }
@@ -99,6 +105,7 @@ export function LoginForm() {
 
       setMagicLinkSent(validation.data.email);
     } catch (error) {
+      shake();
       setError(
         error instanceof Error ? error.message : 'Failed to send magic link'
       );
@@ -106,6 +113,7 @@ export function LoginForm() {
   }
 
   function handleSocialError(error: string) {
+    shake();
     setError(error);
   }
 
@@ -119,7 +127,7 @@ export function LoginForm() {
         <ErrorBanner message={errorMessage} onDismiss={clearError} />
       )}
 
-      <View style={styles.form}>
+      <Animated.View style={[styles.form, animatedStyle]}>
         <Controller
           control={control}
           name="email"
@@ -193,7 +201,7 @@ export function LoginForm() {
         >
           {t('auth.login.submitButton')}
         </Button>
-      </View>
+      </Animated.View>
 
       <View style={styles.divider}>
         <View style={[styles.dividerLine, { backgroundColor: colors.border }]} />
