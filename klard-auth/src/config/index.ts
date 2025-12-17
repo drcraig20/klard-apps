@@ -99,3 +99,28 @@ function parseCspExemptPaths(): string[] {
   }
   return paths.split(",").map((path) => path.trim());
 }
+
+function validatePasskeyConfig(): void {
+  const isProduction = process.env["NODE_ENV"] === "production";
+
+  if (isProduction) {
+    const missing: string[] = [];
+
+    if (!process.env["PASSKEY_RP_ID"]) {
+      missing.push("PASSKEY_RP_ID");
+    }
+    if (!process.env["PASSKEY_ORIGIN"]) {
+      missing.push("PASSKEY_ORIGIN");
+    }
+
+    if (missing.length > 0) {
+      throw new Error(
+        `Missing required passkey environment variables in production: ${missing.join(", ")}. ` +
+          "See .env.example for required configuration.",
+      );
+    }
+  }
+}
+
+// Validate passkey configuration at module load
+validatePasskeyConfig();
