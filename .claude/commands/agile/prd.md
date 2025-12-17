@@ -66,6 +66,33 @@ Only after activation, begin the PRD workflow.
 
 ---
 
+## 🎯 Scope Boundary Question (MANDATORY FIRST)
+
+**Before any drafting**, clarify scope boundaries to prevent assumptions:
+
+```
+🎯 SCOPE BOUNDARY CHECK
+
+Before we begin, I need to understand the scope:
+
+1. **Platforms affected:**
+   - [ ] Mobile only (klard-mobile)
+   - [ ] Web only (klard-web)
+   - [ ] Backend only (klard-auth)
+   - [ ] Full-stack (multiple packages)
+
+2. **Integration requirements:**
+   - Backend API changes needed?
+   - Database schema changes needed?
+   - New dependencies required?
+
+Please confirm the scope so the PRD covers all affected systems.
+```
+
+**Why:** Prevents scope assumptions that cause PRD rework.
+
+---
+
 ## 📥 Input Detection
 
 Detect how the user is providing context:
