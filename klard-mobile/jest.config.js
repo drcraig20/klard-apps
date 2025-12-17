@@ -6,7 +6,7 @@ module.exports = {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
   transformIgnorePatterns: [
-    'node_modules/(?!(?:.pnpm/)?((jest-)?react-native|@react-native(-community)?|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|@expo/vector-icons|react-navigation|@react-navigation/.*|@sentry/react-native|native-base|react-native-svg))',
+    'node_modules/(?!(?:.pnpm/)?((jest-)?react-native|@react-native(-community)?|expo(nent)?|@expo(nent)?/.*|@expo-google-fonts/.*|@expo/vector-icons|react-navigation|@react-navigation/.*|@sentry/react-native|native-base|react-native-svg|better-auth|@better-auth/.*|@gorhom/bottom-sheet))',
   ],
   testMatch: ['**/__tests__/**/*.(test|spec).[jt]s?(x)'],
   collectCoverageFrom: [
