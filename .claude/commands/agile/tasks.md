@@ -63,6 +63,44 @@ When dispatching parallel agents:
 
 ---
 
+## MANDATORY: Context7 Library Requirements Section
+
+**Every generated tasks document MUST include this section at the TOP (after header):**
+
+```markdown
+## ⚠️ MANDATORY: Context7 MCP Library Documentation
+
+**BEFORE writing ANY code that uses external libraries, you MUST:**
+
+### Step 1: Resolve Library ID
+\`\`\`
+mcp__context7__resolve-library-id: libraryName="<library>"
+\`\`\`
+
+### Step 2: Fetch Documentation
+\`\`\`
+mcp__context7__get-library-docs: context7CompatibleLibraryID="<id>" topic="<topic>"
+\`\`\`
+
+### Required Library Lookups for This Feature
+
+| Task Range | Library | Topics to Fetch |
+|------------|---------|-----------------|
+| [task-range] | [library] | [topics] |
+
+### Enforcement
+
+When implementing ANY task:
+1. ✅ Identify libraries used
+2. ✅ Fetch Context7 docs for each
+3. ✅ Reference docs while coding
+4. ❌ NEVER assume API shape from memory
+```
+
+**Populate the table** based on libraries identified during story/architecture analysis.
+
+---
+
 ## Task Generation (Writing-Plans Format)
 
 For each story, generate tasks following the `superpowers:writing-plans` bite-sized format:
