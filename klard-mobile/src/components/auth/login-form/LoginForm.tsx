@@ -19,6 +19,8 @@ import { NetworkErrorSheet } from '../network-error-sheet';
 import { isNetworkError } from '@/utils/error-helpers';
 import { styles } from './login-form.styles';
 
+type PendingOperation = 'email' | 'magicLink' | null;
+
 export function LoginForm() {
   const router = useRouter();
   const colors = useThemeColors();
@@ -49,6 +51,10 @@ export function LoginForm() {
     },
   });
 
+  // Network error state
+  const [networkError, setNetworkError] = useState<{ message: string; code?: string } | null>(null);
+  const [pendingOperation, setPendingOperation] = useState<PendingOperation>(null);
+
   const isSubmitting = uiState === 'submitting';
 
   // Clear any stale error state from previous screens on mount
@@ -73,9 +79,20 @@ export function LoginForm() {
       router.replace('/(tabs)/dashboard');
     } catch (error) {
       shake();
-      setError(
-        error instanceof Error ? error.message : 'An unexpected error occurred'
-      );
+
+      // Check if it's a network error
+      if (isNetworkError(error)) {
+        setNetworkError({
+          message: error instanceof Error ? error.message : 'Network request failed',
+          code: 'NETWORK_ERROR',
+        });
+        setPendingOperation('email');
+      } else {
+        // Show inline error banner for auth errors
+        setError(
+          error instanceof Error ? error.message : 'An unexpected error occurred'
+        );
+      }
     }
   }
 
@@ -106,9 +123,20 @@ export function LoginForm() {
       setMagicLinkSent(validation.data.email);
     } catch (error) {
       shake();
-      setError(
-        error instanceof Error ? error.message : 'Failed to send magic link'
-      );
+
+      // Check if it's a network error
+      if (isNetworkError(error)) {
+        setNetworkError({
+          message: error instanceof Error ? error.message : 'Network request failed',
+          code: 'NETWORK_ERROR',
+        });
+        setPendingOperation('magicLink');
+      } else {
+        // Show inline error banner for auth errors
+        setError(
+          error instanceof Error ? error.message : 'Failed to send magic link'
+        );
+      }
     }
   }
 
@@ -116,6 +144,27 @@ export function LoginForm() {
     shake();
     setError(error);
   }
+
+  const handleNetworkErrorRetry = useCallback(() => {
+    // Close the sheet first
+    setNetworkError(null);
+
+    // Retry the pending operation with preserved form values
+    if (pendingOperation === 'email') {
+      const values = getValues();
+      void onSubmit(values);
+    } else if (pendingOperation === 'magicLink') {
+      void handleMagicLink();
+    }
+
+    setPendingOperation(null);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pendingOperation, getValues]);
+
+  const handleNetworkErrorClose = useCallback(() => {
+    setNetworkError(null);
+    setPendingOperation(null);
+  }, []);
 
   if (uiState === 'magicLinkSent' && magicLinkEmail) {
     return <MagicLinkSent email={magicLinkEmail} onBack={reset} />;
@@ -233,6 +282,15 @@ export function LoginForm() {
           🔒 {t('auth.login.trustElement')}
         </Text>
       </View>
+
+      {networkError && (
+        <NetworkErrorSheet
+          open={!!networkError}
+          onClose={handleNetworkErrorClose}
+          onRetry={handleNetworkErrorRetry}
+          error={networkError}
+        />
+      )}
     </View>
   );
 }
