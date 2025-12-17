@@ -1,6 +1,6 @@
-# Mobile Login Enhancements - Architecture Document
+# Login Enhancements (Passkey/WebAuthn) - Architecture Document
 
-> **PRD:** [`docs/agile/prds/2025-12-16-mobile-login-enhancements-prd.md`](../prds/2025-12-16-mobile-login-enhancements-prd.md)
+> **PRD:** [`docs/agile/prds/2025-12-16-passkey-auth-prd.md`](../prds/2025-12-16-passkey-auth-prd.md)
 > **Status:** Approved
 > **Date:** 2025-12-16
 
@@ -8,17 +8,23 @@
 
 ## Architecture Decisions
 
-### ADR-001: Credential Manager Library
+### ADR-001: Passkey Client Library
 
-**Context:** Need a library to handle passkey/WebAuthn operations on mobile.
+**Context:** Need a library to handle passkey/WebAuthn operations on both web and mobile.
 
 **Options:**
-- A) `react-native-credentials-manager` - Full Credential Manager API
-- B) `expo-better-auth-passkey` - Drop-in better-auth integration
+- A) `react-native-credentials-manager` - React Native Credential Manager API wrapper
+- B) `expo-better-auth-passkey` - Third-party Expo integration
+- C) `@better-auth/passkey/client` - Official better-auth passkey client with `passkeyClient()`
 
-**Decision:** **Option B - `expo-better-auth-passkey`**
+**Decision:** **Option C - `@better-auth/passkey/client` with `passkeyClient()`**
 
-**Rationale:** Tighter better-auth integration, consistent API surface, less glue code.
+**Rationale:**
+- Official better-auth library, guaranteed compatibility
+- Same API surface on web and mobile (via `expoClient()` integration)
+- No third-party dependencies to maintain
+- Handles cookie/challenge flow automatically on Expo
+- SimpleWebAuthn under the hood (industry standard)
 
 ---
 
@@ -48,7 +54,7 @@
 
 **Decision:** **Option A - Auto-detect device name**
 
-**Rationale:** Zero friction for user, good defaults, can rename later if needed.
+**Rationale:** Zero friction for user, good defaults, can rename later via `updatePasskey()`.
 
 ---
 
@@ -58,34 +64,51 @@
 
 ```mermaid
 flowchart TB
+    subgraph "klard-web (Next.js)"
+        WLF[LoginForm]
+        WPB[PasskeyButton]
+        WPA[usePasskeyAuth]
+        WSA[useShakeAnimation]
+        WPC[passkeyClient]
+    end
+
     subgraph "klard-mobile (Expo)"
-        UI[LoginForm]
-        BP[BiometricPrompt]
-        PA[usePasskeyAuth]
-        SA[useShakeAnimation]
+        MLF[LoginForm]
+        MBP[BiometricPrompt]
+        MPA[usePasskeyAuth]
+        MSA[useShakeAnimation]
         NES[NetworkErrorSheet]
-        EBP[expo-better-auth-passkey]
+        MPC[passkeyClient]
+        EC[expoClient]
         ELA[expo-local-authentication]
     end
 
     subgraph "klard-auth (Express)"
         BA[better-auth]
-        PP[@better-auth/passkey]
+        PP[passkey plugin]
         DB[(PostgreSQL)]
         WK[/.well-known/]
     end
 
-    UI --> BP
-    UI --> SA
-    UI --> NES
-    BP --> PA
-    PA --> EBP
-    PA --> ELA
-    EBP -->|"WebAuthn API"| BA
+    WLF --> WPB
+    WLF --> WSA
+    WPB --> WPA
+    WPA --> WPC
+    WPC -->|"WebAuthn API"| BA
+
+    MLF --> MBP
+    MLF --> MSA
+    MLF --> NES
+    MBP --> MPA
+    MPA --> MPC
+    MPC --> EC
+    MPA --> ELA
+    EC -->|"WebAuthn API"| BA
+
     BA --> PP
     PP --> DB
 
-    EBP -.->|"Domain Verification"| WK
+    EC -.->|"Domain Verification"| WK
 ```
 
 ### Component Architecture
@@ -94,7 +117,7 @@ flowchart TB
 flowchart LR
     subgraph "Presentation Layer"
         LF[LoginForm]
-        BP[BiometricPrompt]
+        BP[BiometricPrompt / PasskeyButton]
         NES[NetworkErrorSheet]
     end
 
@@ -106,7 +129,8 @@ flowchart LR
     end
 
     subgraph "Platform Layer"
-        EBP[expo-better-auth-passkey]
+        PC[passkeyClient]
+        EC[expoClient - mobile only]
         ELA[expo-local-authentication]
         AC[authClient]
     end
@@ -117,9 +141,10 @@ flowchart LR
     LF --> UAS
     BP --> UPA
     BP --> UH
-    UPA --> EBP
+    UPA --> PC
     UPA --> ELA
     UPA --> AC
+    PC --> EC
 ```
 
 ---
@@ -131,31 +156,27 @@ flowchart LR
 ```mermaid
 sequenceDiagram
     participant U as User
-    participant BP as BiometricPrompt
+    participant App as BiometricPrompt/PasskeyButton
     participant PA as usePasskeyAuth
-    participant EBP as expo-better-auth-passkey
-    participant ELA as expo-local-authentication
+    participant PC as passkeyClient
     participant A as klard-auth
     participant DB as PostgreSQL
 
-    U->>BP: Tap "Add Passkey"
-    BP->>PA: registerPasskey()
-    PA->>ELA: hasHardwareAsync()
-    ELA-->>PA: true
-    PA->>EBP: register({ deviceName })
-    EBP->>A: POST /passkey/register (init)
-    A-->>EBP: challenge + options
-    EBP->>ELA: authenticateAsync()
-    ELA->>U: Biometric prompt
-    U->>ELA: Biometric verification
-    ELA-->>EBP: credential response
-    EBP->>A: POST /passkey/register (complete)
+    U->>App: Tap "Add Passkey"
+    App->>PA: registerPasskey()
+    PA->>PC: authClient.passkey.addPasskey({ name })
+    PC->>A: POST /passkey/add-passkey (init)
+    A->>A: Generate challenge
+    A-->>PC: Challenge + options
+    PC->>U: Platform biometric prompt
+    U->>PC: Biometric verification
+    PC->>A: POST /passkey/add-passkey (complete)
     A->>DB: Store credential
-    A-->>EBP: Success
-    EBP-->>PA: { credentialId }
-    PA-->>BP: Success
-    BP->>BP: haptics.success()
-    BP-->>U: Confirmation
+    A-->>PC: Success
+    PC-->>PA: { data, error }
+    PA-->>App: Success
+    App->>App: haptics.success()
+    App-->>U: Confirmation
 ```
 
 ### Passkey Sign-In Flow
@@ -164,25 +185,23 @@ sequenceDiagram
 sequenceDiagram
     participant U as User
     participant LF as LoginForm
-    participant BP as BiometricPrompt
     participant PA as usePasskeyAuth
-    participant EBP as expo-better-auth-passkey
+    participant PC as passkeyClient
     participant A as klard-auth
 
     U->>LF: Tap "Sign in with Passkey"
-    LF->>BP: Open (mode: signin)
-    BP->>PA: signInWithPasskey()
-    PA->>EBP: authenticate()
-    EBP->>A: POST /passkey/signin (init)
-    A-->>EBP: challenge + allowed credentials
-    EBP->>U: Biometric prompt
-    U->>EBP: Biometric verification
-    EBP->>A: POST /passkey/signin (complete)
-    A-->>EBP: Session token
-    EBP-->>PA: { token, userId }
-    PA-->>BP: Success
-    BP->>BP: haptics.success()
-    BP-->>LF: onSuccess()
+    LF->>PA: signInWithPasskey()
+    PA->>PC: authClient.signIn.passkey({ autoFill })
+    PC->>A: POST /passkey/sign-in-passkey (init)
+    A->>A: Generate challenge
+    A-->>PC: Challenge + allowed credentials
+    PC->>U: Platform biometric prompt
+    U->>PC: Biometric verification
+    PC->>A: POST /passkey/sign-in-passkey (complete)
+    A-->>PC: Session + token
+    PC-->>PA: { data, error }
+    PA-->>LF: Success
+    LF->>LF: haptics.success()
     LF->>LF: router.replace('/dashboard')
 ```
 
@@ -211,7 +230,7 @@ sequenceDiagram
 
 ## Component Specifications
 
-### 1. BiometricPrompt
+### 1. BiometricPrompt (Mobile)
 
 **Location:** `/klard-mobile/src/components/auth/biometric-prompt/`
 
@@ -240,71 +259,103 @@ interface BiometricPromptProps {
 
 ---
 
-### 2. usePasskeyAuth Hook
+### 2. PasskeyButton (Web)
 
-**Location:** `/klard-mobile/src/hooks/usePasskeyAuth.ts`
+**Location:** `/klard-web/src/components/auth/passkey-button/`
+
+**Files:**
+- `PasskeyButton.tsx`
+- `index.ts`
 
 **Interface:**
+```typescript
+interface PasskeyButtonProps {
+  mode: 'register' | 'signin';
+  onSuccess: () => void;
+  onError: (error: Error) => void;
+  disabled?: boolean;
+  className?: string;
+}
+```
+
+**SOLID Compliance:**
+- **SRP:** Button UI + trigger only
+- **OCP:** Extensible via `mode` prop
+- **LSP:** Substitutable for any button
+- **ISP:** Minimal interface
+- **DIP:** Uses `usePasskeyAuth` hook
+
+---
+
+### 3. usePasskeyAuth Hook
+
+**Location:**
+- `/klard-mobile/src/hooks/usePasskeyAuth.ts`
+- `/klard-web/src/hooks/usePasskeyAuth.ts`
+
+**Interface (shared):**
 ```typescript
 interface UsePasskeyAuthReturn {
   // State
   isLoading: boolean;
   isAvailable: boolean;
-  biometricType: 'faceId' | 'touchId' | 'fingerprint' | 'none';
+  biometricType: 'faceId' | 'touchId' | 'fingerprint' | 'none'; // mobile only
   error: PasskeyError | null;
 
   // Actions
-  registerPasskey: (deviceName?: string) => Promise<PasskeyAuthResult>;
-  signInWithPasskey: () => Promise<PasskeyAuthResult>;
-  checkAvailability: () => Promise<void>;
+  registerPasskey: (name?: string) => Promise<PasskeyAuthResult>;
+  signInWithPasskey: (email: string, callbackURL?: string) => Promise<PasskeyAuthResult>;
+  preloadPasskeys: () => void; // Web only: enables Conditional UI autocomplete
+  listPasskeys: () => Promise<Passkey[]>;
+  deletePasskey: (id: string) => Promise<void>;
+  checkAvailability: () => Promise<void>; // mobile: checks biometric hardware
   clearError: () => void;
 }
 ```
+
+**Key Implementation Notes:**
+- `registerPasskey` → calls `authClient.passkey.addPasskey({ name, authenticatorAttachment: 'platform' })`
+- `signInWithPasskey` → calls `authClient.signIn.passkey({ email, callbackURL })`
+- `preloadPasskeys` (Web) → calls `authClient.signIn.passkey({ autoFill: true })` on mount for Conditional UI
 
 **SOLID Compliance:**
 - **SRP:** Passkey auth logic only
 - **OCP:** New methods addable without modification
 - **LSP:** Consistent interface across platforms
 - **ISP:** Focused return interface
-- **DIP:** Uses auth client abstraction
+- **DIP:** Uses authClient abstraction
 
 ---
 
-### 3. useShakeAnimation Hook
+### 4. useShakeAnimation Hook
 
-**Location:** `/klard-mobile/src/hooks/useShakeAnimation.ts`
+**Location:**
+- `/klard-mobile/src/hooks/useShakeAnimation.ts` (Reanimated)
+- `/klard-web/src/hooks/useShakeAnimation.ts` (CSS)
 
 **Interface:**
 ```typescript
 interface UseShakeAnimationReturn {
-  animatedStyle: AnimatedStyleProp<ViewStyle>;
+  // Mobile: AnimatedStyleProp, Web: className
+  animatedStyle: AnimatedStyleProp<ViewStyle> | string;
   shake: () => void;
 }
 ```
 
-**Implementation:**
-```typescript
-// 200ms total: 4 segments × 50ms
-const shake = () => {
-  offset.value = withSequence(
-    withTiming(-10, { duration: 50 }),
-    withTiming(10, { duration: 50 }),
-    withTiming(-10, { duration: 50 }),
-    withTiming(0, { duration: 50 })
-  );
-};
-```
+**Key Implementation Notes:**
+- **Mobile:** Uses Reanimated `withSequence` + `withTiming` for 200ms shake (4 × 50ms segments)
+- **Web:** Toggles CSS class with `@keyframes` animation, 200ms duration
 
 **SOLID Compliance:**
 - **SRP:** Animation only
 - **OCP:** Configurable via constants
-- **LSP:** Consistent style return
+- **LSP:** Consistent API return
 - **ISP:** 2 methods only
-- **DIP:** Uses reanimated abstraction
+- **DIP:** Uses platform animation abstraction
 
 ---
 
-### 4. NetworkErrorSheet
+### 5. NetworkErrorSheet (Mobile)
 
 **Location:** `/klard-mobile/src/components/auth/network-error-sheet/`
 
@@ -346,19 +397,23 @@ interface NetworkErrorSheetProps {
 import { passkey } from '@better-auth/passkey';
 
 export const auth = betterAuth({
-  // ... existing config
+  // ... existing config (expo() already configured)
   plugins: [
     // ... existing plugins
     passkey({
-      rpID: config.passkey.rpID,
-      rpName: config.passkey.rpName,
-      origin: config.passkey.origin,
-      authenticatorAttachment: 'platform',
-      userVerification: 'required',
+      rpID: config.passkey.rpID,           // e.g., 'klard.app' or 'localhost'
+      rpName: config.passkey.rpName,       // e.g., 'Klard'
+      origin: config.passkey.origin,       // e.g., 'https://klard.app'
+      // Optional: customize challenge cookie name
+      advanced: {
+        webAuthnChallengeCookie: "better-auth-passkey"
+      }
     }),
   ],
 });
 ```
+
+> **Note:** `authenticatorAttachment`, `userVerification`, and `residentKey` are **client-side options** passed to `addPasskey()`, not server configuration.
 
 ### Domain Verification Endpoints
 
@@ -377,17 +432,19 @@ app.use('/.well-known', express.static('public/.well-known'));
 ### Database Schema
 
 ```sql
--- Auto-created by better-auth passkey plugin
+-- Auto-managed by better-auth passkey plugin (run: pnpm dlx @better-auth/cli migrate)
 CREATE TABLE passkey (
-  id UUID PRIMARY KEY,
-  user_id UUID REFERENCES "user"(id) ON DELETE CASCADE,
-  credential_id TEXT NOT NULL UNIQUE,
-  public_key TEXT NOT NULL,
-  counter INTEGER DEFAULT 0,
-  device_type TEXT,
+  id TEXT PRIMARY KEY,
   name TEXT,
-  created_at TIMESTAMP DEFAULT NOW(),
-  last_used_at TIMESTAMP
+  public_key TEXT NOT NULL,
+  user_id TEXT REFERENCES "user"(id) ON DELETE CASCADE,
+  credential_id TEXT NOT NULL UNIQUE,
+  counter INTEGER NOT NULL DEFAULT 0,
+  device_type TEXT,
+  backed_up BOOLEAN,
+  transports TEXT,
+  aaguid TEXT,
+  created_at TIMESTAMP DEFAULT NOW()
 );
 
 CREATE INDEX idx_passkey_user_id ON passkey(user_id);
@@ -403,8 +460,18 @@ CREATE INDEX idx_passkey_credential_id ON passkey(credential_id);
 ```json
 {
   "dependencies": {
-    "expo-local-authentication": "~18.0.10",
-    "expo-better-auth-passkey": "^1.0.0"
+    "@better-auth/passkey": "^1.4.7",
+    "expo-local-authentication": "~18.0.10"
+  }
+}
+```
+
+### klard-web
+
+```json
+{
+  "dependencies": {
+    "@better-auth/passkey": "^1.4.7"
   }
 }
 ```
@@ -418,6 +485,22 @@ CREATE INDEX idx_passkey_credential_id ON passkey(credential_id);
   }
 }
 ```
+
+---
+
+## Auth Client Configuration
+
+### klard-web
+
+Add `passkeyClient()` plugin to existing auth client.
+
+### klard-mobile
+
+Add `passkeyClient()` plugin alongside existing `expoClient()`. Required expoClient options:
+- `scheme: "klard"` - Deep link scheme for OAuth
+- `storagePrefix: "klard"` - SecureStore key prefix
+- `storage: SecureStore` - Secure storage provider
+- `cookiePrefix: "better-auth"` - Must match server cookie prefix
 
 ---
 
@@ -451,42 +534,52 @@ type PasskeyErrorCode =
 ## Implementation Phases
 
 ### Phase 1: Foundation
-- [ ] Install dependencies
+- [ ] Install `@better-auth/passkey` in all packages
 - [ ] Add passkey plugin to klard-auth
-- [ ] Create `usePasskeyAuth` hook
-- [ ] Update auth-client with passkey methods
+- [ ] Configure `passkeyClient()` in klard-web auth-client
+- [ ] Configure `passkeyClient()` + `expoClient()` in klard-mobile auth-client
+- [ ] Run database migration
 
-### Phase 2: UI Components
-- [ ] Create `BiometricPrompt` component
-- [ ] Create `NetworkErrorSheet` component
-- [ ] Create `useShakeAnimation` hook
+### Phase 2: Hooks
+- [ ] Create `usePasskeyAuth` hook (mobile)
+- [ ] Create `usePasskeyAuth` hook (web)
+- [ ] Create `useShakeAnimation` hook (mobile - Reanimated)
+- [ ] Create `useShakeAnimation` hook (web - CSS)
 
-### Phase 3: Integration
-- [ ] Integrate into `LoginForm`
+### Phase 3: UI Components
+- [ ] Create `BiometricPrompt` component (mobile)
+- [ ] Create `PasskeyButton` component (web)
+- [ ] Create `NetworkErrorSheet` component (mobile)
+
+### Phase 4: Integration
+- [ ] Integrate into `LoginForm` (mobile)
+- [ ] Integrate into `LoginForm` (web)
 - [ ] Add shake animation on failure
-- [ ] Add haptic feedback
-- [ ] Replace ErrorBanner with NetworkErrorSheet for network errors
+- [ ] Add haptic feedback (mobile)
+- [ ] Add Conditional UI with `autocomplete="webauthn"` (web)
 
-### Phase 4: Infrastructure
+### Phase 5: Infrastructure
 - [ ] Create domain verification files
-- [ ] Add `NSFaceIDUsageDescription` to iOS
+- [ ] Add `NSFaceIDUsageDescription` to iOS Info.plist
 - [ ] Configure environment variables
 
-### Phase 5: Testing
+### Phase 6: Testing
 - [ ] Unit tests for hooks
 - [ ] Component tests
 - [ ] Integration tests
 - [ ] Device testing (iOS/Android)
+- [ ] Browser testing (Chrome, Safari, Firefox)
 
 ---
 
 ## Security Considerations
 
-1. **Credential Storage:** Platform Secure Enclave (iOS) / StrongBox (Android)
+1. **Credential Storage:** Platform Secure Enclave (iOS) / StrongBox (Android) / Browser WebAuthn
 2. **User Verification:** Required biometric for all operations
 3. **Domain Binding:** Credentials bound to `rpID` domain
 4. **Counter Protection:** Prevents replay attacks
 5. **Rate Limiting:** Passkey endpoints rate-limited
+6. **Cookie Security:** Challenge cookie with `cookiePrefix` matching on Expo
 
 ---
 
@@ -503,4 +596,4 @@ type PasskeyErrorCode =
 
 ## Next Steps
 
-Run `/agile:stories mobile-login-enhancements` to generate user stories.
+Run `/agile:stories passkey-auth` to generate user stories.
