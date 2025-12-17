@@ -70,6 +70,23 @@ Server runs at `http://localhost:3050`
 | `RATE_LIMIT_WINDOW` | `60` | Window in seconds |
 | `RATE_LIMIT_MAX` | `100` | Max requests per window |
 
+### Passkey/WebAuthn (Optional)
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `PASSKEY_RP_ID` | `localhost` | Relying Party ID (domain name) |
+| `PASSKEY_RP_NAME` | `Klard` | Human-readable service name |
+| `PASSKEY_ORIGIN` | `http://localhost:3001` | Full origin URL for passkey operations |
+
+**Production values:**
+- `PASSKEY_RP_ID=klard.app` - Must match your domain
+- `PASSKEY_RP_NAME=Klard` - Displayed to users during passkey setup
+- `PASSKEY_ORIGIN=https://auth.klard.app` - Must match auth server URL exactly
+
+**Development values:**
+- Use `localhost` for RP_ID during local development
+- Origin should match your local auth server port
+
 ## Scripts
 
 ```bash
