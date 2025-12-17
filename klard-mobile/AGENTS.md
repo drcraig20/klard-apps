@@ -1,5 +1,5 @@
 
-You are an expert in TypeScript, React Native, Expo, and Mobile UI development.
+You are an expert in TypeScript, React Native, Expo 54, and Mobile UI development.
 
 ## MANDATORY: Library Documentation via Context7 MCP
 
@@ -9,101 +9,13 @@ You are an expert in TypeScript, React Native, Expo, and Mobile UI development.
 2. Call `mcp__context7__get-library-docs` with that ID to fetch up-to-date documentation
 
 This is NON-NEGOTIABLE. Do not proceed with any work until you have read the relevant library documentation. This applies to:
-- Expo SDK and all expo-* packages
-- React Native core and community packages
-- Navigation libraries (expo-router, react-navigation)
-- State management (Zustand, React Query)
+- Expo SDK 54 and all expo-* packages
+- React Native 0.81 core and community packages
+- Expo Router 6 (NOT react-navigation)
+- State management (Zustand)
 - Any third-party library being used or added
 
 **Why:** Library APIs change frequently. Using outdated patterns causes bugs and wasted effort.
-
-Code Style and Structure
-- Write concise, technical TypeScript code with accurate examples.
-- Use functional and declarative programming patterns; avoid classes.
-- Prefer iteration and modularization over code duplication.
-- Use descriptive variable names with auxiliary verbs (e.g., isLoading, hasError).
-- Structure files: exported component, subcomponents, helpers, static content, types.
-- Use Context7 MCP to fetch Expo documentation before setup and configuration work.
-
-Naming Conventions
-- Use lowercase with dashes for directories (e.g., components/auth-wizard).
-- Favor named exports for components.
-
-TypeScript Usage
-- Use TypeScript for all code; prefer interfaces over types.
-- Avoid enums; use maps instead.
-- Use functional components with TypeScript interfaces.
-- Use strict mode in TypeScript for better type safety.
-
-Syntax and Formatting
-- Use the "function" keyword for pure functions.
-- Avoid unnecessary curly braces in conditionals; use concise syntax for simple statements.
-- Use declarative JSX.
-- Use Prettier for consistent code formatting.
-
-UI and Styling
-- Use Expo's built-in components for common UI patterns and layouts.
-- Implement responsive design with Flexbox and Expo's useWindowDimensions for screen size adjustments.
-- Use styled-components or Tailwind CSS for component styling.
-- Implement dark mode support using Expo's useColorScheme.
-- Ensure high accessibility (a11y) standards using ARIA roles and native accessibility props.
-- Leverage react-native-reanimated and react-native-gesture-handler for performant animations and gestures.
-
-Safe Area Management
-- Use SafeAreaProvider from react-native-safe-area-context to manage safe areas globally in your app.
-- Wrap top-level components with SafeAreaView to handle notches, status bars, and other screen insets on both iOS and Android.
-- Use SafeAreaScrollView for scrollable content to ensure it respects safe area boundaries.
-- Avoid hardcoding padding or margins for safe areas; rely on SafeAreaView and context hooks.
-
-Performance Optimization
-- Minimize the use of useState and useEffect; prefer context and reducers for state management.
-- Use Expo's AppLoading and SplashScreen for optimized app startup experience.
-- Optimize images: use WebP format where supported, include size data, implement lazy loading with expo-image.
-- Implement code splitting and lazy loading for non-critical components with React's Suspense and dynamic imports.
-- Profile and monitor performance using React Native's built-in tools and Expo's debugging features.
-- Avoid unnecessary re-renders by memoizing components and using useMemo and useCallback hooks appropriately.
-
-Navigation
-- Use react-navigation for routing and navigation; follow its best practices for stack, tab, and drawer navigators.
-- Leverage deep linking and universal links for better user engagement and navigation flow.
-- Use dynamic routes with expo-router for better navigation handling.
-
-State Management
-- Use React Context and useReducer for managing global state.
-- Leverage react-query for data fetching and caching; avoid excessive API calls.
-- For complex state management, consider using Zustand or Redux Toolkit.
-- Handle URL search parameters using libraries like expo-linking.
-
-Error Handling and Validation
-- Use Zod for runtime validation and error handling.
-- Implement proper error logging using Sentry or a similar service.
-- Prioritize error handling and edge cases:
-    - Handle errors at the beginning of functions.
-    - Use early returns for error conditions to avoid deeply nested if statements.
-    - Avoid unnecessary else statements; use if-return pattern instead.
-    - Implement global error boundaries to catch and handle unexpected errors.
-- Use expo-error-reporter for logging and reporting errors in production.
-
-Testing
-- Write unit tests using Jest and React Native Testing Library.
-- Implement integration tests for critical user flows using Detox.
-- Mock all database operations, never make real database calls for all test written.
-- Use Expo's testing tools for running tests in different environments.
-- Consider snapshot testing for components to ensure UI consistency.
-
-Security
-- Sanitize user inputs to prevent XSS attacks.
-- Use react-native-encrypted-storage for secure storage of sensitive data.
-- Ensure secure communication with APIs using HTTPS and proper authentication.
-- Use Context7 MCP to fetch Expo security guidelines before implementing security features.
-
-
-Internationalization (i18n)
-- Use react-native-i18n or expo-localization for internationalization and localization.
-- Support multiple languages and RTL layouts.
-- Ensure text scaling and font adjustments for accessibility.
-- Ensure all user-facing text is internationalized and supports localization.
-
 
 ## MANDATORY: Expo SDK First
 
@@ -111,14 +23,12 @@ Internationalization (i18n)
 
 | Instead of (React Native) | Use (Expo SDK) |
 |--------------------------|----------------|
-| `react-native-safe-area-context` | Use but prefer `expo-constants` for status bar |
 | `react-native` Linking | `expo-linking` |
 | `react-native` Image | `expo-image` |
 | `react-native-async-storage` | `expo-secure-store` (for sensitive data) |
 | `react-native-permissions` | `expo-permissions` |
 | `react-native-fs` | `expo-file-system` |
 | `react-native-camera` | `expo-camera` |
-| `react-native-maps` | `expo-maps` or `react-native-maps` via Expo |
 | `react-native-device-info` | `expo-device` |
 | `react-native-localize` | `expo-localization` |
 
@@ -129,15 +39,421 @@ Internationalization (i18n)
 
 **Why:** Expo SDK packages are optimized for Expo managed workflow, have better TypeScript support, and receive coordinated updates.
 
-Key Conventions
-1. Rely on Expo's managed workflow for streamlined development and deployment.
-2. Prioritize Mobile Web Vitals (Load Time, Jank, and Responsiveness).
-3. Use expo-constants for managing environment variables and configuration.
-4. Use expo-permissions to handle device permissions gracefully.
-5. Implement expo-updates for over-the-air (OTA) updates.
-6. Use Context7 MCP to fetch Expo distribution docs before deployment and publishing.
-7. Ensure compatibility with iOS and Android by testing extensively on both platforms.
+---
 
-API Documentation
-- Always use Context7 MCP (`mcp__context7__resolve-library-id` → `mcp__context7__get-library-docs`) to fetch current documentation for any library before implementation work.
-    
+## Tech Stack
+
+| Category | Technology | Notes |
+|----------|------------|-------|
+| Framework | React Native 0.81 + Expo 54 | Managed workflow |
+| Navigation | Expo Router 6 | File-based routing (NOT react-navigation) |
+| Styling | Custom SVA System | Style Variance Authority (NOT Tailwind/styled-components) |
+| Auth | better-auth/expo | Platform-specific auth client |
+| i18n | i18n-js + expo-localization | Multi-language support |
+| State | Zustand | With AsyncStorage persistence |
+
+---
+
+## Expo Router Patterns
+
+**File-based routing in `app/` directory:**
+
+```
+app/
+├── _layout.tsx          # Root layout with providers
+├── index.tsx            # Home/entry screen
+├── (auth)/              # Auth route group
+│   ├── _layout.tsx      # Auth-specific layout
+│   ├── login.tsx        # Login screen
+│   └── register.tsx     # Register screen
+├── (tabs)/              # Tab navigation group
+│   ├── _layout.tsx      # Tab bar configuration
+│   ├── home.tsx         # Home tab
+│   └── settings.tsx     # Settings tab
+└── [id].tsx             # Dynamic route
+```
+
+**Key patterns:**
+- Route groups `(name)/` for logical organization without affecting URL
+- `_layout.tsx` for shared navigation structure
+- Dynamic routes with `[param].tsx`
+- Use `useRouter()` and `useLocalSearchParams()` hooks
+
+**Reference:** `src/app/_layout.tsx`, `src/app/(tabs)/_layout.tsx`
+
+---
+
+## SVA Styling System
+
+**CRITICAL: This app uses a custom Style Variance Authority (SVA) system, NOT Tailwind or styled-components.**
+
+### How SVA Works
+
+Pre-compiled style objects for light/dark themes with variant support:
+
+```typescript
+// Usage pattern
+import { useThemeColors } from "@/hooks/useThemeColors";
+import { buttonStyles } from "./Button.styles";
+
+function Button({ variant = "primary", size = "md" }) {
+  const { isDark } = useThemeColors();
+  const styles = buttonStyles(isDark, { variant, size });
+
+  return <Pressable style={styles.container}>...</Pressable>;
+}
+```
+
+### SVA Function Signature
+
+```typescript
+sva(isDark: boolean, options: { variant?: string; size?: string }): StyleSheet
+```
+
+### Creating New Styles
+
+```typescript
+// Component.styles.ts
+import { createSVA } from "@/styles/sva";
+import { colors } from "@/styles/colors";
+
+export const componentStyles = createSVA({
+  base: (isDark) => ({
+    container: {
+      backgroundColor: isDark ? colors.dark.background : colors.light.background,
+    },
+  }),
+  variants: {
+    variant: {
+      primary: (isDark) => ({ /* primary styles */ }),
+      secondary: (isDark) => ({ /* secondary styles */ }),
+    },
+    size: {
+      sm: () => ({ /* small size */ }),
+      md: () => ({ /* medium size */ }),
+    },
+  },
+});
+```
+
+**Reference:** `src/styles/sva.ts`, `src/styles/colors.ts`
+
+---
+
+## Theme System
+
+### useThemeColors Hook
+
+Primary hook for accessing theme colors:
+
+```typescript
+import { useThemeColors } from "@/hooks/useThemeColors";
+
+function MyComponent() {
+  const { colors, isDark } = useThemeColors();
+
+  return (
+    <View style={{ backgroundColor: colors.background }}>
+      <Text style={{ color: colors.foreground }}>Hello</Text>
+    </View>
+  );
+}
+```
+
+### Color Tokens
+
+120+ color tokens per theme. Key tokens:
+
+| Token | Light | Dark | Usage |
+|-------|-------|------|-------|
+| `primary` | `#0D7C7A` | `#15B5B0` | CTAs, interactive |
+| `background` | `#FFFFFF` | `#0F172A` | Base background |
+| `foreground` | `#0F172A` | `#F8FAFC` | Primary text |
+| `muted` | `#F1F5F9` | `#1E293B` | Secondary backgrounds |
+| `success` | `#059669` | `#10B981` | Positive states |
+| `error` | `#DC2626` | `#EF4444` | Error states |
+
+**Reference:** `src/hooks/useThemeColors.ts`, `src/styles/colors.ts`
+
+---
+
+## Component Patterns
+
+### File Structure
+
+```
+components/ui/Button/
+├── Button.tsx           # Component implementation
+├── Button.styles.ts     # SVA styles
+├── Button.constants.ts  # Variants, sizes (optional)
+└── index.ts             # Re-export
+```
+
+### 35+ UI Components
+
+Located in `src/components/ui/`:
+- **Inputs:** Button, TextInput, Checkbox, Switch, SelectDropdown
+- **Display:** Card, Badge, Avatar, ProgressBar
+- **Feedback:** Toast, Modal, BottomSheet, Skeleton
+- **Navigation:** TabBar, Header, BackButton
+- **Layout:** Container, Divider, SafeAreaWrapper
+
+### Haptic Feedback Integration
+
+All interactive components should include haptic feedback:
+
+```typescript
+import { useHaptics } from "@/hooks/useHaptics";
+
+function Button({ onPress }) {
+  const { light, medium } = useHaptics();
+
+  const handlePress = () => {
+    light(); // Trigger haptic
+    onPress?.();
+  };
+
+  return <Pressable onPress={handlePress}>...</Pressable>;
+}
+```
+
+### Accessibility Props Pattern
+
+```typescript
+<Pressable
+  accessibilityRole="button"
+  accessibilityLabel="Submit form"
+  accessibilityHint="Submits your registration"
+  accessibilityState={{ disabled: isLoading }}
+>
+  ...
+</Pressable>
+```
+
+**Reference:** `src/components/ui/Button/`
+
+---
+
+## Haptic Feedback
+
+### useHaptics Hook
+
+9 feedback types for different interactions:
+
+```typescript
+import { useHaptics } from "@/hooks/useHaptics";
+
+function MyComponent() {
+  const haptics = useHaptics();
+
+  // Available methods:
+  haptics.light();      // Light tap - buttons, toggles
+  haptics.medium();     // Medium tap - selections
+  haptics.heavy();      // Heavy tap - significant actions
+  haptics.success();    // Success notification
+  haptics.warning();    // Warning notification
+  haptics.error();      // Error notification
+  haptics.selection();  // Selection change
+  haptics.rigid();      // Rigid impact
+  haptics.soft();       // Soft impact
+}
+```
+
+**Reference:** `src/hooks/useHaptics.ts`
+
+---
+
+## Authentication
+
+### better-auth/expo Client
+
+```typescript
+import { authClient } from "@/lib/auth-client";
+
+// Sign in with magic link
+await authClient.signIn.magicLink({ email });
+
+// Get current session
+const session = await authClient.getSession();
+
+// Sign out
+await authClient.signOut();
+```
+
+### Platform-Specific URLs
+
+The auth client automatically handles platform-specific callback URLs:
+- iOS: `klard://auth/callback`
+- Android: `klard://auth/callback`
+- Dev: Uses Expo proxy
+
+**Reference:** `src/lib/auth-client.ts`
+
+---
+
+## State Management
+
+### Zustand with AsyncStorage
+
+```typescript
+import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+export const useSubscriptionStore = create(
+  persist(
+    (set) => ({
+      subscriptions: [],
+      addSubscription: (sub) => set((s) => ({
+        subscriptions: [...s.subscriptions, sub]
+      })),
+    }),
+    {
+      name: "subscription-storage",
+      storage: createJSONStorage(() => AsyncStorage),
+    }
+  )
+);
+```
+
+**Reference:** `src/stores/subscriptionStore.ts`
+
+---
+
+## Custom Hooks
+
+All hooks follow SOLID principles with documented comments:
+
+| Hook | Purpose |
+|------|---------|
+| `useThemeColors` | Theme colors and dark mode detection |
+| `useHaptics` | Haptic feedback triggers |
+| `useKeyboard` | Keyboard visibility and height |
+| `useRefreshControl` | Pull-to-refresh logic |
+| `useDebounce` | Debounced values |
+
+**Reference:** `src/hooks/`
+
+---
+
+## Testing
+
+### Stack
+- **Framework:** Jest + jest-expo
+- **Library:** React Native Testing Library
+- **Location:** `src/__tests__/`
+
+### Running Tests
+
+```bash
+pnpm test                           # Run all tests
+pnpm test -- --watch               # Watch mode
+pnpm test -- --coverage            # With coverage
+pnpm test -- src/__tests__/Button  # Single test
+```
+
+### Test Pattern
+
+```typescript
+import { render, fireEvent } from "@testing-library/react-native";
+import { Button } from "@/components/ui/Button";
+
+describe("Button", () => {
+  it("calls onPress when pressed", () => {
+    const onPress = jest.fn();
+    const { getByRole } = render(
+      <Button onPress={onPress}>Click me</Button>
+    );
+
+    fireEvent.press(getByRole("button"));
+    expect(onPress).toHaveBeenCalledTimes(1);
+  });
+});
+```
+
+**Reference:** `src/__tests__/`, `jest.setup.ts`
+
+---
+
+## Code Style
+
+- **TypeScript:** Strict mode, prefer interfaces over types
+- **Components:** Functional only, named exports
+- **Directories:** lowercase-kebab-case
+- **Files:** PascalCase for components, camelCase for utilities
+- **Imports:** Absolute `@/` paths, grouped by type
+
+### Naming Conventions
+
+```typescript
+// Variables with state
+const isLoading = true;
+const hasError = false;
+const canSubmit = true;
+
+// Event handlers
+const handlePress = () => {};
+const onValueChange = (value) => {};
+
+// Hooks
+const useThemeColors = () => {};
+const useHaptics = () => {};
+```
+
+---
+
+## Internationalization
+
+### Setup
+
+```typescript
+import * as Localization from "expo-localization";
+import { I18n } from "i18n-js";
+
+const i18n = new I18n(translations);
+i18n.locale = Localization.locale;
+i18n.enableFallback = true;
+```
+
+### Usage
+
+```typescript
+import { i18n } from "@/lib/i18n";
+
+function WelcomeScreen() {
+  return <Text>{i18n.t("welcome.title")}</Text>;
+}
+```
+
+**Reference:** `src/lib/i18n.ts`, `src/locales/`
+
+---
+
+## Performance Guidelines
+
+- Use `FlatList`/`SectionList` for lists, never `ScrollView` with `map()`
+- Memoize expensive computations with `useMemo`
+- Wrap event handlers in `useCallback` when passed as props
+- Use `expo-image` for optimized image loading
+- Profile with React DevTools and Expo performance tools
+
+---
+
+## Safe Area Management
+
+```typescript
+import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
+
+// In _layout.tsx
+export default function RootLayout() {
+  return (
+    <SafeAreaProvider>
+      <SafeAreaView style={{ flex: 1 }} edges={["top"]}>
+        <Slot />
+      </SafeAreaView>
+    </SafeAreaProvider>
+  );
+}
+```
+
+Use `edges` prop to control which edges apply safe area insets.

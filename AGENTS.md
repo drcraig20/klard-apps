@@ -9,6 +9,7 @@ Comprehensive contributor handbook for the Klard apps monorepo. Use pnpm 10.x + 
 2) Read package guides:
    - Web: `klard-web/AGENTS.md`
    - Mobile: `klard-mobile/AGENTS.md`
+   - Auth: `klard-auth/CLAUDE.md`
    - Shared: `commons/` follows the same conventions; use web/mobile guides for context.
 3) Documentation (required before work): use Context7 MCP to fetch current docs for each library you will touch (`mcp__context7__resolve-library-id` → `mcp__context7__get-library-docs`; e.g., Next.js, React, Tailwind, shadcn/ui, Expo, Zustand, Zod).
 4) Skills: list available skills, mark YES/NO, activate any that apply (TDD, debugging, solid-design-principles, writing-plans, etc.). Follow their checklists explicitly.
@@ -17,9 +18,10 @@ Comprehensive contributor handbook for the Klard apps monorepo. Use pnpm 10.x + 
 ---
 
 ## Project Map
-- Packages: `klard-web/` (Next.js 16 App Router, shadcn/ui), `klard-mobile/` (Expo/React Native, Expo Router 6), `commons/` (shared types/Zod constants). Build order: `commons` → `klard-web` + `klard-mobile`.
+- Packages: `klard-web/` (Next.js 16 App Router, shadcn/ui), `klard-mobile/` (Expo/React Native, Expo Router 6), `klard-auth/` (Express 5 + better-auth backend), `commons/` (shared types/Zod constants). Build order: `commons` → `klard-web` + `klard-mobile` + `klard-auth`.
 - `klard-web/src/`: routes in `app/`, UI in `components/`, utilities in `lib/`, hooks in `hooks/`, assets in `public/`.
 - `klard-mobile/src/`: Expo Router in `app/`, shared UI in `components/`, hooks/lib with features; assets in `assets/`.
+- `klard-auth/src/`: Express app in `app.ts`, entry in `index.ts`, config in `config/`, exceptions in `exceptions/`, auth setup in `lib/`, services in `services/`.
 - `commons/src/`: types, validation, constants; outputs in `dist/` (generated—never edit).
 - Path alias `@/` → `src/` in each package. Directories lowercase-kebab; component files may be PascalCase when exporting a component.
 
@@ -27,17 +29,17 @@ Comprehensive contributor handbook for the Klard apps monorepo. Use pnpm 10.x + 
 
 ## Environment & Setup
 - Node 20+, pnpm 10.x. Install from root only: `pnpm install`. Do not hand-edit `pnpm-lock.yaml`.
-- Env files: copy `.env.example` → `.env.local` (web) and `.env` (mobile). Never commit `.env*`, keys, keystores, or certificates.
+- Env files: copy `.env.example` → `.env.local` (web), `.env` (mobile), `.env` (auth). Never commit `.env*`, keys, keystores, or certificates.
 - Editor: enable TypeScript strictness, ESLint, and format-on-save where configured. Restart TS server after path/alias changes.
 - Turbo cache: use `pnpm clean` if artifacts get stale; prefer targeted rebuilds over nuking `node_modules`.
 
 ---
 
 ## Build, Test, and Development Commands
-- Development: `pnpm dev` (all apps), or scoped `pnpm dev:web`, `pnpm dev:mobile`.
-- Lint: `pnpm lint`; scoped `pnpm --filter klard-web lint`, `pnpm --filter klard-mobile lint`.
-- Tests: `pnpm --filter klard-web test:run` (Vitest + jsdom), `pnpm --filter klard-mobile test` (jest-expo), `pnpm --filter commons test` (Vitest).
-- Type/build: `pnpm build` (turbo all), `pnpm build:web`, `pnpm --filter klard-mobile typecheck`, `pnpm --filter commons build` (tsup).
+- Development: `pnpm dev` (all apps), or scoped `pnpm dev:web`, `pnpm dev:mobile`, `pnpm dev:auth`.
+- Lint: `pnpm lint`; scoped `pnpm --filter klard-web lint`, `pnpm --filter klard-mobile lint`, `pnpm --filter klard-auth lint`.
+- Tests: `pnpm --filter klard-web test:run` (Vitest + jsdom), `pnpm --filter klard-mobile test` (jest-expo), `pnpm --filter klard-auth test` (Vitest), `pnpm --filter commons test` (Vitest).
+- Type/build: `pnpm build` (turbo all), `pnpm build:web`, `pnpm build:auth`, `pnpm --filter klard-mobile typecheck`, `pnpm --filter commons build` (tsup).
 - Cleaning: `pnpm clean` to reset Turbo cache/artifacts.
 - Notes: run commands from repo root unless a package script explicitly requires cwd; prefer `--filter` for scoped tasks.
 
@@ -67,9 +69,10 @@ Comprehensive contributor handbook for the Klard apps monorepo. Use pnpm 10.x + 
 ---
 
 ## Testing Guidance
-- Placement: co-locate tests (`src/__tests__` or `*.test.tsx`). Cover new logic, edge cases, and regressions.
+- Placement: co-locate tests (`src/__tests__` or `*.test.tsx`, or `tests/` for auth). Cover new logic, edge cases, and regressions.
 - Web: Vitest + Testing Library; avoid over-mocking React Query/Zustand; use `src/__tests__/setup.ts` for shared config.
 - Mobile: React Native Testing Library with jest-expo; coverage collected from `src/**/*.{ts,tsx}`.
+- Auth: Vitest with supertest for integration tests; tests in `tests/unit/` and `tests/integration/`.
 - Commons: Vitest for schemas/constants; keep `pnpm --filter commons build` green.
 - Style: prefer behavioral tests over brittle snapshots; if snapshots are needed, keep them small. Avoid network calls; mock external services.
 
@@ -84,8 +87,8 @@ Comprehensive contributor handbook for the Klard apps monorepo. Use pnpm 10.x + 
 ---
 
 ## Security & Configuration
-- Secrets: never commit `.env*`, service keys, keystores, or certificates. Use env vars loaded via `.env.local` (web) or `.env` (mobile).
-- Generated artifacts: do not edit `dist/`, `.expo/`, `.next/`, or lockfiles manually. Use pnpm for dependency changes.
+- Secrets: never commit `.env*`, service keys, keystores, or certificates. Use env vars loaded via `.env.local` (web), `.env` (mobile/auth).
+- Generated artifacts: do not edit `dist/`, `.expo/`, `.next/`, `build/`, or lockfiles manually. Use pnpm for dependency changes.
 - Validation: enforce Zod at data boundaries; sanitize and escape user-provided content before rendering.
 - Logging: avoid PII; prefer structured and actionable logs.
 - Dependencies: add via pnpm; prefer `workspace:*` for shared packages.
@@ -93,7 +96,7 @@ Comprehensive contributor handbook for the Klard apps monorepo. Use pnpm 10.x + 
 ---
 
 ## Git, Commits, and Pull Requests
-- Commits: Conventional Commits with package scopes (`feat(web): ...`, `fix(mobile): ...`, `chore(commons): ...`, `docs: ...`). No tool co-author lines.
+- Commits: Conventional Commits with package scopes (`feat(web): ...`, `fix(mobile): ...`, `feat(auth): ...`, `chore(commons): ...`, `docs: ...`). No tool co-author lines.
 - Branch hygiene: keep diffs focused; avoid mixing refactors with features unless required for safety.
 - Pre-push: run relevant lint/tests/build; record results in the PR description.
 - PR content: summary, linked issue/task, screenshots/recordings for UI changes, environment/setup notes, risks, and follow-ups. Exclude build artifacts and env files.
@@ -132,6 +135,7 @@ Comprehensive contributor handbook for the Klard apps monorepo. Use pnpm 10.x + 
 ## Release & Deployment Notes
 - Web: follow CI/CD workflows (see `.github/workflows`); ensure `pnpm build:web` passes locally before tagging.
 - Mobile: follow Expo EAS flows (see `klard-mobile` configs); never commit signing artifacts; document required env vars.
+- Auth: ensure `pnpm build:auth` passes; Docker deployment via `klard-auth/Dockerfile`; requires PostgreSQL connection string.
 - Commons: workspace versioning; keep changes backward compatible where possible; document breaking changes clearly.
 
 ---

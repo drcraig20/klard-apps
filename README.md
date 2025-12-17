@@ -6,13 +6,14 @@ This monorepo contains the client applications for **Klard** — a privacy-first
 
 ## About This Repository
 
-`klard-apps` is a **pnpm monorepo** containing all Klard client applications:
+`klard-apps` is a **pnpm monorepo** containing all Klard applications and auth backend:
 
 - **klard-web** — Next.js 16 progressive web application
-- **klard-mobile** — React Native (Expo) mobile app for iOS and Android
+- **klard-mobile** — React Native (Expo 54) mobile app for iOS and Android
+- **klard-auth** — Express 5 authentication backend with better-auth
 - **commons** — Shared TypeScript types, validation schemas, and constants
 
-> **Note:** Backend services (Auth, Core API, Card Service, etc.) are maintained in separate repositories.
+> **Note:** Other backend services (Core API, Card Service, etc.) are maintained in separate repositories for now, may be mirated here later.
 
 ## The Problem
 
@@ -55,22 +56,28 @@ Klard provides a unified dashboard for subscription tracking, price monitoring, 
 - Recharts
 
 ### Mobile (klard-mobile)
-- React Native
-- Expo (SDK 52+)
-- Expo Router
+- React Native 0.81
+- Expo SDK 54
+- Expo Router 6
+- SVA Styling (custom Style Variance Authority)
+- TypeScript
+
+### Auth Backend (klard-auth)
+- Express 5
+- better-auth (7 auth methods)
+- PostgreSQL
 - TypeScript
 
 ### Shared (commons)
 - TypeScript types and interfaces
-- Zod validation schemas
+- Zod 4 validation schemas
 - Constants and configuration
 
 ### Build Tools
-- pnpm (package manager)
+- pnpm 10.x (package manager)
 - Turborepo (monorepo orchestration)
 
 ### External Services
-- **Auth**: klard-auth (separate repository)
 - **Email**: Sendgrid
 - **Cards**: Airwallex / Lithic / Stripe Issuing
 - **Price Scraping**: ScrapingBee / Zyte
@@ -148,12 +155,13 @@ klard-apps/
 | Package        | Path             | Description                              |
 |----------------|------------------|------------------------------------------|
 | `klard-web`    | `./klard-web`    | Next.js 16 PWA                           |
-| `klard-mobile` | `./klard-mobile` | React Native (Expo) mobile app           |
+| `klard-mobile` | `./klard-mobile` | React Native (Expo 54) mobile app        |
+| `klard-auth`   | `./klard-auth`   | Express 5 + better-auth backend          |
 | `commons`      | `./commons`      | Shared types, validation, and constants  |
 
-## Backend Architecture (External)
+## Backend Architecture
 
-The client apps connect to backend services maintained separately:
+**klard-auth** is part of this monorepo. Other services are maintained separately:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
@@ -228,7 +236,8 @@ See [`docs/design/Klard Design System.md`](docs/design/Klard%20Design%20System.m
 ### Prerequisites
 
 - Node.js 20+
-- pnpm 8+
+- pnpm 10.x
+- PostgreSQL (for klard-auth)
 - Expo CLI (for mobile development)
 - iOS Simulator / Android Emulator (for mobile)
 
@@ -246,8 +255,9 @@ pnpm install
 pnpm dev
 
 # Or start individual apps
-pnpm dev:web      # Start Next.js dev server
+pnpm dev:web      # Start Next.js dev server (localhost:3000)
 pnpm dev:mobile   # Start Expo dev server
+pnpm dev:auth     # Start auth server (localhost:3050)
 ```
 
 ### Environment Setup
@@ -269,10 +279,13 @@ cp .env.example .env.local
 | `pnpm dev`        | Start all apps in development mode   |
 | `pnpm dev:web`    | Start web app only                   |
 | `pnpm dev:mobile` | Start mobile app only                |
+| `pnpm dev:auth`   | Start auth server only               |
 | `pnpm build`      | Build all apps for production        |
-| `pnpm lint`       | Run ESLint across all packages       |
-| `pnpm typecheck`  | Run TypeScript type checking         |
-| `pnpm test`       | Run tests across all packages        |
+| `pnpm build:web`  | Build web app only                   |
+| `pnpm build:auth` | Build auth server only               |
+| `pnpm lint`       | Run linters across all packages      |
+| `pnpm test:auth`  | Run auth server tests                |
+| `pnpm clean`      | Remove build artifacts               |
 
 ## Documentation
 

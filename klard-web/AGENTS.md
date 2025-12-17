@@ -1,5 +1,5 @@
 
-You are an expert developer proficient in TypeScript, React and Next.js, shadcn/ui, Zod, Turbo (Monorepo Management), i18next (react-i18next, i18next, expo-localization), Zustand.
+You are an expert developer proficient in TypeScript, React 19, Next.js 16, shadcn/ui, Tailwind CSS 4, better-auth, and Zustand.
 
 ## MANDATORY: Library Documentation via Context7 MCP
 
@@ -11,149 +11,455 @@ You are an expert developer proficient in TypeScript, React and Next.js, shadcn/
 This is NON-NEGOTIABLE. Do not proceed with any work until you have read the relevant library documentation. This applies to:
 - Next.js (App Router, data fetching, routing)
 - React and React hooks
-- Tailwind CSS and styling libraries
+- Tailwind CSS 4 and styling
 - shadcn/ui components
-- Zustand
+- Zustand state management
 - Zod validation
+- better-auth client
 - Any third-party library being used or added
 
 **Why:** Library APIs change frequently. Using outdated patterns causes bugs and wasted effort.
 
-Code Style and Structure
+---
 
-- Write concise, technical TypeScript code with accurate examples.
-- Use functional and declarative programming patterns; avoid classes.
-- Prefer iteration and modularization over code duplication.
-- Use descriptive variable names with auxiliary verbs (e.g., `isLoading`, `hasError`).
-- Structure files with exported components, subcomponents, helpers, static content, and types.
-- Favor named exports for components and functions.
-- Use lowercase with dashes for directory names (e.g., `components/auth-wizard`).
+## Tech Stack
 
-TypeScript and Zod Usage
+| Category | Technology | Notes |
+|----------|------------|-------|
+| Framework | Next.js 16 | App Router, React Server Components |
+| React | React 19 | With React Compiler enabled |
+| Styling | Tailwind CSS 4 | CSS variables, design tokens |
+| Components | shadcn/ui | Radix UI primitives + Klard customizations |
+| Auth | better-auth | React client with useSession |
+| State | Zustand | For UI state (forms, modals) |
+| i18n | i18next + react-i18next | Multi-language support |
+| Validation | Zod | Schema validation |
 
-- Use TypeScript for all code; prefer interfaces to types for object shapes.
-- Utilize Zod for schema validation and type inference.
-- Avoid enums; use literal types or maps instead.
-- Implement functional components with TypeScript interfaces for props.
+---
 
-Syntax and Formatting
+## App Router Patterns
 
-- Use the `function` keyword for pure functions.
-- Write declarative JSX with a clear and readable structure.
-- Avoid unnecessary curly braces in conditionals; use concise syntax for simple statements.
+### Route Structure
 
-UI and Styling
+```
+app/
+├── layout.tsx              # Root layout (ThemeProvider, I18nProvider)
+├── globals.css             # Global styles + Tailwind
+├── (auth)/                 # Auth route group
+│   ├── layout.tsx          # Auth layout (split-panel design)
+│   ├── login/page.tsx      # Login page
+│   ├── signup/page.tsx     # Signup page
+│   └── verify/page.tsx     # Email verification
+├── (dashboard)/            # Protected route group
+│   ├── layout.tsx          # Dashboard layout (sidebar, nav)
+│   └── page.tsx            # Dashboard home
+└── onboarding/page.tsx     # Onboarding flow
+```
 
-- Always read [design](../docs/design) when styling UI components and styling.
-- Implement responsive design with a responsive-first approach.
-- Ensure styling consistency between web and mobile view.
+### Key Patterns
 
-## shadcn/ui Component Library
+**Route Groups** - `(name)/` for organization without URL impact:
+```typescript
+// app/(auth)/layout.tsx - Auth-specific layout
+export default function AuthLayout({ children }) {
+  return (
+    <div className="min-h-screen grid md:grid-cols-2">
+      <AuthIllustration />
+      <div className="flex items-center justify-center">{children}</div>
+    </div>
+  );
+}
+```
 
-**MANDATORY:** Use shadcn/ui components as the foundation for all UI elements. shadcn/ui provides accessible, customizable primitives built on Radix UI.
+**Root Layout** - Providers at the root:
+```typescript
+// app/layout.tsx
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body>
+        <ThemeProvider>
+          <I18nProvider>{children}</I18nProvider>
+        </ThemeProvider>
+      </body>
+    </html>
+  );
+}
+```
 
-### Installation
+**Reference:** `src/app/layout.tsx`, `src/app/(auth)/layout.tsx`
 
-Components are installed individually via CLI:
+---
+
+## Authentication
+
+### better-auth Client Setup
+
+```typescript
+// src/lib/auth-client.ts
+import { createAuthClient } from 'better-auth/react';
+import { magicLinkClient, inferAdditionalFields } from 'better-auth/client/plugins';
+
+export const authClient = createAuthClient({
+  baseURL: process.env.NEXT_PUBLIC_AUTH_URL,
+  plugins: [
+    magicLinkClient(),
+    inferAdditionalFields({
+      user: { hasOnboarded: { type: "boolean", required: false } },
+    }),
+  ],
+});
+
+export const { signIn, signUp, signOut, useSession, updateUser } = authClient;
+```
+
+### useAuthRedirect Hook
+
+Handles auth-based redirects with SOLID principles:
+
+```typescript
+import { useAuthRedirect } from '@/hooks/use-auth-redirect';
+
+// Protected page - requires auth
+useAuthRedirect({ requireAuth: true });
+
+// Guest-only page - redirects authenticated users
+useAuthRedirect({ requireAuth: false });
+
+// Onboarding page - skip onboarding check
+useAuthRedirect({ requireAuth: true, skipOnboardingCheck: true });
+```
+
+### Auth Flow
+
+1. User visits protected route → `useAuthRedirect` checks session
+2. No session → redirect to `/login`
+3. Session exists, not onboarded → redirect to `/onboarding`
+4. Session exists, onboarded → allow access
+
+**Reference:** `src/lib/auth-client.ts`, `src/hooks/use-auth-redirect.ts`
+
+---
+
+## Component Patterns
+
+### shadcn/ui as Foundation
+
+**MANDATORY:** Use shadcn/ui components for all UI elements. Install via CLI:
+
 ```bash
-npx shadcn@latest add button input card alert
+npx shadcn@latest add button input card alert checkbox
 ```
 
 ### Usage Guidelines
 
-- **Always prefer shadcn/ui components** over custom implementations for common UI patterns (Button, Input, Card, Alert, Checkbox, etc.)
-- **Customize via variants** - Extend component variants for Klard-specific styles rather than inline styling
-- **Use the `cn()` utility** from `@/lib/utils` for conditional class merging
-- **Maintain accessibility** - shadcn/ui components are accessible by default; preserve this behavior
+- **Always prefer shadcn/ui** over custom implementations
+- **Customize via variants** - Extend for Klard-specific styles
+- **Use `cn()` utility** from `@/lib/utils` for class merging
+- **Maintain accessibility** - shadcn/ui is accessible by default
 
-### Klard-Specific Variants
+### Klard Button Variants
 
-Extend shadcn/ui button variants for Klard design system:
 ```tsx
-// Use variant="klard" for primary CTAs
+// Primary CTA
 <Button variant="klard" size="lg">Sign In</Button>
 
-// Use variant="social" for OAuth buttons
+// Social OAuth buttons
 <Button variant="social">
-  <GoogleIcon /> Google
+  <GoogleIcon /> Continue with Google
 </Button>
 ```
 
 ### Component Customization
 
-When customizing shadcn/ui components:
-1. Modify the component file directly in `src/components/ui/`
-2. Use CSS variables from Klard design system (HSL format for shadcn compatibility)
+1. Modify component file in `src/components/ui/`
+2. Use CSS variables from Klard design system (HSL format)
 3. Extend variants rather than overriding base styles
-4. Document any custom variants added
+4. Document custom variants added
 
-State Management
+**Reference:** `src/components/ui/button.tsx`, `src/lib/utils.ts`
 
-- Use Zustand for state management.
-- Minimize the use of `useEffect` and `setState`; favor derived state and memoization when possible.
+---
 
-Internationalization
-- Use i18next and react-i18next for web applications.
-- Use expo-localization for React Native apps.
-- Ensure all user-facing text is internationalized and supports localization.
+## Form Handling
 
-Error Handling and Validation
+### react-hook-form + Zod Pattern
 
-- Prioritize error handling and edge cases.
-- Handle errors and edge cases at the beginning of functions.
-- Use early returns for error conditions to avoid deep nesting.
-- Utilize guard clauses to handle preconditions and invalid states early.
-- Implement proper error logging and user-friendly error messages.
-- Use custom error types or factories for consistent error handling.
+```typescript
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { LoginSchema, type LoginInput } from '@klard-apps/commons';
 
-Performance Optimization
+function LoginForm() {
+  const form = useForm<LoginInput>({
+    resolver: zodResolver(LoginSchema),
+    defaultValues: { email: '', password: '' },
+  });
 
-- Optimize for both web and mobile performance.
-- Use dynamic imports for code splitting in Next.js.
-- Implement lazy loading for non-critical components.
-- Optimize images use appropriate formats, include size data, and implement lazy loading.
+  const onSubmit = (data: LoginInput) => {
+    // Handle submission
+  };
 
-Monorepo Management
+  return (
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <FormField
+          control={form.control}
+          name="email"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Email</FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+      </form>
+    </Form>
+  );
+}
+```
 
-- Follow best practices using Turbo for monorepo setups.
-- Ensure packages are properly isolated and dependencies are correctly managed.
-- Use shared configurations and scripts where appropriate.
-- Utilize the workspace structure as defined in the root `package.json`.
+### Field Components
 
-Backend
-- Use Zod schemas to validate data exchanged with the backend.
+Pre-built field components with consistent styling:
+- `InputField` - Text inputs with labels
+- `SelectField` - Dropdown selections
+- `CheckboxField` - Checkbox with label
 
-Testing and Quality Assurance
+**Reference:** `src/components/ui/input-field.tsx`
 
-- Write unit and integration tests for critical components.
-- Mock all database operations, never make real database calls for all tests written.
-- Use testing libraries compatible with React.
-- Ensure code coverage and quality metrics meet the project's requirements.
+---
 
-Project Structure and Environment
+## State Management
 
-- Follow the established project structure with separate packages for `app`, `ui`, and `api`.
-- Use the `apps` directory for Next.js and Expo applications.
-- Utilize the `commons` directory for shared code and components.
-- Use `dotenv` for environment variable management.
+### Zustand for UI State
 
-Key Conventions
+```typescript
+// src/stores/auth-ui-store.ts
+import { create } from 'zustand';
 
-- Use descriptive and meaningful commit messages.
-- Ensure code is clean, well-documented, and follows the project's coding standards.
-- Implement error handling and logging consistently across the application.
+interface AuthUIState {
+  email: string;
+  setEmail: (email: string) => void;
+  isLoading: boolean;
+  setIsLoading: (loading: boolean) => void;
+}
 
-Follow Official Documentation
+export const useAuthUIStore = create<AuthUIState>((set) => ({
+  email: '',
+  setEmail: (email) => set({ email }),
+  isLoading: false,
+  setIsLoading: (isLoading) => set({ isLoading }),
+}));
+```
 
-- Always use Context7 MCP (`mcp__context7__resolve-library-id` → `mcp__context7__get-library-docs`) to fetch current documentation before any implementation work.
-- For Next.js, use Context7 to fetch docs on data fetching methods and routing conventions.
-- For other services, use Context7 to get up-to-date API references.
+### When to Use What
 
-Output Expectations
+| Need | Solution |
+|------|----------|
+| Auth session | `useSession()` from better-auth |
+| Form state | react-hook-form |
+| Shared UI state | Zustand store |
+| Server data | React Query (future) |
 
-- Code Examples Provide code snippets that align with the guidelines above.
-- Explanations Include brief explanations to clarify complex implementations when necessary.
-- Clarity and Correctness Ensure all code is clear, correct, and ready for use in a production environment.
-- Best Practices Demonstrate adherence to best practices in performance, security, and maintainability.
+**Reference:** `src/stores/auth-ui-store.ts`
 
-  
+---
+
+## Custom Hooks
+
+All hooks follow SOLID principles with documented comments:
+
+| Hook | Purpose | Location |
+|------|---------|----------|
+| `useAuthRedirect` | Auth-based navigation | `src/hooks/use-auth-redirect.ts` |
+| `useAuthError` | Auth error formatting | `src/hooks/use-auth-error.ts` |
+| `useOnboarding` | Onboarding flow state | `src/hooks/use-onboarding.ts` |
+| `useMobile` | Mobile viewport detection | `src/hooks/use-mobile.ts` |
+| `useDebounce` | Debounced values | `src/hooks/use-debounce.ts` |
+| `useFormFieldIds` | Unique form field IDs | `src/hooks/use-form-field-ids.ts` |
+
+### Hook Design Principles
+
+```typescript
+/**
+ * Hook documentation with SOLID comments:
+ *
+ * SRP: Only handles redirect logic based on auth state
+ * OCP: Extensible via options (routes are configurable)
+ * DIP: All routes are injectable via options
+ * ISP: Returns focused interface with only auth state info
+ */
+export function useAuthRedirect(options: AuthRedirectOptions = {}): AuthRedirectResult {
+  // Implementation
+}
+```
+
+**Reference:** `src/hooks/`
+
+---
+
+## Testing
+
+### Stack
+
+- **Framework:** Vitest
+- **Library:** React Testing Library
+- **Environment:** jsdom
+- **Location:** `src/__tests__/`
+
+### Running Tests
+
+```bash
+pnpm test:run           # Run all tests
+pnpm test               # Watch mode
+pnpm test -- --coverage # With coverage
+```
+
+### Test Pattern
+
+```typescript
+import { render, screen, fireEvent } from '@testing-library/react';
+import { Button } from '@/components/ui/button';
+
+describe('Button', () => {
+  it('renders with correct text', () => {
+    render(<Button>Click me</Button>);
+    expect(screen.getByRole('button', { name: /click me/i })).toBeInTheDocument();
+  });
+
+  it('handles click events', () => {
+    const onClick = vi.fn();
+    render(<Button onClick={onClick}>Click</Button>);
+    fireEvent.click(screen.getByRole('button'));
+    expect(onClick).toHaveBeenCalledTimes(1);
+  });
+});
+```
+
+**Reference:** `src/__tests__/`, `src/__tests__/setup.ts`
+
+---
+
+## Code Style
+
+- **TypeScript:** Strict mode, prefer interfaces over types
+- **Components:** Functional only, named exports
+- **Directories:** lowercase-kebab-case (`components/auth-wizard`)
+- **Files:** lowercase-kebab-case for utilities, PascalCase for components
+- **Imports:** Absolute `@/` paths, grouped logically
+
+### Naming Conventions
+
+```typescript
+// State variables with descriptive prefixes
+const isLoading = true;
+const hasError = false;
+const canSubmit = true;
+
+// Event handlers
+const handleSubmit = () => {};
+const onValueChange = (value) => {};
+
+// Function keyword for pure functions
+function formatCurrency(amount: number): string {
+  return `$${amount.toFixed(2)}`;
+}
+```
+
+---
+
+## UI and Styling
+
+### Tailwind CSS 4
+
+- Always read `docs/design/` when styling components
+- Responsive-first approach (`sm:`, `md:`, `lg:` prefixes)
+- Use CSS variables for design tokens
+- Dark mode via `dark:` variant
+
+### Design System Colors
+
+```css
+/* Primary teal palette */
+--primary: #0D7C7A (light) / #15B5B0 (dark)
+--background: #FFFFFF (light) / #0F172A (dark)
+--foreground: #0F172A (light) / #F8FAFC (dark)
+```
+
+### Glassmorphism Pattern
+
+```tsx
+<div className="
+  bg-[var(--card)]/80 backdrop-blur-[12px]
+  border border-[var(--border)]
+  rounded-[var(--radius-lg)]
+  shadow-[0_2px_12px_rgba(15,23,42,0.08)]
+">
+  {children}
+</div>
+```
+
+**Reference:** `docs/design/Klard Design System.md`
+
+---
+
+## Internationalization
+
+### Setup
+
+```typescript
+// Already configured in app/layout.tsx via I18nProvider
+import { useTranslation } from 'react-i18next';
+
+function MyComponent() {
+  const { t } = useTranslation();
+  return <h1>{t('welcome.title')}</h1>;
+}
+```
+
+### Key Rules
+
+- All user-facing text through i18next
+- No hardcoded strings in components
+- Support RTL where applicable
+
+**Reference:** `src/components/providers/i18n-provider.tsx`
+
+---
+
+## Error Handling
+
+- Guard early with early returns
+- Handle errors at function start
+- User-friendly error messages
+- Use `useAuthError` hook for auth errors
+
+```typescript
+function handleSubmit(data: FormData) {
+  // Guard clauses first
+  if (!data.email) {
+    setError('Email is required');
+    return;
+  }
+
+  // Happy path
+  try {
+    await submitData(data);
+  } catch (error) {
+    setError(formatError(error));
+  }
+}
+```
+
+---
+
+## Performance
+
+- Use dynamic imports for code splitting
+- Implement lazy loading for non-critical components
+- Optimize images with Next.js Image component
+- Minimize `useEffect` usage - prefer derived state

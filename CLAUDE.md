@@ -10,7 +10,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 |----------------------|--------------------------------------|
 | klard-web (Next.js)  | `klard-web/AGENTS.md`                |
 | klard-mobile (Expo)  | `klard-mobile/AGENTS.md`             |
-| Both apps            | Read BOTH files                      |
+| klard-auth (Express) | `klard-auth/CLAUDE.md`               |
+| Both apps            | Read BOTH web + mobile files         |
 | commons only         | Either file (for shared conventions) |
 
 This is NON-NEGOTIABLE. These files contain coding standards, patterns, and mandatory Context7 MCP requirements for fetching library documentation.
@@ -69,10 +70,15 @@ pnpm dev
 # Development (individual apps)
 pnpm dev:web          # Next.js at localhost:3000
 pnpm dev:mobile       # Expo dev server
+pnpm dev:auth         # Express auth server
 
 # Production builds
 pnpm build            # Build all packages
 pnpm build:web        # Build web only
+pnpm build:auth       # Build auth only
+
+# Testing
+pnpm test:auth        # Run auth tests
 
 # Code quality
 pnpm lint             # ESLint across all packages
@@ -94,7 +100,7 @@ pnpm android              # Android emulator
 pnpm ios                  # iOS simulator
 ```
 
-## Architecture
+## Architecture Overview
 
 This is a **pnpm monorepo** with Turborepo orchestration:
 
@@ -102,23 +108,116 @@ This is a **pnpm monorepo** with Turborepo orchestration:
 klard-apps/
 ├── klard-web/       # Next.js 16 (App Router) + Tailwind CSS 4
 ├── klard-mobile/    # React Native + Expo 54 + Expo Router 6
+├── klard-auth/      # Express 5 auth backend + better-auth + PostgreSQL
 └── commons/         # Shared types, Zod schemas, constants (@klard-apps/commons)
 ```
 
-### Build Dependencies
+### Build Dependency Graph
 
-`commons` → builds first (no deps)
-`klard-web` + `klard-mobile` → build in parallel (depend on commons via `workspace:*`)
+```
+                    ┌─────────────┐
+                    │   commons   │  ← Builds FIRST (no deps)
+                    └──────┬──────┘
+           ┌───────────────┼───────────────┐
+           ▼               ▼               ▼
+    ┌────────────┐  ┌────────────┐  ┌────────────┐
+    │ klard-web  │  │klard-mobile│  │ klard-auth │  ← Build in PARALLEL
+    └────────────┘  └────────────┘  └────────────┘
+```
+
+### Data Flow
+
+```
+┌─────────────┐     ┌─────────────┐     ┌─────────────┐
+│ klard-web   │────▶│ klard-auth  │◀────│klard-mobile │
+│ (Next.js)   │     │ (Express)   │     │ (Expo)      │
+└─────────────┘     └──────┬──────┘     └─────────────┘
+       │                   │                   │
+       └───────────────────┴───────────────────┘
+                           │
+                    ┌──────▼──────┐
+                    │   commons   │  ← Shared types, Zod schemas
+                    └─────────────┘
+```
 
 ### Tech Stack
 
 | Package | Framework | Key Dependencies |
 |---------|-----------|------------------|
-| klard-web | Next.js 16, React 19 | Tailwind 4, better-auth, React Compiler |
-| klard-mobile | React Native 0.81, Expo 54 | Expo Router 6, better-auth/expo, expo-secure-store |
+| klard-web | Next.js 16, React 19 | Tailwind 4, shadcn/ui, better-auth, React Compiler |
+| klard-mobile | React Native 0.81, Expo 54 | Expo Router 6, SVA styling, better-auth/expo |
+| klard-auth | Express 5, Node 20+ | better-auth, PostgreSQL, JWT/OIDC |
 | commons | TypeScript library | Zod 4, tsup |
 
 All packages use TypeScript 5.9.3 with **strict mode**.
+
+---
+
+## Authentication Architecture
+
+**better-auth** is the unified auth solution across all packages, providing:
+
+### Auth Methods (7 total)
+
+| Method | Description | Configuration |
+|--------|-------------|---------------|
+| Email/Password | Traditional auth | 8-128 char passwords |
+| Magic Link | Passwordless email link | 15-minute expiry |
+| Email OTP | 6-digit verification code | 10-minute expiry, 3 attempts |
+| OAuth | Social providers | Google, GitHub, Apple (conditional) |
+| Account Linking | Auto-link OAuth to existing accounts | Trusted providers only |
+| Bearer Token | Mobile API authentication | For expo client |
+| JWT/JWKS | API integration | RS256, 30-day rotation |
+
+### Session Management
+
+```typescript
+session: {
+  expiresIn: 60 * 60 * 24 * 5,  // 5 days
+  updateAge: 60 * 60 * 24,      // 24-hour sliding window
+  cookieCache: { maxAge: 60 * 5 } // 5-min cache
+}
+```
+
+### Package Responsibilities
+
+| Package | Auth Role | Key Files |
+|---------|-----------|-----------|
+| klard-auth | Auth server (better-auth instance) | `src/lib/auth.ts` |
+| klard-web | React client (useSession, signIn/Out) | `src/lib/auth-client.ts` |
+| klard-mobile | Expo client (bearer tokens, deep links) | `src/lib/auth-client.ts` |
+
+---
+
+## State Management Strategy
+
+### By Package
+
+| Package | Client State | Auth State | Server State |
+|---------|--------------|------------|--------------|
+| klard-web | Zustand stores | better-auth useSession | React Query (future) |
+| klard-mobile | Zustand + AsyncStorage | better-auth/expo | React Query (future) |
+| klard-auth | N/A (stateless server) | better-auth sessions | PostgreSQL |
+| commons | N/A | N/A | Zod schemas only |
+
+### Zustand Patterns
+
+**Web stores** (`klard-web/src/stores/`):
+- `auth-ui-store.ts` - Auth form state (email, loading, errors)
+- `subscription-store.ts` - Subscription management
+
+**Mobile stores** (`klard-mobile/src/stores/`):
+- Same patterns with `persist` middleware + AsyncStorage
+
+### When to Use What
+
+| Need | Solution |
+|------|----------|
+| Auth state (session, user) | `useSession()` from better-auth |
+| UI state (forms, modals) | Zustand store |
+| Persisted client data | Zustand + AsyncStorage (mobile) |
+| Shared types/validation | commons Zod schemas |
+| Server data caching | React Query (when added) |
 
 ### Mobile: Expo SDK First
 
@@ -176,9 +275,9 @@ Full specs in `docs/design/Klard Design System.md`.
 
 ## External Services
 
-Backend services are in separate repositories:
-- **Auth: klard-auth (IMPLEMENTED)** - Uses better-auth library, handles JWT/OIDC authentication
-- Core API: subscriptions CRUD
+- Core API: subscriptions CRUD (separate repository)
 - Card Service: BurnerCard issuing (Airwallex/Lithic/Stripe)
 - Analytics: PostHog
 - Monitoring: Sentry, BetterStack
+
+Note: Auth backend (`klard-auth`) is now part of this monorepo.

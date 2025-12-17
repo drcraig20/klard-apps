@@ -1,36 +1,102 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# klard-web
 
-## Getting Started
+Next.js 16 web application for Klard — a privacy-first subscription management platform.
 
-First, run the development server:
+## Features
+
+- **App Router** with React Server Components
+- **React 19** with React Compiler enabled
+- **Tailwind CSS 4** with Klard design system
+- **shadcn/ui** components with custom Klard variants
+- **better-auth** for authentication (magic link, email OTP)
+- **i18next** for internationalization
+- **Vitest** for testing
+
+## Quick Start
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+# From monorepo root
+pnpm install
+pnpm dev:web
+
+# Or from this directory
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the app.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Scripts
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+pnpm dev          # Start development server
+pnpm build        # Build for production
+pnpm start        # Run production build
+pnpm lint         # Run ESLint
+pnpm test         # Run tests (Vitest)
+pnpm test:run     # Run tests once
+```
 
-## Learn More
+## Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+src/
+├── app/                    # App Router pages
+│   ├── (auth)/             # Auth route group (login, signup)
+│   ├── (dashboard)/        # Protected route group
+│   ├── layout.tsx          # Root layout with providers
+│   └── globals.css         # Global styles
+├── components/
+│   ├── ui/                 # shadcn/ui components
+│   ├── auth/               # Auth-specific components
+│   └── providers/          # Context providers
+├── hooks/                  # Custom React hooks
+├── lib/                    # Utilities and auth client
+└── stores/                 # Zustand stores
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Tech Stack
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+| Category | Technology |
+|----------|------------|
+| Framework | Next.js 16 (App Router) |
+| React | React 19 + React Compiler |
+| Styling | Tailwind CSS 4 |
+| Components | shadcn/ui (Radix UI) |
+| Auth | better-auth client |
+| State | Zustand |
+| i18n | i18next + react-i18next |
+| Testing | Vitest + React Testing Library |
 
-## Deploy on Vercel
+## Authentication
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Uses `better-auth` client connecting to `klard-auth` service:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```typescript
+import { useSession, signIn, signOut } from '@/lib/auth-client';
+
+// Check auth state
+const { data: session, isPending } = useSession();
+
+// Sign in with magic link
+await signIn.magicLink({ email: 'user@example.com' });
+```
+
+## Environment Variables
+
+```bash
+NEXT_PUBLIC_AUTH_URL=http://localhost:3050  # Auth server URL
+```
+
+## Adding Components
+
+Install shadcn/ui components:
+
+```bash
+npx shadcn@latest add button input card
+```
+
+## Related Documentation
+
+- See `AGENTS.md` for AI assistant guidelines and patterns
+- See root `CLAUDE.md` for monorepo-wide conventions
+- See `docs/design/Klard Design System.md` for design specs
