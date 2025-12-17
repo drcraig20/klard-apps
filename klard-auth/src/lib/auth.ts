@@ -1,7 +1,7 @@
-import { expo } from "@better-auth/expo";
-import { passkey } from "@better-auth/passkey";
 import { betterAuth } from "better-auth";
 import { bearer, emailOTP, jwt, magicLink, openAPI } from "better-auth/plugins";
+import { expo } from "@better-auth/expo";
+import { passkey } from "@better-auth/passkey";
 import { Pool } from "pg";
 import { config } from "../config/index.js";
 import { sendEmail } from "../services/email.js";
@@ -115,7 +115,7 @@ export const auth: ReturnType<typeof betterAuth> = betterAuth({
         type: "boolean",
         required: false,
         defaultValue: false,
-        input: true,
+        input: true
       },
     },
   },
@@ -124,12 +124,6 @@ export const auth: ReturnType<typeof betterAuth> = betterAuth({
   plugins: [
     expo(),
     openAPI(),
-    // Passkey/WebAuthn support
-    passkey({
-      rpID: config.passkey.rpID,
-      rpName: config.passkey.rpName,
-      origin: config.passkey.origin,
-    }),
     // Email OTP for verification and password reset
     emailOTP({
       otpLength: config.otp.length,
@@ -193,6 +187,16 @@ export const auth: ReturnType<typeof betterAuth> = betterAuth({
 
     // Bearer token support for mobile
     bearer(),
+
+    // Passkey support for passwordless biometric auth
+    passkey({
+      rpID: config.passkey.rpID,
+      rpName: config.passkey.rpName,
+      origin: config.passkey.origin,
+      advanced: {
+        webAuthnChallengeCookie: "better-auth-passkey",
+      },
+    }),
   ],
 });
 
