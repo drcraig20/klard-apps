@@ -1,11 +1,12 @@
+import { expo } from "@better-auth/expo";
+import { passkey } from "@better-auth/passkey";
 import { betterAuth } from "better-auth";
 import { bearer, emailOTP, jwt, magicLink, openAPI } from "better-auth/plugins";
-import { expo } from "@better-auth/expo";
 import { Pool } from "pg";
 import { config } from "../config/index.js";
 import { sendEmail } from "../services/email.js";
 
-export const auth = betterAuth({
+export const auth: ReturnType<typeof betterAuth> = betterAuth({
   database: new Pool({
     connectionString: config.databaseUrl,
   }),
@@ -114,7 +115,7 @@ export const auth = betterAuth({
         type: "boolean",
         required: false,
         defaultValue: false,
-        input: true
+        input: true,
       },
     },
   },
@@ -123,6 +124,12 @@ export const auth = betterAuth({
   plugins: [
     expo(),
     openAPI(),
+    // Passkey/WebAuthn support
+    passkey({
+      rpID: config.passkey.rpID,
+      rpName: config.passkey.rpName,
+      origin: config.passkey.origin,
+    }),
     // Email OTP for verification and password reset
     emailOTP({
       otpLength: config.otp.length,
