@@ -78,6 +78,13 @@ export const config = {
     gracePeriod: parseIntWithDefault(process.env["JWT_GRACE_PERIOD"], 60 * 60 * 24 * 7), // 7 days
   },
 
+  // Passkey/WebAuthn configuration
+  passkey: {
+    rpID: process.env["PASSKEY_RP_ID"] ?? "localhost",
+    rpName: process.env["PASSKEY_RP_NAME"] ?? "Klard",
+    origin: process.env["PASSKEY_ORIGIN"] ?? "http://localhost:3001",
+  },
+
   // Security configuration
   security: {
     // Paths exempt from CSP (for OpenAPI docs, etc.)
