@@ -1,3 +1,5 @@
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { toNodeHandler } from "better-auth/node";
 import compression from "compression";
 import cookieParser from "cookie-parser";
@@ -8,6 +10,9 @@ import morgan from "morgan";
 import { config } from "./config/index.js";
 import { globalErrorHandler, notFoundHandler } from "./exceptions/KlardExceptionHandler.js";
 import { auth } from "./lib/auth.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 export function createApp(): Express {
   const app = express();
@@ -51,6 +56,25 @@ export function createApp(): Express {
   app.get("/health", (_req: Request, res: Response) => {
     res.json({ status: "healthy", timestamp: new Date().toISOString() });
   });
+
+  // Serve .well-known files for domain verification (passkey, OAuth, etc.)
+  // Files accessible without authentication, served from public/.well-known/
+  const publicDir = path.resolve(__dirname, "../public");
+  app.use(
+    "/.well-known",
+    express.static(path.join(publicDir, ".well-known"), {
+      setHeaders: (res, filePath) => {
+        // Set correct Content-Type for JSON files
+        if (filePath.endsWith(".json")) {
+          res.setHeader("Content-Type", "application/json");
+        }
+        // Apple app site association should be served as JSON (no .json extension)
+        if (filePath.endsWith("apple-app-site-association")) {
+          res.setHeader("Content-Type", "application/json");
+        }
+      },
+    }),
+  );
 
   // Error handling - must be registered last
   app.use(notFoundHandler);
