@@ -1,0 +1,46 @@
+# Dependencies
+node_modules
+
+# Build output
+build
+dist
+
+# Git
+.git
+.gitignore
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# Environment files (secrets)
+.env
+.env.*
+!.env.example
+
+# Tests
+tests
+coverage
+*.test.ts
+*.spec.ts
+
+# Documentation
+*.md
+docs
+
+# Logs
+logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker files (prevent recursive copies)
+Dockerfile*
+docker-compose*.yml
+.dockerignore
