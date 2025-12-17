@@ -85,6 +85,17 @@ Does this structure make sense? Any themes missing?
 
 ---
 
+## ⛔ VALIDATION CHECKPOINT - STOP HERE
+
+**Do NOT proceed to generate full stories until the PM approves:**
+1. Epic/theme structure
+2. Story granularity (separate vs merged)
+3. Any format preferences for acceptance criteria
+
+Wait for explicit user approval before continuing.
+
+---
+
 ## Generate User Stories (Validate Each)
 
 For each story, present for validation:
@@ -100,23 +111,14 @@ For each story, present for validation:
 **I want** [capability]
 **So that** [benefit/value]
 
-**Acceptance Criteria (Gherkin):**
-```gherkin
-Scenario: [Happy path]
-  Given [initial context]
-  When [action taken]
-  Then [expected result]
+**Acceptance Criteria:**
+> Acceptance criteria define what "done" means - simple outcome statements, NOT test scenarios.
 
-Scenario: [Edge case]
-  Given [edge case context]
-  When [action taken]
-  Then [expected handling]
-
-Scenario: [Error case]
-  Given [error condition]
-  When [action taken]
-  Then [error handled gracefully]
-```
+- [ ] [Outcome 1 - specific, testable]
+- [ ] [Outcome 2 - specific, testable]
+- [ ] [Outcome 3 - specific, testable]
+- [ ] [Edge case handled: brief description]
+- [ ] [Error case handled: brief description]
 
 **Technical Notes:**
 - Files likely affected: [list]
