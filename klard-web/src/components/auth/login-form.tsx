@@ -16,6 +16,7 @@ import { KlardLogo } from '@/components/ui/klard-icon';
 import { ErrorBanner } from '@/components/ui/error-banner';
 import { SubmitButton } from '@/components/ui/submit-button';
 import { useAuthUIStore } from '@/stores/auth-ui-store';
+import { useShakeAnimation } from '@/hooks/useShakeAnimation';
 import Link from 'next/link';
 import { z } from 'zod';
 
@@ -34,6 +35,7 @@ export function LoginForm() {
     clearError,
     reset,
   } = useAuthUIStore();
+  const { className: shakeClassName, shake } = useShakeAnimation();
 
   const {
     register,
@@ -74,6 +76,7 @@ export function LoginForm() {
       reset();
       router.push('/dashboard');
     } catch (error) {
+      shake();
       setError(
         error instanceof Error ? error.message : t('auth.errors.unexpectedError')
       );
@@ -85,6 +88,7 @@ export function LoginForm() {
     const validation = MagicLinkSchema.safeParse({ email });
 
     if (!validation.success) {
+      shake();
       setError(t('auth.errors.invalidEmailForMagicLink'));
       return;
     }
@@ -105,6 +109,7 @@ export function LoginForm() {
 
       setMagicLinkSent(validation.data.email);
     } catch (error) {
+      shake();
       setError(
         error instanceof Error ? error.message : t('auth.errors.magicLinkFailed')
       );
@@ -112,6 +117,7 @@ export function LoginForm() {
   }
 
   function handleSocialError(error: string) {
+    shake();
     setError(error);
   }
 
@@ -144,7 +150,7 @@ export function LoginForm() {
       )}
 
       {/* Form */}
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+      <form onSubmit={handleSubmit(onSubmit)} className={`space-y-5 ${shakeClassName}`} role="form">
         <InputField
           id="email"
           label={t('auth.login.emailLabel')}
