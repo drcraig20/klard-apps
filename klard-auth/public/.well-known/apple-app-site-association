@@ -3,16 +3,14 @@
     "apps": [],
     "details": [
       {
-        "appID": "PLACEHOLDER.com.klard.app",
-        "paths": [
-          "/api/auth/*"
-        ]
+        "appID": "TEAM_ID.io.klard.app",
+        "paths": ["*"]
       }
     ]
   },
   "webcredentials": {
     "apps": [
-      "PLACEHOLDER.com.klard.app"
+      "TEAM_ID.io.klard.app"
     ]
   }
 }
