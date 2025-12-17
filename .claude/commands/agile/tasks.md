@@ -31,6 +31,7 @@ Dispatch in parallel (single message with multiple Task tool calls):
 Task 1: Explore agent - "Analyze stories for task dependencies and scope"
 Task 2: feature-dev:code-explorer - "Explore codebase for existing implementations to reference"
 Task 3: Explore agent - "Find existing UI components in klard-web/src/components and klard-mobile/src/components that can be reused (NO DRY violations)"
+Task 4: Explore agent - "Read the plan document in docs/agile/plans/*-<feature>-plan.md to find components and patterns already identified for reuse"
 ```
 
 ### Step 4 - PROCEED
@@ -128,7 +129,9 @@ When implementing ANY task:
 4. ❌ NEVER duplicate existing component functionality
 ```
 
-**Populate the table** based on component discovery from parallel agent dispatch.
+**Populate the table** based on:
+1. Components identified in the **plan document** (`docs/agile/plans/*-<feature>-plan.md`)
+2. Component discovery from parallel agent dispatch (codebase search)
 
 ---
 
