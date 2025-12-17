@@ -10,7 +10,10 @@
     "clean": "turbo clean",
     "dev:web": "turbo dev --filter=klard-web",
     "dev:mobile": "turbo dev --filter=klard-mobile",
-    "build:web": "turbo build --filter=klard-web"
+    "dev:auth": "turbo dev --filter=klard-auth",
+    "build:web": "turbo build --filter=klard-web",
+    "build:auth": "turbo build --filter=klard-auth",
+    "test:auth": "turbo test --filter=klard-auth"
   },
   "repository": {
     "type": "git",

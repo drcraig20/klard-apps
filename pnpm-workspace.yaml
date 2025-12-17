@@ -1,4 +1,5 @@
 packages:
   - "klard-web"
   - "klard-mobile"
+  - "klard-auth"
   - "commons"

@@ -4,7 +4,7 @@
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**", "dist/**", ".expo/**"]
+      "outputs": [".next/**", "dist/**", ".expo/**", "build/**"]
     },
     "dev": {
       "cache": false,
@@ -12,6 +12,10 @@
     },
     "lint": {
       "dependsOn": ["^build"]
+    },
+    "test": {
+      "dependsOn": ["^build"],
+      "cache": false
     },
     "clean": {
       "cache": false

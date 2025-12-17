@@ -70,6 +70,7 @@ next-env.d.ts
 
 # IDE
 .idea/
+*.iml
 
 # test artifacts
 TEST_RESULTS.md
@@ -80,3 +81,8 @@ test-results/
 # turbo
 .turbo/
 /klard-mobile/.env.example
+
+# klard-auth (Express backend)
+klard-auth/.env
+klard-auth/.env.local
+klard-auth/.env*.local
