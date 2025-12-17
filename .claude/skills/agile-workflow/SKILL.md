@@ -15,19 +15,19 @@ Spec-driven development lifecycle for building features from idea to release.
 
 ## Commands & Skill Integration
 
-| Command | Model | Purpose | Skills | Parallel Agents |
-|---------|-------|---------|--------|-----------------|
-| `/agile:plan <feature>` | opus | Plan a new feature | `brainstorming` (conditional), `code-explorer` | ✅ explorer + docs research |
-| `/agile:prd` | opus | Generate PRD | `brainstorming` (conditional), `code-explorer` | ✅ codebase + requirements |
-| `/agile:arch` | opus | Design architecture | `code-architect`, `solid-design-principles`, `brainstorming` (conditional) | ✅ architect + explorer |
+| Command | Model  | Purpose | Skills | Parallel Agents |
+|---------|--------|---------|--------|-----------------|
+| `/agile:plan <feature>` | opus   | Plan a new feature | `brainstorming` (conditional), `code-explorer` | ✅ explorer + docs research |
+| `/agile:prd` | opus   | Generate PRD | `brainstorming` (conditional), `code-explorer` | ✅ codebase + requirements |
+| `/agile:arch` | opus   | Design architecture | `code-architect`, `solid-design-principles`, `brainstorming` (conditional) | ✅ architect + explorer |
 | `/agile:stories` | sonnet | Create user stories | `solid-design-principles`, `brainstorming` (conditional) | ✅ PRD + architecture analysis |
 | `/agile:tasks` | sonnet | Break into tasks | `writing-plans`, `brainstorming` (conditional) | ✅ stories + code exploration |
-| `/agile:impl <task-id>` | sonnet | Implement with TDD | `test-driven-development`, `verification-before-completion`, `testing-anti-patterns` | ✅ context gathering (TDD sequential) |
+| `/agile:impl [feature]` | sonnet | **Execute ALL tasks** with parallel sub-agents | `dispatching-parallel-agents`, `verification-before-completion` | ✅ **ALL independent tasks simultaneously** |
 | `/agile:qa` | sonnet | Quality assurance | `requesting-code-review`, `verification-before-completion` | ✅ multiple reviewers |
-| `/agile:release <version>` | haiku | Prepare release | `finishing-a-development-branch` | ❌ sequential |
-| `/agile:status` | haiku | Show progress | - | ❌ |
-| `/agile:board` | haiku | Display task board | - | ❌ |
-| `/agile:reflect` | opus | End-of-phase analysis | - | ❌ sequential (analysis) |
+| `/agile:release <version>` | haiku  | Prepare release | `finishing-a-development-branch` | ❌ sequential |
+| `/agile:status` | haiku  | Show progress | - | ❌ |
+| `/agile:board` | haiku  | Display task board | - | ❌ |
+| `/agile:reflect` | opus   | End-of-phase analysis | - | ❌ sequential (analysis) |
 
 ## Mandatory Skill Activation
 
@@ -84,9 +84,54 @@ Use Task tool with multiple agents in single message when:
 - Code review can happen on separate file sets
 
 NEVER use parallel for:
-- TDD (red-green-refactor is sequential)
 - Sequential approval workflows
-- Dependent tasks
+- Tasks with unmet dependencies
+
+### `/agile:impl` Parallel Execution
+
+The `/agile:impl` command executes ALL tasks using parallel sub-agents:
+
+```
+/agile:impl
+    │
+    ▼
+┌─────────────────────────────────────┐
+│ 1. Load task document (auto-detect) │
+│ 2. Build dependency graph           │
+│ 3. Find ALL independent tasks       │
+└─────────────────────────────────────┘
+    │
+    ▼
+┌─────────────────────────────────────┐
+│ Dispatch ALL independent tasks      │
+│ in parallel (single message)        │
+│                                     │
+│ Task 1 ─┬─► Sub-agent 1 (TDD)       │
+│ Task 2 ─┼─► Sub-agent 2 (TDD)       │
+│ Task 3 ─┼─► Sub-agent 3 (TDD)       │
+│ ...     └─► Sub-agent N (TDD)       │
+└─────────────────────────────────────┘
+    │
+    ▼
+┌─────────────────────────────────────┐
+│ Collect results                     │
+│ Find newly unblocked tasks          │
+│ Dispatch next batch                 │
+└─────────────────────────────────────┘
+    │
+    ▼
+┌─────────────────────────────────────┐
+│ At epic boundary:                   │
+│ Show summary, ask to continue       │
+└─────────────────────────────────────┘
+```
+
+**Key behaviors:**
+- Auto-detects task document (no argument needed)
+- TDD happens WITHIN each sub-agent (sequential red-green-refactor)
+- Sub-agents run IN PARALLEL (independent tasks)
+- Checkpoints at epic boundaries for user review
+- Each sub-agent must use Context7 for library docs
 
 ## Artifacts
 
