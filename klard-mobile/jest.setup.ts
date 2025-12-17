@@ -52,3 +52,33 @@ jest.mock('expo-constants', () => ({
     slug: 'klard-mobile',
   },
 }));
+
+// Mock react-native-reanimated
+jest.mock('react-native-reanimated', () => {
+  const View = require('react-native').View;
+
+  return {
+    default: {
+      View,
+      Text: View,
+      ScrollView: View,
+      createAnimatedComponent: (component: unknown) => component,
+    },
+    useSharedValue: (initial: unknown) => ({ value: initial }),
+    useAnimatedStyle: (callback: () => unknown) => callback(),
+    withTiming: (value: unknown) => value,
+    withSpring: (value: unknown) => value,
+    withSequence: (...values: unknown[]) => values[values.length - 1],
+    withDelay: (_delay: number, value: unknown) => value,
+    withRepeat: (value: unknown) => value,
+    runOnJS: (fn: (...args: unknown[]) => unknown) => fn,
+    useAnimatedGestureHandler: () => ({}),
+    useAnimatedScrollHandler: () => () => {},
+    Easing: {
+      linear: (x: number) => x,
+      ease: (x: number) => x,
+      quad: (x: number) => x,
+      cubic: (x: number) => x,
+    },
+  };
+});
