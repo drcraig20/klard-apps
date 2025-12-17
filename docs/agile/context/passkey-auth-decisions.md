@@ -82,3 +82,37 @@ await authClient.passkey.deletePasskey({ id });
 | US-011 | Deploy domain verification files | P0 | S |
 | US-012 | Configure iOS Face ID permission | P0 | S |
 | US-013 | Configure passkey environment variables | P0 | S |
+
+## Tasks Phase Decisions - 2025-12-17
+
+| Decision | Options Considered | Chosen | Rationale |
+|----------|-------------------|--------|-----------|
+| Task granularity | A) Full detailed TDD steps for all 47 tasks, B) Summarized with templates, C) Progressive breakdown | C) Progressive breakdown | Full TDD details for foundation tasks (US-001-003), summaries for rest, generate details on-demand with `/agile:impl` |
+| Execution approach | A) Subagent-driven (this session), B) Parallel session | Pending user decision | Both options available; subagent-driven recommended for faster iteration |
+| Parallel track strategy | A) Sequential, B) Parallel independent work | B) Parallel independent | US-008, US-010, US-011-013 can start Day 1 alongside US-001 |
+| Task ID format | A) Sequential, B) Story-based | B) Story-based (AUTH-XXX-YY) | Clear traceability: AUTH-001-01 = US-001 Task 1 |
+
+**Tasks Created:**
+
+| Story | Tasks | Total Est. |
+|-------|-------|-----------|
+| US-001 | 5 | 4h |
+| US-002 | 3 | 2h |
+| US-003 | 3 | 2h |
+| US-004 | 6 | 8h |
+| US-005 | 5 | 6h |
+| US-006 | 4 | 6h |
+| US-007 | 4 | 6h |
+| US-008 | 4 | 4h |
+| US-009 | 2 | 2h |
+| US-010 | 4 | 4h |
+| US-011 | 3 | 2h |
+| US-012 | 2 | 1h |
+| US-013 | 2 | 1h |
+| **TOTAL** | **47** | **~48h** |
+
+**Parallel Tracks Identified:**
+- Critical Path: US-001 → US-002/003 → US-004/005 → US-006/007
+- UX Track: US-008 (no deps, unblocks sign-in)
+- Error Handling Track: US-010 (no deps)
+- Infrastructure Track: US-011, US-012, US-013 (no deps)
