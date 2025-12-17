@@ -14,6 +14,9 @@ model: sonnet
 
 ### Step 1 - EVALUATE
 
+- `superpowers:using-git-worktrees` - YES - Isolate implementation in worktree (MANDATORY)
+- `superpowers:subagent-driven-development` - YES - Fresh subagent per task with code review
+- `superpowers:dispatching-parallel-agents` - CONDITIONAL - If implementing 3+ independent tasks
 - `superpowers:test-driven-development` - YES - TDD workflow
 - `superpowers:verification-before-completion` - YES - Verify before claiming done
 - `superpowers:testing-anti-patterns` - YES - Avoid testing mistakes
@@ -22,6 +25,14 @@ model: sonnet
 
 ### Step 2 - ACTIVATE
 
+**⚠️ WORKTREE ISOLATION REQUIRED:**
+Use `Skill(superpowers:using-git-worktrees)` tool FIRST - create isolated worktree before any implementation.
+
+**⚠️ PARALLEL IMPLEMENTATION (if multiple independent tasks):**
+Use `Skill(superpowers:dispatching-parallel-agents)` if implementing 3+ independent tasks.
+Use `Skill(superpowers:subagent-driven-development)` for subagent-per-task workflow.
+
+Then activate remaining skills:
 Use `Skill(superpowers:test-driven-development)` tool NOW.
 Use `Skill(superpowers:testing-anti-patterns)` tool NOW.
 Use `Skill(solid-design-principles)` tool NOW.
@@ -154,6 +165,7 @@ Using context from dispatched agents:
 ```
 ✅ PRE-IMPLEMENTATION CHECK
 
+- [ ] **Working in isolated git worktree** (MANDATORY - verify with `git worktree list`)
 - [ ] Task dependencies are complete
 - [ ] Understand acceptance criteria
 - [ ] Know which files to modify/create
@@ -172,7 +184,104 @@ Ready to proceed?
 
 ---
 
-## TDD Cycle: Red → Green → Refactor
+## Parallel Sub-Agent Implementation (When Applicable)
+
+**Use parallel sub-agents when:**
+- Implementing 3+ tasks with **no file overlap**
+- Tasks are in **different packages** (e.g., klard-auth, klard-web, klard-mobile)
+- Tasks can be verified **independently**
+
+**Do NOT use parallel when:**
+- Tasks modify the same files
+- Tasks have sequential dependencies (e.g., AUTH-001-02 depends on AUTH-001-01)
+- Tasks share database migrations or schema changes
+
+### Parallel Dispatch Pattern
+
+```
+🚀 PARALLEL IMPLEMENTATION MODE
+
+Identified [N] independent tasks for parallel execution:
+
+| Task ID | Package | Files | Can Parallelize? |
+|---------|---------|-------|------------------|
+| AUTH-001-01 | klard-auth | package.json | ✅ Independent |
+| AUTH-008-01 | klard-mobile | hooks/useShakeAnimation.ts | ✅ Independent |
+| AUTH-010-01 | klard-mobile | components/auth/NetworkErrorSheet.tsx | ✅ Independent |
+
+Dispatching sub-agents in parallel...
+```
+
+**Dispatch format (single message with multiple Task tool calls):**
+
+```
+Task 1 (general-purpose):
+  description: "Implement AUTH-001-01"
+  prompt: |
+    You are implementing AUTH-001-01 from docs/agile/tasks/[task-file].md
+
+    MANDATORY FIRST STEPS:
+    1. Use Skill(superpowers:using-git-worktrees) to create worktree: impl/AUTH-001-01
+    2. Use Skill(superpowers:test-driven-development) for TDD
+    3. Fetch Context7 docs for any libraries used
+
+    Your job:
+    1. Read task details from the task file
+    2. Create isolated worktree for this task
+    3. Implement using TDD (red → green → refactor)
+    4. Verify with tests, lint, tsc
+    5. Commit changes in worktree
+    6. Report: files changed, test results, any issues
+
+    Work directory: /path/to/klard-apps
+
+Task 2 (general-purpose):
+  description: "Implement AUTH-008-01"
+  prompt: [same structure, different task]
+
+Task 3 (general-purpose):
+  description: "Implement AUTH-010-01"
+  prompt: [same structure, different task]
+```
+
+### After Parallel Completion
+
+1. **Collect sub-agent reports**
+2. **Dispatch code reviewers** (can also be parallel):
+   ```
+   Task (superpowers:code-reviewer): Review AUTH-001-01 implementation
+   Task (superpowers:code-reviewer): Review AUTH-008-01 implementation
+   Task (superpowers:code-reviewer): Review AUTH-010-01 implementation
+   ```
+3. **Fix any Critical/Important issues** (sequential - may conflict)
+4. **Merge worktrees** to main implementation branch
+5. **Run full test suite** to verify integration
+
+### Worktree Merge Strategy
+
+```bash
+# After all parallel tasks complete and pass review:
+cd /path/to/klard-apps
+
+# Merge each worktree's branch
+git merge impl/AUTH-001-01 --no-ff -m "feat(auth): AUTH-001-01 - Install passkey dependency"
+git merge impl/AUTH-008-01 --no-ff -m "feat(mobile): AUTH-008-01 - Create useShakeAnimation hook"
+git merge impl/AUTH-010-01 --no-ff -m "feat(mobile): AUTH-010-01 - Create NetworkErrorSheet"
+
+# Clean up worktrees
+git worktree remove impl/AUTH-001-01
+git worktree remove impl/AUTH-008-01
+git worktree remove impl/AUTH-010-01
+
+# Run full verification
+pnpm test --run
+pnpm lint
+pnpm exec tsc --noEmit
+```
+
+---
+
+## TDD Cycle: Red → Green → Refactor (Sequential Mode)
 
 ### 1. RED: Write Failing Tests
 
