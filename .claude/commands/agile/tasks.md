@@ -30,6 +30,7 @@ Dispatch in parallel (single message with multiple Task tool calls):
 ```
 Task 1: Explore agent - "Analyze stories for task dependencies and scope"
 Task 2: feature-dev:code-explorer - "Explore codebase for existing implementations to reference"
+Task 3: Explore agent - "Find existing UI components in klard-web/src/components and klard-mobile/src/components that can be reused (NO DRY violations)"
 ```
 
 ### Step 4 - PROCEED
@@ -98,6 +99,36 @@ When implementing ANY task:
 ```
 
 **Populate the table** based on libraries identified during story/architecture analysis.
+
+---
+
+## MANDATORY: Reusable Components Section
+
+**Every generated tasks document MUST include a section listing existing components to reuse:**
+
+```markdown
+## ♻️ MANDATORY: Reuse Existing Components (NO DRY Violations)
+
+**BEFORE creating ANY new UI component, check if it already exists:**
+
+### Existing Components to Reuse
+
+| Component | Package | Path | Use For |
+|-----------|---------|------|---------|
+| Button | klard-mobile | src/components/ui/Button/Button.tsx | All buttons |
+| InputField | klard-mobile | src/components/ui/InputField/InputField.tsx | Form inputs |
+| [etc.] | | | |
+
+### DRY Enforcement
+
+When implementing ANY task:
+1. ✅ Search existing components FIRST
+2. ✅ Extend/compose existing components when possible
+3. ✅ Only create new components if truly novel
+4. ❌ NEVER duplicate existing component functionality
+```
+
+**Populate the table** based on component discovery from parallel agent dispatch.
 
 ---
 
