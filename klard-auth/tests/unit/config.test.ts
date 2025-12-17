@@ -107,53 +107,27 @@ describe("config", () => {
   });
 
   describe("Passkey configuration", () => {
-    it("should treat empty PASSKEY_RP_ID as empty string (not default)", async () => {
+    it("should load passkey environment variables with defaults", async () => {
       vi.stubEnv("PASSKEY_RP_ID", "");
-      vi.resetModules();
-      const { config } = await import("../../src/config/index.js");
-      // ?? only defaults on null/undefined, empty string passes through
-      expect(config.passkey.rpID).toBe("");
-      vi.unstubAllEnvs();
-    });
-
-    it("should use PASSKEY_RP_ID from environment when set", async () => {
-      vi.stubEnv("PASSKEY_RP_ID", "klard.app");
-      vi.resetModules();
-      const { config } = await import("../../src/config/index.js");
-      expect(config.passkey.rpID).toBe("klard.app");
-      vi.unstubAllEnvs();
-    });
-
-    it("should treat empty PASSKEY_RP_NAME as empty string (not default)", async () => {
       vi.stubEnv("PASSKEY_RP_NAME", "");
-      vi.resetModules();
-      const { config } = await import("../../src/config/index.js");
-      // ?? only defaults on null/undefined, empty string passes through
-      expect(config.passkey.rpName).toBe("");
-      vi.unstubAllEnvs();
-    });
-
-    it("should use PASSKEY_RP_NAME from environment when set", async () => {
-      vi.stubEnv("PASSKEY_RP_NAME", "Klard Dev");
-      vi.resetModules();
-      const { config } = await import("../../src/config/index.js");
-      expect(config.passkey.rpName).toBe("Klard Dev");
-      vi.unstubAllEnvs();
-    });
-
-    it("should treat empty PASSKEY_ORIGIN as empty string (not default)", async () => {
       vi.stubEnv("PASSKEY_ORIGIN", "");
       vi.resetModules();
       const { config } = await import("../../src/config/index.js");
-      // ?? only defaults on null/undefined, empty string passes through
-      expect(config.passkey.origin).toBe("");
+      expect(config.passkey).toBeDefined();
+      expect(config.passkey.rpID).toBe("localhost");
+      expect(config.passkey.rpName).toBe("Klard");
+      expect(config.passkey.origin).toBe("http://localhost:3001");
       vi.unstubAllEnvs();
     });
 
-    it("should use PASSKEY_ORIGIN from environment when set", async () => {
+    it("should use passkey environment variables when set", async () => {
+      vi.stubEnv("PASSKEY_RP_ID", "klard.app");
+      vi.stubEnv("PASSKEY_RP_NAME", "Klard Production");
       vi.stubEnv("PASSKEY_ORIGIN", "https://klard.app");
       vi.resetModules();
       const { config } = await import("../../src/config/index.js");
+      expect(config.passkey.rpID).toBe("klard.app");
+      expect(config.passkey.rpName).toBe("Klard Production");
       expect(config.passkey.origin).toBe("https://klard.app");
       vi.unstubAllEnvs();
     });
