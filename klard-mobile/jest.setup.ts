@@ -57,12 +57,15 @@ jest.mock('expo-constants', () => ({
 jest.mock('react-native-reanimated', () => {
   const View = require('react-native').View;
 
+  const identity = (x: number) => x;
+
   return {
     default: {
       View,
       Text: View,
       ScrollView: View,
       createAnimatedComponent: (component: unknown) => component,
+      addWhitelistedUIProps: jest.fn(),
     },
     useSharedValue: (initial: unknown) => ({ value: initial }),
     useAnimatedStyle: (callback: () => unknown) => callback(),
@@ -75,10 +78,14 @@ jest.mock('react-native-reanimated', () => {
     useAnimatedGestureHandler: () => ({}),
     useAnimatedScrollHandler: () => () => {},
     Easing: {
-      linear: (x: number) => x,
-      ease: (x: number) => x,
-      quad: (x: number) => x,
-      cubic: (x: number) => x,
+      linear: identity,
+      ease: identity,
+      quad: identity,
+      cubic: identity,
+      in: () => identity,
+      out: () => identity,
+      inOut: () => identity,
+      bezier: () => identity,
     },
   };
 });
@@ -136,3 +143,38 @@ jest.mock('@better-auth/expo/client', () => ({
 jest.mock('@better-auth/passkey/client', () => ({
   passkeyClient: jest.fn(() => ({ __passkey: true })),
 }));
+
+// Mock AsyncStorage
+jest.mock('@react-native-async-storage/async-storage', () => ({
+  default: {
+    getItem: jest.fn(),
+    setItem: jest.fn(),
+    removeItem: jest.fn(),
+    clear: jest.fn(),
+    getAllKeys: jest.fn(),
+    multiGet: jest.fn(),
+    multiSet: jest.fn(),
+    multiRemove: jest.fn(),
+  },
+}));
+
+// Mock @expo/ui
+jest.mock('@expo/ui/swift-ui', () => ({
+  DateTimePicker: () => null,
+  Host: () => null,
+  BottomSheet: () => null,
+}));
+
+// Mock @gorhom/bottom-sheet
+jest.mock('@gorhom/bottom-sheet', () => {
+  const View = require('react-native').View;
+  return {
+    __esModule: true,
+    default: View,
+    BottomSheetView: View,
+    BottomSheetBackdrop: View,
+    BottomSheetHandle: View,
+    BottomSheetFlatList: View,
+    BottomSheetScrollView: View,
+  };
+});

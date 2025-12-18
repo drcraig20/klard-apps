@@ -7,7 +7,7 @@ import { useRouter } from 'expo-router';
 import * as Linking from 'expo-linking';
 import { LoginSchema, MagicLinkSchema, type LoginInput } from '@klard-apps/commons';
 import { signIn } from '@/lib/auth-client';
-import { useThemeColors, useShakeAnimation } from '@/hooks';
+import { useThemeColors, useShakeAnimation, usePasskeyAuth } from '@/hooks';
 import { useAuthUIStore } from '@/stores';
 import { typography } from '@/styles';
 import { t } from '@/lib/i18n';
@@ -51,11 +51,24 @@ export function LoginForm() {
     },
   });
 
+  // Passkey authentication
+  const {
+    isLoading: passkeyLoading,
+    isAvailable: passkeyAvailable,
+    checkAvailability,
+    signInWithPasskey,
+  } = usePasskeyAuth();
+
   // Network error state
   const [networkError, setNetworkError] = useState<{ message: string; code?: string } | null>(null);
   const [pendingOperation, setPendingOperation] = useState<PendingOperation>(null);
 
   const isSubmitting = uiState === 'submitting';
+
+  // Check passkey availability on mount
+  useEffect(() => {
+    void checkAvailability();
+  }, [checkAvailability]);
 
   // Clear any stale error state from previous screens on mount
   useEffect(() => {
@@ -137,6 +150,26 @@ export function LoginForm() {
           error instanceof Error ? error.message : 'Failed to send magic link'
         );
       }
+    }
+  }
+
+  async function handlePasskeySignIn() {
+    try {
+      // Note: signInWithPasskey uses discoverable credentials - no email required
+      const result = await signInWithPasskey();
+
+      if (result.success) {
+        reset();
+        router.replace('/(tabs)/dashboard');
+      } else if (result.error) {
+        shake();
+        setError(result.error.message);
+      }
+    } catch (error) {
+      shake();
+      setError(
+        error instanceof Error ? error.message : 'Failed to sign in with passkey'
+      );
     }
   }
 
@@ -250,6 +283,22 @@ export function LoginForm() {
         >
           {t('auth.login.submitButton')}
         </Button>
+
+        {passkeyAvailable && (
+          <>
+            <View style={styles.fieldSpacer} />
+            <Button
+              variant="secondary"
+              size="lg"
+              loading={passkeyLoading}
+              fullWidth
+              onPress={handlePasskeySignIn}
+              disabled={passkeyLoading}
+            >
+              {passkeyLoading ? t('auth.login.passkeyLoading') : t('auth.login.passkeyButton')}
+            </Button>
+          </>
+        )}
       </Animated.View>
 
       <View style={styles.divider}>

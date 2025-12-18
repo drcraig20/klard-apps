@@ -196,19 +196,11 @@ export function usePasskeyAuth() {
    * Triggers biometric prompt and authenticates user with better-auth backend
    *
    * Note: better-auth's passkey implementation uses discoverable credentials,
-   * where the authenticator identifies the user automatically. The email and
-   * callbackURL parameters are included for interface consistency with other
-   * sign-in methods (signInWithEmail, signInWithMagicLink) but are not used
-   * in the current implementation. callbackURL is reserved for future redirect support.
+   * where the authenticator identifies the user automatically. No email required.
    *
-   * @param email - Unused; included for interface consistency with other sign-in methods
-   * @param callbackURL - Unused; reserved for future redirect support
    * @returns PasskeyAuthResult with success status and session data or error
    */
-  const signInWithPasskey = useCallback(async (
-    email: string,
-    callbackURL?: string
-  ): Promise<PasskeyAuthResult> => {
+  const signInWithPasskey = useCallback(async (): Promise<PasskeyAuthResult> => {
     setIsLoading(true);
     setError(null);
 
