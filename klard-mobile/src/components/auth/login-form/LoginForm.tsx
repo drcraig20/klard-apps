@@ -89,6 +89,7 @@ export function LoginForm() {
         throw new Error(result.error.message || 'Invalid email or password');
       }
 
+      haptics.success();
       reset();
       router.replace('/(tabs)/dashboard');
     } catch (error) {
@@ -134,6 +135,7 @@ export function LoginForm() {
         throw new Error(result.error.message || 'Failed to send magic link');
       }
 
+      haptics.success();
       setMagicLinkSent(validation.data.email);
     } catch (error) {
       shake();
@@ -178,6 +180,10 @@ export function LoginForm() {
   function handleSocialError(error: string) {
     shake();
     setError(error);
+  }
+
+  function handleSocialSuccess() {
+    haptics.success();
   }
 
   const handleNetworkErrorRetry = useCallback(() => {
@@ -311,7 +317,7 @@ export function LoginForm() {
         <View style={[styles.dividerLine, { backgroundColor: colors.border }]} />
       </View>
 
-      <SocialButtons disabled={isSubmitting} onError={handleSocialError} />
+      <SocialButtons disabled={isSubmitting} onError={handleSocialError} onSuccess={handleSocialSuccess} />
 
       <View style={styles.signupContainer}>
         <Text style={[typography.body, { color: colors.textSecondary }]}>
