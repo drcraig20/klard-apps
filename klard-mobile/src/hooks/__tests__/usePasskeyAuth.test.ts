@@ -376,7 +376,7 @@ describe('usePasskeyAuth', () => {
       const { result } = renderHook(() => usePasskeyAuth());
 
       act(() => {
-        result.current.signInWithPasskey('test@example.com');
+        result.current.signInWithPasskey();
       });
 
       expect(result.current.isLoading).toBe(true);
@@ -391,7 +391,7 @@ describe('usePasskeyAuth', () => {
       const email = 'test@example.com';
 
       await act(async () => {
-        await result.current.signInWithPasskey(email);
+        await result.current.signInWithPasskey();
       });
 
       // Verify signIn.passkey was called without arguments
@@ -405,7 +405,7 @@ describe('usePasskeyAuth', () => {
       let signInResult;
 
       await act(async () => {
-        signInResult = await result.current.signInWithPasskey('test@example.com');
+        signInResult = await result.current.signInWithPasskey();
       });
 
       // Verify the result structure matches PasskeyAuthResult
@@ -434,7 +434,7 @@ describe('usePasskeyAuth', () => {
       let signInResult;
 
       await act(async () => {
-        signInResult = await result.current.signInWithPasskey('test@example.com');
+        signInResult = await result.current.signInWithPasskey();
       });
 
       // Should not set error state for user cancellation
@@ -455,7 +455,7 @@ describe('usePasskeyAuth', () => {
       let signInResult;
 
       await act(async () => {
-        signInResult = await result.current.signInWithPasskey('test@example.com');
+        signInResult = await result.current.signInWithPasskey();
       });
 
       // Result should be defined with proper error structure
@@ -480,7 +480,7 @@ describe('usePasskeyAuth', () => {
       let signInResult;
 
       await act(async () => {
-        signInResult = await result.current.signInWithPasskey('test@example.com');
+        signInResult = await result.current.signInWithPasskey();
       });
 
       // Result should be defined with proper error structure
@@ -507,7 +507,7 @@ describe('usePasskeyAuth', () => {
       });
 
       await act(async () => {
-        await result.current.signInWithPasskey('test@example.com');
+        await result.current.signInWithPasskey();
       });
 
       expect(result.current.error).toBe('Invalid passkey credential');
@@ -531,7 +531,7 @@ describe('usePasskeyAuth', () => {
       });
 
       await act(async () => {
-        await result.current.signInWithPasskey('test@example.com');
+        await result.current.signInWithPasskey();
       });
 
       expect(result.current.error).toBeNull();
@@ -543,7 +543,7 @@ describe('usePasskeyAuth', () => {
       const callbackURL = '/dashboard';
 
       await act(async () => {
-        await result.current.signInWithPasskey(email, callbackURL);
+        await result.current.signInWithPasskey();
       });
 
       // Verify signIn.passkey was called

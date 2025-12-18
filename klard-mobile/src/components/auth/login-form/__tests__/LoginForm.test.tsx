@@ -4,13 +4,16 @@ import { useAuthUIStore } from '@/stores';
 import * as authClient from '@/lib/auth-client';
 
 // Mock dependencies
+const mockRouterReplace = jest.fn();
+const mockRouterPush = jest.fn();
+
 jest.mock('@/lib/auth-client');
 jest.mock('@/stores');
 jest.mock('expo-router', () => ({
-  useRouter: () => ({
-    replace: jest.fn(),
-    push: jest.fn(),
-  }),
+  useRouter: jest.fn(() => ({
+    replace: mockRouterReplace,
+    push: mockRouterPush,
+  })),
 }));
 jest.mock('expo-linking', () => ({
   createURL: jest.fn((path: string) => `klard://${path}`),
@@ -19,6 +22,17 @@ jest.mock('@/hooks/useShakeAnimation', () => ({
   useShakeAnimation: jest.fn(() => ({
     animatedStyle: { transform: [{ translateX: 0 }] },
     shake: jest.fn(),
+  })),
+}));
+jest.mock('@/hooks/usePasskeyAuth', () => ({
+  usePasskeyAuth: jest.fn(() => ({
+    isLoading: false,
+    isAvailable: false,
+    biometricType: 'none',
+    error: null,
+    checkAvailability: jest.fn(),
+    registerPasskey: jest.fn(),
+    signInWithPasskey: jest.fn(),
   })),
 }));
 
@@ -302,5 +316,195 @@ describe('LoginForm - Network Error Integration', () => {
 
     // Should NOT call setError
     expect(mockSetError).not.toHaveBeenCalled();
+  });
+});
+
+describe('LoginForm - Passkey Integration', () => {
+  const mockSetError = jest.fn();
+  const mockReset = jest.fn();
+  const mockSetSubmitting = jest.fn();
+  const mockClearError = jest.fn();
+  const mockSignInWithPasskey = jest.fn();
+  const mockCheckAvailability = jest.fn();
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+
+    // Mock the Zustand store
+    (useAuthUIStore as unknown as jest.Mock).mockReturnValue({
+      formState: 'idle',
+      errorMessage: null,
+      magicLinkEmail: null,
+      setSubmitting: mockSetSubmitting,
+      setMagicLinkSent: jest.fn(),
+      setError: mockSetError,
+      clearError: mockClearError,
+      reset: mockReset,
+    });
+  });
+
+  it('should not show passkey button when biometrics unavailable', () => {
+    const usePasskeyAuth = require('@/hooks/usePasskeyAuth').usePasskeyAuth;
+    (usePasskeyAuth as jest.Mock).mockReturnValue({
+      isLoading: false,
+      isAvailable: false,
+      biometricType: 'none',
+      error: null,
+      checkAvailability: mockCheckAvailability,
+      registerPasskey: jest.fn(),
+      signInWithPasskey: mockSignInWithPasskey,
+    });
+
+    const { queryByText } = render(<LoginForm />);
+
+    // Passkey button should not be visible
+    expect(queryByText(/sign in with passkey/i)).toBeNull();
+  });
+
+  it('should show passkey button when biometrics available', () => {
+    const usePasskeyAuth = require('@/hooks/usePasskeyAuth').usePasskeyAuth;
+    (usePasskeyAuth as jest.Mock).mockReturnValue({
+      isLoading: false,
+      isAvailable: true,
+      biometricType: 'faceId',
+      error: null,
+      checkAvailability: mockCheckAvailability,
+      registerPasskey: jest.fn(),
+      signInWithPasskey: mockSignInWithPasskey,
+    });
+
+    const { getByText } = render(<LoginForm />);
+
+    // Passkey button should be visible
+    expect(getByText(/sign in with passkey/i)).toBeTruthy();
+  });
+
+  it('should call checkAvailability on mount', () => {
+    const usePasskeyAuth = require('@/hooks/usePasskeyAuth').usePasskeyAuth;
+    (usePasskeyAuth as jest.Mock).mockReturnValue({
+      isLoading: false,
+      isAvailable: false,
+      biometricType: 'none',
+      error: null,
+      checkAvailability: mockCheckAvailability,
+      registerPasskey: jest.fn(),
+      signInWithPasskey: mockSignInWithPasskey,
+    });
+
+    render(<LoginForm />);
+
+    // Should call checkAvailability on mount
+    expect(mockCheckAvailability).toHaveBeenCalledTimes(1);
+  });
+
+  it('should trigger signInWithPasskey on button press', async () => {
+    const usePasskeyAuth = require('@/hooks/usePasskeyAuth').usePasskeyAuth;
+    (usePasskeyAuth as jest.Mock).mockReturnValue({
+      isLoading: false,
+      isAvailable: true,
+      biometricType: 'touchId',
+      error: null,
+      checkAvailability: mockCheckAvailability,
+      registerPasskey: jest.fn(),
+      signInWithPasskey: mockSignInWithPasskey,
+    });
+
+    mockSignInWithPasskey.mockResolvedValue({ success: true });
+
+    const { getByText } = render(<LoginForm />);
+
+    // Press passkey button (no email required - uses discoverable credentials)
+    const passkeyButton = getByText(/sign in with passkey/i);
+    fireEvent.press(passkeyButton);
+
+    // Should call signInWithPasskey without parameters
+    await waitFor(() => {
+      expect(mockSignInWithPasskey).toHaveBeenCalledWith();
+    });
+  });
+
+  it('should navigate to dashboard on successful passkey sign-in', async () => {
+    const usePasskeyAuth = require('@/hooks/usePasskeyAuth').usePasskeyAuth;
+    (usePasskeyAuth as jest.Mock).mockReturnValue({
+      isLoading: false,
+      isAvailable: true,
+      biometricType: 'faceId',
+      error: null,
+      checkAvailability: mockCheckAvailability,
+      registerPasskey: jest.fn(),
+      signInWithPasskey: mockSignInWithPasskey,
+    });
+
+    mockSignInWithPasskey.mockResolvedValue({ success: true });
+
+    const { getByText } = render(<LoginForm />);
+
+    // Press passkey button
+    const passkeyButton = getByText(/sign in with passkey/i);
+    fireEvent.press(passkeyButton);
+
+    // Should navigate to dashboard
+    await waitFor(() => {
+      expect(mockRouterReplace).toHaveBeenCalledWith('/(tabs)/dashboard');
+    });
+  });
+
+  it('should show error and trigger shake on passkey sign-in failure', async () => {
+    const mockShake = jest.fn();
+    const useShakeAnimation = require('@/hooks/useShakeAnimation').useShakeAnimation;
+    (useShakeAnimation as jest.Mock).mockReturnValue({
+      animatedStyle: { transform: [{ translateX: 0 }] },
+      shake: mockShake,
+    });
+
+    const usePasskeyAuth = require('@/hooks/usePasskeyAuth').usePasskeyAuth;
+    (usePasskeyAuth as jest.Mock).mockReturnValue({
+      isLoading: false,
+      isAvailable: true,
+      biometricType: 'fingerprint',
+      error: null,
+      checkAvailability: mockCheckAvailability,
+      registerPasskey: jest.fn(),
+      signInWithPasskey: mockSignInWithPasskey,
+    });
+
+    mockSignInWithPasskey.mockResolvedValue({
+      success: false,
+      error: { code: 'INVALID_CREDENTIAL', message: 'Passkey authentication failed' },
+    });
+
+    const { getByText } = render(<LoginForm />);
+
+    // Press passkey button
+    const passkeyButton = getByText(/sign in with passkey/i);
+    fireEvent.press(passkeyButton);
+
+    // Should call shake and show error
+    await waitFor(() => {
+      expect(mockShake).toHaveBeenCalled();
+      expect(mockSetError).toHaveBeenCalledWith('Passkey authentication failed');
+    });
+
+    // Should NOT navigate
+    expect(mockRouterReplace).not.toHaveBeenCalled();
+  });
+
+  it('should disable passkey button while passkey operation in progress', async () => {
+    const usePasskeyAuth = require('@/hooks/usePasskeyAuth').usePasskeyAuth;
+    (usePasskeyAuth as jest.Mock).mockReturnValue({
+      isLoading: true,
+      isAvailable: true,
+      biometricType: 'faceId',
+      error: null,
+      checkAvailability: mockCheckAvailability,
+      registerPasskey: jest.fn(),
+      signInWithPasskey: mockSignInWithPasskey,
+    });
+
+    const { getByText } = render(<LoginForm />);
+
+    // Button should be disabled/loading
+    const passkeyButton = getByText(/authenticating|sign in with passkey/i);
+    expect(passkeyButton).toBeTruthy();
   });
 });

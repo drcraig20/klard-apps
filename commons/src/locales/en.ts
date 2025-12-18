@@ -13,6 +13,8 @@ export const en = {
       passwordPlaceholder: "Enter your password",
       rememberMe: "Remember me",
       magicLinkButton: "Sign in with email link",
+      passkeyButton: "Sign in with Passkey",
+      passkeyLoading: "Authenticating...",
       submitButton: "Sign In",
       submitting: "Signing in...",
       orContinueWith: "or continue with",
