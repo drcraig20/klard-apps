@@ -1,3 +1,5 @@
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { toNodeHandler } from "better-auth/node";
 import compression from "compression";
 import cookieParser from "cookie-parser";
@@ -5,8 +7,6 @@ import cors from "cors";
 import express, { type Express, type Request, type Response } from "express";
 import helmet from "helmet";
 import morgan from "morgan";
-import path from "node:path";
-import { fileURLToPath } from "node:url";
 import { config } from "./config/index.js";
 import { globalErrorHandler, notFoundHandler } from "./exceptions/KlardExceptionHandler.js";
 import { auth } from "./lib/auth.js";

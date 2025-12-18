@@ -1,7 +1,7 @@
-import { betterAuth } from "better-auth";
-import { bearer, emailOTP, jwt, magicLink, openAPI } from "better-auth/plugins";
 import { expo } from "@better-auth/expo";
 import { passkey } from "@better-auth/passkey";
+import { betterAuth } from "better-auth";
+import { bearer, emailOTP, jwt, magicLink, openAPI } from "better-auth/plugins";
 import { Pool } from "pg";
 import { config } from "../config/index.js";
 import { sendEmail } from "../services/email.js";
@@ -119,7 +119,7 @@ export const auth: ReturnType<typeof betterAuth> = betterAuth({
         type: "boolean",
         required: false,
         defaultValue: false,
-        input: true
+        input: true,
       },
     },
   },
