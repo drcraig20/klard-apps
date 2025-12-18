@@ -1327,7 +1327,7 @@ git commit -m "feat(web): add passkey TypeScript types"
 
 ---
 
-#### Task AUTH-010-03: Integrate NetworkErrorSheet into LoginForm
+#### Task AUTH-010-03: Integrate NetworkErrorSheet into LoginForm ✅
 
 **Story:** US-010 | **Type:** Feature | **Estimate:** 1h
 
@@ -1335,12 +1335,14 @@ git commit -m "feat(web): add passkey TypeScript types"
 - Modify: `klard-mobile/src/components/auth/login-form/LoginForm.tsx`
 
 **Acceptance Criteria:**
-- [ ] Network errors show NetworkErrorSheet instead of inline banner
-- [ ] Auth errors still show inline ErrorBanner
-- [ ] Form values preserved when sheet dismissed
-- [ ] "Try again" retries the failed operation with same values
+- [x] Network errors show NetworkErrorSheet instead of inline banner
+- [x] Auth errors still show inline ErrorBanner
+- [x] Form values preserved when sheet dismissed
+- [x] "Try again" retries the failed operation with same values
 
 **Dependencies:** AUTH-010-01, AUTH-010-02
+
+**Completed:** 2025-12-17 | **Commit:** 7d3a657
 
 ---
 
@@ -1463,7 +1465,7 @@ git commit -m "feat(web): add passkey TypeScript types"
 
 ---
 
-#### Task AUTH-013-01: Document environment variables
+#### Task AUTH-013-01: Document environment variables ✅
 
 **Story:** US-013 | **Type:** Chore | **Estimate:** 30min
 
@@ -1472,12 +1474,14 @@ git commit -m "feat(web): add passkey TypeScript types"
 - Modify: `klard-auth/README.md` (or create PASSKEY.md)
 
 **Acceptance Criteria:**
-- [ ] `PASSKEY_RP_ID` documented with examples (localhost, klard.app)
-- [ ] `PASSKEY_RP_NAME` documented
-- [ ] `PASSKEY_ORIGIN` documented with examples
-- [ ] Production vs development values explained
+- [x] `PASSKEY_RP_ID` documented with examples (localhost, klard.app)
+- [x] `PASSKEY_RP_NAME` documented
+- [x] `PASSKEY_ORIGIN` documented with examples
+- [x] Production vs development values explained
 
 **Dependencies:** AUTH-001-02 (already created, this documents)
+
+**Completed:** 2025-12-18 | **Commit:** 4528b3a
 
 ---
 
