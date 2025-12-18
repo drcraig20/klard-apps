@@ -18,6 +18,7 @@ import { SubmitButton } from '@/components/ui/submit-button';
 import { useAuthUIStore } from '@/stores/auth-ui-store';
 import { useShakeAnimation } from '@/hooks/useShakeAnimation';
 import { usePasskeyAuth } from '@/hooks/usePasskeyAuth';
+import { PasskeyButton } from './passkey-button/PasskeyButton';
 import Link from 'next/link';
 import { z } from 'zod';
 
@@ -204,6 +205,21 @@ export function LoginForm() {
         <SubmitButton isSubmitting={isSubmitting}>
           {t('auth.login.submitButton')}
         </SubmitButton>
+
+        {/* Passkey sign-in button - AUTH-007-03 */}
+        <PasskeyButton
+          mode="signin"
+          onSuccess={() => {
+            reset();
+            router.push('/dashboard');
+          }}
+          onError={(error) => {
+            shake();
+            setError(error);
+          }}
+          disabled={isSubmitting}
+          className="w-full"
+        />
       </form>
 
       {/* Divider */}

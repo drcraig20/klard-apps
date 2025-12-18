@@ -79,7 +79,7 @@ export function PasskeyButton({
       }
       onSuccess();
     } else if (result.error) {
-      onError(result.error);
+      onError(result.error.message);
     }
   };
 
