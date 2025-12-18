@@ -96,3 +96,29 @@ export const buttonContainerStyles = sva({
     width: '100%',
   },
 });
+
+export const fallbackContainerStyles = sva({
+  base: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 24,
+    paddingHorizontal: 16,
+  },
+});
+
+export const fallbackTextStyles = sva({
+  base: {
+    fontSize: 14,
+    textAlign: 'center',
+  },
+  variants: {
+    variant: {
+      default: (colors) => ({
+        color: colors.mutedForeground,
+      }),
+    },
+  },
+  defaultVariants: {
+    variant: 'default',
+  },
+});
