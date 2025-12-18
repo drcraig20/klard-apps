@@ -130,6 +130,14 @@ function validatePasskeyConfig(): void {
           "See .env.example for required configuration.",
       );
     }
+
+    // Validate RP_ID format (must be domain only, no protocol or port)
+    const rpId = process.env["PASSKEY_RP_ID"];
+    if (rpId && (rpId.includes("://") || rpId.includes(":"))) {
+      throw new Error(
+        "PASSKEY_RP_ID must be domain only (no protocol or port). Example: 'klard.app'",
+      );
+    }
   }
 }
 

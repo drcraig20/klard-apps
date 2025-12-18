@@ -155,4 +155,117 @@ describe("config", () => {
       vi.unstubAllEnvs();
     });
   });
+
+  describe("Passkey validation", () => {
+    it("should allow defaults in development environment", async () => {
+      vi.stubEnv("NODE_ENV", "development");
+      vi.stubEnv("PASSKEY_RP_ID", "");
+      vi.stubEnv("PASSKEY_ORIGIN", "");
+      vi.resetModules();
+
+      // Should not throw
+      await expect(import("../../src/config/index.js")).resolves.toBeDefined();
+      vi.unstubAllEnvs();
+    });
+
+    it("should allow defaults when NODE_ENV is not set", async () => {
+      vi.stubEnv("NODE_ENV", "");
+      vi.stubEnv("PASSKEY_RP_ID", "");
+      vi.stubEnv("PASSKEY_ORIGIN", "");
+      vi.resetModules();
+
+      // Should not throw
+      await expect(import("../../src/config/index.js")).resolves.toBeDefined();
+      vi.unstubAllEnvs();
+    });
+
+    it("should throw error when PASSKEY_RP_ID is missing in production", async () => {
+      vi.stubEnv("NODE_ENV", "production");
+      vi.stubEnv("VITEST", "false");
+      vi.stubEnv("PASSKEY_RP_ID", "");
+      vi.stubEnv("PASSKEY_ORIGIN", "https://klard.app");
+      vi.resetModules();
+
+      await expect(import("../../src/config/index.js")).rejects.toThrow(
+        "Missing required passkey environment variables in production: PASSKEY_RP_ID",
+      );
+      vi.unstubAllEnvs();
+    });
+
+    it("should throw error when PASSKEY_ORIGIN is missing in production", async () => {
+      vi.stubEnv("NODE_ENV", "production");
+      vi.stubEnv("VITEST", "false");
+      vi.stubEnv("PASSKEY_RP_ID", "klard.app");
+      vi.stubEnv("PASSKEY_ORIGIN", "");
+      vi.resetModules();
+
+      await expect(import("../../src/config/index.js")).rejects.toThrow(
+        "Missing required passkey environment variables in production: PASSKEY_ORIGIN",
+      );
+      vi.unstubAllEnvs();
+    });
+
+    it("should throw error when both PASSKEY_RP_ID and PASSKEY_ORIGIN are missing in production", async () => {
+      vi.stubEnv("NODE_ENV", "production");
+      vi.stubEnv("VITEST", "false");
+      vi.stubEnv("PASSKEY_RP_ID", "");
+      vi.stubEnv("PASSKEY_ORIGIN", "");
+      vi.resetModules();
+
+      await expect(import("../../src/config/index.js")).rejects.toThrow(
+        "Missing required passkey environment variables in production: PASSKEY_RP_ID, PASSKEY_ORIGIN",
+      );
+      vi.unstubAllEnvs();
+    });
+
+    it("should throw error when PASSKEY_RP_ID contains protocol in production", async () => {
+      vi.stubEnv("NODE_ENV", "production");
+      vi.stubEnv("VITEST", "false");
+      vi.stubEnv("PASSKEY_RP_ID", "https://klard.app");
+      vi.stubEnv("PASSKEY_ORIGIN", "https://klard.app");
+      vi.resetModules();
+
+      await expect(import("../../src/config/index.js")).rejects.toThrow(
+        "PASSKEY_RP_ID must be domain only (no protocol or port)",
+      );
+      vi.unstubAllEnvs();
+    });
+
+    it("should throw error when PASSKEY_RP_ID contains port in production", async () => {
+      vi.stubEnv("NODE_ENV", "production");
+      vi.stubEnv("VITEST", "false");
+      vi.stubEnv("PASSKEY_RP_ID", "klard.app:443");
+      vi.stubEnv("PASSKEY_ORIGIN", "https://klard.app");
+      vi.resetModules();
+
+      await expect(import("../../src/config/index.js")).rejects.toThrow(
+        "PASSKEY_RP_ID must be domain only (no protocol or port)",
+      );
+      vi.unstubAllEnvs();
+    });
+
+    it("should pass validation with valid values in production", async () => {
+      vi.stubEnv("NODE_ENV", "production");
+      vi.stubEnv("VITEST", "false");
+      vi.stubEnv("PASSKEY_RP_ID", "klard.app");
+      vi.stubEnv("PASSKEY_ORIGIN", "https://klard.app");
+      vi.resetModules();
+
+      // Should not throw
+      await expect(import("../../src/config/index.js")).resolves.toBeDefined();
+      vi.unstubAllEnvs();
+    });
+
+    it("should skip validation in test environment (VITEST=true)", async () => {
+      vi.stubEnv("NODE_ENV", "production");
+      vi.stubEnv("VITEST", "true");
+      vi.stubEnv("PASSKEY_RP_ID", "");
+      vi.stubEnv("PASSKEY_ORIGIN", "");
+      vi.resetModules();
+
+      // Should not throw even with missing values in production
+      await expect(import("../../src/config/index.js")).resolves.toBeDefined();
+      vi.unstubAllEnvs();
+    });
+  });
 });
