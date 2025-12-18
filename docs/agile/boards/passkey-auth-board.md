@@ -9,7 +9,8 @@
 
 | Task ID | Title | Story | Est. |
 |---------|-------|-------|------|
-| AUTH-001-05 | Add rate limiting to passkey endpoints | US-001 | 1.5h |
+| AUTH-002-01 | Install mobile passkey dependencies | US-002 | 15m |
+| AUTH-003-01 | Install web passkey dependency | US-003 | 15m |
 
 ---
 
@@ -17,10 +18,8 @@
 
 | Task ID | Title | Blocked By | Story |
 |---------|-------|------------|-------|
-| AUTH-002-01 | Install mobile passkey dependencies | AUTH-001-05 | US-002 |
 | AUTH-002-02 | Configure passkeyClient in mobile auth-client | AUTH-002-01 | US-002 |
 | AUTH-002-03 | Verify cookie prefix alignment | AUTH-002-02 | US-002 |
-| AUTH-003-01 | Install web passkey dependency | AUTH-001-05 | US-003 |
 | AUTH-003-02 | Configure passkeyClient in web auth-client | AUTH-003-01 | US-003 |
 | AUTH-003-03 | Create passkey types for web | AUTH-003-02 | US-003 |
 | AUTH-004-01 | Create usePasskeyAuth hook (mobile) | AUTH-002-03 | US-004 |
@@ -62,6 +61,7 @@
 | AUTH-001-02 | Configure passkey environment variables | US-001 | `c3fc02b` |
 | AUTH-001-03 | Add passkey plugin to auth configuration | US-001 | `0f1cbe5` |
 | AUTH-001-04 | Generate database migration for passkey table | US-001 | `945da5d` |
+| AUTH-001-05 | Add rate limiting to passkey endpoints | US-001 | `f3a6571` |
 | AUTH-008-01 | Create useShakeAnimation hook (mobile) | US-008 | `cc6893c` |
 | AUTH-008-02 | Integrate shake into mobile LoginForm | US-008 | `e9db408` |
 | AUTH-008-03 | Create useShakeAnimation hook (web) | US-008 | `c4d4927` |
@@ -83,30 +83,31 @@
 
 | Status | Count |
 |--------|-------|
-| Ready | 1 |
-| Blocked | 28 |
+| Ready | 2 |
+| Blocked | 26 |
 | In Progress | 0 |
-| Completed | 18 |
+| Completed | 19 |
 | **Total** | **47** |
-| **Progress** | **38.3%** |
+| **Progress** | **40.4%** |
 
 ---
 
 ## Critical Path
 
 ```
-AUTH-001-05 → AUTH-002-01 → AUTH-004-01 → ... → AUTH-006-04
+AUTH-002-01 → AUTH-002-02 → AUTH-002-03 → AUTH-004-01 → ... → AUTH-006-04
 ```
 
-**Next on critical path:** AUTH-001-05 (Add rate limiting to passkey endpoints)
+**Next on critical path:** AUTH-002-01 (Install mobile passkey dependencies) - can run in parallel with AUTH-003-01
 
 ---
 
 ## Quick Commands
 
 ```bash
-# Continue implementation
-/agile:impl AUTH-001-05
+# Continue implementation (parallel tracks available!)
+/agile:impl AUTH-002-01  # Mobile track
+/agile:impl AUTH-003-01  # Web track
 
 # Check status
 /agile:status
