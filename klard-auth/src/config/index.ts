@@ -69,6 +69,10 @@ export const config = {
       window: parseIntWithDefault(process.env["RATE_LIMIT_2FA_WINDOW"], 10),
       max: parseIntWithDefault(process.env["RATE_LIMIT_2FA_MAX"], 3),
     },
+    passkey: {
+      window: parseIntWithDefault(process.env["RATE_LIMIT_PASSKEY_WINDOW"], 60),
+      max: parseIntWithDefault(process.env["RATE_LIMIT_PASSKEY_MAX"], 10),
+    },
   },
 
   // JWT configuration

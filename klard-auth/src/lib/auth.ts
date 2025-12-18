@@ -85,6 +85,10 @@ export const auth: ReturnType<typeof betterAuth> = betterAuth({
         window: config.rateLimit.twoFactorVerify.window,
         max: config.rateLimit.twoFactorVerify.max,
       },
+      "/passkey/*": {
+        window: config.rateLimit.passkey.window,
+        max: config.rateLimit.passkey.max,
+      },
     },
   },
 

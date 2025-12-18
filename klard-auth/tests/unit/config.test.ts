@@ -106,6 +106,29 @@ describe("config", () => {
     });
   });
 
+  describe("Passkey rate limiting configuration", () => {
+    it("should have default passkey rate limit of 60s window and 10 max requests", async () => {
+      vi.stubEnv("RATE_LIMIT_PASSKEY_WINDOW", "");
+      vi.stubEnv("RATE_LIMIT_PASSKEY_MAX", "");
+      vi.resetModules();
+      const { config } = await import("../../src/config/index.js");
+      expect(config.rateLimit.passkey).toBeDefined();
+      expect(config.rateLimit.passkey.window).toBe(60);
+      expect(config.rateLimit.passkey.max).toBe(10);
+      vi.unstubAllEnvs();
+    });
+
+    it("should use passkey rate limit environment variables when set", async () => {
+      vi.stubEnv("RATE_LIMIT_PASSKEY_WINDOW", "120");
+      vi.stubEnv("RATE_LIMIT_PASSKEY_MAX", "5");
+      vi.resetModules();
+      const { config } = await import("../../src/config/index.js");
+      expect(config.rateLimit.passkey.window).toBe(120);
+      expect(config.rateLimit.passkey.max).toBe(5);
+      vi.unstubAllEnvs();
+    });
+  });
+
   describe("Passkey configuration", () => {
     it("should load passkey environment variables with defaults", async () => {
       vi.stubEnv("PASSKEY_RP_ID", "");
