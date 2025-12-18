@@ -7,7 +7,7 @@ import { useRouter } from 'expo-router';
 import * as Linking from 'expo-linking';
 import { LoginSchema, MagicLinkSchema, type LoginInput } from '@klard-apps/commons';
 import { signIn } from '@/lib/auth-client';
-import { useThemeColors, useShakeAnimation, usePasskeyAuth } from '@/hooks';
+import { useThemeColors, useShakeAnimation, usePasskeyAuth, useHaptics } from '@/hooks';
 import { useAuthUIStore } from '@/stores';
 import { typography } from '@/styles';
 import { t } from '@/lib/i18n';
@@ -25,6 +25,7 @@ export function LoginForm() {
   const router = useRouter();
   const colors = useThemeColors();
   const { animatedStyle, shake } = useShakeAnimation();
+  const haptics = useHaptics();
 
   const {
     formState: uiState,
@@ -159,6 +160,7 @@ export function LoginForm() {
       const result = await signInWithPasskey();
 
       if (result.success) {
+        haptics.success();
         reset();
         router.replace('/(tabs)/dashboard');
       } else if (result.error) {
