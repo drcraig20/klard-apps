@@ -82,3 +82,57 @@ jest.mock('react-native-reanimated', () => {
     },
   };
 });
+
+// Mock expo-secure-store
+jest.mock('expo-secure-store', () => ({
+  getItemAsync: jest.fn(),
+  setItemAsync: jest.fn(),
+  deleteItemAsync: jest.fn(),
+}));
+
+// Mock better-auth
+jest.mock('better-auth/react', () => ({
+  createAuthClient: jest.fn((config) => {
+    // Create base client
+    const client: any = {
+      signIn: {
+        email: jest.fn(),
+      },
+      signUp: {
+        email: jest.fn(),
+      },
+      signOut: jest.fn(),
+      useSession: jest.fn(),
+      updateUser: jest.fn(),
+    };
+
+    // Only add passkey methods if passkeyClient plugin is present
+    if (config?.plugins?.some((plugin: any) => plugin?.__passkey)) {
+      client.passkey = {
+        addPasskey: jest.fn(),
+        listUserPasskeys: jest.fn(),
+        deletePasskey: jest.fn(),
+        updatePasskey: jest.fn(),
+      };
+      client.signIn.passkey = jest.fn();
+    }
+
+    return client;
+  }),
+}));
+
+// Mock better-auth/client/plugins
+jest.mock('better-auth/client/plugins', () => ({
+  magicLinkClient: jest.fn(() => ({})),
+  inferAdditionalFields: jest.fn(() => ({})),
+}));
+
+// Mock @better-auth/expo/client
+jest.mock('@better-auth/expo/client', () => ({
+  expoClient: jest.fn(() => ({})),
+}));
+
+// Mock @better-auth/passkey/client
+jest.mock('@better-auth/passkey/client', () => ({
+  passkeyClient: jest.fn(() => ({ __passkey: true })),
+}));

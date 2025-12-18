@@ -1,6 +1,7 @@
 import { createAuthClient } from 'better-auth/react';
 import { magicLinkClient, inferAdditionalFields } from 'better-auth/client/plugins';
 import { expoClient } from "@better-auth/expo/client";
+import { passkeyClient } from "@better-auth/passkey/client";
 import * as SecureStore from 'expo-secure-store';
 import { Platform } from 'react-native';
 
@@ -36,6 +37,7 @@ export const authClient = createAuthClient({
       storagePrefix: "klard",
       storage: SecureStore,
     }),
+    passkeyClient(),
     inferAdditionalFields({
       user: {
         hasOnboarded: {
