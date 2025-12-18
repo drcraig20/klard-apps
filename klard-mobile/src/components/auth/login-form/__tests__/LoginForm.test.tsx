@@ -48,28 +48,28 @@ jest.mock('@/hooks/useHaptics', () => ({
     selection: jest.fn(),
   })),
 }));
-jest.mock('../social-buttons', () => ({
+jest.mock('@/components/auth/social-buttons', () => ({
   SocialButtons: jest.fn(({ onError, onSuccess }) => {
     const React = require('react');
     const { View } = require('react-native');
     return React.createElement(View, { testID: 'social-buttons' });
   }),
 }));
-jest.mock('../magic-link-sent', () => ({
+jest.mock('@/components/auth/magic-link-sent', () => ({
   MagicLinkSent: jest.fn(() => {
     const React = require('react');
     const { View } = require('react-native');
     return React.createElement(View, { testID: 'magic-link-sent' });
   }),
 }));
-jest.mock('../error-banner', () => ({
+jest.mock('@/components/auth/error-banner', () => ({
   ErrorBanner: jest.fn(() => {
     const React = require('react');
     const { View } = require('react-native');
     return React.createElement(View, { testID: 'error-banner' });
   }),
 }));
-jest.mock('../network-error-sheet', () => ({
+jest.mock('@/components/auth/network-error-sheet', () => ({
   NetworkErrorSheet: jest.fn(({ open }) => {
     const React = require('react');
     const { View, Text, TouchableOpacity } = require('react-native');
@@ -787,6 +787,59 @@ describe('LoginForm - Haptic Feedback on Success', () => {
     // Wait for error handling
     await waitFor(() => {
       expect(mockSetError).toHaveBeenCalled();
+    });
+
+    // Should NOT call haptics.success()
+    expect(mockHapticsSuccess).not.toHaveBeenCalled();
+  });
+
+  it('should NOT call haptics.success() on passkey sign-in failure', async () => {
+    const mockSignInWithPasskey = jest.fn();
+    const usePasskeyAuth = require('@/hooks/usePasskeyAuth').usePasskeyAuth;
+    (usePasskeyAuth as jest.Mock).mockReturnValue({
+      isLoading: false,
+      isAvailable: true,
+      biometricType: 'faceId',
+      error: null,
+      checkAvailability: jest.fn(),
+      registerPasskey: jest.fn(),
+      signInWithPasskey: mockSignInWithPasskey,
+    });
+
+    // Mock passkey failure
+    mockSignInWithPasskey.mockResolvedValue({
+      success: false,
+      error: { code: 'INVALID_CREDENTIAL', message: 'Passkey authentication failed' },
+    });
+
+    const { getByText } = render(<LoginForm />);
+
+    // Press passkey button
+    const passkeyButton = getByText(/sign in with passkey/i);
+    fireEvent.press(passkeyButton);
+
+    // Wait for error handling
+    await waitFor(() => {
+      expect(mockSetError).toHaveBeenCalledWith('Passkey authentication failed');
+    });
+
+    // Should NOT call haptics.success()
+    expect(mockHapticsSuccess).not.toHaveBeenCalled();
+
+    // Should NOT navigate
+    expect(mockRouterReplace).not.toHaveBeenCalled();
+  });
+
+  it('should NOT call haptics.success() on social login failure', async () => {
+    const { getByTestId } = render(<LoginForm />);
+
+    // Find SocialButtons and trigger onError callback
+    const socialButtons = getByTestId('social-buttons');
+    fireEvent(socialButtons, 'error', 'Social authentication failed');
+
+    // Wait for error handling
+    await waitFor(() => {
+      expect(mockSetError).toHaveBeenCalledWith('Social authentication failed');
     });
 
     // Should NOT call haptics.success()
