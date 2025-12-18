@@ -17,6 +17,7 @@ import { ErrorBanner } from '@/components/ui/error-banner';
 import { SubmitButton } from '@/components/ui/submit-button';
 import { useAuthUIStore } from '@/stores/auth-ui-store';
 import { useShakeAnimation } from '@/hooks/useShakeAnimation';
+import { usePasskeyAuth } from '@/hooks/usePasskeyAuth';
 import Link from 'next/link';
 import { z } from 'zod';
 
@@ -36,6 +37,7 @@ export function LoginForm() {
     reset,
   } = useAuthUIStore();
   const { className: shakeClassName, shake } = useShakeAnimation();
+  const { preloadPasskeys } = usePasskeyAuth();
 
   const {
     register,
@@ -59,6 +61,11 @@ export function LoginForm() {
   useEffect(() => {
     reset();
   }, [reset]);
+
+  // Preload passkeys with Conditional UI on mount
+  useEffect(() => {
+    void preloadPasskeys();
+  }, [preloadPasskeys]);
 
   async function onSubmit(data: LoginFormValues) {
     try {
@@ -159,6 +166,7 @@ export function LoginForm() {
           leftIcon={<Mail size={20} />}
           error={errors.email?.message}
           disabled={isSubmitting}
+          autoComplete="webauthn"
           {...register('email')}
         />
 
