@@ -176,7 +176,7 @@ describe('usePasskeyAuth', () => {
   describe('signInWithPasskey', () => {
     it('should set isLoading to true during sign-in', async () => {
       const mockSignIn = vi.fn().mockImplementation(
-        () => new Promise((resolve) => setTimeout(() => resolve({ data: { user: { id: 'user-123' } } }), 100))
+        () => new Promise((resolve) => setTimeout(() => resolve({ data: { user: { id: 'user-123' }, session: { id: 'session-123' } } }), 100))
       );
       vi.mocked(authClient.signIn.passkey).mockImplementation(mockSignIn);
 
@@ -196,8 +196,8 @@ describe('usePasskeyAuth', () => {
       });
     });
 
-    it('should call authClient.signIn.passkey with default options', async () => {
-      const mockSignIn = vi.fn().mockResolvedValue({ data: { user: { id: 'user-123' } } });
+    it('should call authClient.signIn.passkey without autoFill for explicit sign-in', async () => {
+      const mockSignIn = vi.fn().mockResolvedValue({ data: { user: { id: 'user-123' }, session: { id: 'session-123' } } });
       vi.mocked(authClient.signIn.passkey).mockImplementation(mockSignIn);
 
       const { result } = renderHook(() => usePasskeyAuth());
@@ -206,11 +206,29 @@ describe('usePasskeyAuth', () => {
         await result.current.signInWithPasskey();
       });
 
+      // Should be called without autoFill parameter (or autoFill: false)
+      // Since autoFill is for Conditional UI, explicit sign-in should not use it
       expect(mockSignIn).toHaveBeenCalledWith();
     });
 
+    it('should accept optional email parameter', async () => {
+      const mockSignIn = vi.fn().mockResolvedValue({ data: { user: { id: 'user-123' }, session: { id: 'session-123' } } });
+      vi.mocked(authClient.signIn.passkey).mockImplementation(mockSignIn);
+
+      const { result } = renderHook(() => usePasskeyAuth());
+
+      await act(async () => {
+        await result.current.signInWithPasskey('user@example.com');
+      });
+
+      // better-auth passkey sign-in may or may not use email for discoverable credentials
+      // The important part is that the function accepts the parameter
+      expect(mockSignIn).toHaveBeenCalled();
+    });
+
     it('should set isLoading to false after successful sign-in', async () => {
-      const mockSignIn = vi.fn().mockResolvedValue({ data: { user: { id: 'user-123' } } });
+      const mockSession = { user: { id: 'user-123', email: 'user@example.com' }, session: { id: 'session-123' } };
+      const mockSignIn = vi.fn().mockResolvedValue({ data: mockSession });
       vi.mocked(authClient.signIn.passkey).mockImplementation(mockSignIn);
 
       const { result } = renderHook(() => usePasskeyAuth());
@@ -220,6 +238,42 @@ describe('usePasskeyAuth', () => {
       });
 
       expect(result.current.isLoading).toBe(false);
+      expect(result.current.error).toBeNull();
+    });
+
+    it('should return PasskeyAuthResult with session data on success', async () => {
+      const mockSession = { user: { id: 'user-123', email: 'user@example.com' }, session: { id: 'session-123' } };
+      const mockSignIn = vi.fn().mockResolvedValue({ data: mockSession });
+      vi.mocked(authClient.signIn.passkey).mockImplementation(mockSignIn);
+
+      const { result } = renderHook(() => usePasskeyAuth());
+
+      let signInResult;
+      await act(async () => {
+        signInResult = await result.current.signInWithPasskey();
+      });
+
+      expect(signInResult).toEqual({
+        success: true,
+        data: mockSession
+      });
+    });
+
+    it('should handle user cancellation gracefully (NotAllowedError)', async () => {
+      const mockError = new Error('User cancelled');
+      mockError.name = 'NotAllowedError';
+      const mockSignIn = vi.fn().mockRejectedValue(mockError);
+      vi.mocked(authClient.signIn.passkey).mockImplementation(mockSignIn);
+
+      const { result } = renderHook(() => usePasskeyAuth());
+
+      let signInResult;
+      await act(async () => {
+        signInResult = await result.current.signInWithPasskey();
+      });
+
+      // Silent return on user cancellation
+      expect(signInResult).toEqual({ success: false });
       expect(result.current.error).toBeNull();
     });
 
@@ -238,22 +292,8 @@ describe('usePasskeyAuth', () => {
       expect(result.current.error).toBe('Sign-in failed');
     });
 
-    it('should return success true on successful sign-in', async () => {
-      const mockSignIn = vi.fn().mockResolvedValue({ data: { user: { id: 'user-123' } } });
-      vi.mocked(authClient.signIn.passkey).mockImplementation(mockSignIn);
-
-      const { result } = renderHook(() => usePasskeyAuth());
-
-      let signInResult;
-      await act(async () => {
-        signInResult = await result.current.signInWithPasskey();
-      });
-
-      expect(signInResult).toEqual({ success: true });
-    });
-
-    it('should return success false on sign-in failure', async () => {
-      const mockError = new Error('Sign-in failed');
+    it('should return PasskeyAuthResult with error on failure', async () => {
+      const mockError = new Error('Invalid credential');
       const mockSignIn = vi.fn().mockRejectedValue(mockError);
       vi.mocked(authClient.signIn.passkey).mockImplementation(mockSignIn);
 
@@ -264,7 +304,34 @@ describe('usePasskeyAuth', () => {
         signInResult = await result.current.signInWithPasskey();
       });
 
-      expect(signInResult).toEqual({ success: false, error: 'Sign-in failed' });
+      expect(signInResult).toEqual({
+        success: false,
+        error: {
+          code: 'INVALID_CREDENTIAL',
+          message: 'Invalid credential',
+        },
+      });
+    });
+
+    it('should handle network errors with appropriate error code', async () => {
+      const mockError = new Error('Network request failed');
+      const mockSignIn = vi.fn().mockRejectedValue(mockError);
+      vi.mocked(authClient.signIn.passkey).mockImplementation(mockSignIn);
+
+      const { result } = renderHook(() => usePasskeyAuth());
+
+      let signInResult;
+      await act(async () => {
+        signInResult = await result.current.signInWithPasskey();
+      });
+
+      expect(signInResult).toEqual({
+        success: false,
+        error: {
+          code: 'NETWORK_ERROR',
+          message: 'Network request failed',
+        },
+      });
     });
   });
 

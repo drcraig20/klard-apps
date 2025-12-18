@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo } from 'react';
 import { authClient } from '@/lib/auth-client';
-import type { PasskeyAuthResult } from '@klard-apps/commons';
+import type { PasskeyAuthResult, PasskeyErrorCode } from '@klard-apps/commons';
 
 /**
  * Auto-detects browser name from navigator.userAgent.
@@ -92,19 +92,40 @@ export function usePasskeyAuth() {
    * SRP: Only handles passkey sign-in
    * DIP: Delegates to authClient.signIn.passkey
    *
-   * @returns Promise resolving to success status
+   * @param email - Optional email for identifying user (may be used with discoverable credentials)
+   * @returns Promise resolving to PasskeyAuthResult with session data
    */
-  const signInWithPasskey = useCallback(async () => {
+  const signInWithPasskey = useCallback(async (email?: string): Promise<PasskeyAuthResult> => {
     setIsLoading(true);
     setError(null);
 
     try {
-      await authClient.signIn.passkey();
-      return { success: true };
+      const result = await authClient.signIn.passkey();
+      return { success: true, data: result.data };
     } catch (err) {
+      // Handle user cancellation gracefully (NotAllowedError = silent return)
+      if (err instanceof Error && err.name === 'NotAllowedError') {
+        return { success: false };
+      }
+
       const errorMessage = err instanceof Error ? err.message : 'Sign-in failed';
       setError(errorMessage);
-      return { success: false, error: errorMessage };
+
+      // Map error message to appropriate error code
+      let errorCode: PasskeyErrorCode = 'CREDENTIAL_FAILED';
+      if (errorMessage.toLowerCase().includes('network')) {
+        errorCode = 'NETWORK_ERROR';
+      } else if (errorMessage.toLowerCase().includes('invalid')) {
+        errorCode = 'INVALID_CREDENTIAL';
+      }
+
+      return {
+        success: false,
+        error: {
+          code: errorCode,
+          message: errorMessage,
+        },
+      };
     } finally {
       setIsLoading(false);
     }
@@ -148,6 +169,6 @@ export interface UsePasskeyAuthReturn {
   isAvailable: boolean;
   error: string | null;
   registerPasskey: (name?: string) => Promise<PasskeyAuthResult>;
-  signInWithPasskey: () => Promise<{ success: boolean; error?: string }>;
+  signInWithPasskey: (email?: string) => Promise<PasskeyAuthResult>;
   preloadPasskeys: () => Promise<void>;
 }
