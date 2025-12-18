@@ -1,5 +1,24 @@
 import { useState, useCallback, useMemo } from 'react';
 import { authClient } from '@/lib/auth-client';
+import type { PasskeyAuthResult } from '@klard-apps/commons';
+
+/**
+ * Auto-detects browser name from navigator.userAgent.
+ * Follows SRP - single responsibility of browser detection.
+ *
+ * @returns Browser name (Chrome, Safari, Firefox, or Browser)
+ */
+function getBrowserName(): string {
+  if (typeof navigator === 'undefined') {
+    return 'Browser';
+  }
+
+  const ua = navigator.userAgent;
+  if (ua.includes('Chrome')) return 'Chrome';
+  if (ua.includes('Safari')) return 'Safari';
+  if (ua.includes('Firefox')) return 'Firefox';
+  return 'Browser';
+}
 
 /**
  * Hook for passkey/WebAuthn authentication operations.
@@ -36,27 +55,36 @@ export function usePasskeyAuth() {
    * SRP: Only handles passkey registration
    * DIP: Delegates to authClient.passkey.addPasskey
    *
-   * @param options - Registration options (name, authenticatorAttachment)
-   * @returns Promise resolving to success status
+   * @param name - Optional passkey name (auto-detects browser if not provided)
+   * @returns Promise resolving to PasskeyAuthResult
    */
-  const registerPasskey = useCallback(
-    async (options?: { name?: string; authenticatorAttachment?: 'platform' | 'cross-platform' }) => {
-      setIsLoading(true);
-      setError(null);
+  const registerPasskey = useCallback(async (name?: string): Promise<PasskeyAuthResult> => {
+    setIsLoading(true);
+    setError(null);
 
-      try {
-        await authClient.passkey.addPasskey(options);
-        return { success: true };
-      } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : 'Registration failed';
-        setError(errorMessage);
-        return { success: false, error: errorMessage };
-      } finally {
-        setIsLoading(false);
+    try {
+      const deviceName = name || getBrowserName();
+      const result = await authClient.passkey.addPasskey({ name: deviceName });
+      return { success: true, data: result };
+    } catch (err) {
+      // Handle user cancellation gracefully (NotAllowedError = silent return)
+      if (err instanceof Error && err.name === 'NotAllowedError') {
+        return { success: false };
       }
-    },
-    []
-  );
+
+      const errorMessage = err instanceof Error ? err.message : 'Registration failed';
+      setError(errorMessage);
+      return {
+        success: false,
+        error: {
+          code: 'CREDENTIAL_FAILED',
+          message: errorMessage,
+        },
+      };
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
 
   /**
    * Sign in using a registered passkey.
@@ -119,10 +147,7 @@ export interface UsePasskeyAuthReturn {
   isLoading: boolean;
   isAvailable: boolean;
   error: string | null;
-  registerPasskey: (options?: {
-    name?: string;
-    authenticatorAttachment?: 'platform' | 'cross-platform';
-  }) => Promise<{ success: boolean; error?: string }>;
+  registerPasskey: (name?: string) => Promise<PasskeyAuthResult>;
   signInWithPasskey: () => Promise<{ success: boolean; error?: string }>;
   preloadPasskeys: () => Promise<void>;
 }
