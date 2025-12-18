@@ -5,6 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { usePasskeyAuth, BiometricType } from '@/hooks/usePasskeyAuth';
 import { Button } from '@/components/ui/Button';
 import { useThemeColors } from '@/hooks/useThemeColors';
+import { useHaptics } from '@/hooks/useHaptics';
 import { isNetworkError } from '@/utils/error-helpers';
 import { NetworkErrorSheet } from '@/components/auth/network-error-sheet';
 import {
@@ -94,6 +95,7 @@ export function BiometricPrompt({
   const colorScheme = useColorScheme();
   const isDark = colorScheme === 'dark';
   const colors = useThemeColors();
+  const haptics = useHaptics();
 
   const {
     isLoading: hookLoading,
@@ -132,6 +134,7 @@ export function BiometricPrompt({
     try {
       if (mode === 'register') {
         await registerPasskey();
+        haptics.success();
         onSuccess();
       } else {
         await signInWithPasskey();
@@ -153,7 +156,7 @@ export function BiometricPrompt({
     } finally {
       setIsProcessing(false);
     }
-  }, [mode, registerPasskey, signInWithPasskey, onSuccess, onError]);
+  }, [mode, registerPasskey, signInWithPasskey, onSuccess, onError, haptics]);
 
   const isLoading = hookLoading || isProcessing;
   const iconName = getBiometricIcon(biometricType);

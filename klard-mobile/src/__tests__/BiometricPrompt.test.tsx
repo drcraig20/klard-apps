@@ -2,6 +2,7 @@ import { render, fireEvent, waitFor } from '@testing-library/react-native';
 import { BiometricPrompt } from '@/components/auth/biometric-prompt';
 import { usePasskeyAuth } from '@/hooks/usePasskeyAuth';
 import { isNetworkError } from '@/utils/error-helpers';
+import * as Haptics from 'expo-haptics';
 
 // Mock dependencies
 jest.mock('@/hooks/usePasskeyAuth');
@@ -19,10 +20,16 @@ jest.mock('@/hooks/useThemeColors', () => ({
 }));
 jest.mock('expo-haptics', () => ({
   impactAsync: jest.fn(),
+  notificationAsync: jest.fn(),
   ImpactFeedbackStyle: {
     Light: 'light',
     Medium: 'medium',
     Heavy: 'heavy',
+  },
+  NotificationFeedbackType: {
+    Success: 'success',
+    Warning: 'warning',
+    Error: 'error',
   },
 }));
 jest.mock('@/utils/error-helpers', () => ({
@@ -257,6 +264,72 @@ describe('BiometricPrompt', () => {
       await waitFor(() => {
         expect(mockOnSuccess).toHaveBeenCalledTimes(1);
       });
+    });
+
+    it('calls haptics.success() when registration succeeds', async () => {
+      const mockRegisterPasskey = jest.fn().mockResolvedValue({ success: true });
+      (usePasskeyAuth as jest.Mock).mockReturnValue({
+        isLoading: false,
+        isAvailable: true,
+        biometricType: 'faceId',
+        error: null,
+        checkAvailability: jest.fn(),
+        registerPasskey: mockRegisterPasskey,
+        signInWithPasskey: jest.fn(),
+      });
+
+      const { getByText } = render(
+        <BiometricPrompt
+          mode="register"
+          onSuccess={mockOnSuccess}
+          onError={mockOnError}
+          onCancel={mockOnCancel}
+        />
+      );
+
+      const button = getByText('Add Passkey');
+      fireEvent.press(button);
+
+      await waitFor(() => {
+        expect(Haptics.notificationAsync).toHaveBeenCalledWith(
+          Haptics.NotificationFeedbackType.Success
+        );
+      });
+    });
+
+    it('does not call haptics on registration failure', async () => {
+      const mockRegisterPasskey = jest
+        .fn()
+        .mockRejectedValue(new Error('Registration failed'));
+      (usePasskeyAuth as jest.Mock).mockReturnValue({
+        isLoading: false,
+        isAvailable: true,
+        biometricType: 'faceId',
+        error: null,
+        checkAvailability: jest.fn(),
+        registerPasskey: mockRegisterPasskey,
+        signInWithPasskey: jest.fn(),
+      });
+      (isNetworkError as jest.Mock).mockReturnValue(false);
+
+      const { getByText } = render(
+        <BiometricPrompt
+          mode="register"
+          onSuccess={mockOnSuccess}
+          onError={mockOnError}
+          onCancel={mockOnCancel}
+        />
+      );
+
+      const button = getByText('Add Passkey');
+      fireEvent.press(button);
+
+      await waitFor(() => {
+        expect(mockOnError).toHaveBeenCalledWith('Registration failed');
+      });
+
+      // Haptics should not be called on failure
+      expect(Haptics.notificationAsync).not.toHaveBeenCalled();
     });
 
     it('calls onError when registration fails', async () => {
