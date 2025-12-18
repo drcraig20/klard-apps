@@ -37,7 +37,15 @@ async function getDeviceName(): Promise<string> {
 function isUserCancellation(error: unknown): boolean {
   if (!error) return false;
 
-  const errorMessage = error instanceof Error ? error.message.toLowerCase() : String(error).toLowerCase();
+  let errorMessage = '';
+
+  if (error instanceof Error) {
+    errorMessage = error.message.toLowerCase();
+  } else if (typeof error === 'object' && error !== null && 'message' in error) {
+    errorMessage = String((error as { message: unknown }).message).toLowerCase();
+  } else {
+    errorMessage = String(error).toLowerCase();
+  }
 
   // Common cancellation patterns across platforms
   return (
@@ -185,12 +193,95 @@ export function usePasskeyAuth() {
 
   /**
    * Sign in using passkey with biometric authentication
-   * Placeholder for future implementation with backend integration
+   * Triggers biometric prompt and authenticates user with better-auth backend
+   *
+   * @param email - User's email for identifying the account
+   * @param callbackURL - Optional redirect URL after successful sign-in
+   * @returns PasskeyAuthResult with success status and session data or error
    */
-  const signInWithPasskey = useCallback(async () => {
-    // Placeholder implementation
-    // Will be implemented in future tasks with backend integration
-    return;
+  const signInWithPasskey = useCallback(async (
+    email: string,
+    callbackURL?: string
+  ): Promise<PasskeyAuthResult> => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      // Call better-auth signIn.passkey API
+      const result = await authClient.signIn.passkey({
+        fetchOptions: {
+          onSuccess(context) {
+            // Success handled by returning result
+          },
+          onError(context) {
+            // Error handled by checking result.error
+          },
+        },
+      });
+
+      // Check if sign-in was successful
+      if (result.data && result.data.session) {
+        return {
+          success: true,
+          data: {
+            id: result.data.session.id,
+            name: result.data.user?.name || 'User',
+            createdAt: new Date(),
+          },
+        };
+      }
+
+      // Check if error exists
+      if (result.error) {
+        // Handle user cancellation silently (no error message)
+        if (isUserCancellation(result.error)) {
+          return { success: false };
+        }
+
+        const errorMessage = result.error.message || 'Sign-in failed';
+
+        // Set error state for display
+        setError(errorMessage);
+
+        // Determine error code based on error message
+        const errorCode: 'INVALID_CREDENTIAL' | 'NETWORK_ERROR' = errorMessage.toLowerCase().includes('invalid') || errorMessage.toLowerCase().includes('credential')
+          ? 'INVALID_CREDENTIAL'
+          : 'NETWORK_ERROR';
+
+        return {
+          success: false,
+          error: {
+            code: errorCode,
+            message: errorMessage,
+          },
+        };
+      }
+
+      // Fallback error if no data and no error (shouldn't happen)
+      setError('Sign-in failed');
+      return {
+        success: false,
+        error: {
+          code: 'NETWORK_ERROR',
+          message: 'Sign-in failed',
+        },
+      };
+    } catch (err) {
+      // Handle exceptions (network errors, etc.)
+      const errorMessage =
+        err instanceof Error ? err.message : 'Failed to sign in with passkey';
+      setError(errorMessage);
+
+      return {
+        success: false,
+        error: {
+          code: 'NETWORK_ERROR',
+          message: errorMessage,
+        },
+      };
+    } finally {
+      setIsLoading(false);
+    }
   }, []);
 
   return useMemo(
