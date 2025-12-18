@@ -861,7 +861,7 @@ git commit -m "feat(web): add passkey TypeScript types"
 
 ---
 
-#### Task AUTH-004-05: Handle biometric unavailable fallback
+#### Task AUTH-004-05: Handle biometric unavailable fallback ✅
 
 **Story:** US-004 | **Type:** Feature | **Estimate:** 1h
 
@@ -870,13 +870,15 @@ git commit -m "feat(web): add passkey TypeScript types"
 - Test: `klard-mobile/src/components/auth/biometric-prompt/__tests__/BiometricPrompt.test.tsx`
 
 **Acceptance Criteria:**
-- [ ] Component checks `isAvailable` before rendering registration UI
-- [ ] Shows fallback message when biometrics unavailable
-- [ ] Fallback message: "Biometric authentication is not available on this device"
-- [ ] Does not show registration button when unavailable
-- [ ] Tests verify fallback rendering
+- [x] Component checks `isAvailable` before rendering registration UI
+- [x] Shows fallback message when biometrics unavailable
+- [x] Fallback message: "Biometric authentication is not available on this device"
+- [x] Does not show registration button when unavailable
+- [x] Tests verify fallback rendering
 
 **Dependencies:** AUTH-004-04
+
+**Commit:** b89640f
 
 ---
 
@@ -962,19 +964,22 @@ git commit -m "feat(web): add passkey TypeScript types"
 
 ---
 
-#### Task AUTH-005-04: Hide PasskeyButton on unsupported browsers
+#### Task AUTH-005-04: Hide PasskeyButton on unsupported browsers ✅
 
 **Story:** US-005 | **Type:** Feature | **Estimate:** 30min
 
 **Files:**
-- Modify: `klard-web/src/components/auth/passkey-button/PasskeyButton.tsx`
+- Modified: `klard-web/src/components/auth/passkey-button/PasskeyButton.tsx`
+- Modified: `klard-web/src/__tests__/PasskeyButton.test.tsx`
 
 **Acceptance Criteria:**
-- [ ] Component returns null when `isAvailable` is false
-- [ ] No flash of button before availability check completes
-- [ ] Tests verify hidden behavior
+- [x] Component returns null when `isAvailable` is false
+- [x] No flash of button before availability check completes
+- [x] Tests verify hidden behavior
 
 **Dependencies:** AUTH-005-03
+
+**Commit:** 3b9186a
 
 ---
 
@@ -1180,7 +1185,7 @@ git commit -m "feat(web): add passkey TypeScript types"
 
 ---
 
-#### Task AUTH-008-02: Integrate shake into mobile LoginForm
+#### Task AUTH-008-02: Integrate shake into mobile LoginForm ✅
 
 **Story:** US-008 | **Type:** Feature | **Estimate:** 1h
 
@@ -1188,11 +1193,13 @@ git commit -m "feat(web): add passkey TypeScript types"
 - Modify: `klard-mobile/src/components/auth/login-form/LoginForm.tsx`
 
 **Acceptance Criteria:**
-- [ ] Wrap form fields in Animated.View with `animatedStyle`
-- [ ] Call `shake()` on any auth failure (password, passkey, social)
-- [ ] Shake triggers before error message display
+- [x] Wrap form fields in Animated.View with `animatedStyle`
+- [x] Call `shake()` on any auth failure (password, passkey, social)
+- [x] Shake triggers before error message display
 
 **Dependencies:** AUTH-008-01
+
+**Completed:** 2025-12-17 | **Commit:** e9db408
 
 ---
 
