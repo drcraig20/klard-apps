@@ -48,6 +48,79 @@ jest.mock('@/hooks/useHaptics', () => ({
     selection: jest.fn(),
   })),
 }));
+jest.mock('../social-buttons', () => ({
+  SocialButtons: jest.fn(({ onError, onSuccess }) => {
+    const React = require('react');
+    const { View } = require('react-native');
+    return React.createElement(View, { testID: 'social-buttons' });
+  }),
+}));
+jest.mock('../magic-link-sent', () => ({
+  MagicLinkSent: jest.fn(() => {
+    const React = require('react');
+    const { View } = require('react-native');
+    return React.createElement(View, { testID: 'magic-link-sent' });
+  }),
+}));
+jest.mock('../error-banner', () => ({
+  ErrorBanner: jest.fn(() => {
+    const React = require('react');
+    const { View } = require('react-native');
+    return React.createElement(View, { testID: 'error-banner' });
+  }),
+}));
+jest.mock('../network-error-sheet', () => ({
+  NetworkErrorSheet: jest.fn(({ open }) => {
+    const React = require('react');
+    const { View, Text, TouchableOpacity } = require('react-native');
+    if (!open) return null;
+    return React.createElement(
+      View,
+      { testID: 'network-error-sheet' },
+      React.createElement(
+        TouchableOpacity,
+        { testID: 'network-error-sheet-close' },
+        React.createElement(Text, {}, 'Close')
+      ),
+      React.createElement(
+        TouchableOpacity,
+        { testID: 'network-error-sheet-retry' },
+        React.createElement(Text, {}, 'Try again')
+      )
+    );
+  }),
+}));
+jest.mock('@/components/ui', () => ({
+  Button: jest.fn(({ children, onPress, testID }) => {
+    const React = require('react');
+    const { TouchableOpacity, Text } = require('react-native');
+    return React.createElement(
+      TouchableOpacity,
+      { onPress, testID },
+      React.createElement(Text, {}, children)
+    );
+  }),
+  InputField: jest.fn(({ placeholder, onChangeText, onBlur, value, testID }) => {
+    const React = require('react');
+    const { TextInput } = require('react-native');
+    return React.createElement(TextInput, {
+      placeholder,
+      onChangeText,
+      onBlur,
+      value,
+      testID,
+    });
+  }),
+  CheckboxField: jest.fn(({ checked, onChange, label }) => {
+    const React = require('react');
+    const { TouchableOpacity, Text } = require('react-native');
+    return React.createElement(
+      TouchableOpacity,
+      { onPress: () => onChange(!checked) },
+      React.createElement(Text, {}, label)
+    );
+  }),
+}));
 
 describe('LoginForm - Shake Animation Integration', () => {
   const mockSetError = jest.fn();
@@ -562,5 +635,161 @@ describe('LoginForm - Passkey Integration', () => {
 
     // Verify navigation happened
     expect(mockRouterReplace).toHaveBeenCalledWith('/(tabs)/dashboard');
+  });
+});
+
+describe('LoginForm - Haptic Feedback on Success', () => {
+  const mockSetError = jest.fn();
+  const mockReset = jest.fn();
+  const mockSetSubmitting = jest.fn();
+  const mockClearError = jest.fn();
+  const mockSetMagicLinkSent = jest.fn();
+  const mockHapticsSuccess = jest.fn();
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+
+    // Mock haptics
+    const useHaptics = require('@/hooks/useHaptics').useHaptics;
+    (useHaptics as jest.Mock).mockReturnValue({
+      success: mockHapticsSuccess,
+      error: jest.fn(),
+      light: jest.fn(),
+      medium: jest.fn(),
+      heavy: jest.fn(),
+      rigid: jest.fn(),
+      soft: jest.fn(),
+      warning: jest.fn(),
+      selection: jest.fn(),
+    });
+
+    // Mock the Zustand store
+    (useAuthUIStore as unknown as jest.Mock).mockReturnValue({
+      formState: 'idle',
+      errorMessage: null,
+      magicLinkEmail: null,
+      setSubmitting: mockSetSubmitting,
+      setMagicLinkSent: mockSetMagicLinkSent,
+      setError: mockSetError,
+      clearError: mockClearError,
+      reset: mockReset,
+    });
+  });
+
+  it('should call haptics.success() on successful email/password login', async () => {
+    // Mock successful auth
+    (authClient.signIn.email as jest.Mock) = jest.fn().mockResolvedValue({
+      data: { user: { id: '1', email: 'test@example.com' } },
+    });
+
+    const { getByText, getByPlaceholderText } = render(<LoginForm />);
+
+    // Fill in form
+    const emailInput = getByPlaceholderText(/email/i);
+    const passwordInput = getByPlaceholderText(/password/i);
+    fireEvent.changeText(emailInput, 'test@example.com');
+    fireEvent.changeText(passwordInput, 'password123');
+
+    // Submit form
+    const submitButton = getByText(/sign in|log in|submit/i);
+    fireEvent.press(submitButton);
+
+    // Should call haptics.success() before navigation
+    await waitFor(() => {
+      expect(mockHapticsSuccess).toHaveBeenCalled();
+    });
+
+    // Verify navigation happened
+    expect(mockRouterReplace).toHaveBeenCalledWith('/(tabs)/dashboard');
+  });
+
+  it('should call haptics.success() on successful magic link sent', async () => {
+    // Mock successful magic link
+    (authClient.signIn.magicLink as jest.Mock) = jest.fn().mockResolvedValue({
+      data: { success: true },
+    });
+
+    const { getByText, getByPlaceholderText } = render(<LoginForm />);
+
+    // Fill in email
+    const emailInput = getByPlaceholderText(/email/i);
+    fireEvent.changeText(emailInput, 'test@example.com');
+
+    // Click magic link button
+    const magicLinkButton = getByText(/magic link/i);
+    fireEvent.press(magicLinkButton);
+
+    // Should call haptics.success() when magic link is sent
+    await waitFor(() => {
+      expect(mockHapticsSuccess).toHaveBeenCalled();
+    });
+
+    // Verify magic link sent state was set
+    expect(mockSetMagicLinkSent).toHaveBeenCalledWith('test@example.com');
+  });
+
+  it('should call haptics.success() on successful social login', async () => {
+    const { getByTestId } = render(<LoginForm />);
+
+    // Find SocialButtons and trigger onSuccess callback
+    const socialButtons = getByTestId('social-buttons');
+    fireEvent(socialButtons, 'success');
+
+    // Should call haptics.success()
+    await waitFor(() => {
+      expect(mockHapticsSuccess).toHaveBeenCalled();
+    });
+  });
+
+  it('should NOT call haptics.success() on email/password login failure', async () => {
+    // Mock failed auth
+    (authClient.signIn.email as jest.Mock) = jest.fn().mockResolvedValue({
+      error: { message: 'Invalid credentials' },
+    });
+
+    const { getByText, getByPlaceholderText } = render(<LoginForm />);
+
+    // Fill in form
+    const emailInput = getByPlaceholderText(/email/i);
+    const passwordInput = getByPlaceholderText(/password/i);
+    fireEvent.changeText(emailInput, 'test@example.com');
+    fireEvent.changeText(passwordInput, 'wrongpassword');
+
+    // Submit form
+    const submitButton = getByText(/sign in|log in|submit/i);
+    fireEvent.press(submitButton);
+
+    // Wait for error handling
+    await waitFor(() => {
+      expect(mockSetError).toHaveBeenCalled();
+    });
+
+    // Should NOT call haptics.success()
+    expect(mockHapticsSuccess).not.toHaveBeenCalled();
+  });
+
+  it('should NOT call haptics.success() on magic link failure', async () => {
+    // Mock failed magic link
+    (authClient.signIn.magicLink as jest.Mock) = jest.fn().mockResolvedValue({
+      error: { message: 'Failed to send magic link' },
+    });
+
+    const { getByText, getByPlaceholderText } = render(<LoginForm />);
+
+    // Fill in email
+    const emailInput = getByPlaceholderText(/email/i);
+    fireEvent.changeText(emailInput, 'test@example.com');
+
+    // Click magic link button
+    const magicLinkButton = getByText(/magic link/i);
+    fireEvent.press(magicLinkButton);
+
+    // Wait for error handling
+    await waitFor(() => {
+      expect(mockSetError).toHaveBeenCalled();
+    });
+
+    // Should NOT call haptics.success()
+    expect(mockHapticsSuccess).not.toHaveBeenCalled();
   });
 });
