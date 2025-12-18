@@ -1045,18 +1045,27 @@ git commit -m "feat(web): add passkey TypeScript types"
 
 ---
 
-#### Task AUTH-006-03: Add shake animation on passkey failure
+#### Task AUTH-006-03: Add shake animation on passkey failure ✅
 
 **Story:** US-006 | **Type:** Feature | **Estimate:** 1h
+**Status:** Complete (implemented in AUTH-006-02)
+**Commit:** 6d0ec79
 
 **Files:**
-- Modify: `klard-mobile/src/components/auth/login-form/LoginForm.tsx`
+- Modified: `klard-mobile/src/components/auth/login-form/LoginForm.tsx`
 
 **Acceptance Criteria:**
-- [ ] On passkey auth failure, form shakes horizontally
-- [ ] Uses `useShakeAnimation` hook (from US-008)
-- [ ] Shake duration is 200ms
-- [ ] Error message displayed after shake
+- [x] On passkey auth failure, form shakes horizontally
+- [x] Uses `useShakeAnimation` hook (from US-008)
+- [x] Shake duration is 200ms
+- [x] Error message displayed after shake
+
+**Implementation Details:**
+- Shake animation was already implemented in AUTH-006-02 alongside passkey integration
+- Both error paths (unsuccessful result and caught exceptions) trigger shake before displaying error
+- Line 165: `shake()` called when `result.error` exists
+- Line 169: `shake()` called in catch block for unexpected errors
+- Consistent with email/password failure UX
 
 **Dependencies:** AUTH-006-02
 
