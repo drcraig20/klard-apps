@@ -150,7 +150,12 @@ For each story, generate tasks following the `superpowers:writing-plans` bite-si
 **Files:**
 - Create: `exact/path/to/NewFile.ts`
 - Modify: `exact/path/to/existing.ts` - [what change]
-- Test: `exact/path/to/test.ts`
+- Test: `package/src/__tests__/ComponentName.test.ts` ← FLAT structure, NOT nested!
+
+**⚠️ TEST FILE LOCATION CONVENTION:**
+- ✅ Preferred: `package/test/` (root level)
+- ✅ Fallback: `package/src/__tests__/` (flat)
+- ❌ NEVER: `package/src/hooks/__tests__/` or `package/src/components/feature/__tests__/` (nested)
 
 **Step 1: Write the failing test**
 ```typescript
