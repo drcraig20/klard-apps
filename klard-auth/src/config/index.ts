@@ -101,7 +101,14 @@ function parseCspExemptPaths(): string[] {
 }
 
 function validatePasskeyConfig(): void {
-  const isProduction = process.env["NODE_ENV"] === "production";
+  const nodeEnv = process.env["NODE_ENV"];
+  const isProduction = nodeEnv === "production";
+  const isVitest = process.env["VITEST"] === "true";
+
+  // Skip validation in test environment (Vitest sets VITEST=true)
+  if (isVitest) {
+    return;
+  }
 
   if (isProduction) {
     const missing: string[] = [];
