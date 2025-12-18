@@ -27,6 +27,9 @@ jest.mock('@/lib/auth-client', () => ({
     passkey: {
       addPasskey: jest.fn(),
     },
+    signIn: {
+      passkey: jest.fn(),
+    },
   },
 }));
 
@@ -343,14 +346,213 @@ describe('usePasskeyAuth', () => {
   });
 
   describe('signInWithPasskey', () => {
+    beforeEach(() => {
+      // Setup default successful mock for signIn.passkey
+      (authClient.signIn.passkey as jest.Mock).mockResolvedValue({
+        data: {
+          user: {
+            id: 'user-123',
+            email: 'test@example.com',
+            name: 'Test User',
+          },
+          session: {
+            id: 'session-123',
+            userId: 'user-123',
+            token: 'session-token-123',
+            expiresAt: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000), // 5 days
+          },
+        },
+        error: null,
+      });
+    });
+
     it('is defined and callable', async () => {
       const { result } = renderHook(() => usePasskeyAuth());
       expect(result.current.signInWithPasskey).toBeDefined();
+      expect(typeof result.current.signInWithPasskey).toBe('function');
+    });
 
-      // For now, just verify it's a function that can be called
-      await act(async () => {
-        await result.current.signInWithPasskey();
+    it('sets isLoading to true during sign in', async () => {
+      const { result } = renderHook(() => usePasskeyAuth());
+
+      act(() => {
+        result.current.signInWithPasskey('test@example.com');
       });
+
+      expect(result.current.isLoading).toBe(true);
+
+      await waitFor(() => {
+        expect(result.current.isLoading).toBe(false);
+      });
+    });
+
+    it('calls authClient.signIn.passkey with correct options', async () => {
+      const { result } = renderHook(() => usePasskeyAuth());
+      const email = 'test@example.com';
+
+      await act(async () => {
+        await result.current.signInWithPasskey(email);
+      });
+
+      // Verify signIn.passkey was called
+      expect(authClient.signIn.passkey).toHaveBeenCalledWith({
+        fetchOptions: {
+          onSuccess: expect.any(Function),
+          onError: expect.any(Function),
+        },
+      });
+      expect(result.current.error).toBeNull();
+    });
+
+    it('returns PasskeyAuthResult with success true on successful sign in', async () => {
+      const { result } = renderHook(() => usePasskeyAuth());
+      let signInResult;
+
+      await act(async () => {
+        signInResult = await result.current.signInWithPasskey('test@example.com');
+      });
+
+      // Verify the result structure matches PasskeyAuthResult
+      expect(signInResult).toBeDefined();
+      expect(signInResult).toEqual({
+        success: true,
+        data: {
+          id: 'session-123',
+          name: 'Test User',
+          createdAt: expect.any(Date),
+        },
+      });
+      expect(result.current.error).toBeNull();
+    });
+
+    it('handles user cancellation gracefully without showing error', async () => {
+      // Mock user cancellation error
+      (authClient.signIn.passkey as jest.Mock).mockResolvedValue({
+        data: null,
+        error: {
+          message: 'User cancelled the operation',
+        },
+      });
+
+      const { result } = renderHook(() => usePasskeyAuth());
+      let signInResult;
+
+      await act(async () => {
+        signInResult = await result.current.signInWithPasskey('test@example.com');
+      });
+
+      // Should not set error state for user cancellation
+      expect(result.current.error).toBeNull();
+      expect(signInResult).toEqual({ success: false });
+    });
+
+    it('handles invalid credential error with appropriate message', async () => {
+      // Mock invalid credential error
+      (authClient.signIn.passkey as jest.Mock).mockResolvedValue({
+        data: null,
+        error: {
+          message: 'Invalid passkey credential',
+        },
+      });
+
+      const { result } = renderHook(() => usePasskeyAuth());
+      let signInResult;
+
+      await act(async () => {
+        signInResult = await result.current.signInWithPasskey('test@example.com');
+      });
+
+      // Result should be defined with proper error structure
+      expect(signInResult).toBeDefined();
+      expect(signInResult).toEqual({
+        success: false,
+        error: {
+          code: 'INVALID_CREDENTIAL',
+          message: 'Invalid passkey credential',
+        },
+      });
+      expect(result.current.error).toBe('Invalid passkey credential');
+    });
+
+    it('handles network error with appropriate message', async () => {
+      // Mock network error
+      (authClient.signIn.passkey as jest.Mock).mockRejectedValue(
+        new Error('Network request failed')
+      );
+
+      const { result } = renderHook(() => usePasskeyAuth());
+      let signInResult;
+
+      await act(async () => {
+        signInResult = await result.current.signInWithPasskey('test@example.com');
+      });
+
+      // Result should be defined with proper error structure
+      expect(signInResult).toBeDefined();
+      expect(signInResult).toEqual({
+        success: false,
+        error: {
+          code: 'NETWORK_ERROR',
+          message: 'Network request failed',
+        },
+      });
+      expect(result.current.error).toBe('Network request failed');
+    });
+
+    it('clears previous errors before new sign-in attempt', async () => {
+      const { result } = renderHook(() => usePasskeyAuth());
+
+      // First attempt with error
+      (authClient.signIn.passkey as jest.Mock).mockResolvedValue({
+        data: null,
+        error: {
+          message: 'Invalid passkey credential',
+        },
+      });
+
+      await act(async () => {
+        await result.current.signInWithPasskey('test@example.com');
+      });
+
+      expect(result.current.error).toBe('Invalid passkey credential');
+
+      // Second attempt should clear the error first
+      (authClient.signIn.passkey as jest.Mock).mockResolvedValue({
+        data: {
+          user: {
+            id: 'user-123',
+            email: 'test@example.com',
+            name: 'Test User',
+          },
+          session: {
+            id: 'session-123',
+            userId: 'user-123',
+            token: 'session-token-123',
+            expiresAt: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000),
+          },
+        },
+        error: null,
+      });
+
+      await act(async () => {
+        await result.current.signInWithPasskey('test@example.com');
+      });
+
+      expect(result.current.error).toBeNull();
+    });
+
+    it('accepts optional callbackURL parameter', async () => {
+      const { result } = renderHook(() => usePasskeyAuth());
+      const email = 'test@example.com';
+      const callbackURL = '/dashboard';
+
+      await act(async () => {
+        await result.current.signInWithPasskey(email, callbackURL);
+      });
+
+      // Verify signIn.passkey was called
+      expect(authClient.signIn.passkey).toHaveBeenCalled();
+      expect(result.current.error).toBeNull();
     });
   });
 
