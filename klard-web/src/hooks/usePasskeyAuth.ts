@@ -132,17 +132,33 @@ export function usePasskeyAuth() {
   }, []);
 
   /**
-   * Preload user's passkeys for improved UX.
+   * Preload user's passkeys with Conditional UI autofill.
+   * Enables browser passkey suggestions when user interacts with webauthn input fields.
    * Does not set loading state to avoid UI flicker.
    *
-   * SRP: Only handles passkey preloading
-   * DIP: Delegates to authClient.passkey.listUserPasskeys
+   * SRP: Only handles passkey preloading with Conditional UI
+   * DIP: Delegates to authClient.signIn.passkey with autoFill option
    *
    * @returns Promise resolving when preload completes
    */
   const preloadPasskeys = useCallback(async () => {
+    // Check if Conditional UI is supported in the browser
+    if (
+      typeof window === 'undefined' ||
+      !window.PublicKeyCredential ||
+      !PublicKeyCredential.isConditionalMediationAvailable
+    ) {
+      return;
+    }
+
     try {
-      await authClient.passkey.listUserPasskeys();
+      const isSupported = await PublicKeyCredential.isConditionalMediationAvailable();
+      if (!isSupported) {
+        return;
+      }
+
+      // Preload passkeys with autofill (Conditional UI)
+      await authClient.signIn.passkey({ autoFill: true });
     } catch (err) {
       // Silently fail - preloading is non-critical
       console.debug('Passkey preload failed:', err);
