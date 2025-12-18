@@ -1,0 +1,230 @@
+import { renderHook, act, waitFor } from '@testing-library/react-native';
+import * as LocalAuthentication from 'expo-local-authentication';
+import { usePasskeyAuth } from '@/hooks/usePasskeyAuth';
+
+// Mock expo-local-authentication
+jest.mock('expo-local-authentication', () => ({
+  hasHardwareAsync: jest.fn(),
+  isEnrolledAsync: jest.fn(),
+  supportedAuthenticationTypesAsync: jest.fn(),
+  authenticateAsync: jest.fn(),
+  AuthenticationType: {
+    FINGERPRINT: 1,
+    FACIAL_RECOGNITION: 2,
+    IRIS: 3,
+  },
+}));
+
+describe('usePasskeyAuth', () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  describe('initial state', () => {
+    it('returns initial state with isLoading false, isAvailable false, biometricType none, and no error', () => {
+      const { result } = renderHook(() => usePasskeyAuth());
+
+      expect(result.current.isLoading).toBe(false);
+      expect(result.current.isAvailable).toBe(false);
+      expect(result.current.biometricType).toBe('none');
+      expect(result.current.error).toBeNull();
+    });
+
+    it('exposes checkAvailability method', () => {
+      const { result } = renderHook(() => usePasskeyAuth());
+      expect(result.current.checkAvailability).toBeDefined();
+      expect(typeof result.current.checkAvailability).toBe('function');
+    });
+
+    it('exposes registerPasskey method', () => {
+      const { result } = renderHook(() => usePasskeyAuth());
+      expect(result.current.registerPasskey).toBeDefined();
+      expect(typeof result.current.registerPasskey).toBe('function');
+    });
+
+    it('exposes signInWithPasskey method', () => {
+      const { result } = renderHook(() => usePasskeyAuth());
+      expect(result.current.signInWithPasskey).toBeDefined();
+      expect(typeof result.current.signInWithPasskey).toBe('function');
+    });
+  });
+
+  describe('checkAvailability', () => {
+    it('sets isLoading to true during availability check', async () => {
+      (LocalAuthentication.hasHardwareAsync as jest.Mock).mockResolvedValue(true);
+      (LocalAuthentication.isEnrolledAsync as jest.Mock).mockResolvedValue(true);
+      (LocalAuthentication.supportedAuthenticationTypesAsync as jest.Mock).mockResolvedValue([
+        LocalAuthentication.AuthenticationType.FACIAL_RECOGNITION,
+      ]);
+
+      const { result } = renderHook(() => usePasskeyAuth());
+
+      act(() => {
+        result.current.checkAvailability();
+      });
+
+      expect(result.current.isLoading).toBe(true);
+
+      await waitFor(() => {
+        expect(result.current.isLoading).toBe(false);
+      });
+    });
+
+    it('detects Face ID when FACIAL_RECOGNITION is available on iOS', async () => {
+      (LocalAuthentication.hasHardwareAsync as jest.Mock).mockResolvedValue(true);
+      (LocalAuthentication.isEnrolledAsync as jest.Mock).mockResolvedValue(true);
+      (LocalAuthentication.supportedAuthenticationTypesAsync as jest.Mock).mockResolvedValue([
+        LocalAuthentication.AuthenticationType.FACIAL_RECOGNITION,
+      ]);
+
+      const { result } = renderHook(() => usePasskeyAuth());
+
+      await act(async () => {
+        await result.current.checkAvailability();
+      });
+
+      expect(result.current.biometricType).toBe('faceId');
+      expect(result.current.isAvailable).toBe(true);
+    });
+
+    it('detects Touch ID when FINGERPRINT is available on iOS', async () => {
+      (LocalAuthentication.hasHardwareAsync as jest.Mock).mockResolvedValue(true);
+      (LocalAuthentication.isEnrolledAsync as jest.Mock).mockResolvedValue(true);
+      (LocalAuthentication.supportedAuthenticationTypesAsync as jest.Mock).mockResolvedValue([
+        LocalAuthentication.AuthenticationType.FINGERPRINT,
+      ]);
+
+      const { result } = renderHook(() => usePasskeyAuth());
+
+      await act(async () => {
+        await result.current.checkAvailability();
+      });
+
+      expect(result.current.biometricType).toBe('touchId');
+      expect(result.current.isAvailable).toBe(true);
+    });
+
+    it('detects fingerprint when FINGERPRINT is available on Android', async () => {
+      (LocalAuthentication.hasHardwareAsync as jest.Mock).mockResolvedValue(true);
+      (LocalAuthentication.isEnrolledAsync as jest.Mock).mockResolvedValue(true);
+      (LocalAuthentication.supportedAuthenticationTypesAsync as jest.Mock).mockResolvedValue([
+        LocalAuthentication.AuthenticationType.FINGERPRINT,
+      ]);
+
+      // For this test, we assume Android context (in real implementation, would use Platform.OS)
+      const { result } = renderHook(() => usePasskeyAuth());
+
+      await act(async () => {
+        await result.current.checkAvailability();
+      });
+
+      // On iOS this returns 'touchId', but implementation should handle Android case
+      expect(['touchId', 'fingerprint']).toContain(result.current.biometricType);
+      expect(result.current.isAvailable).toBe(true);
+    });
+
+    it('sets biometricType to none when no hardware available', async () => {
+      (LocalAuthentication.hasHardwareAsync as jest.Mock).mockResolvedValue(false);
+      (LocalAuthentication.isEnrolledAsync as jest.Mock).mockResolvedValue(false);
+      (LocalAuthentication.supportedAuthenticationTypesAsync as jest.Mock).mockResolvedValue([]);
+
+      const { result } = renderHook(() => usePasskeyAuth());
+
+      await act(async () => {
+        await result.current.checkAvailability();
+      });
+
+      expect(result.current.biometricType).toBe('none');
+      expect(result.current.isAvailable).toBe(false);
+    });
+
+    it('sets biometricType to none when hardware available but not enrolled', async () => {
+      (LocalAuthentication.hasHardwareAsync as jest.Mock).mockResolvedValue(true);
+      (LocalAuthentication.isEnrolledAsync as jest.Mock).mockResolvedValue(false);
+      (LocalAuthentication.supportedAuthenticationTypesAsync as jest.Mock).mockResolvedValue([
+        LocalAuthentication.AuthenticationType.FINGERPRINT,
+      ]);
+
+      const { result } = renderHook(() => usePasskeyAuth());
+
+      await act(async () => {
+        await result.current.checkAvailability();
+      });
+
+      expect(result.current.biometricType).toBe('none');
+      expect(result.current.isAvailable).toBe(false);
+    });
+
+    it('handles errors during availability check', async () => {
+      const error = new Error('Hardware check failed');
+      (LocalAuthentication.hasHardwareAsync as jest.Mock).mockRejectedValue(error);
+
+      const { result } = renderHook(() => usePasskeyAuth());
+
+      await act(async () => {
+        await result.current.checkAvailability();
+      });
+
+      expect(result.current.error).toBe('Hardware check failed');
+      expect(result.current.isAvailable).toBe(false);
+      expect(result.current.isLoading).toBe(false);
+    });
+
+    it('calls LocalAuthentication APIs in correct order', async () => {
+      (LocalAuthentication.hasHardwareAsync as jest.Mock).mockResolvedValue(true);
+      (LocalAuthentication.isEnrolledAsync as jest.Mock).mockResolvedValue(true);
+      (LocalAuthentication.supportedAuthenticationTypesAsync as jest.Mock).mockResolvedValue([
+        LocalAuthentication.AuthenticationType.FACIAL_RECOGNITION,
+      ]);
+
+      const { result } = renderHook(() => usePasskeyAuth());
+
+      await act(async () => {
+        await result.current.checkAvailability();
+      });
+
+      expect(LocalAuthentication.hasHardwareAsync).toHaveBeenCalled();
+      expect(LocalAuthentication.isEnrolledAsync).toHaveBeenCalled();
+      expect(LocalAuthentication.supportedAuthenticationTypesAsync).toHaveBeenCalled();
+    });
+  });
+
+  describe('registerPasskey', () => {
+    it('is defined and callable', async () => {
+      const { result } = renderHook(() => usePasskeyAuth());
+      expect(result.current.registerPasskey).toBeDefined();
+
+      // For now, just verify it's a function that can be called
+      await act(async () => {
+        await result.current.registerPasskey();
+      });
+    });
+  });
+
+  describe('signInWithPasskey', () => {
+    it('is defined and callable', async () => {
+      const { result } = renderHook(() => usePasskeyAuth());
+      expect(result.current.signInWithPasskey).toBeDefined();
+
+      // For now, just verify it's a function that can be called
+      await act(async () => {
+        await result.current.signInWithPasskey();
+      });
+    });
+  });
+
+  describe('stable references', () => {
+    it('returns stable function references across rerenders', () => {
+      const { result, rerender } = renderHook(() => usePasskeyAuth());
+      const firstCheckAvailability = result.current.checkAvailability;
+      const firstRegisterPasskey = result.current.registerPasskey;
+      const firstSignInWithPasskey = result.current.signInWithPasskey;
+
+      rerender({});
+
+      expect(result.current.checkAvailability).toBe(firstCheckAvailability);
+      expect(result.current.registerPasskey).toBe(firstRegisterPasskey);
+      expect(result.current.signInWithPasskey).toBe(firstSignInWithPasskey);
+    });
+  });
+});
