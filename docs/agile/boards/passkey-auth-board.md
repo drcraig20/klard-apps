@@ -9,9 +9,9 @@
 
 | Task ID | Title | Story | Est. |
 |---------|-------|-------|------|
-| AUTH-004-01 | Create usePasskeyAuth hook (mobile) | US-004 | 2h |
-| AUTH-005-01 | Create usePasskeyAuth hook (web) | US-005 | 1.5h |
-| AUTH-010-04 | Handle network errors in passkey flows | US-010 | 30m |
+| AUTH-004-02 | Create BiometricPrompt component | US-004 | 2h |
+| AUTH-004-03 | Add passkey types to commons | US-004 | 30m |
+| AUTH-005-02 | Create PasskeyButton component | US-005 | 1.5h |
 
 ---
 
@@ -19,12 +19,9 @@
 
 | Task ID | Title | Blocked By | Story |
 |---------|-------|------------|-------|
-| AUTH-004-02 | Create BiometricPrompt component | AUTH-004-01 | US-004 |
-| AUTH-004-03 | Add passkey types to commons | AUTH-004-01 | US-004 |
 | AUTH-004-04 | Implement passkey registration flow | AUTH-004-03 | US-004 |
 | AUTH-004-05 | Handle biometric unavailable fallback | AUTH-004-04 | US-004 |
 | AUTH-004-06 | Add success haptic feedback on registration | AUTH-004-05 | US-004 |
-| AUTH-005-02 | Create PasskeyButton component | AUTH-005-01 | US-005 |
 | AUTH-005-03 | Implement web passkey registration flow | AUTH-005-02 | US-005 |
 | AUTH-005-04 | Hide PasskeyButton on unsupported browsers | AUTH-005-03 | US-005 |
 | AUTH-005-05 | Add success animation on registration | AUTH-005-04 | US-005 |
@@ -38,6 +35,7 @@
 | AUTH-007-04 | Add shake animation on web failure | AUTH-007-03 | US-007 |
 | AUTH-009-01 | Add haptic success to all login methods | AUTH-006-04 | US-009 |
 | AUTH-009-02 | Ensure no haptic on failure | AUTH-009-01 | US-009 |
+| AUTH-010-04 | Handle network errors in passkey flows | AUTH-004-02 | US-010 |
 
 ---
 
@@ -62,6 +60,8 @@
 | AUTH-003-01 | Install web passkey dependency | US-003 | `d44ecbc` |
 | AUTH-003-02 | Configure passkeyClient in web auth-client | US-003 | `16b280e` |
 | AUTH-003-03 | Create passkey types for web | US-003 | `608a533` |
+| AUTH-004-01 | Create usePasskeyAuth hook (mobile) | US-004 | `ebf16b9` |
+| AUTH-005-01 | Create usePasskeyAuth hook (web) | US-005 | `6cc627f` |
 | AUTH-008-01 | Create useShakeAnimation hook (mobile) | US-008 | `cc6893c` |
 | AUTH-008-02 | Integrate shake into mobile LoginForm | US-008 | `e9db408` |
 | AUTH-008-03 | Create useShakeAnimation hook (web) | US-008 | `c4d4927` |
@@ -84,11 +84,11 @@
 | Status | Count |
 |--------|-------|
 | Ready | 3 |
-| Blocked | 19 |
+| Blocked | 17 |
 | In Progress | 0 |
-| Completed | 25 |
+| Completed | 27 |
 | **Total** | **47** |
-| **Progress** | **53.2%** |
+| **Progress** | **57.4%** |
 
 ---
 
@@ -99,8 +99,8 @@
 | US-001 | Configure Backend Passkey Plugin | ✅ Complete | 5/5 |
 | US-002 | Configure Mobile Auth Client | ✅ Complete | 3/3 |
 | US-003 | Configure Web Auth Client | ✅ Complete | 3/3 |
-| US-004 | Mobile Passkey Registration | 🔄 Ready | 0/6 |
-| US-005 | Web Passkey Registration | 🔄 Ready | 0/5 |
+| US-004 | Mobile Passkey Registration | 🔄 In Progress | 1/6 |
+| US-005 | Web Passkey Registration | 🔄 In Progress | 1/5 |
 | US-006 | Mobile Passkey Sign-In | ⏸️ Blocked | 0/4 |
 | US-007 | Web Passkey Sign-In | ⏸️ Blocked | 0/4 |
 | US-008 | Form Shake Animation | ✅ Complete | 4/4 |
