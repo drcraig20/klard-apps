@@ -74,14 +74,14 @@ describe('usePasskeyAuth', () => {
   describe('registerPasskey', () => {
     it('should set isLoading to true during registration', async () => {
       const mockAddPasskey = vi.fn().mockImplementation(
-        () => new Promise((resolve) => setTimeout(() => resolve({ data: { id: 'passkey-123' } }), 100))
+        () => new Promise((resolve) => setTimeout(() => resolve({ id: 'passkey-123', name: 'Test Passkey', createdAt: new Date() }), 100))
       );
       vi.mocked(authClient.passkey.addPasskey).mockImplementation(mockAddPasskey);
 
       const { result } = renderHook(() => usePasskeyAuth());
 
       // Start the promise but don't await it yet
-      const promise = result.current.registerPasskey({ name: 'Test Passkey' });
+      const promise = result.current.registerPasskey('Test Passkey');
 
       // Check loading state is true during execution
       await waitFor(() => {
@@ -95,26 +95,26 @@ describe('usePasskeyAuth', () => {
     });
 
     it('should call authClient.passkey.addPasskey with correct parameters', async () => {
-      const mockAddPasskey = vi.fn().mockResolvedValue({ data: { id: 'passkey-123' } });
+      const mockAddPasskey = vi.fn().mockResolvedValue({ id: 'passkey-123', name: 'MacBook Pro', createdAt: new Date() });
       vi.mocked(authClient.passkey.addPasskey).mockImplementation(mockAddPasskey);
 
       const { result } = renderHook(() => usePasskeyAuth());
 
       await act(async () => {
-        await result.current.registerPasskey({ name: 'MacBook Pro' });
+        await result.current.registerPasskey('MacBook Pro');
       });
 
       expect(mockAddPasskey).toHaveBeenCalledWith({ name: 'MacBook Pro' });
     });
 
     it('should set isLoading to false after successful registration', async () => {
-      const mockAddPasskey = vi.fn().mockResolvedValue({ data: { id: 'passkey-123' } });
+      const mockAddPasskey = vi.fn().mockResolvedValue({ id: 'passkey-123', name: 'Test Passkey', createdAt: new Date() });
       vi.mocked(authClient.passkey.addPasskey).mockImplementation(mockAddPasskey);
 
       const { result } = renderHook(() => usePasskeyAuth());
 
       await act(async () => {
-        await result.current.registerPasskey({ name: 'Test Passkey' });
+        await result.current.registerPasskey('Test Passkey');
       });
 
       expect(result.current.isLoading).toBe(false);
@@ -129,7 +129,7 @@ describe('usePasskeyAuth', () => {
       const { result } = renderHook(() => usePasskeyAuth());
 
       await act(async () => {
-        await result.current.registerPasskey({ name: 'Test Passkey' });
+        await result.current.registerPasskey('Test Passkey');
       });
 
       expect(result.current.isLoading).toBe(false);
@@ -137,17 +137,18 @@ describe('usePasskeyAuth', () => {
     });
 
     it('should return success true on successful registration', async () => {
-      const mockAddPasskey = vi.fn().mockResolvedValue({ data: { id: 'passkey-123' } });
+      const mockPasskey = { id: 'passkey-123', name: 'Test Passkey', createdAt: new Date() };
+      const mockAddPasskey = vi.fn().mockResolvedValue(mockPasskey);
       vi.mocked(authClient.passkey.addPasskey).mockImplementation(mockAddPasskey);
 
       const { result } = renderHook(() => usePasskeyAuth());
 
       let registerResult;
       await act(async () => {
-        registerResult = await result.current.registerPasskey({ name: 'Test Passkey' });
+        registerResult = await result.current.registerPasskey('Test Passkey');
       });
 
-      expect(registerResult).toEqual({ success: true });
+      expect(registerResult).toEqual({ success: true, data: mockPasskey });
     });
 
     it('should return success false on registration failure', async () => {
@@ -159,10 +160,16 @@ describe('usePasskeyAuth', () => {
 
       let registerResult;
       await act(async () => {
-        registerResult = await result.current.registerPasskey({ name: 'Test Passkey' });
+        registerResult = await result.current.registerPasskey('Test Passkey');
       });
 
-      expect(registerResult).toEqual({ success: false, error: 'Registration failed' });
+      expect(registerResult).toEqual({
+        success: false,
+        error: {
+          code: 'CREDENTIAL_FAILED',
+          message: 'Registration failed',
+        },
+      });
     });
   });
 
