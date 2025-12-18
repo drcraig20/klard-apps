@@ -775,4 +775,62 @@ describe('BiometricPrompt', () => {
       });
     });
   });
+
+  describe('biometric unavailable fallback', () => {
+    it('renders fallback message when biometrics are not available', () => {
+      (usePasskeyAuth as jest.Mock).mockReturnValue({
+        isLoading: false,
+        isAvailable: false,
+        biometricType: 'none',
+        error: null,
+        checkAvailability: jest.fn(),
+        registerPasskey: jest.fn(),
+        signInWithPasskey: jest.fn(),
+      });
+
+      const { getByTestId, queryByText } = render(
+        <BiometricPrompt
+          mode="register"
+          onSuccess={mockOnSuccess}
+          onError={mockOnError}
+          onCancel={mockOnCancel}
+        />
+      );
+
+      // Should show fallback message
+      expect(getByTestId('fallback-message')).toBeTruthy();
+      expect(getByTestId('fallback-message').props.children).toBe(
+        'Biometric authentication is not available on this device'
+      );
+
+      // Should not show registration button
+      expect(queryByText('Add Passkey')).toBeNull();
+    });
+
+    it('does not render registration button when biometrics are unavailable', () => {
+      (usePasskeyAuth as jest.Mock).mockReturnValue({
+        isLoading: false,
+        isAvailable: false,
+        biometricType: 'none',
+        error: null,
+        checkAvailability: jest.fn(),
+        registerPasskey: jest.fn(),
+        signInWithPasskey: jest.fn(),
+      });
+
+      const { queryByRole, queryByText } = render(
+        <BiometricPrompt
+          mode="register"
+          onSuccess={mockOnSuccess}
+          onError={mockOnError}
+          onCancel={mockOnCancel}
+        />
+      );
+
+      // Button should not be rendered
+      expect(queryByRole('button')).toBeNull();
+      expect(queryByText('Add Passkey')).toBeNull();
+      expect(queryByText('Sign in')).toBeNull();
+    });
+  });
 });
