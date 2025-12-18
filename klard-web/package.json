@@ -11,6 +11,7 @@
     "test:run": "vitest run"
   },
   "dependencies": {
+    "@better-auth/passkey": "^1.4.7",
     "@hookform/resolvers": "^5.2.2",
     "@klard-apps/commons": "workspace:*",
     "@radix-ui/react-avatar": "^1.1.11",
