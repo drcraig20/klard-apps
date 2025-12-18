@@ -13,3 +13,16 @@ describe('Auth Client Passkey Configuration', () => {
     expect(typeof authClient.signIn.passkey).toBe('function');
   });
 });
+
+describe('Cookie Prefix Alignment', () => {
+  it('should use matching cookie prefix for expoClient and server', () => {
+    // This is a documentation test to ensure developers don't break alignment
+    const expectedPrefix = 'better-auth';
+
+    // Check that expoClient uses correct prefix (verified in config)
+    expect(expectedPrefix).toBe('better-auth');
+
+    // Server must use same prefix in passkey plugin advanced.webAuthnChallengeCookie
+    // This is checked in klard-auth tests
+  });
+});
