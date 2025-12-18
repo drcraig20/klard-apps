@@ -15,9 +15,34 @@ jest.mock('expo-local-authentication', () => ({
   },
 }));
 
+// Mock expo-device
+jest.mock('expo-device', () => ({
+  deviceName: 'Test iPhone',
+  modelName: 'iPhone 14 Pro',
+}));
+
+// Mock auth-client
+jest.mock('@/lib/auth-client', () => ({
+  authClient: {
+    passkey: {
+      addPasskey: jest.fn(),
+    },
+  },
+}));
+
+// Import the mocked authClient for type-safe testing
+import { authClient } from '@/lib/auth-client';
+
 describe('usePasskeyAuth', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+
+    // Setup default successful mock for addPasskey
+    (authClient.passkey.addPasskey as jest.Mock).mockResolvedValue({
+      data: {
+        id: 'test-passkey-id-123',
+      },
+    });
   });
 
   describe('initial state', () => {
@@ -198,6 +223,122 @@ describe('usePasskeyAuth', () => {
       await act(async () => {
         await result.current.registerPasskey();
       });
+    });
+
+    it('sets isLoading to true during registration', async () => {
+      const { result } = renderHook(() => usePasskeyAuth());
+
+      act(() => {
+        result.current.registerPasskey();
+      });
+
+      expect(result.current.isLoading).toBe(true);
+
+      await waitFor(() => {
+        expect(result.current.isLoading).toBe(false);
+      });
+    });
+
+    it('calls authClient.passkey.addPasskey with custom name when provided', async () => {
+      const { result } = renderHook(() => usePasskeyAuth());
+      const customName = 'My iPhone 14';
+
+      await act(async () => {
+        await result.current.registerPasskey(customName);
+      });
+
+      // Verify addPasskey was called with the custom name
+      expect(authClient.passkey.addPasskey).toHaveBeenCalledWith({
+        name: customName,
+      });
+      expect(result.current.error).toBeNull();
+    });
+
+    it('uses device name when no name provided', async () => {
+      const { result } = renderHook(() => usePasskeyAuth());
+
+      await act(async () => {
+        await result.current.registerPasskey();
+      });
+
+      // Should call addPasskey with device name from expo-device
+      expect(authClient.passkey.addPasskey).toHaveBeenCalledWith({
+        name: 'Test iPhone',
+      });
+      expect(result.current.error).toBeNull();
+    });
+
+    it('returns PasskeyAuthResult with success true on successful registration', async () => {
+      const { result } = renderHook(() => usePasskeyAuth());
+      let registrationResult;
+
+      await act(async () => {
+        registrationResult = await result.current.registerPasskey('Test Device');
+      });
+
+      // Verify the result structure matches PasskeyAuthResult
+      expect(registrationResult).toBeDefined();
+      expect(registrationResult).toEqual({
+        success: true,
+        data: {
+          id: 'test-passkey-id-123',
+          name: 'Test Device',
+          createdAt: expect.any(Date),
+        },
+      });
+    });
+
+    it('handles user cancellation gracefully without showing error', async () => {
+      // Mock user cancellation error
+      (authClient.passkey.addPasskey as jest.Mock).mockRejectedValue(
+        new Error('User cancelled the operation')
+      );
+
+      const { result } = renderHook(() => usePasskeyAuth());
+      let registrationResult;
+
+      await act(async () => {
+        registrationResult = await result.current.registerPasskey();
+      });
+
+      // Should not set error state for user cancellation
+      expect(result.current.error).toBeNull();
+      expect(registrationResult).toEqual({ success: false });
+    });
+
+    it('returns PasskeyAuthResult with error on failure', async () => {
+      // Mock a non-cancellation error
+      (authClient.passkey.addPasskey as jest.Mock).mockRejectedValue(
+        new Error('Network error')
+      );
+
+      const { result } = renderHook(() => usePasskeyAuth());
+      let registrationResult;
+
+      await act(async () => {
+        registrationResult = await result.current.registerPasskey('Test Device');
+      });
+
+      // Result should be defined with proper error structure
+      expect(registrationResult).toBeDefined();
+      expect(registrationResult).toEqual({
+        success: false,
+        error: {
+          code: 'CREDENTIAL_FAILED',
+          message: 'Network error',
+        },
+      });
+      expect(result.current.error).toBe('Network error');
+    });
+
+    it('clears previous errors before new registration attempt', async () => {
+      const { result } = renderHook(() => usePasskeyAuth());
+
+      await act(async () => {
+        await result.current.registerPasskey();
+      });
+
+      expect(result.current.error).toBeNull();
     });
   });
 
