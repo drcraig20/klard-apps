@@ -1,6 +1,6 @@
 # Passkey Auth - Task Board
 
-> **Last Updated:** 2025-12-17
+> **Last Updated:** 2025-12-18
 > **Tasks Document:** [`../tasks/2025-12-17-passkey-auth-tasks.md`](../tasks/2025-12-17-passkey-auth-tasks.md)
 
 ---
@@ -9,7 +9,7 @@
 
 | Task ID | Title | Story | Est. |
 |---------|-------|-------|------|
-| AUTH-001-04 | Run database migration for passkey table | US-001 | 30m |
+| AUTH-001-05 | Add rate limiting to passkey endpoints | US-001 | 1.5h |
 
 ---
 
@@ -17,7 +17,6 @@
 
 | Task ID | Title | Blocked By | Story |
 |---------|-------|------------|-------|
-| AUTH-001-05 | Add rate limiting to passkey endpoints | AUTH-001-04 | US-001 |
 | AUTH-002-01 | Install mobile passkey dependencies | AUTH-001-05 | US-002 |
 | AUTH-002-02 | Configure passkeyClient in mobile auth-client | AUTH-002-01 | US-002 |
 | AUTH-002-03 | Verify cookie prefix alignment | AUTH-002-02 | US-002 |
@@ -62,6 +61,7 @@
 | AUTH-001-01 | Install passkey plugin dependency | US-001 | (earlier) |
 | AUTH-001-02 | Configure passkey environment variables | US-001 | `c3fc02b` |
 | AUTH-001-03 | Add passkey plugin to auth configuration | US-001 | `0f1cbe5` |
+| AUTH-001-04 | Generate database migration for passkey table | US-001 | `945da5d` |
 | AUTH-008-01 | Create useShakeAnimation hook (mobile) | US-008 | `cc6893c` |
 | AUTH-008-02 | Integrate shake into mobile LoginForm | US-008 | `e9db408` |
 | AUTH-008-03 | Create useShakeAnimation hook (web) | US-008 | `c4d4927` |
@@ -84,21 +84,21 @@
 | Status | Count |
 |--------|-------|
 | Ready | 1 |
-| Blocked | 29 |
+| Blocked | 28 |
 | In Progress | 0 |
-| Completed | 17 |
+| Completed | 18 |
 | **Total** | **47** |
-| **Progress** | **36.2%** |
+| **Progress** | **38.3%** |
 
 ---
 
 ## Critical Path
 
 ```
-AUTH-001-04 → AUTH-001-05 → AUTH-002-01 → AUTH-004-01 → ... → AUTH-006-04
+AUTH-001-05 → AUTH-002-01 → AUTH-004-01 → ... → AUTH-006-04
 ```
 
-**Next on critical path:** AUTH-001-04 (Run database migration)
+**Next on critical path:** AUTH-001-05 (Add rate limiting to passkey endpoints)
 
 ---
 
@@ -106,7 +106,7 @@ AUTH-001-04 → AUTH-001-05 → AUTH-002-01 → AUTH-004-01 → ... → AUTH-006
 
 ```bash
 # Continue implementation
-/agile:impl AUTH-001-04
+/agile:impl AUTH-001-05
 
 # Check status
 /agile:status
