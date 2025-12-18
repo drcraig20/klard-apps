@@ -5,7 +5,7 @@ arguments:
   - name: feature
     description: Feature name (auto-detects from most recent task document if omitted)
     required: false
-model: opus
+model: sonnet
 ---
 
 # Implement Feature: Parallel Sub-Agent Execution
@@ -160,19 +160,6 @@ Return a structured report:
 7. **Acceptance criteria met:** [yes/no with details]
 8. **Issues:** [any problems encountered]
 
-## CRITICAL: WORKING DIRECTORY
-
-**ALL commands MUST run in the feature worktree, NOT the main repo.**
-
-Before ANY file operations or git commands:
-```bash
-cd [WORKTREE_PATH]  # e.g., /Users/.../klard-apps/.worktrees/passkey-impl
-pwd  # Verify you're in the worktree
-```
-
-If the task document mentions a worktree, use that path. If unsure, ASK before proceeding.
-```
-
 ---
 
 ## Step 4: Collect Results & Find Newly Unblocked Tasks
@@ -191,7 +178,7 @@ TaskOutput(task_id, block=true, timeout=180000)  // 3 minutes per task
 
 After ALL parallel sub-agents complete:
 
-1. **Collect all reports** using blocking TaskOutput
+1. **Collect summary reports** using blocking TaskOutput
 2. **Update dependency graph** - mark completed tasks
 3. **Find newly unblocked tasks** - tasks whose dependencies are now met
 4. **Run integration verification:**

@@ -23,7 +23,7 @@ Spec-driven development lifecycle for building features from idea to release.
 | `/agile:stories` | sonnet | Create user stories | `solid-design-principles`, `brainstorming` (conditional) | ✅ PRD + architecture analysis |
 | `/agile:tasks` | sonnet | Break into tasks | `writing-plans`, `brainstorming` (conditional) | ✅ stories + code exploration |
 | `/agile:impl [feature]` | sonnet | **Execute ALL tasks** with parallel sub-agents | `dispatching-parallel-agents`, `verification-before-completion` | ✅ **ALL independent tasks simultaneously** |
-| `/agile:qa` | sonnet | Quality assurance | `requesting-code-review`, `verification-before-completion` | ✅ multiple reviewers |
+| `/agile:qa` | haiku  | Quality assurance | `requesting-code-review`, `verification-before-completion` | ✅ multiple reviewers |
 | `/agile:release <version>` | haiku  | Prepare release | `finishing-a-development-branch` | ❌ sequential |
 | `/agile:status` | haiku  | Show progress | - | ❌ |
 | `/agile:board` | haiku  | Display task board | - | ❌ |
