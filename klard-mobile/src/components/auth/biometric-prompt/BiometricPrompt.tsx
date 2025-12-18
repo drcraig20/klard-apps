@@ -5,6 +5,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { usePasskeyAuth, BiometricType } from '@/hooks/usePasskeyAuth';
 import { Button } from '@/components/ui/Button';
 import { useThemeColors } from '@/hooks/useThemeColors';
+import { isNetworkError } from '@/utils/error-helpers';
+import { NetworkErrorSheet } from '@/components/auth/network-error-sheet';
 import {
   containerStyles,
   iconContainerStyles,
@@ -101,6 +103,7 @@ export function BiometricPrompt({
   } = usePasskeyAuth();
 
   const [isProcessing, setIsProcessing] = useState(false);
+  const [networkError, setNetworkError] = useState<{ message: string } | null>(null);
 
   // Determine button text and accessibility label based on mode
   const buttonText = mode === 'register' ? 'Add Passkey' : 'Sign in';
@@ -120,7 +123,7 @@ export function BiometricPrompt({
 
   /**
    * Handle button press - calls appropriate passkey method based on mode
-   * Implements error handling and success/error callbacks
+   * Implements error handling with network error detection and success/error callbacks
    */
   const handlePress = useCallback(async () => {
     setIsProcessing(true);
@@ -134,6 +137,15 @@ export function BiometricPrompt({
         onSuccess();
       }
     } catch (error) {
+      // Check if this is a network error
+      if (isNetworkError(error)) {
+        const errorMessage =
+          error instanceof Error ? error.message : 'Network error occurred';
+        setNetworkError({ message: errorMessage });
+        return;
+      }
+
+      // Handle non-network errors through the error callback
       const errorMessage =
         error instanceof Error ? error.message : 'Operation failed';
       onError(errorMessage);
@@ -186,6 +198,14 @@ export function BiometricPrompt({
           {buttonText}
         </Button>
       </View>
+
+      {/* Network Error Sheet */}
+      <NetworkErrorSheet
+        open={!!networkError}
+        onClose={() => setNetworkError(null)}
+        onRetry={handlePress}
+        error={networkError || { message: '' }}
+      />
     </View>
   );
 }
