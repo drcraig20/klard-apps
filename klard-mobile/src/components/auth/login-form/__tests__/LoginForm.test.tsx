@@ -35,6 +35,19 @@ jest.mock('@/hooks/usePasskeyAuth', () => ({
     signInWithPasskey: jest.fn(),
   })),
 }));
+jest.mock('@/hooks/useHaptics', () => ({
+  useHaptics: jest.fn(() => ({
+    success: jest.fn(),
+    error: jest.fn(),
+    light: jest.fn(),
+    medium: jest.fn(),
+    heavy: jest.fn(),
+    rigid: jest.fn(),
+    soft: jest.fn(),
+    warning: jest.fn(),
+    selection: jest.fn(),
+  })),
+}));
 
 describe('LoginForm - Shake Animation Integration', () => {
   const mockSetError = jest.fn();
@@ -506,5 +519,48 @@ describe('LoginForm - Passkey Integration', () => {
     // Button should be disabled/loading
     const passkeyButton = getByText(/authenticating|sign in with passkey/i);
     expect(passkeyButton).toBeTruthy();
+  });
+
+  it('should call haptics.success() on successful passkey sign-in', async () => {
+    const mockHapticsSuccess = jest.fn();
+    const useHaptics = require('@/hooks/useHaptics').useHaptics;
+    (useHaptics as jest.Mock).mockReturnValue({
+      success: mockHapticsSuccess,
+      error: jest.fn(),
+      light: jest.fn(),
+      medium: jest.fn(),
+      heavy: jest.fn(),
+      rigid: jest.fn(),
+      soft: jest.fn(),
+      warning: jest.fn(),
+      selection: jest.fn(),
+    });
+
+    const usePasskeyAuth = require('@/hooks/usePasskeyAuth').usePasskeyAuth;
+    (usePasskeyAuth as jest.Mock).mockReturnValue({
+      isLoading: false,
+      isAvailable: true,
+      biometricType: 'faceId',
+      error: null,
+      checkAvailability: mockCheckAvailability,
+      registerPasskey: jest.fn(),
+      signInWithPasskey: mockSignInWithPasskey,
+    });
+
+    mockSignInWithPasskey.mockResolvedValue({ success: true });
+
+    const { getByText } = render(<LoginForm />);
+
+    // Press passkey button
+    const passkeyButton = getByText(/sign in with passkey/i);
+    fireEvent.press(passkeyButton);
+
+    // Should call haptics.success() before navigation
+    await waitFor(() => {
+      expect(mockHapticsSuccess).toHaveBeenCalled();
+    });
+
+    // Verify navigation happened
+    expect(mockRouterReplace).toHaveBeenCalledWith('/(tabs)/dashboard');
   });
 });
