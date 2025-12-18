@@ -65,7 +65,15 @@ export function usePasskeyAuth() {
     try {
       const deviceName = name || getBrowserName();
       const result = await authClient.passkey.addPasskey({ name: deviceName });
-      return { success: true, data: result };
+      // Construct Passkey object from API response
+      return {
+        success: true,
+        data: {
+          id: result.data?.id || '',
+          name: deviceName,
+          createdAt: new Date(),
+        },
+      };
     } catch (err) {
       // Handle user cancellation gracefully (NotAllowedError = silent return)
       if (err instanceof Error && err.name === 'NotAllowedError') {
@@ -88,20 +96,33 @@ export function usePasskeyAuth() {
 
   /**
    * Sign in using a registered passkey.
+   * Uses discoverable credentials where the authenticator identifies the user automatically.
    *
    * SRP: Only handles passkey sign-in
    * DIP: Delegates to authClient.signIn.passkey
    *
-   * @param email - Optional email for identifying user (may be used with discoverable credentials)
    * @returns Promise resolving to PasskeyAuthResult with session data
    */
-  const signInWithPasskey = useCallback(async (email?: string): Promise<PasskeyAuthResult> => {
+  const signInWithPasskey = useCallback(async (): Promise<PasskeyAuthResult> => {
     setIsLoading(true);
     setError(null);
 
     try {
       const result = await authClient.signIn.passkey();
-      return { success: true, data: result.data };
+      // Check if sign-in was successful
+      if (result.data?.session) {
+        // Construct Passkey object from session data
+        return {
+          success: true,
+          data: {
+            id: result.data.session.id,
+            name: result.data.user?.name || 'User',
+            createdAt: new Date(),
+          },
+        };
+      }
+      // If no session data, return failure
+      return { success: false };
     } catch (err) {
       // Handle user cancellation gracefully (NotAllowedError = silent return)
       if (err instanceof Error && err.name === 'NotAllowedError') {
@@ -185,6 +206,6 @@ export interface UsePasskeyAuthReturn {
   isAvailable: boolean;
   error: string | null;
   registerPasskey: (name?: string) => Promise<PasskeyAuthResult>;
-  signInWithPasskey: (email?: string) => Promise<PasskeyAuthResult>;
+  signInWithPasskey: () => Promise<PasskeyAuthResult>;
   preloadPasskeys: () => Promise<void>;
 }
