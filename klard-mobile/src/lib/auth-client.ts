@@ -36,6 +36,7 @@ export const authClient = createAuthClient({
       scheme: "klard",
       storagePrefix: "klard",
       storage: SecureStore,
+      cookiePrefix: "better-auth", // MUST match server passkey plugin webAuthnChallengeCookie prefix
     }),
     passkeyClient(),
     inferAdditionalFields({
