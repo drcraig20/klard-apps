@@ -14,8 +14,6 @@ import {
   titleStyles,
   descriptionStyles,
   buttonContainerStyles,
-  fallbackContainerStyles,
-  fallbackTextStyles,
 } from './biometric-prompt.styles';
 
 /**
@@ -160,15 +158,9 @@ export function BiometricPrompt({
   const isLoading = hookLoading || isProcessing;
   const iconName = getBiometricIcon(biometricType);
 
-  // Render fallback UI if biometrics are not available
+  // Hide component if biometrics not available (AUTH-004-05)
   if (!isAvailable) {
-    return (
-      <View style={fallbackContainerStyles(isDark)}>
-        <Text style={fallbackTextStyles(isDark)} testID="fallback-message">
-          Biometric authentication is not available on this device
-        </Text>
-      </View>
-    );
+    return null;
   }
 
   return (

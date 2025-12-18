@@ -776,8 +776,8 @@ describe('BiometricPrompt', () => {
     });
   });
 
-  describe('biometric unavailable fallback', () => {
-    it('renders fallback message when biometrics are not available', () => {
+  describe('biometric unavailable', () => {
+    it('returns null when biometrics are not available', () => {
       (usePasskeyAuth as jest.Mock).mockReturnValue({
         isLoading: false,
         isAvailable: false,
@@ -788,7 +788,7 @@ describe('BiometricPrompt', () => {
         signInWithPasskey: jest.fn(),
       });
 
-      const { getByTestId, queryByText } = render(
+      const { toJSON } = render(
         <BiometricPrompt
           mode="register"
           onSuccess={mockOnSuccess}
@@ -797,17 +797,11 @@ describe('BiometricPrompt', () => {
         />
       );
 
-      // Should show fallback message
-      expect(getByTestId('fallback-message')).toBeTruthy();
-      expect(getByTestId('fallback-message').props.children).toBe(
-        'Biometric authentication is not available on this device'
-      );
-
-      // Should not show registration button
-      expect(queryByText('Add Passkey')).toBeNull();
+      // Component should render nothing
+      expect(toJSON()).toBeNull();
     });
 
-    it('does not render registration button when biometrics are unavailable', () => {
+    it('hides in both register and signin modes when unavailable', () => {
       (usePasskeyAuth as jest.Mock).mockReturnValue({
         isLoading: false,
         isAvailable: false,
@@ -818,7 +812,8 @@ describe('BiometricPrompt', () => {
         signInWithPasskey: jest.fn(),
       });
 
-      const { queryByRole, queryByText } = render(
+      // Test register mode
+      const { toJSON: registerJSON } = render(
         <BiometricPrompt
           mode="register"
           onSuccess={mockOnSuccess}
@@ -826,11 +821,18 @@ describe('BiometricPrompt', () => {
           onCancel={mockOnCancel}
         />
       );
+      expect(registerJSON()).toBeNull();
 
-      // Button should not be rendered
-      expect(queryByRole('button')).toBeNull();
-      expect(queryByText('Add Passkey')).toBeNull();
-      expect(queryByText('Sign in')).toBeNull();
+      // Test signin mode
+      const { toJSON: signinJSON } = render(
+        <BiometricPrompt
+          mode="signin"
+          onSuccess={mockOnSuccess}
+          onError={mockOnError}
+          onCancel={mockOnCancel}
+        />
+      );
+      expect(signinJSON()).toBeNull();
     });
   });
 });
