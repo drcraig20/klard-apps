@@ -310,3 +310,59 @@ When ALL tasks are done:
 4. **Context7 mandatory** - All sub-agents fetch library docs first
 5. **TDD enforced** - All sub-agents follow red-green-refactor
 6. **User confirmation** - Wait for approval between epics
+
+---
+
+## ⚠️ TOKEN OPTIMIZATION (MANDATORY)
+
+**DO NOT tell sub-agents to read the full task document.**
+
+Instead, the main agent should:
+1. Extract task specs from the document
+2. Pass ONLY essential info to sub-agents
+
+**EFFICIENT Agent Prompt Template:**
+```
+**Task:** [TASK-ID] - [Title]
+
+**Files:**
+- Create: `exact/path/file.ts`
+- Test: `package/src/__tests__/File.test.ts` ← FLAT, not nested!
+
+**Acceptance Criteria:**
+- [Bullet 1]
+- [Bullet 2]
+
+**Implementation:**
+```typescript
+// Key code snippet
+```
+
+**Context7:** Fetch [library] docs for [topic]
+
+**Verify:** Run tests, check tsc
+
+**Commit:** `type(scope): message\n\nRefs: [TASK-ID]`
+```
+
+**Why:** Sub-agents re-reading 1700-line docs wastes ~2000 tokens per task.
+
+---
+
+## 📋 SESSION START CHECKLIST
+
+Before dispatching first batch, ask the user:
+
+```
+📋 PROJECT CONVENTIONS CHECK
+
+Before I start dispatching tasks, any conventions I should know?
+- Test file locations (default: `src/__tests__/` flat)
+- Commit message style
+- Any files that shouldn't be modified
+- Naming patterns to follow
+
+(Say "defaults are fine" to skip)
+```
+
+**Why:** Prevents mid-session corrections and rework.
