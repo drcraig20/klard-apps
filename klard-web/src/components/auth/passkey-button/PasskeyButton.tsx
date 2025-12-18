@@ -44,6 +44,7 @@ export function PasskeyButton({
     usePasskeyAuth();
 
   // SRP: Single check for availability - hides component when WebAuthn unavailable
+  // AUTH-005-04: Return null to hide button on unsupported browsers
   if (!isAvailable) {
     return null;
   }

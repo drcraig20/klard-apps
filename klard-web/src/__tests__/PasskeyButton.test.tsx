@@ -30,6 +30,47 @@ describe('PasskeyButton', () => {
 
       expect(container.firstChild).toBeNull();
     });
+
+    it('returns null even when loading state is true (no flash)', () => {
+      mockUsePasskeyAuth.mockReturnValue({
+        isAvailable: false,
+        isLoading: true, // Loading state should not cause flash
+        error: null,
+        registerPasskey: vi.fn(),
+        signInWithPasskey: vi.fn(),
+        preloadPasskeys: vi.fn(),
+      });
+
+      const { container } = render(
+        <PasskeyButton mode="register" onSuccess={vi.fn()} onError={vi.fn()} />
+      );
+
+      // Button should remain hidden regardless of loading state
+      expect(container.firstChild).toBeNull();
+    });
+
+    it('remains hidden in both signin and register modes', () => {
+      mockUsePasskeyAuth.mockReturnValue({
+        isAvailable: false,
+        isLoading: false,
+        error: null,
+        registerPasskey: vi.fn(),
+        signInWithPasskey: vi.fn(),
+        preloadPasskeys: vi.fn(),
+      });
+
+      // Test register mode
+      const { container: registerContainer } = render(
+        <PasskeyButton mode="register" onSuccess={vi.fn()} onError={vi.fn()} />
+      );
+      expect(registerContainer.firstChild).toBeNull();
+
+      // Test signin mode
+      const { container: signinContainer } = render(
+        <PasskeyButton mode="signin" onSuccess={vi.fn()} onError={vi.fn()} />
+      );
+      expect(signinContainer.firstChild).toBeNull();
+    });
   });
 
   describe('when WebAuthn is available', () => {
