@@ -1,6 +1,7 @@
 'use client';
 
-import { Key } from 'lucide-react';
+import { useState } from 'react';
+import { Key, Check } from 'lucide-react';
 import { usePasskeyAuth } from '@/hooks/usePasskeyAuth';
 import { Button } from '@/components/ui/button/button';
 import { cn } from '@/lib/utils';
@@ -43,6 +44,9 @@ export function PasskeyButton({
   const { isAvailable, isLoading, registerPasskey, signInWithPasskey } =
     usePasskeyAuth();
 
+  // AUTH-005-05: Success animation state
+  const [showSuccess, setShowSuccess] = useState(false);
+
   // SRP: Single check for availability - hides component when WebAuthn unavailable
   // AUTH-005-04: Return null to hide button on unsupported browsers
   if (!isAvailable) {
@@ -54,6 +58,7 @@ export function PasskeyButton({
    *
    * SRP: Only handles click event and delegates to appropriate auth method
    * DIP: Depends on hook methods, not concrete implementations
+   * AUTH-005-05: Shows success animation on registration
    */
   const handleClick = async () => {
     let result;
@@ -67,6 +72,11 @@ export function PasskeyButton({
 
     // SRP: Delegates success/error handling to parent via callbacks
     if (result.success) {
+      // AUTH-005-05: Show success animation on registration
+      if (mode === 'register') {
+        setShowSuccess(true);
+        setTimeout(() => setShowSuccess(false), 1500);
+      }
       onSuccess();
     } else if (result.error) {
       onError(result.error);
@@ -83,7 +93,13 @@ export function PasskeyButton({
       onClick={handleClick}
       disabled={disabled || isLoading}
       loading={isLoading}
-      icon={<Key className="size-4" />}
+      icon={
+        showSuccess ? (
+          <Check className="size-4 text-green-500 transition-opacity duration-200" />
+        ) : (
+          <Key className="size-4" />
+        )
+      }
       iconPosition="left"
       className={cn(className)}
     >
