@@ -58,3 +58,46 @@ export interface OnboardingResult {
   /** Skip onboarding and redirect to dashboard */
   skipOnboarding: () => Promise<void>;
 }
+
+/**
+ * Passkey error codes for unified error handling across platforms.
+ * Follows OCP - extensible without modifying existing code.
+ */
+export type PasskeyErrorCode =
+  | 'BIOMETRIC_UNAVAILABLE'
+  | 'USER_CANCELLED'
+  | 'CREDENTIAL_FAILED'
+  | 'NETWORK_ERROR'
+  | 'RATE_LIMITED'
+  | 'INVALID_CREDENTIAL';
+
+/**
+ * Passkey error interface.
+ * Follows ISP - minimal interface for error handling.
+ */
+export interface PasskeyError {
+  code: PasskeyErrorCode;
+  message: string;
+}
+
+/**
+ * Passkey credential interface.
+ * Follows SRP - represents a single passkey credential.
+ */
+export interface Passkey {
+  id: string;
+  name: string;
+  createdAt: Date;
+  deviceType?: 'platform' | 'cross-platform';
+  backedUp?: boolean;
+}
+
+/**
+ * Result from passkey authentication operations.
+ * Follows ISP - discriminated union for success/error states.
+ */
+export interface PasskeyAuthResult {
+  success: boolean;
+  data?: Passkey;
+  error?: PasskeyError;
+}
