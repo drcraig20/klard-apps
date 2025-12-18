@@ -386,7 +386,7 @@ describe('usePasskeyAuth', () => {
       });
     });
 
-    it('calls authClient.signIn.passkey with correct options', async () => {
+    it('calls authClient.signIn.passkey with no arguments', async () => {
       const { result } = renderHook(() => usePasskeyAuth());
       const email = 'test@example.com';
 
@@ -394,13 +394,9 @@ describe('usePasskeyAuth', () => {
         await result.current.signInWithPasskey(email);
       });
 
-      // Verify signIn.passkey was called
-      expect(authClient.signIn.passkey).toHaveBeenCalledWith({
-        fetchOptions: {
-          onSuccess: expect.any(Function),
-          onError: expect.any(Function),
-        },
-      });
+      // Verify signIn.passkey was called without arguments
+      // (email is unused, discoverable credentials identify the user)
+      expect(authClient.signIn.passkey).toHaveBeenCalledWith();
       expect(result.current.error).toBeNull();
     });
 
