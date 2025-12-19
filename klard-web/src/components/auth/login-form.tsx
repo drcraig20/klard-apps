@@ -6,12 +6,11 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 import { Mail, Lock } from 'lucide-react';
-import { LoginSchema, MagicLinkSchema } from '@klard-apps/commons';
+import { LoginSchema } from '@klard-apps/commons';
 import { signIn } from '@/lib/auth-client';
 import { InputField } from '@/components/ui/input-field';
 import { CheckboxField } from '@/components/ui/checkbox-field';
 import { SocialButtons } from './social-buttons';
-import { MagicLinkSuccess } from './magic-link-success';
 import { KlardLogo } from '@/components/ui/klard-icon';
 import { ErrorBanner } from '@/components/ui/error-banner';
 import { SubmitButton } from '@/components/ui/submit-button';
@@ -30,9 +29,7 @@ export function LoginForm() {
   const {
     formState: uiState,
     errorMessage,
-    magicLinkEmail,
     setSubmitting,
-    setMagicLinkSent,
     setError,
     clearError,
     reset,
@@ -44,7 +41,6 @@ export function LoginForm() {
     register,
     handleSubmit,
     formState: { errors },
-    getValues,
     watch,
     setValue,
   } = useForm({
@@ -91,49 +87,12 @@ export function LoginForm() {
     }
   }
 
-  async function handleMagicLink() {
-    const email = getValues('email');
-    const validation = MagicLinkSchema.safeParse({ email });
-
-    if (!validation.success) {
-      shake();
-      setError(t('auth.errors.invalidEmailForMagicLink'));
-      return;
-    }
-
-    try {
-      setSubmitting();
-
-      const callbackURL = `${window.location.origin}/dashboard`;
-
-      const result = await signIn.magicLink({
-        email: validation.data.email,
-        callbackURL,
-      });
-
-      if (result.error) {
-        throw new Error(result.error.message || t('auth.errors.magicLinkFailed'));
-      }
-
-      setMagicLinkSent(validation.data.email);
-    } catch (error) {
-      shake();
-      setError(
-        error instanceof Error ? error.message : t('auth.errors.magicLinkFailed')
-      );
-    }
-  }
-
   function handleSocialError(error: string) {
     shake();
     setError(error);
   }
 
   const isSubmitting = uiState === 'submitting';
-
-  if (uiState === 'magicLinkSent' && magicLinkEmail) {
-    return <MagicLinkSuccess email={magicLinkEmail} onBack={reset} />;
-  }
 
   return (
     <div className="w-full max-w-md mx-auto p-8">
@@ -182,23 +141,14 @@ export function LoginForm() {
           {...register('password')}
         />
 
-        {/* Remember me & Magic link */}
-        <div className="flex items-center justify-between">
+        {/* Remember me */}
+        <div className="flex items-center">
           <CheckboxField
             checked={rememberMe}
             onChange={(checked) => setValue('rememberMe', checked)}
             label={t('auth.login.rememberMe')}
             disabled={isSubmitting}
           />
-
-          <button
-            type="button"
-            onClick={handleMagicLink}
-            disabled={isSubmitting}
-            className="text-sm font-medium text-primary hover:underline disabled:opacity-50"
-          >
-            {t('auth.login.magicLinkButton')}
-          </button>
         </div>
 
         {/* Submit button */}
