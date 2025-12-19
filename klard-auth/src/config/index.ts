@@ -86,7 +86,7 @@ export const config = {
   passkey: {
     rpID: process.env["PASSKEY_RP_ID"] || "localhost",
     rpName: process.env["PASSKEY_RP_NAME"] || "Klard",
-    origin: process.env["PASSKEY_ORIGIN"] || "http://localhost:3001",
+    origin: process.env["PASSKEY_ORIGIN"] || "http://localhost:3000",
   },
 
   // Security configuration
@@ -135,7 +135,7 @@ function validatePasskeyConfig(): void {
     const rpId = process.env["PASSKEY_RP_ID"];
     if (rpId && (rpId.includes("://") || rpId.includes(":"))) {
       throw new Error(
-        "PASSKEY_RP_ID must be domain only (no protocol or port). Example: 'klard.app'",
+        "PASSKEY_RP_ID must be domain only (no protocol or port). Example: 'klard.io'",
       );
     }
   }

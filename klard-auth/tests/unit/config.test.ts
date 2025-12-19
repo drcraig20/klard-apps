@@ -139,19 +139,19 @@ describe("config", () => {
       expect(config.passkey).toBeDefined();
       expect(config.passkey.rpID).toBe("localhost");
       expect(config.passkey.rpName).toBe("Klard");
-      expect(config.passkey.origin).toBe("http://localhost:3001");
+      expect(config.passkey.origin).toBe("http://localhost:3000");
       vi.unstubAllEnvs();
     });
 
     it("should use passkey environment variables when set", async () => {
-      vi.stubEnv("PASSKEY_RP_ID", "klard.app");
+      vi.stubEnv("PASSKEY_RP_ID", "klard.io");
       vi.stubEnv("PASSKEY_RP_NAME", "Klard Production");
-      vi.stubEnv("PASSKEY_ORIGIN", "https://klard.app");
+      vi.stubEnv("PASSKEY_ORIGIN", "https://klard.io");
       vi.resetModules();
       const { config } = await import("../../src/config/index.js");
-      expect(config.passkey.rpID).toBe("klard.app");
+      expect(config.passkey.rpID).toBe("klard.io");
       expect(config.passkey.rpName).toBe("Klard Production");
-      expect(config.passkey.origin).toBe("https://klard.app");
+      expect(config.passkey.origin).toBe("https://klard.io");
       vi.unstubAllEnvs();
     });
   });
@@ -183,7 +183,7 @@ describe("config", () => {
       vi.stubEnv("NODE_ENV", "production");
       vi.stubEnv("VITEST", "false");
       vi.stubEnv("PASSKEY_RP_ID", "");
-      vi.stubEnv("PASSKEY_ORIGIN", "https://klard.app");
+      vi.stubEnv("PASSKEY_ORIGIN", "https://klard.io");
       vi.resetModules();
 
       await expect(import("../../src/config/index.js")).rejects.toThrow(
@@ -195,7 +195,7 @@ describe("config", () => {
     it("should throw error when PASSKEY_ORIGIN is missing in production", async () => {
       vi.stubEnv("NODE_ENV", "production");
       vi.stubEnv("VITEST", "false");
-      vi.stubEnv("PASSKEY_RP_ID", "klard.app");
+      vi.stubEnv("PASSKEY_RP_ID", "klard.io");
       vi.stubEnv("PASSKEY_ORIGIN", "");
       vi.resetModules();
 
@@ -221,8 +221,8 @@ describe("config", () => {
     it("should throw error when PASSKEY_RP_ID contains protocol in production", async () => {
       vi.stubEnv("NODE_ENV", "production");
       vi.stubEnv("VITEST", "false");
-      vi.stubEnv("PASSKEY_RP_ID", "https://klard.app");
-      vi.stubEnv("PASSKEY_ORIGIN", "https://klard.app");
+      vi.stubEnv("PASSKEY_RP_ID", "https://klard.io");
+      vi.stubEnv("PASSKEY_ORIGIN", "https://klard.io");
       vi.resetModules();
 
       await expect(import("../../src/config/index.js")).rejects.toThrow(
@@ -234,8 +234,8 @@ describe("config", () => {
     it("should throw error when PASSKEY_RP_ID contains port in production", async () => {
       vi.stubEnv("NODE_ENV", "production");
       vi.stubEnv("VITEST", "false");
-      vi.stubEnv("PASSKEY_RP_ID", "klard.app:443");
-      vi.stubEnv("PASSKEY_ORIGIN", "https://klard.app");
+      vi.stubEnv("PASSKEY_RP_ID", "klard.io:443");
+      vi.stubEnv("PASSKEY_ORIGIN", "https://klard.io");
       vi.resetModules();
 
       await expect(import("../../src/config/index.js")).rejects.toThrow(
@@ -247,8 +247,8 @@ describe("config", () => {
     it("should pass validation with valid values in production", async () => {
       vi.stubEnv("NODE_ENV", "production");
       vi.stubEnv("VITEST", "false");
-      vi.stubEnv("PASSKEY_RP_ID", "klard.app");
-      vi.stubEnv("PASSKEY_ORIGIN", "https://klard.app");
+      vi.stubEnv("PASSKEY_RP_ID", "klard.io");
+      vi.stubEnv("PASSKEY_ORIGIN", "https://klard.io");
       vi.resetModules();
 
       // Should not throw

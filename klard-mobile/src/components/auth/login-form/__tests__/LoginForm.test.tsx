@@ -18,6 +18,14 @@ jest.mock('expo-router', () => ({
 jest.mock('expo-linking', () => ({
   createURL: jest.fn((path: string) => `klard://${path}`),
 }));
+jest.mock('@/hooks/useThemeColors', () => ({
+  useThemeColors: jest.fn(() => ({
+    primary: '#0D7C7A',
+    border: '#E2E8F0',
+    textSecondary: '#64748B',
+    textTertiary: '#94A3B8',
+  })),
+}));
 jest.mock('@/hooks/useShakeAnimation', () => ({
   useShakeAnimation: jest.fn(() => ({
     animatedStyle: { transform: [{ translateX: 0 }] },
@@ -53,13 +61,6 @@ jest.mock('@/components/auth/social-buttons', () => ({
     const React = require('react');
     const { View } = require('react-native');
     return React.createElement(View, { testID: 'social-buttons' });
-  }),
-}));
-jest.mock('@/components/auth/magic-link-sent', () => ({
-  MagicLinkSent: jest.fn(() => {
-    const React = require('react');
-    const { View } = require('react-native');
-    return React.createElement(View, { testID: 'magic-link-sent' });
   }),
 }));
 jest.mock('@/components/auth/error-banner', () => ({
@@ -134,9 +135,7 @@ describe('LoginForm - Shake Animation Integration', () => {
     (useAuthUIStore as unknown as jest.Mock).mockReturnValue({
       formState: 'idle',
       errorMessage: null,
-      magicLinkEmail: null,
       setSubmitting: mockSetSubmitting,
-      setMagicLinkSent: jest.fn(),
       setError: mockSetError,
       clearError: jest.fn(),
       reset: mockReset,
@@ -175,38 +174,6 @@ describe('LoginForm - Shake Animation Integration', () => {
 
     // Verify error was set
     expect(mockSetError).toHaveBeenCalledWith('Invalid credentials');
-  });
-
-  it('should call shake() on magic link failure', async () => {
-    const mockShake = jest.fn();
-    const useShakeAnimation = require('@/hooks/useShakeAnimation').useShakeAnimation;
-    (useShakeAnimation as jest.Mock).mockReturnValue({
-      animatedStyle: { transform: [{ translateX: 0 }] },
-      shake: mockShake,
-    });
-
-    // Mock failed magic link
-    (authClient.signIn.magicLink as jest.Mock) = jest.fn().mockResolvedValue({
-      error: { message: 'Failed to send magic link' },
-    });
-
-    const { getByText, getByPlaceholderText } = render(<LoginForm />);
-
-    // Fill in email
-    const emailInput = getByPlaceholderText(/email/i);
-    fireEvent.changeText(emailInput, 'test@example.com');
-
-    // Click magic link button
-    const magicLinkButton = getByText(/magic link/i);
-    fireEvent.press(magicLinkButton);
-
-    // Wait for shake to be called
-    await waitFor(() => {
-      expect(mockShake).toHaveBeenCalled();
-    });
-
-    // Verify error was set
-    expect(mockSetError).toHaveBeenCalled();
   });
 
   it('should call shake() on social auth error', async () => {
@@ -262,9 +229,7 @@ describe('LoginForm - Network Error Integration', () => {
     (useAuthUIStore as unknown as jest.Mock).mockReturnValue({
       formState: 'idle',
       errorMessage: null,
-      magicLinkEmail: null,
       setSubmitting: mockSetSubmitting,
-      setMagicLinkSent: jest.fn(),
       setError: mockSetError,
       clearError: mockClearError,
       reset: mockReset,
@@ -383,26 +348,6 @@ describe('LoginForm - Network Error Integration', () => {
       });
     });
   });
-
-  it('should handle network errors in magic link flow', async () => {
-    const networkError = new Error('timeout');
-    (authClient.signIn.magicLink as jest.Mock) = jest.fn().mockRejectedValue(networkError);
-
-    const { getByPlaceholderText, getByText, queryByTestId } = render(<LoginForm />);
-
-    const emailInput = getByPlaceholderText(/email/i);
-    fireEvent.changeText(emailInput, 'test@example.com');
-
-    const magicLinkButton = getByText(/magic link/i);
-    fireEvent.press(magicLinkButton);
-
-    await waitFor(() => {
-      expect(queryByTestId('network-error-sheet')).toBeTruthy();
-    });
-
-    // Should NOT call setError
-    expect(mockSetError).not.toHaveBeenCalled();
-  });
 });
 
 describe('LoginForm - Passkey Integration', () => {
@@ -420,9 +365,7 @@ describe('LoginForm - Passkey Integration', () => {
     (useAuthUIStore as unknown as jest.Mock).mockReturnValue({
       formState: 'idle',
       errorMessage: null,
-      magicLinkEmail: null,
       setSubmitting: mockSetSubmitting,
-      setMagicLinkSent: jest.fn(),
       setError: mockSetError,
       clearError: mockClearError,
       reset: mockReset,
@@ -643,7 +586,6 @@ describe('LoginForm - Haptic Feedback on Success', () => {
   const mockReset = jest.fn();
   const mockSetSubmitting = jest.fn();
   const mockClearError = jest.fn();
-  const mockSetMagicLinkSent = jest.fn();
   const mockHapticsSuccess = jest.fn();
 
   beforeEach(() => {
@@ -667,9 +609,7 @@ describe('LoginForm - Haptic Feedback on Success', () => {
     (useAuthUIStore as unknown as jest.Mock).mockReturnValue({
       formState: 'idle',
       errorMessage: null,
-      magicLinkEmail: null,
       setSubmitting: mockSetSubmitting,
-      setMagicLinkSent: mockSetMagicLinkSent,
       setError: mockSetError,
       clearError: mockClearError,
       reset: mockReset,
@@ -703,31 +643,6 @@ describe('LoginForm - Haptic Feedback on Success', () => {
     expect(mockRouterReplace).toHaveBeenCalledWith('/(tabs)/dashboard');
   });
 
-  it('should call haptics.success() on successful magic link sent', async () => {
-    // Mock successful magic link
-    (authClient.signIn.magicLink as jest.Mock) = jest.fn().mockResolvedValue({
-      data: { success: true },
-    });
-
-    const { getByText, getByPlaceholderText } = render(<LoginForm />);
-
-    // Fill in email
-    const emailInput = getByPlaceholderText(/email/i);
-    fireEvent.changeText(emailInput, 'test@example.com');
-
-    // Click magic link button
-    const magicLinkButton = getByText(/magic link/i);
-    fireEvent.press(magicLinkButton);
-
-    // Should call haptics.success() when magic link is sent
-    await waitFor(() => {
-      expect(mockHapticsSuccess).toHaveBeenCalled();
-    });
-
-    // Verify magic link sent state was set
-    expect(mockSetMagicLinkSent).toHaveBeenCalledWith('test@example.com');
-  });
-
   it('should call haptics.success() on successful social login', async () => {
     const { getByTestId } = render(<LoginForm />);
 
@@ -758,31 +673,6 @@ describe('LoginForm - Haptic Feedback on Success', () => {
     // Submit form
     const submitButton = getByText(/sign in|log in|submit/i);
     fireEvent.press(submitButton);
-
-    // Wait for error handling
-    await waitFor(() => {
-      expect(mockSetError).toHaveBeenCalled();
-    });
-
-    // Should NOT call haptics.success()
-    expect(mockHapticsSuccess).not.toHaveBeenCalled();
-  });
-
-  it('should NOT call haptics.success() on magic link failure', async () => {
-    // Mock failed magic link
-    (authClient.signIn.magicLink as jest.Mock) = jest.fn().mockResolvedValue({
-      error: { message: 'Failed to send magic link' },
-    });
-
-    const { getByText, getByPlaceholderText } = render(<LoginForm />);
-
-    // Fill in email
-    const emailInput = getByPlaceholderText(/email/i);
-    fireEvent.changeText(emailInput, 'test@example.com');
-
-    // Click magic link button
-    const magicLinkButton = getByText(/magic link/i);
-    fireEvent.press(magicLinkButton);
 
     // Wait for error handling
     await waitFor(() => {

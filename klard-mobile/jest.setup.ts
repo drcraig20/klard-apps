@@ -130,7 +130,6 @@ jest.mock('better-auth/react', () => ({
 
 // Mock better-auth/client/plugins
 jest.mock('better-auth/client/plugins', () => ({
-  magicLinkClient: jest.fn(() => ({})),
   inferAdditionalFields: jest.fn(() => ({})),
 }));
 
