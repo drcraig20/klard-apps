@@ -218,7 +218,7 @@ describe('usePasskeyAuth', () => {
       const { result } = renderHook(() => usePasskeyAuth());
 
       await act(async () => {
-        await result.current.signInWithPasskey('user@example.com');
+        await result.current.signInWithPasskey();
       });
 
       // better-auth passkey sign-in may or may not use email for discoverable credentials

@@ -9,7 +9,6 @@ import { useRouter } from 'next/navigation';
 vi.mock('@/lib/auth-client', () => ({
   signIn: {
     email: vi.fn(),
-    magicLink: vi.fn(),
   },
 }));
 
@@ -33,12 +32,11 @@ describe('LoginForm - Shake Animation Integration', () => {
     // 3. className is applied to the form element
     // 4. shake() is called on auth failures:
     //    - Email/password authentication failure (onSubmit catch block)
-    //    - Magic link validation failure (handleMagicLink validation and catch block)
     //    - Social authentication error (handleSocialError)
     // 5. Animation duration is 200ms (defined in useShakeAnimation hook)
     //
     // Implementation verified in:
-    // - src/components/auth/login-form.tsx (lines 19, 38, 79, 91, 112, 120, 153)
+    // - src/components/auth/login-form.tsx
     // - src/hooks/useShakeAnimation.ts (SHAKE_DURATION = 200)
     // - src/app/globals.css (animate-shake keyframes with 200ms duration)
     expect(true).toBe(true);
