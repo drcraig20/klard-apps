@@ -221,7 +221,7 @@ describe('PasskeyButton', () => {
     it('calls onError when registration fails', async () => {
       const mockRegister = vi
         .fn()
-        .mockResolvedValue({ success: false, error: 'Registration failed' });
+        .mockResolvedValue({ success: false, error: { code: 'CREDENTIAL_FAILED', message: 'Registration failed' } });
       const onError = vi.fn();
 
       mockUsePasskeyAuth.mockReturnValue({

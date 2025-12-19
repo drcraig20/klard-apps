@@ -137,18 +137,22 @@ describe('usePasskeyAuth', () => {
     });
 
     it('should return success true on successful registration', async () => {
-      const mockPasskey = { id: 'passkey-123', name: 'Test Passkey', createdAt: new Date() };
-      const mockAddPasskey = vi.fn().mockResolvedValue(mockPasskey);
+      // API response structure: { data: { id: 'passkey-123' } }
+      const mockAddPasskey = vi.fn().mockResolvedValue({ data: { id: 'passkey-123' } });
       vi.mocked(authClient.passkey.addPasskey).mockImplementation(mockAddPasskey);
 
       const { result } = renderHook(() => usePasskeyAuth());
 
-      let registerResult;
+      let registerResult: { success: boolean; data?: { id: string; name: string; createdAt: Date } };
       await act(async () => {
         registerResult = await result.current.registerPasskey('Test Passkey');
       });
 
-      expect(registerResult).toEqual({ success: true, data: mockPasskey });
+      // Hook transforms API response to Passkey object
+      expect(registerResult!.success).toBe(true);
+      expect(registerResult!.data?.id).toBe('passkey-123');
+      expect(registerResult!.data?.name).toBe('Test Passkey');
+      expect(registerResult!.data?.createdAt).toBeInstanceOf(Date);
     });
 
     it('should return success false on registration failure', async () => {
@@ -241,22 +245,23 @@ describe('usePasskeyAuth', () => {
       expect(result.current.error).toBeNull();
     });
 
-    it('should return PasskeyAuthResult with session data on success', async () => {
-      const mockSession = { user: { id: 'user-123', email: 'user@example.com' }, session: { id: 'session-123' } };
+    it('should return PasskeyAuthResult with transformed Passkey data on success', async () => {
+      const mockSession = { user: { id: 'user-123', email: 'user@example.com', name: 'Test User' }, session: { id: 'session-123' } };
       const mockSignIn = vi.fn().mockResolvedValue({ data: mockSession });
       vi.mocked(authClient.signIn.passkey).mockImplementation(mockSignIn);
 
       const { result } = renderHook(() => usePasskeyAuth());
 
-      let signInResult;
+      let signInResult: { success: boolean; data?: { id: string; name: string; createdAt: Date } };
       await act(async () => {
         signInResult = await result.current.signInWithPasskey();
       });
 
-      expect(signInResult).toEqual({
-        success: true,
-        data: mockSession
-      });
+      // Hook transforms session data to Passkey object
+      expect(signInResult!.success).toBe(true);
+      expect(signInResult!.data?.id).toBe('session-123');
+      expect(signInResult!.data?.name).toBe('Test User');
+      expect(signInResult!.data?.createdAt).toBeInstanceOf(Date);
     });
 
     it('should handle user cancellation gracefully (NotAllowedError)', async () => {
@@ -336,11 +341,20 @@ describe('usePasskeyAuth', () => {
   });
 
   describe('preloadPasskeys', () => {
-    it('should call authClient.passkey.listUserPasskeys', async () => {
-      const mockListPasskeys = vi.fn().mockResolvedValue({
-        data: [{ id: 'passkey-1', name: 'Test Passkey', createdAt: '2024-01-01' }]
+    beforeEach(() => {
+      // Mock Conditional UI availability check
+      Object.defineProperty(window, 'PublicKeyCredential', {
+        value: {
+          isConditionalMediationAvailable: vi.fn().mockResolvedValue(true),
+        },
+        writable: true,
+        configurable: true,
       });
-      vi.mocked(authClient.passkey.listUserPasskeys).mockImplementation(mockListPasskeys);
+    });
+
+    it('should call authClient.signIn.passkey with autoFill option', async () => {
+      const mockSignIn = vi.fn().mockResolvedValue({ data: null });
+      vi.mocked(authClient.signIn.passkey).mockImplementation(mockSignIn);
 
       const { result } = renderHook(() => usePasskeyAuth());
 
@@ -348,12 +362,12 @@ describe('usePasskeyAuth', () => {
         await result.current.preloadPasskeys();
       });
 
-      expect(mockListPasskeys).toHaveBeenCalled();
+      expect(mockSignIn).toHaveBeenCalledWith({ autoFill: true });
     });
 
     it('should not set loading state during preload', async () => {
-      const mockListPasskeys = vi.fn().mockResolvedValue({ data: [] });
-      vi.mocked(authClient.passkey.listUserPasskeys).mockImplementation(mockListPasskeys);
+      const mockSignIn = vi.fn().mockResolvedValue({ data: null });
+      vi.mocked(authClient.signIn.passkey).mockImplementation(mockSignIn);
 
       const { result } = renderHook(() => usePasskeyAuth());
 
@@ -367,8 +381,8 @@ describe('usePasskeyAuth', () => {
 
     it('should handle preload errors silently', async () => {
       const mockError = new Error('Preload failed');
-      const mockListPasskeys = vi.fn().mockRejectedValue(mockError);
-      vi.mocked(authClient.passkey.listUserPasskeys).mockImplementation(mockListPasskeys);
+      const mockSignIn = vi.fn().mockRejectedValue(mockError);
+      vi.mocked(authClient.signIn.passkey).mockImplementation(mockSignIn);
 
       const { result } = renderHook(() => usePasskeyAuth());
 
