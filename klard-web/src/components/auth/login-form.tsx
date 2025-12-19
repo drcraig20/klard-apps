@@ -9,7 +9,6 @@ import { Mail, Lock } from 'lucide-react';
 import { LoginSchema } from '@klard-apps/commons';
 import { signIn } from '@/lib/auth-client';
 import { InputField } from '@/components/ui/input-field';
-import { CheckboxField } from '@/components/ui/checkbox-field';
 import { SocialButtons } from './social-buttons';
 import { KlardLogo } from '@/components/ui/klard-icon';
 import { ErrorBanner } from '@/components/ui/error-banner';
@@ -41,18 +40,13 @@ export function LoginForm() {
     register,
     handleSubmit,
     formState: { errors },
-    watch,
-    setValue,
   } = useForm({
     resolver: zodResolver(LoginSchema),
     defaultValues: {
       email: '',
       password: '',
-      rememberMe: false,
     },
   });
-
-  const rememberMe = watch('rememberMe');
 
   // Clear any stale error state from previous screens on mount
   useEffect(() => {
@@ -140,16 +134,6 @@ export function LoginForm() {
           disabled={isSubmitting}
           {...register('password')}
         />
-
-        {/* Remember me */}
-        <div className="flex items-center">
-          <CheckboxField
-            checked={rememberMe}
-            onChange={(checked) => setValue('rememberMe', checked)}
-            label={t('auth.login.rememberMe')}
-            disabled={isSubmitting}
-          />
-        </div>
 
         {/* Submit button */}
         <SubmitButton isSubmitting={isSubmitting}>
