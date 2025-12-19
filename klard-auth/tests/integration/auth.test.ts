@@ -369,52 +369,6 @@ describe("Better Auth Integration Tests", () => {
     });
   });
 
-  describe("Passwordless / Magic Link", () => {
-    describe("POST /api/auth/magic-link/send", () => {
-      it("should send magic link email", async () => {
-        mockStore.sentEmails.length = 0;
-
-        const response = await request(app)
-          .post("/api/auth/magic-link/send")
-          .send({ email: "magic@example.com" })
-          .set("Content-Type", "application/json");
-
-        expect(response.status).toBe(200);
-
-        const magicLinkEmail = mockStore.sentEmails.find(
-          (e) => e.to === "magic@example.com" && e.subject.includes("Sign in"),
-        );
-        expect(magicLinkEmail).toBeDefined();
-        expect(magicLinkEmail?.url).toMatch(/token=/);
-      });
-
-      it("should include expiring token in magic link", async () => {
-        mockStore.sentEmails.length = 0;
-
-        await request(app)
-          .post("/api/auth/magic-link/send")
-          .send({ email: "magic-expire@example.com" })
-          .set("Content-Type", "application/json");
-
-        const magicLinkEmail = mockStore.sentEmails.find(
-          (e) => e.to === "magic-expire@example.com" && e.subject.includes("Sign in"),
-        );
-
-        expect(magicLinkEmail?.url).toMatch(/token=/);
-      });
-    });
-
-    describe("GET /api/auth/magic-link/verify", () => {
-      it("should reject invalid magic link token", async () => {
-        const response = await request(app)
-          .get("/api/auth/magic-link/verify")
-          .query({ token: "invalid-magic-token" });
-
-        expect(response.status).toBe(400);
-      });
-    });
-  });
-
   describe("Session Management", () => {
     let sessionCookies: string[];
 

@@ -1,7 +1,7 @@
 import { expo } from "@better-auth/expo";
 import { passkey } from "@better-auth/passkey";
 import { betterAuth } from "better-auth";
-import { bearer, emailOTP, jwt, magicLink, openAPI } from "better-auth/plugins";
+import { bearer, emailOTP, jwt, openAPI } from "better-auth/plugins";
 import { Pool } from "pg";
 import { config } from "../config/index.js";
 import { sendEmail } from "../services/email.js";
@@ -165,19 +165,6 @@ export const auth: ReturnType<typeof betterAuth> = betterAuth({
           html: `<p>Your ${template.message} is: <strong>${otp}</strong></p><p>This code expires in ${expiresInMinutes} minutes.</p>`,
         });
       },
-    }),
-
-    // Magic link for passwordless sign-in
-    magicLink({
-      sendMagicLink: async ({ email, url }) => {
-        await sendEmail({
-          to: email,
-          subject: "Sign in to Klard",
-          text: `Click to sign in: ${url}`,
-          html: `<p>Click <a href="${url}">here</a> to sign in.</p>`,
-        });
-      },
-      expiresIn: 60 * 15, // 15 minutes
     }),
 
     // JWT for API integration
