@@ -1,1 +1,0 @@
-export { MagicLinkSent } from './MagicLinkSent';

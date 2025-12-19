@@ -4,22 +4,20 @@ import Animated from 'react-native-reanimated';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'expo-router';
-import * as Linking from 'expo-linking';
-import { LoginSchema, MagicLinkSchema, type LoginInput } from '@klard-apps/commons';
+import { LoginSchema, type LoginInput } from '@klard-apps/commons';
 import { signIn } from '@/lib/auth-client';
 import { useThemeColors, useShakeAnimation, usePasskeyAuth, useHaptics } from '@/hooks';
 import { useAuthUIStore } from '@/stores';
 import { typography } from '@/styles';
 import { t } from '@/lib/i18n';
-import { Button, InputField, CheckboxField } from '@/components/ui';
+import { Button, InputField } from '@/components/ui';
 import { SocialButtons } from '../social-buttons';
-import { MagicLinkSent } from '../magic-link-sent';
 import { ErrorBanner } from '../error-banner';
 import { NetworkErrorSheet } from '../network-error-sheet';
 import { isNetworkError } from '@/utils/error-helpers';
 import { styles } from './login-form.styles';
 
-type PendingOperation = 'email' | 'magicLink' | null;
+type PendingOperation = 'email' | null;
 
 export function LoginForm() {
   const router = useRouter();
@@ -30,9 +28,7 @@ export function LoginForm() {
   const {
     formState: uiState,
     errorMessage,
-    magicLinkEmail,
     setSubmitting,
-    setMagicLinkSent,
     setError,
     clearError,
     reset,
@@ -48,7 +44,6 @@ export function LoginForm() {
     defaultValues: {
       email: '',
       password: '',
-      rememberMe: false,
     },
   });
 
@@ -111,51 +106,6 @@ export function LoginForm() {
     }
   }
 
-  async function handleMagicLink() {
-    const email = getValues('email');
-    const validation = MagicLinkSchema.safeParse({ email });
-
-    if (!validation.success) {
-      shake();
-      setError('Please enter a valid email to receive a magic link');
-      return;
-    }
-
-    try {
-      setSubmitting();
-
-      const callbackURL = Linking.createURL('(tabs)/dashboard');
-
-      const result = await signIn.magicLink({
-        email: validation.data.email,
-        callbackURL,
-      });
-
-      if (result.error) {
-        throw new Error(result.error.message || 'Failed to send magic link');
-      }
-
-      haptics.success();
-      setMagicLinkSent(validation.data.email);
-    } catch (error) {
-      shake();
-
-      // Check if it's a network error
-      if (isNetworkError(error)) {
-        setNetworkError({
-          message: error instanceof Error ? error.message : 'Network request failed',
-          code: 'NETWORK_ERROR',
-        });
-        setPendingOperation('magicLink');
-      } else {
-        // Show inline error banner for auth errors
-        setError(
-          error instanceof Error ? error.message : 'Failed to send magic link'
-        );
-      }
-    }
-  }
-
   async function handlePasskeySignIn() {
     try {
       // Note: signInWithPasskey uses discoverable credentials - no email required
@@ -194,8 +144,6 @@ export function LoginForm() {
     if (pendingOperation === 'email') {
       const values = getValues();
       void onSubmit(values);
-    } else if (pendingOperation === 'magicLink') {
-      void handleMagicLink();
     }
 
     setPendingOperation(null);
@@ -206,10 +154,6 @@ export function LoginForm() {
     setNetworkError(null);
     setPendingOperation(null);
   }, []);
-
-  if (uiState === 'magicLinkSent' && magicLinkEmail) {
-    return <MagicLinkSent email={magicLinkEmail} onBack={reset} />;
-  }
 
   return (
     <View style={styles.container}>
@@ -256,31 +200,7 @@ export function LoginForm() {
           )}
         />
 
-        <View style={styles.optionsRow}>
-          <Controller
-            control={control}
-            name="rememberMe"
-            render={({ field: { onChange, value } }) => (
-              <CheckboxField
-                checked={value}
-                onChange={onChange}
-                label={t('auth.login.rememberMe')}
-                disabled={isSubmitting}
-              />
-            )}
-          />
-
-          <TouchableOpacity
-            onPress={handleMagicLink}
-            disabled={isSubmitting}
-            accessibilityRole="button"
-            accessibilityLabel={t('auth.login.magicLinkButton')}
-          >
-            <Text style={[typography.label, { color: colors.primary }]}>
-              {t('auth.login.magicLinkButton')}
-            </Text>
-          </TouchableOpacity>
-        </View>
+        <View style={styles.fieldSpacer} />
 
         <Button
           variant="primary"
