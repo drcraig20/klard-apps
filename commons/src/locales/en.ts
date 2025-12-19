@@ -11,8 +11,6 @@ export const en = {
       emailPlaceholder: "you@example.com",
       passwordLabel: "Password",
       passwordPlaceholder: "Enter your password",
-      rememberMe: "Remember me",
-      magicLinkButton: "Sign in with email link",
       passkeyButton: "Sign in with Passkey",
       passkeyLoading: "Authenticating...",
       submitButton: "Sign In",
@@ -21,11 +19,6 @@ export const en = {
       noAccount: "Don't have an account?",
       signUp: "Sign up",
       trustElement: "Privacy-first. No bank access required."
-    },
-    magicLink: {
-      title: "Check your email",
-      description: "We sent a login link to",
-      backToLogin: "Back to login"
     },
     social: {
       google: "Google",
@@ -61,9 +54,7 @@ export const en = {
     },
     errors: {
       invalidCredentials: "Invalid email or password",
-      magicLinkFailed: "Failed to send magic link",
       unexpectedError: "An unexpected error occurred",
-      invalidEmailForMagicLink: "Please enter a valid email to receive a magic link",
       signupFailed: "Failed to create account",
       accountExists: "An account with this email already exists"
     }
