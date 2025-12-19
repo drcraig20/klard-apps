@@ -1,7 +1,6 @@
 export { InputField } from './input-field';
 export { SocialButtons } from './social-buttons';
 export { LoginForm } from './login-form';
-export { MagicLinkSent } from './magic-link-sent';
 export { ErrorBanner } from './error-banner';
 export { SignupForm } from './signup-form';
 export { PasswordStrengthIndicator } from './password-strength-indicator';

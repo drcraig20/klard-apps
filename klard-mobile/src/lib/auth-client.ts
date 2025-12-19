@@ -1,5 +1,5 @@
 import { createAuthClient } from 'better-auth/react';
-import { magicLinkClient, inferAdditionalFields } from 'better-auth/client/plugins';
+import { inferAdditionalFields } from 'better-auth/client/plugins';
 import { expoClient } from "@better-auth/expo/client";
 import { passkeyClient } from "@better-auth/passkey/client";
 import * as SecureStore from 'expo-secure-store';
@@ -31,7 +31,6 @@ function getAuthBaseURL(): string {
 export const authClient = createAuthClient({
   baseURL: getAuthBaseURL(),
   plugins: [
-    magicLinkClient(),
     expoClient({
       scheme: "klard",
       storagePrefix: "klard",
