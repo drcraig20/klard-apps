@@ -70,7 +70,11 @@
       "Bash(git -C /Users/drcraig/Desktop/PersonalProjects/klard-apps log --oneline -30)",
       "Bash(tree:*)",
       "Bash(git -C /Users/drcraig/Desktop/PersonalProjects/klard-apps log --oneline -3)",
-      "SlashCommand(/agile:impl:*)"
+      "SlashCommand(/agile:impl:*)",
+      "WebSearch",
+      "mcp__plugin_Notion_notion__notion-create-pages",
+      "mcp__plugin_Notion_notion__notion-update-page",
+      "mcp__todoist__add-tasks"
     ],
     "deny": [],
     "ask": []
