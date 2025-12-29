@@ -1,5 +1,7 @@
 # Klard Design System - Light Theme Colors & Effects
 
+> **Note:** Light theme is the default for everyday use. Celebration screens (block notifications, milestone achievements, shareable reports) render in the user's chosen theme. Both light and dark themes are designed to be screenshot-worthy with appropriate glow effects and contrast.
+
 ## Colors
 
 ### Primary Colors
@@ -11,10 +13,13 @@
 - **Secondary Foreground:** #FFFFFF (White)
 
 ### Accent Colors
-- **Accent Success:** #059669 (Dark Green)
+- **Accent Success:** #059669 (Dark Green) — Also used for **Block Celebrations**
 - **Accent Warning:** #D97706 (Dark Amber)
-- **Accent Error:** #DC2626 (Dark Coral)
+- **Accent Error:** #DC2626 (Dark Coral) — **Actual failures only, NEVER for blocked charges**
 - **Accent Foreground:** #FFFFFF (White)
+
+### Block Celebration Note
+Block celebrations (notifications, milestones, shareable screens) render in the user's current theme. Light theme celebrations use Success Green (#059669) with appropriate glow effects. See color specifications below for light theme celebration styling.
 
 ### Neutral Colors
 - **Background:** #FFFFFF (Pure White)
@@ -234,6 +239,7 @@
 - Use for: Error messages, critical actions, destructive buttons
 - Background pairing: Light red (#FEF2F2) for error containers
 - Use sparingly: Only for genuine errors or destructive actions
+- **NEVER use for:** Blocked charges — blocks are CELEBRATIONS (render in dark theme)
 
 ### Background (#FFFFFF)
 - Use for: Main page background, card backgrounds, modals

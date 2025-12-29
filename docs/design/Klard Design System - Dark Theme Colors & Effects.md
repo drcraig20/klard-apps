@@ -1,4 +1,6 @@
-# Klard Design System - Colors & Effects
+# Klard Design System - Dark Theme Colors & Effects
+
+> **Note:** Dark theme is preferred by power users and dashboard-heavy workflows. Celebration screens (block notifications, milestone achievements, shareable reports) render in the user's chosen theme. Dark theme celebrations feature enhanced glow effects that make teal/green colors pop.
 
 ## Colors
 
@@ -11,10 +13,16 @@
 - **Secondary Foreground:** #F8FAFC (Near White)
 
 ### Accent Colors
-- **Accent Success:** #10B981 (Savings Green)
+- **Accent Success:** #10B981 (Savings Green) — Also used for **Block Celebrations**
 - **Accent Warning:** #F59E0B (Alert Amber)
-- **Accent Error:** #EF4444 (Critical Coral)
+- **Accent Error:** #EF4444 (Critical Coral) — **Actual failures only, NEVER for blocked charges**
 - **Accent Foreground:** #FFFFFF (White)
+
+### Block Celebration Colors (NEW)
+- **Block Success:** #10B981 (Savings Green) with enhanced glow
+- **Block Success Glow:** rgba(16, 185, 129, 0.35) — 35% opacity, increased from standard 25%
+- **Alternate Block Color:** #15B5B0 (Primary Teal) for variety
+- **Confetti Colors:** #10B981, #15B5B0, #F59E0B (green, teal, gold)
 
 ### Neutral Colors
 - **Background:** #0F172A (Dark Navy)
@@ -87,6 +95,15 @@
 - **Blur:** 16px
 - **Spread:** 0px
 - **Color:** rgba(16, 185, 129, 0.25)
+
+#### Block Celebration Glow (Block notifications) — NEW
+- **X Position:** 0px
+- **Y Position:** 0px
+- **Blur:** 24px
+- **Spread:** 4px
+- **Color:** rgba(16, 185, 129, 0.35)
+- **Animation:** Pulse on block event (0.8s ease-in-out)
+- **Usage:** Block success notifications, milestone achievements
 
 #### Amber Warning Glow (Alert states)
 - **X Position:** 0px
@@ -190,6 +207,13 @@
 ### Accent Error (#EF4444)
 - Use for: Error messages, critical actions, destructive buttons
 - Use sparingly: Only for genuine errors or destructive actions
+- **NEVER use for:** Blocked charges — blocks are CELEBRATIONS, use Success Green
+
+### Block Celebration (#10B981 with enhanced glow) — NEW
+- Use for: Block notifications, savings milestones, achievement badges
+- Pair with: Dark background for optimal screenshot sharing
+- Always include: Enhanced glow effect (35% opacity)
+- Animation: Confetti permitted for first block and milestones
 
 ### Background (#0F172A)
 - Use for: Main page background, dark sections
