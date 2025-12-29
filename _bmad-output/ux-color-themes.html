@@ -1,0 +1,1320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Klard Design System — Color Themes</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      /* Light Theme Tokens */
+      --light-primary: #0D7C7A;
+      --light-primary-hover: #0A5F5D;
+      --light-secondary: #15B5B0;
+      --light-background: #FFFFFF;
+      --light-foreground: #0F172A;
+      --light-muted: #F1F5F9;
+      --light-muted-foreground: #64748B;
+      --light-card: #FFFFFF;
+      --light-border: rgba(148, 163, 184, 0.2);
+      --light-success: #059669;
+      --light-success-bg: #ECFDF5;
+      --light-warning: #D97706;
+      --light-warning-bg: #FEF3C7;
+      --light-error: #DC2626;
+      --light-error-bg: #FEF2F2;
+      --light-glass-bg: rgba(255, 255, 255, 0.8);
+      --light-shadow: rgba(15, 23, 42, 0.08);
+      --light-glow: rgba(13, 124, 122, 0.3);
+
+      /* Dark Theme Tokens */
+      --dark-primary: #15B5B0;
+      --dark-primary-hover: #1DCCC6;
+      --dark-secondary: #0D7C7A;
+      --dark-background: #0F172A;
+      --dark-foreground: #F8FAFC;
+      --dark-muted: #1E293B;
+      --dark-muted-foreground: #94A3B8;
+      --dark-card: #1E293B;
+      --dark-border: rgba(148, 163, 184, 0.12);
+      --dark-success: #10B981;
+      --dark-success-bg: rgba(16, 185, 129, 0.15);
+      --dark-warning: #F59E0B;
+      --dark-warning-bg: rgba(245, 158, 11, 0.15);
+      --dark-error: #EF4444;
+      --dark-error-bg: rgba(239, 68, 68, 0.15);
+      --dark-glass-bg: rgba(30, 41, 59, 0.6);
+      --dark-shadow: rgba(0, 0, 0, 0.3);
+      --dark-glow: rgba(21, 181, 176, 0.35);
+
+      /* Shared */
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --transition: 300ms ease-in-out;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'DM Sans', -apple-system, sans-serif;
+      line-height: 1.6;
+      background: linear-gradient(135deg, #0F172A 0%, #1E293B 50%, #0F172A 100%);
+      min-height: 100vh;
+      color: #F8FAFC;
+    }
+
+    h1, h2, h3, h4, h5 {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    /* Header */
+    .header {
+      padding: 3rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle at 30% 50%, rgba(21, 181, 176, 0.15) 0%, transparent 50%),
+                  radial-gradient(circle at 70% 80%, rgba(16, 185, 129, 0.1) 0%, transparent 40%);
+      pointer-events: none;
+    }
+
+    .header h1 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 800;
+      background: linear-gradient(135deg, #15B5B0 0%, #10B981 50%, #15B5B0 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 0.5rem;
+      position: relative;
+    }
+
+    .header p {
+      color: var(--dark-muted-foreground);
+      font-size: 1.125rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: var(--dark-glass-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--dark-border);
+      border-radius: 9999px;
+      font-size: 0.875rem;
+      color: var(--dark-primary);
+      margin-bottom: 1.5rem;
+    }
+
+    .badge::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: var(--dark-success);
+      border-radius: 50%;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.2); }
+    }
+
+    /* Navigation */
+    .nav {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 1rem 2rem;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--dark-border);
+    }
+
+    .nav a {
+      padding: 0.625rem 1.25rem;
+      color: var(--dark-muted-foreground);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      border-radius: var(--radius-md);
+      transition: var(--transition);
+    }
+
+    .nav a:hover {
+      color: var(--dark-foreground);
+      background: var(--dark-muted);
+    }
+
+    /* Main Container */
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+
+    /* Section */
+    .section {
+      margin-bottom: 4rem;
+    }
+
+    .section-header {
+      margin-bottom: 2rem;
+    }
+
+    .section-header h2 {
+      font-size: 1.75rem;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .section-header h2::before {
+      content: '';
+      width: 4px;
+      height: 1.5rem;
+      background: linear-gradient(180deg, var(--dark-primary), var(--dark-success));
+      border-radius: 2px;
+    }
+
+    .section-header p {
+      color: var(--dark-muted-foreground);
+    }
+
+    /* Theme Comparison Grid */
+    .theme-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    @media (max-width: 900px) {
+      .theme-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .theme-panel {
+      border-radius: var(--radius-xl);
+      padding: 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .theme-panel.light {
+      background: var(--light-background);
+      color: var(--light-foreground);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+    }
+
+    .theme-panel.dark {
+      background: var(--dark-background);
+      color: var(--dark-foreground);
+      border: 1px solid var(--dark-border);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    .theme-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.375rem 0.875rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 1.5rem;
+    }
+
+    .light .theme-label {
+      background: var(--light-muted);
+      color: var(--light-muted-foreground);
+    }
+
+    .dark .theme-label {
+      background: var(--dark-muted);
+      color: var(--dark-muted-foreground);
+    }
+
+    .theme-label svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    /* Color Swatches */
+    .color-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .color-group-title {
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.75rem;
+      opacity: 0.6;
+    }
+
+    .color-swatches {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .swatch {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      min-width: 80px;
+    }
+
+    .swatch-color {
+      width: 100%;
+      height: 48px;
+      border-radius: var(--radius-md);
+      position: relative;
+      transition: transform 0.2s ease;
+      cursor: pointer;
+    }
+
+    .swatch-color:hover {
+      transform: scale(1.05);
+    }
+
+    .swatch-color.with-glow {
+      box-shadow: 0 0 24px var(--glow-color, rgba(21, 181, 176, 0.35));
+    }
+
+    .swatch-color.with-border {
+      border: 1px solid var(--dark-border);
+    }
+
+    .light .swatch-color.with-border {
+      border-color: var(--light-border);
+    }
+
+    .swatch-info {
+      font-size: 0.6875rem;
+    }
+
+    .swatch-name {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 0.125rem;
+    }
+
+    .swatch-hex {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.625rem;
+      opacity: 0.7;
+    }
+
+    .swatch-contrast {
+      font-size: 0.5625rem;
+      padding: 0.125rem 0.375rem;
+      background: var(--dark-success-bg);
+      color: var(--dark-success);
+      border-radius: 4px;
+      display: inline-block;
+      margin-top: 0.25rem;
+    }
+
+    .light .swatch-contrast {
+      background: var(--light-success-bg);
+      color: var(--light-success);
+    }
+
+    /* Component Previews */
+    .component-preview {
+      padding: 1.5rem;
+      border-radius: var(--radius-lg);
+      margin-top: 1.5rem;
+    }
+
+    .light .component-preview {
+      background: var(--light-muted);
+    }
+
+    .dark .component-preview {
+      background: var(--dark-muted);
+    }
+
+    .preview-title {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 1rem;
+      opacity: 0.6;
+    }
+
+    /* Buttons */
+    .btn-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .btn {
+      padding: 0.625rem 1.25rem;
+      border-radius: var(--radius-md);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.875rem;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Light theme buttons */
+    .light .btn-primary {
+      background: linear-gradient(135deg, var(--light-primary), var(--light-primary-hover));
+      color: white;
+      box-shadow: 0 0 20px var(--light-glow);
+    }
+
+    .light .btn-primary:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 28px var(--light-glow);
+    }
+
+    .light .btn-secondary {
+      background: transparent;
+      color: var(--light-primary);
+      border: 1.5px solid var(--light-primary);
+    }
+
+    .light .btn-secondary:hover {
+      background: rgba(13, 124, 122, 0.08);
+    }
+
+    .light .btn-success {
+      background: linear-gradient(135deg, var(--light-success), #047857);
+      color: white;
+      box-shadow: 0 0 16px rgba(5, 150, 105, 0.2);
+    }
+
+    .light .btn-destructive {
+      background: transparent;
+      color: var(--light-error);
+      border: 1.5px solid var(--light-error);
+    }
+
+    /* Dark theme buttons */
+    .dark .btn-primary {
+      background: linear-gradient(135deg, var(--dark-primary), var(--dark-secondary));
+      color: white;
+      box-shadow: 0 0 24px var(--dark-glow);
+    }
+
+    .dark .btn-primary:hover {
+      transform: scale(1.02);
+      box-shadow: 0 0 32px var(--dark-glow);
+    }
+
+    .dark .btn-secondary {
+      background: transparent;
+      color: var(--dark-primary);
+      border: 1.5px solid var(--dark-primary);
+    }
+
+    .dark .btn-secondary:hover {
+      background: rgba(21, 181, 176, 0.1);
+    }
+
+    .dark .btn-success {
+      background: linear-gradient(135deg, var(--dark-success), #059669);
+      color: white;
+      box-shadow: 0 0 24px rgba(16, 185, 129, 0.35);
+    }
+
+    .dark .btn-destructive {
+      background: transparent;
+      color: var(--dark-error);
+      border: 1.5px solid var(--dark-error);
+    }
+
+    /* Glass Cards */
+    .glass-card {
+      padding: 1.25rem;
+      border-radius: var(--radius-lg);
+      backdrop-filter: blur(12px);
+      margin-top: 1rem;
+    }
+
+    .light .glass-card {
+      background: var(--light-glass-bg);
+      border: 1px solid var(--light-border);
+      box-shadow: 0 4px 16px var(--light-shadow);
+    }
+
+    .dark .glass-card {
+      background: var(--dark-glass-bg);
+      border: 1px solid var(--dark-border);
+      box-shadow: 0 4px 16px var(--dark-shadow);
+    }
+
+    .glass-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.75rem;
+    }
+
+    .glass-card-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .glass-card-badge {
+      font-size: 0.6875rem;
+      padding: 0.25rem 0.625rem;
+      border-radius: 9999px;
+      font-weight: 600;
+    }
+
+    .light .glass-card-badge.success {
+      background: var(--light-success-bg);
+      color: var(--light-success);
+    }
+
+    .dark .glass-card-badge.success {
+      background: var(--dark-success-bg);
+      color: var(--dark-success);
+    }
+
+    .glass-card-value {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 0.25rem;
+    }
+
+    .light .glass-card-value {
+      color: var(--light-success);
+    }
+
+    .dark .glass-card-value {
+      color: var(--dark-success);
+      text-shadow: 0 0 24px rgba(16, 185, 129, 0.4);
+    }
+
+    .glass-card-subtitle {
+      font-size: 0.8125rem;
+      opacity: 0.7;
+    }
+
+    /* Input Preview */
+    .input-preview {
+      margin-top: 1rem;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border-radius: var(--radius-md);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.9375rem;
+      transition: var(--transition);
+    }
+
+    .light .input-field {
+      background: var(--light-card);
+      border: 1.5px solid var(--light-border);
+      color: var(--light-foreground);
+    }
+
+    .light .input-field:focus {
+      outline: none;
+      border-color: var(--light-primary);
+      box-shadow: 0 0 0 3px rgba(13, 124, 122, 0.15);
+    }
+
+    .dark .input-field {
+      background: var(--dark-muted);
+      border: 1.5px solid var(--dark-border);
+      color: var(--dark-foreground);
+    }
+
+    .dark .input-field:focus {
+      outline: none;
+      border-color: var(--dark-primary);
+      box-shadow: 0 0 0 3px rgba(21, 181, 176, 0.2);
+    }
+
+    .input-field::placeholder {
+      opacity: 0.5;
+    }
+
+    /* Alert Banners */
+    .alert-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .alert {
+      padding: 0.875rem 1rem;
+      border-radius: var(--radius-md);
+      font-size: 0.8125rem;
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
+    }
+
+    .alert svg {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    /* Light theme alerts */
+    .light .alert.success {
+      background: var(--light-success-bg);
+      color: #065F46;
+      border: 1px solid #A7F3D0;
+    }
+
+    .light .alert.warning {
+      background: var(--light-warning-bg);
+      color: #92400E;
+      border: 1px solid #FDE68A;
+    }
+
+    .light .alert.error {
+      background: var(--light-error-bg);
+      color: #991B1B;
+      border: 1px solid #FECACA;
+    }
+
+    /* Dark theme alerts */
+    .dark .alert.success {
+      background: var(--dark-success-bg);
+      color: var(--dark-success);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+
+    .dark .alert.warning {
+      background: var(--dark-warning-bg);
+      color: var(--dark-warning);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .dark .alert.error {
+      background: var(--dark-error-bg);
+      color: var(--dark-error);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+    }
+
+    /* Effects Section */
+    .effects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .effect-card {
+      padding: 1.5rem;
+      border-radius: var(--radius-lg);
+      background: var(--dark-muted);
+      border: 1px solid var(--dark-border);
+    }
+
+    .effect-card h4 {
+      font-size: 1rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .effect-demo {
+      height: 80px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .effect-demo.teal-glow {
+      background: var(--dark-primary);
+      box-shadow: 0 0 24px rgba(21, 181, 176, 0.35);
+      color: white;
+    }
+
+    .effect-demo.green-glow {
+      background: var(--dark-success);
+      box-shadow: 0 0 24px rgba(16, 185, 129, 0.35);
+      color: white;
+    }
+
+    .effect-demo.glass {
+      background: var(--dark-glass-bg);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--dark-border);
+      color: var(--dark-foreground);
+    }
+
+    .effect-demo.celebration {
+      background: linear-gradient(135deg, var(--dark-success), #059669);
+      box-shadow: 0 0 32px rgba(16, 185, 129, 0.4);
+      color: white;
+      animation: celebrationPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes celebrationPulse {
+      0%, 100% { box-shadow: 0 0 24px rgba(16, 185, 129, 0.35); }
+      50% { box-shadow: 0 0 40px rgba(16, 185, 129, 0.5); }
+    }
+
+    .effect-code {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.6875rem;
+      padding: 0.75rem;
+      background: var(--dark-background);
+      border-radius: var(--radius-sm);
+      overflow-x: auto;
+      color: var(--dark-muted-foreground);
+    }
+
+    .effect-code .property {
+      color: var(--dark-primary);
+    }
+
+    .effect-code .value {
+      color: var(--dark-success);
+    }
+
+    /* Token Reference Table */
+    .token-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8125rem;
+    }
+
+    .token-table th {
+      text-align: left;
+      padding: 0.75rem 1rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.6875rem;
+      letter-spacing: 0.05em;
+      background: var(--dark-muted);
+      color: var(--dark-muted-foreground);
+    }
+
+    .token-table th:first-child {
+      border-radius: var(--radius-md) 0 0 0;
+    }
+
+    .token-table th:last-child {
+      border-radius: 0 var(--radius-md) 0 0;
+    }
+
+    .token-table td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--dark-border);
+      vertical-align: middle;
+    }
+
+    .token-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .token-table tr:last-child td:first-child {
+      border-radius: 0 0 0 var(--radius-md);
+    }
+
+    .token-table tr:last-child td:last-child {
+      border-radius: 0 0 var(--radius-md) 0;
+    }
+
+    .token-preview {
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      display: inline-block;
+      vertical-align: middle;
+      border: 1px solid var(--dark-border);
+    }
+
+    .token-name {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.75rem;
+      color: var(--dark-primary);
+    }
+
+    .token-value {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.75rem;
+      color: var(--dark-muted-foreground);
+    }
+
+    /* Footer */
+    .footer {
+      text-align: center;
+      padding: 3rem 2rem;
+      border-top: 1px solid var(--dark-border);
+      margin-top: 4rem;
+    }
+
+    .footer p {
+      color: var(--dark-muted-foreground);
+      font-size: 0.875rem;
+    }
+
+    .footer .date {
+      color: var(--dark-primary);
+      font-weight: 600;
+    }
+
+    /* Celebration Demo */
+    .celebration-demo {
+      background: linear-gradient(135deg, var(--dark-background), var(--dark-muted));
+      border-radius: var(--radius-xl);
+      padding: 3rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--dark-border);
+    }
+
+    .celebration-demo::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at 50% 30%, rgba(16, 185, 129, 0.2) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .celebration-icon {
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, var(--dark-success), #059669);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1.5rem;
+      box-shadow: 0 0 40px rgba(16, 185, 129, 0.4);
+      animation: celebrationPulse 2s ease-in-out infinite;
+    }
+
+    .celebration-icon svg {
+      width: 32px;
+      height: 32px;
+      color: white;
+    }
+
+    .celebration-amount {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 3rem;
+      font-weight: 800;
+      color: var(--dark-success);
+      text-shadow: 0 0 40px rgba(16, 185, 129, 0.5);
+      margin-bottom: 0.5rem;
+    }
+
+    .celebration-text {
+      font-size: 1.125rem;
+      color: var(--dark-foreground);
+      margin-bottom: 0.25rem;
+    }
+
+    .celebration-subtext {
+      color: var(--dark-muted-foreground);
+      font-size: 0.9375rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 640px) {
+      .container {
+        padding: 1rem;
+      }
+
+      .theme-panel {
+        padding: 1.25rem;
+      }
+
+      .effects-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="badge">Klard Design System</div>
+    <h1>Color Themes</h1>
+    <p>A comprehensive visual reference for light and dark theme tokens, effects, and component styling.</p>
+  </header>
+
+  <nav class="nav">
+    <a href="#themes">Themes</a>
+    <a href="#effects">Effects</a>
+    <a href="#celebration">Celebrations</a>
+    <a href="#tokens">Token Reference</a>
+  </nav>
+
+  <main class="container">
+
+    <!-- Theme Comparison -->
+    <section id="themes" class="section">
+      <div class="section-header">
+        <h2>Theme Comparison</h2>
+        <p>Side-by-side view of light and dark theme implementations with identical components.</p>
+      </div>
+
+      <div class="theme-grid">
+        <!-- Light Theme Panel -->
+        <div class="theme-panel light">
+          <div class="theme-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="5"/>
+              <path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
+            </svg>
+            Light Theme
+          </div>
+
+          <!-- Primary Colors -->
+          <div class="color-group">
+            <div class="color-group-title">Primary</div>
+            <div class="color-swatches">
+              <div class="swatch">
+                <div class="swatch-color" style="background: #0D7C7A; --glow-color: rgba(13,124,122,0.3);" class="with-glow"></div>
+                <div class="swatch-info">
+                  <span class="swatch-name">Primary</span>
+                  <span class="swatch-hex">#0D7C7A</span>
+                  <span class="swatch-contrast">4.68:1 AA</span>
+                </div>
+              </div>
+              <div class="swatch">
+                <div class="swatch-color" style="background: #15B5B0;"></div>
+                <div class="swatch-info">
+                  <span class="swatch-name">Secondary</span>
+                  <span class="swatch-hex">#15B5B0</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Semantic Colors -->
+          <div class="color-group">
+            <div class="color-group-title">Semantic</div>
+            <div class="color-swatches">
+              <div class="swatch">
+                <div class="swatch-color" style="background: #059669;"></div>
+                <div class="swatch-info">
+                  <span class="swatch-name">Success</span>
+                  <span class="swatch-hex">#059669</span>
+                </div>
+              </div>
+              <div class="swatch">
+                <div class="swatch-color" style="background: #D97706;"></div>
+                <div class="swatch-info">
+                  <span class="swatch-name">Warning</span>
+                  <span class="swatch-hex">#D97706</span>
+                </div>
+              </div>
+              <div class="swatch">
+                <div class="swatch-color" style="background: #DC2626;"></div>
+                <div class="swatch-info">
+                  <span class="swatch-name">Error</span>
+                  <span class="swatch-hex">#DC2626</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Neutrals -->
+          <div class="color-group">
+            <div class="color-group-title">Neutrals</div>
+            <div class="color-swatches">
+              <div class="swatch">
+                <div class="swatch-color with-border" style="background: #FFFFFF;"></div>
+                <div class="swatch-info">
+                  <span class="swatch-name">Background</span>
+                  <span class="swatch-hex">#FFFFFF</span>
+                </div>
+              </div>
+              <div class="swatch">
+                <div class="swatch-color" style="background: #F1F5F9;"></div>
+                <div class="swatch-info">
+                  <span class="swatch-name">Muted</span>
+                  <span class="swatch-hex">#F1F5F9</span>
+                </div>
+              </div>
+              <div class="swatch">
+                <div class="swatch-color" style="background: #0F172A;"></div>
+                <div class="swatch-info">
+                  <span class="swatch-name">Foreground</span>
+                  <span class="swatch-hex">#0F172A</span>
+                  <span class="swatch-contrast">14.74:1 AAA</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Component Preview -->
+          <div class="component-preview">
+            <div class="preview-title">Component Preview</div>
+
+            <div class="btn-row">
+              <button class="btn btn-primary">Primary</button>
+              <button class="btn btn-secondary">Secondary</button>
+              <button class="btn btn-success">Block Card</button>
+              <button class="btn btn-destructive">Delete</button>
+            </div>
+
+            <div class="input-preview">
+              <input type="text" class="input-field" placeholder="Enter subscription name...">
+            </div>
+
+            <div class="glass-card">
+              <div class="glass-card-header">
+                <span class="glass-card-title">Total Savings</span>
+                <span class="glass-card-badge success">+12%</span>
+              </div>
+              <div class="glass-card-value">$247.98</div>
+              <div class="glass-card-subtitle">This month</div>
+            </div>
+
+            <div class="alert-row">
+              <div class="alert success">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+                Blocked $14.99 from TrialService
+              </div>
+              <div class="alert warning">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                Spotify went up $12.99 → $14.99
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Dark Theme Panel -->
+        <div class="theme-panel dark">
+          <div class="theme-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+            </svg>
+            Dark Theme
+          </div>
+
+          <!-- Primary Colors -->
+          <div class="color-group">
+            <div class="color-group-title">Primary</div>
+            <div class="color-swatches">
+              <div class="swatch">
+                <div class="swatch-color with-glow" style="background: #15B5B0; --glow-color: rgba(21,181,176,0.35);"></div>
+                <div class="swatch-info">
+                  <span class="swatch-name">Primary</span>
+                  <span class="swatch-hex">#15B5B0</span>
+                </div>
+              </div>
+              <div class="swatch">
+                <div class="swatch-color" style="background: #0D7C7A;"></div>
+                <div class="swatch-info">
+                  <span class="swatch-name">Secondary</span>
+                  <span class="swatch-hex">#0D7C7A</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Semantic Colors -->
+          <div class="color-group">
+            <div class="color-group-title">Semantic</div>
+            <div class="color-swatches">
+              <div class="swatch">
+                <div class="swatch-color with-glow" style="background: #10B981; --glow-color: rgba(16,185,129,0.35);"></div>
+                <div class="swatch-info">
+                  <span class="swatch-name">Success</span>
+                  <span class="swatch-hex">#10B981</span>
+                </div>
+              </div>
+              <div class="swatch">
+                <div class="swatch-color" style="background: #F59E0B;"></div>
+                <div class="swatch-info">
+                  <span class="swatch-name">Warning</span>
+                  <span class="swatch-hex">#F59E0B</span>
+                </div>
+              </div>
+              <div class="swatch">
+                <div class="swatch-color" style="background: #EF4444;"></div>
+                <div class="swatch-info">
+                  <span class="swatch-name">Error</span>
+                  <span class="swatch-hex">#EF4444</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Neutrals -->
+          <div class="color-group">
+            <div class="color-group-title">Neutrals</div>
+            <div class="color-swatches">
+              <div class="swatch">
+                <div class="swatch-color" style="background: #0F172A;"></div>
+                <div class="swatch-info">
+                  <span class="swatch-name">Background</span>
+                  <span class="swatch-hex">#0F172A</span>
+                </div>
+              </div>
+              <div class="swatch">
+                <div class="swatch-color" style="background: #1E293B;"></div>
+                <div class="swatch-info">
+                  <span class="swatch-name">Muted</span>
+                  <span class="swatch-hex">#1E293B</span>
+                </div>
+              </div>
+              <div class="swatch">
+                <div class="swatch-color" style="background: #F8FAFC;"></div>
+                <div class="swatch-info">
+                  <span class="swatch-name">Foreground</span>
+                  <span class="swatch-hex">#F8FAFC</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Component Preview -->
+          <div class="component-preview">
+            <div class="preview-title">Component Preview</div>
+
+            <div class="btn-row">
+              <button class="btn btn-primary">Primary</button>
+              <button class="btn btn-secondary">Secondary</button>
+              <button class="btn btn-success">Block Card</button>
+              <button class="btn btn-destructive">Delete</button>
+            </div>
+
+            <div class="input-preview">
+              <input type="text" class="input-field" placeholder="Enter subscription name...">
+            </div>
+
+            <div class="glass-card">
+              <div class="glass-card-header">
+                <span class="glass-card-title">Total Savings</span>
+                <span class="glass-card-badge success">+12%</span>
+              </div>
+              <div class="glass-card-value">$247.98</div>
+              <div class="glass-card-subtitle">This month</div>
+            </div>
+
+            <div class="alert-row">
+              <div class="alert success">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>
+                Blocked $14.99 from TrialService
+              </div>
+              <div class="alert warning">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                Spotify went up $12.99 → $14.99
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Effects Section -->
+    <section id="effects" class="section">
+      <div class="section-header">
+        <h2>Effects & Treatments</h2>
+        <p>Glow effects, glassmorphism, and shadow specifications for dark theme.</p>
+      </div>
+
+      <div class="effects-grid">
+        <div class="effect-card">
+          <h4>Teal Glow (Primary CTA)</h4>
+          <div class="effect-demo teal-glow">Primary Button</div>
+          <div class="effect-code">
+            <span class="property">box-shadow:</span> <span class="value">0 0 24px rgba(21, 181, 176, 0.35)</span>;
+          </div>
+        </div>
+
+        <div class="effect-card">
+          <h4>Green Glow (Success/Block)</h4>
+          <div class="effect-demo green-glow">Block Success</div>
+          <div class="effect-code">
+            <span class="property">box-shadow:</span> <span class="value">0 0 24px rgba(16, 185, 129, 0.35)</span>;
+          </div>
+        </div>
+
+        <div class="effect-card">
+          <h4>Glassmorphism</h4>
+          <div class="effect-demo glass">Glass Panel</div>
+          <div class="effect-code">
+            <span class="property">background:</span> <span class="value">rgba(30, 41, 59, 0.6)</span>;<br>
+            <span class="property">backdrop-filter:</span> <span class="value">blur(12px)</span>;<br>
+            <span class="property">border:</span> <span class="value">1px solid rgba(148, 163, 184, 0.12)</span>;
+          </div>
+        </div>
+
+        <div class="effect-card">
+          <h4>Celebration Glow (Pulse)</h4>
+          <div class="effect-demo celebration">Blocked!</div>
+          <div class="effect-code">
+            <span class="property">box-shadow:</span> <span class="value">0 0 32px rgba(16, 185, 129, 0.4)</span>;<br>
+            <span class="property">animation:</span> <span class="value">pulse 2s ease-in-out infinite</span>;
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Celebration Demo -->
+    <section id="celebration" class="section">
+      <div class="section-header">
+        <h2>Block Celebration</h2>
+        <p>Screenshot-ready celebration state for blocked charges. Blocks are victories, not errors.</p>
+      </div>
+
+      <div class="celebration-demo">
+        <div class="celebration-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <path d="M9 12l2 2 4-4"/>
+          </svg>
+        </div>
+        <div class="celebration-amount">$47.98</div>
+        <div class="celebration-text">Your BurnerCard did its job!</div>
+        <div class="celebration-subtext">Blocked charge from TrialService Premium</div>
+      </div>
+    </section>
+
+    <!-- Token Reference -->
+    <section id="tokens" class="section">
+      <div class="section-header">
+        <h2>Token Reference</h2>
+        <p>Complete list of CSS custom property tokens for both themes.</p>
+      </div>
+
+      <table class="token-table">
+        <thead>
+          <tr>
+            <th>Token</th>
+            <th>Light</th>
+            <th>Dark</th>
+            <th>Usage</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="token-name">--primary</span></td>
+            <td><span class="token-preview" style="background: #0D7C7A;"></span> <span class="token-value">#0D7C7A</span></td>
+            <td><span class="token-preview" style="background: #15B5B0;"></span> <span class="token-value">#15B5B0</span></td>
+            <td>CTAs, links, active states</td>
+          </tr>
+          <tr>
+            <td><span class="token-name">--secondary</span></td>
+            <td><span class="token-preview" style="background: #15B5B0;"></span> <span class="token-value">#15B5B0</span></td>
+            <td><span class="token-preview" style="background: #0D7C7A;"></span> <span class="token-value">#0D7C7A</span></td>
+            <td>Hover states, accents</td>
+          </tr>
+          <tr>
+            <td><span class="token-name">--background</span></td>
+            <td><span class="token-preview" style="background: #FFFFFF; border: 1px solid #E2E8F0;"></span> <span class="token-value">#FFFFFF</span></td>
+            <td><span class="token-preview" style="background: #0F172A;"></span> <span class="token-value">#0F172A</span></td>
+            <td>Page background</td>
+          </tr>
+          <tr>
+            <td><span class="token-name">--foreground</span></td>
+            <td><span class="token-preview" style="background: #0F172A;"></span> <span class="token-value">#0F172A</span></td>
+            <td><span class="token-preview" style="background: #F8FAFC;"></span> <span class="token-value">#F8FAFC</span></td>
+            <td>Primary text</td>
+          </tr>
+          <tr>
+            <td><span class="token-name">--muted</span></td>
+            <td><span class="token-preview" style="background: #F1F5F9;"></span> <span class="token-value">#F1F5F9</span></td>
+            <td><span class="token-preview" style="background: #1E293B;"></span> <span class="token-value">#1E293B</span></td>
+            <td>Cards, elevated surfaces</td>
+          </tr>
+          <tr>
+            <td><span class="token-name">--success</span></td>
+            <td><span class="token-preview" style="background: #059669;"></span> <span class="token-value">#059669</span></td>
+            <td><span class="token-preview" style="background: #10B981;"></span> <span class="token-value">#10B981</span></td>
+            <td>Savings, blocks, positive</td>
+          </tr>
+          <tr>
+            <td><span class="token-name">--warning</span></td>
+            <td><span class="token-preview" style="background: #D97706;"></span> <span class="token-value">#D97706</span></td>
+            <td><span class="token-preview" style="background: #F59E0B;"></span> <span class="token-value">#F59E0B</span></td>
+            <td>Price changes, alerts</td>
+          </tr>
+          <tr>
+            <td><span class="token-name">--error</span></td>
+            <td><span class="token-preview" style="background: #DC2626;"></span> <span class="token-value">#DC2626</span></td>
+            <td><span class="token-preview" style="background: #EF4444;"></span> <span class="token-value">#EF4444</span></td>
+            <td>Actual errors only</td>
+          </tr>
+          <tr>
+            <td><span class="token-name">--border</span></td>
+            <td><span class="token-value">rgba(148, 163, 184, 0.2)</span></td>
+            <td><span class="token-value">rgba(148, 163, 184, 0.12)</span></td>
+            <td>Borders, dividers</td>
+          </tr>
+          <tr>
+            <td><span class="token-name">--glow-primary</span></td>
+            <td><span class="token-value">rgba(13, 124, 122, 0.3)</span></td>
+            <td><span class="token-value">rgba(21, 181, 176, 0.35)</span></td>
+            <td>Primary button glow</td>
+          </tr>
+          <tr>
+            <td><span class="token-name">--glow-success</span></td>
+            <td><span class="token-value">rgba(5, 150, 105, 0.2)</span></td>
+            <td><span class="token-value">rgba(16, 185, 129, 0.35)</span></td>
+            <td>Block/savings glow</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+  </main>
+
+  <footer class="footer">
+    <p>Klard Design System Color Themes — Generated <span class="date">December 2024</span></p>
+    <p style="margin-top: 0.5rem; opacity: 0.6;">Part of the UX Design Specification</p>
+  </footer>
+
+</body>
+</html>

@@ -1,0 +1,2497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Klard — Design Directions</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Editorial Container */
+            --ink: #0a0a0a;
+            --paper: #faf9f7;
+            --stone: #e8e6e1;
+            --fog: #94918b;
+            --ash: #6b6860;
+
+            /* Klard Brand */
+            --klard-teal: #0D7C7A;
+            --klard-teal-light: #15B5B0;
+            --klard-navy: #0F172A;
+            --klard-success: #059669;
+            --klard-warning: #D97706;
+
+            /* Typography */
+            --font-display: 'Instrument Serif', Georgia, serif;
+            --font-body: 'DM Sans', system-ui, sans-serif;
+
+            /* Spacing */
+            --space-xs: 0.5rem;
+            --space-sm: 1rem;
+            --space-md: 2rem;
+            --space-lg: 4rem;
+            --space-xl: 8rem;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-snap-type: y mandatory;
+        }
+
+        body {
+            font-family: var(--font-body);
+            background: var(--ink);
+            color: var(--paper);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Noise texture overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 10000;
+        }
+
+        /* Fixed Navigation */
+        .nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: var(--space-md) var(--space-lg);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            mix-blend-mode: difference;
+        }
+
+        .nav-logo {
+            font-family: var(--font-display);
+            font-size: 1.5rem;
+            font-style: italic;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-progress {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .nav-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--paper);
+            opacity: 0.3;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            cursor: pointer;
+        }
+
+        .nav-dot.active {
+            opacity: 1;
+            transform: scale(1.4);
+        }
+
+        .nav-dot:hover {
+            opacity: 0.7;
+        }
+
+        /* Fixed TOC Sidebar */
+        .toc {
+            position: fixed;
+            left: var(--space-lg);
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-xs);
+        }
+
+        .toc-item {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--fog);
+            opacity: 0.4;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+            transform: rotate(180deg);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+            padding: var(--space-xs) 0;
+        }
+
+        .toc-item.active {
+            opacity: 1;
+            color: var(--paper);
+        }
+
+        .toc-item:hover {
+            opacity: 0.8;
+        }
+
+        /* Slide Container */
+        .slides {
+            scroll-snap-type: y mandatory;
+            overflow-y: scroll;
+            height: 100vh;
+        }
+
+        .slide {
+            height: 100vh;
+            scroll-snap-align: start;
+            scroll-snap-stop: always;
+            display: grid;
+            place-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Title Slide */
+        .slide--title {
+            background: var(--ink);
+        }
+
+        .title-content {
+            text-align: center;
+            max-width: 900px;
+            padding: var(--space-lg);
+        }
+
+        .title-eyebrow {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            color: var(--fog);
+            margin-bottom: var(--space-md);
+            opacity: 0;
+            animation: fadeUp 1s 0.2s forwards;
+        }
+
+        .title-main {
+            font-family: var(--font-display);
+            font-size: clamp(3rem, 10vw, 8rem);
+            font-weight: 400;
+            line-height: 0.95;
+            letter-spacing: -0.03em;
+            margin-bottom: var(--space-md);
+            opacity: 0;
+            animation: fadeUp 1s 0.4s forwards;
+        }
+
+        .title-main em {
+            font-style: italic;
+            color: var(--klard-teal-light);
+        }
+
+        .title-sub {
+            font-size: 1.125rem;
+            color: var(--fog);
+            max-width: 500px;
+            margin: 0 auto var(--space-lg);
+            line-height: 1.6;
+            opacity: 0;
+            animation: fadeUp 1s 0.6s forwards;
+        }
+
+        .title-scroll {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: var(--space-sm);
+            color: var(--ash);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            opacity: 0;
+            animation: fadeUp 1s 0.8s forwards;
+        }
+
+        .title-scroll-line {
+            width: 1px;
+            height: 60px;
+            background: linear-gradient(to bottom, var(--ash), transparent);
+            animation: scrollPulse 2s infinite;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes scrollPulse {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* Direction Slides */
+        .slide--direction {
+            background: var(--paper);
+            color: var(--ink);
+        }
+
+        .direction-layout {
+            display: grid;
+            grid-template-columns: 1fr 1.5fr;
+            width: 100%;
+            height: 100%;
+        }
+
+        .direction-info {
+            padding: var(--space-xl) var(--space-lg);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            background: var(--paper);
+            position: relative;
+        }
+
+        .direction-info::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 10%;
+            bottom: 10%;
+            width: 1px;
+            background: var(--stone);
+        }
+
+        .direction-number {
+            font-family: var(--font-display);
+            font-size: 8rem;
+            font-style: italic;
+            line-height: 1;
+            color: var(--stone);
+            position: absolute;
+            top: var(--space-lg);
+            left: var(--space-lg);
+            opacity: 0.5;
+        }
+
+        .direction-name {
+            font-family: var(--font-display);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 400;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            margin-bottom: var(--space-md);
+        }
+
+        .direction-desc {
+            font-size: 1.125rem;
+            color: var(--ash);
+            line-height: 1.7;
+            max-width: 400px;
+            margin-bottom: var(--space-lg);
+        }
+
+        .direction-traits {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-sm);
+        }
+
+        .direction-trait {
+            padding: 0.5rem 1rem;
+            background: var(--ink);
+            color: var(--paper);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            border-radius: 100px;
+        }
+
+        .direction-mockup {
+            background: var(--ink);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Mockup Container */
+        .mockup-frame {
+            width: 100%;
+            max-width: 900px;
+            background: #1a1a1a;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow:
+                0 50px 100px -20px rgba(0,0,0,0.5),
+                0 30px 60px -30px rgba(0,0,0,0.4);
+            transform: perspective(1000px) rotateY(-2deg) rotateX(1deg);
+            transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .mockup-frame:hover {
+            transform: perspective(1000px) rotateY(0deg) rotateX(0deg) scale(1.02);
+        }
+
+        .mockup-browser {
+            background: #2a2a2a;
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .browser-dots {
+            display: flex;
+            gap: 6px;
+        }
+
+        .browser-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+        }
+        .browser-dot--red { background: #ff5f57; }
+        .browser-dot--yellow { background: #ffbd2e; }
+        .browser-dot--green { background: #28c840; }
+
+        .browser-url {
+            flex: 1;
+            background: #1a1a1a;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 12px;
+            color: #666;
+            margin-left: 16px;
+        }
+
+        .mockup-content {
+            min-height: 500px;
+            position: relative;
+        }
+
+        /* ====================== */
+        /* DIRECTION 1: CLEAN */
+        /* ====================== */
+        .d1 {
+            background: #ffffff;
+            padding: 32px;
+        }
+
+        .d1-grid {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 32px;
+            height: 100%;
+        }
+
+        .d1-sidebar {
+            background: #f8f9fa;
+            border-radius: 16px;
+            padding: 24px;
+        }
+
+        .d1-logo {
+            font-family: var(--font-display);
+            font-size: 22px;
+            color: var(--klard-teal);
+            margin-bottom: 32px;
+        }
+
+        .d1-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .d1-nav-item {
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 14px;
+            color: #64748b;
+            transition: all 0.2s;
+        }
+
+        .d1-nav-item.active {
+            background: white;
+            color: var(--klard-navy);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .d1-main {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .d1-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .d1-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--klard-navy);
+        }
+
+        .d1-btn {
+            padding: 12px 24px;
+            background: var(--klard-teal);
+            color: white;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .d1-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .d1-stat {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .d1-stat-label {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-bottom: 8px;
+        }
+
+        .d1-stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--klard-navy);
+        }
+
+        .d1-stat-value.green { color: var(--klard-success); }
+
+        .d1-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .d1-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+        }
+
+        .d1-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .d1-card-name {
+            font-weight: 600;
+            color: var(--klard-navy);
+        }
+
+        .d1-card-badge {
+            padding: 4px 10px;
+            background: #ecfdf5;
+            color: var(--klard-success);
+            border-radius: 100px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .d1-card-num {
+            font-size: 13px;
+            color: #94a3b8;
+            font-family: 'SF Mono', monospace;
+        }
+
+        /* ====================== */
+        /* DIRECTION 2: BOLD */
+        /* ====================== */
+        .d2 {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            padding: 0;
+        }
+
+        .d2-layout {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            height: 100%;
+        }
+
+        .d2-sidebar {
+            background: rgba(255,255,255,0.03);
+            border-right: 1px solid rgba(255,255,255,0.08);
+            padding: 32px 24px;
+        }
+
+        .d2-logo {
+            font-family: var(--font-display);
+            font-size: 26px;
+            font-weight: 600;
+            background: linear-gradient(135deg, #15b5b0, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 48px;
+        }
+
+        .d2-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 18px;
+            border-radius: 12px;
+            color: #94a3b8;
+            font-size: 14px;
+            margin-bottom: 6px;
+            transition: all 0.2s;
+        }
+
+        .d2-nav-item.active {
+            background: linear-gradient(135deg, #15b5b0, #34d399);
+            color: var(--klard-navy);
+            font-weight: 600;
+        }
+
+        .d2-main {
+            padding: 32px;
+        }
+
+        .d2-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+        }
+
+        .d2-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .d2-btn {
+            padding: 14px 28px;
+            background: linear-gradient(135deg, #15b5b0, #34d399);
+            color: var(--klard-navy);
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            box-shadow: 0 8px 24px rgba(21,181,176,0.35);
+        }
+
+        .d2-hero {
+            background: linear-gradient(135deg, #15b5b0, #0d7c7a);
+            border-radius: 24px;
+            padding: 40px;
+            margin-bottom: 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .d2-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -15%;
+            width: 300px;
+            height: 300px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 50%;
+        }
+
+        .d2-hero-label {
+            font-size: 13px;
+            color: rgba(255,255,255,0.75);
+            margin-bottom: 8px;
+        }
+
+        .d2-hero-value {
+            font-size: 48px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .d2-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .d2-card {
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 24px;
+            backdrop-filter: blur(10px);
+        }
+
+        .d2-card-icon {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, #15b5b0, #34d399);
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            margin-bottom: 16px;
+            font-size: 20px;
+        }
+
+        .d2-card-title {
+            font-size: 13px;
+            color: #94a3b8;
+            margin-bottom: 6px;
+        }
+
+        .d2-card-value {
+            font-size: 26px;
+            font-weight: 700;
+            color: white;
+        }
+
+        /* ====================== */
+        /* DIRECTION 3: GLASS */
+        /* ====================== */
+        .d3 {
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+            padding: 32px;
+            position: relative;
+        }
+
+        .d3-glow {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+        }
+
+        .d3-glow--1 {
+            width: 350px;
+            height: 350px;
+            background: rgba(21,181,176,0.25);
+            top: -100px;
+            right: -50px;
+        }
+
+        .d3-glow--2 {
+            width: 250px;
+            height: 250px;
+            background: rgba(139,92,246,0.2);
+            bottom: -50px;
+            left: 100px;
+        }
+
+        .d3-container {
+            position: relative;
+            z-index: 1;
+        }
+
+        .d3-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .d3-logo {
+            font-family: var(--font-display);
+            font-size: 24px;
+            color: white;
+        }
+
+        .d3-logo span { color: #15b5b0; }
+
+        .d3-nav {
+            display: flex;
+            gap: 4px;
+            background: rgba(255,255,255,0.05);
+            padding: 5px;
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+        }
+
+        .d3-nav-item {
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #94a3b8;
+        }
+
+        .d3-nav-item.active {
+            background: #15b5b0;
+            color: var(--klard-navy);
+            font-weight: 500;
+        }
+
+        .d3-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr 1fr;
+            grid-template-rows: auto auto;
+            gap: 20px;
+        }
+
+        .d3-card {
+            background: rgba(255,255,255,0.04);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 24px;
+            padding: 28px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+        }
+
+        .d3-card--hero {
+            grid-row: span 2;
+            background: linear-gradient(135deg, rgba(21,181,176,0.15), rgba(139,92,246,0.08));
+            border-color: rgba(21,181,176,0.25);
+        }
+
+        .d3-card-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #94a3b8;
+            margin-bottom: 12px;
+        }
+
+        .d3-card-value {
+            font-size: 42px;
+            font-weight: 700;
+            color: white;
+        }
+
+        .d3-card-value--teal {
+            background: linear-gradient(135deg, #15b5b0, #34d399);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .d3-burner {
+            background: linear-gradient(135deg, #1e293b, #1e1b4b);
+            border-radius: 14px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid rgba(21,181,176,0.25);
+            box-shadow: 0 0 40px rgba(21,181,176,0.15);
+        }
+
+        .d3-burner-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+
+        .d3-burner-row:last-child { margin-bottom: 0; }
+
+        .d3-burner-num {
+            font-family: 'SF Mono', monospace;
+            font-size: 16px;
+            letter-spacing: 2px;
+            color: white;
+        }
+
+        .d3-burner-label {
+            font-size: 10px;
+            color: #64748b;
+            margin-bottom: 2px;
+        }
+
+        .d3-burner-value {
+            font-size: 13px;
+            color: white;
+        }
+
+        /* ====================== */
+        /* DIRECTION 4: DENSE */
+        /* ====================== */
+        .d4 {
+            background: #f1f5f9;
+            padding: 0;
+        }
+
+        .d4-layout {
+            display: grid;
+            grid-template-columns: 56px 1fr;
+            height: 100%;
+        }
+
+        .d4-rail {
+            background: var(--klard-navy);
+            padding: 16px 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .d4-icon {
+            width: 36px;
+            height: 36px;
+            display: grid;
+            place-items: center;
+            border-radius: 10px;
+            color: #64748b;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+
+        .d4-icon.active {
+            background: var(--klard-teal);
+            color: white;
+        }
+
+        .d4-main {
+            padding: 20px;
+        }
+
+        .d4-topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .d4-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--klard-navy);
+        }
+
+        .d4-search {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: white;
+            padding: 10px 16px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            width: 260px;
+        }
+
+        .d4-search input {
+            border: none;
+            outline: none;
+            flex: 1;
+            font-size: 13px;
+            color: var(--klard-navy);
+        }
+
+        .d4-stats {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .d4-stat {
+            background: white;
+            border-radius: 8px;
+            padding: 14px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .d4-stat-label {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #64748b;
+            margin-bottom: 4px;
+        }
+
+        .d4-stat-value {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--klard-navy);
+        }
+
+        .d4-stat-value.green { color: var(--klard-success); }
+
+        .d4-table {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+        }
+
+        .d4-table-header {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr 60px;
+            padding: 10px 16px;
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #64748b;
+        }
+
+        .d4-table-row {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr 1fr 60px;
+            padding: 14px 16px;
+            border-bottom: 1px solid #f1f5f9;
+            align-items: center;
+            font-size: 13px;
+        }
+
+        .d4-sub-name {
+            font-weight: 500;
+            color: var(--klard-navy);
+        }
+
+        .d4-sub-cat {
+            font-size: 11px;
+            color: #94a3b8;
+        }
+
+        .d4-status {
+            display: inline-flex;
+            padding: 4px 10px;
+            border-radius: 100px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .d4-status.protected {
+            background: #ecfdf5;
+            color: var(--klard-success);
+        }
+
+        .d4-status.unprotected {
+            background: #fef3c7;
+            color: var(--klard-warning);
+        }
+
+        /* ====================== */
+        /* DIRECTION 5: MOBILE */
+        /* ====================== */
+        .d5 {
+            background: linear-gradient(180deg, var(--klard-teal) 0%, #0a6665 180px, #f8fafc 180px);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding-top: 20px;
+        }
+
+        .d5-phone {
+            width: 320px;
+            background: #f8fafc;
+            border-radius: 0 0 36px 36px;
+            overflow: hidden;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+        }
+
+        .d5-statusbar {
+            background: var(--klard-teal);
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            color: white;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .d5-header {
+            background: var(--klard-teal);
+            padding: 0 20px 28px;
+            color: white;
+        }
+
+        .d5-greeting {
+            font-size: 13px;
+            opacity: 0.85;
+        }
+
+        .d5-name {
+            font-size: 22px;
+            font-weight: 700;
+        }
+
+        .d5-card {
+            background: white;
+            margin: -14px 14px 0;
+            border-radius: 18px;
+            padding: 22px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            position: relative;
+            z-index: 1;
+        }
+
+        .d5-card-label {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .d5-card-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--klard-success);
+        }
+
+        .d5-card-sub {
+            font-size: 12px;
+            color: #94a3b8;
+        }
+
+        .d5-actions {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .d5-action {
+            text-align: center;
+        }
+
+        .d5-action-icon {
+            width: 42px;
+            height: 42px;
+            background: #f1f5f9;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            margin: 0 auto 6px;
+            font-size: 18px;
+        }
+
+        .d5-action-label {
+            font-size: 11px;
+            color: var(--klard-navy);
+        }
+
+        .d5-section {
+            padding: 20px 14px;
+        }
+
+        .d5-section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--klard-navy);
+            margin-bottom: 14px;
+        }
+
+        .d5-item {
+            background: white;
+            border-radius: 14px;
+            padding: 14px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .d5-item-icon {
+            width: 42px;
+            height: 42px;
+            background: #f1f5f9;
+            border-radius: 10px;
+            display: grid;
+            place-items: center;
+            font-size: 20px;
+        }
+
+        .d5-item-info {
+            flex: 1;
+        }
+
+        .d5-item-name {
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--klard-navy);
+        }
+
+        .d5-item-price {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .d5-item-badge {
+            padding: 5px 10px;
+            background: #ecfdf5;
+            color: var(--klard-success);
+            border-radius: 100px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        /* ====================== */
+        /* DIRECTION 6: PLAYFUL */
+        /* ====================== */
+        .d6 {
+            background: linear-gradient(135deg, #f0fdf9 0%, #ecfeff 100%);
+            padding: 28px;
+        }
+
+        .d6-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 28px;
+        }
+
+        .d6-logo {
+            font-family: var(--font-display);
+            font-size: 26px;
+            color: var(--klard-teal);
+        }
+
+        .d6-logo span {
+            display: inline-block;
+            transform: rotate(-6deg);
+        }
+
+        .d6-avatar {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, #fcd34d, #f59e0b);
+            border-radius: 50%;
+            display: grid;
+            place-items: center;
+            font-size: 22px;
+            box-shadow: 0 4px 14px rgba(245,158,11,0.35);
+        }
+
+        .d6-hero {
+            background: white;
+            border-radius: 28px;
+            padding: 40px;
+            margin-bottom: 24px;
+            text-align: center;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.04);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .d6-hero::before {
+            content: '';
+            position: absolute;
+            top: -40px;
+            right: -40px;
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #fef3c7, #fcd34d);
+            border-radius: 50%;
+            opacity: 0.6;
+        }
+
+        .d6-hero::after {
+            content: '';
+            position: absolute;
+            bottom: -25px;
+            left: 40px;
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, #ccfbf1, var(--klard-teal));
+            border-radius: 50%;
+            opacity: 0.4;
+        }
+
+        .d6-hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .d6-hero-emoji {
+            font-size: 52px;
+            margin-bottom: 12px;
+        }
+
+        .d6-hero-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--klard-navy);
+            margin-bottom: 6px;
+        }
+
+        .d6-hero-sub {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 16px;
+        }
+
+        .d6-hero-value {
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--klard-success);
+        }
+
+        .d6-cards {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 18px;
+        }
+
+        .d6-card {
+            background: white;
+            border-radius: 22px;
+            padding: 24px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.04);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .d6-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 28px rgba(0,0,0,0.1);
+        }
+
+        .d6-card-emoji {
+            font-size: 36px;
+            margin-bottom: 12px;
+        }
+
+        .d6-card-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--klard-navy);
+            margin-bottom: 6px;
+        }
+
+        .d6-card-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--klard-teal);
+        }
+
+        /* ====================== */
+        /* DIRECTION 7: DARK */
+        /* ====================== */
+        .d7 {
+            background: #0a0a0a;
+            padding: 28px;
+        }
+
+        .d7-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .d7-logo {
+            font-size: 20px;
+            font-weight: 600;
+            color: white;
+            letter-spacing: -0.5px;
+        }
+
+        .d7-nav {
+            display: flex;
+            gap: 28px;
+        }
+
+        .d7-nav-item {
+            font-size: 13px;
+            color: #525252;
+        }
+
+        .d7-nav-item.active { color: white; }
+
+        .d7-hero {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .d7-hero-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.2em;
+            color: #525252;
+            margin-bottom: 12px;
+        }
+
+        .d7-hero-value {
+            font-size: 64px;
+            font-weight: 700;
+            color: white;
+            letter-spacing: -2px;
+        }
+
+        .d7-hero-value span { color: #15b5b0; }
+
+        .d7-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        .d7-card {
+            background: #141414;
+            border: 1px solid #262626;
+            border-radius: 14px;
+            padding: 20px;
+            transition: all 0.2s;
+        }
+
+        .d7-card:hover {
+            border-color: #404040;
+            background: #1a1a1a;
+        }
+
+        .d7-card-label {
+            font-size: 11px;
+            color: #525252;
+            margin-bottom: 10px;
+        }
+
+        .d7-card-value {
+            font-size: 24px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .d7-card-change {
+            font-size: 12px;
+            color: #10b981;
+            margin-top: 6px;
+        }
+
+        .d7-section-title {
+            font-size: 12px;
+            color: #525252;
+            margin-bottom: 14px;
+        }
+
+        .d7-burners {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .d7-burner {
+            background: linear-gradient(135deg, #141414, #0a0a0a);
+            border: 1px solid #262626;
+            border-radius: 10px;
+            padding: 16px;
+        }
+
+        .d7-burner-name {
+            font-size: 13px;
+            color: white;
+            margin-bottom: 14px;
+        }
+
+        .d7-burner-num {
+            font-family: 'SF Mono', monospace;
+            font-size: 12px;
+            color: #525252;
+            letter-spacing: 1.5px;
+        }
+
+        .d7-burner-row {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 14px;
+        }
+
+        .d7-burner-meta {
+            font-size: 10px;
+            color: #404040;
+        }
+
+        .d7-burner-val {
+            font-size: 11px;
+            color: #a3a3a3;
+        }
+
+        /* ====================== */
+        /* DIRECTION 8: HYBRID */
+        /* ====================== */
+        .d8 {
+            background: #f8fafc;
+            padding: 20px;
+        }
+
+        .d8-layout {
+            display: grid;
+            grid-template-columns: 1fr 280px;
+            gap: 20px;
+            height: 100%;
+        }
+
+        .d8-main {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .d8-header {
+            background: linear-gradient(135deg, var(--klard-teal), #0a6665);
+            border-radius: 18px;
+            padding: 28px;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .d8-greeting {
+            font-size: 13px;
+            opacity: 0.85;
+        }
+
+        .d8-title {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .d8-savings-label {
+            font-size: 11px;
+            opacity: 0.75;
+        }
+
+        .d8-savings-value {
+            font-size: 34px;
+            font-weight: 700;
+        }
+
+        .d8-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+        }
+
+        .d8-stat {
+            background: white;
+            border-radius: 14px;
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .d8-stat-icon {
+            width: 36px;
+            height: 36px;
+            background: #f1f5f9;
+            border-radius: 10px;
+            display: grid;
+            place-items: center;
+            margin-bottom: 12px;
+            font-size: 18px;
+        }
+
+        .d8-stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--klard-navy);
+        }
+
+        .d8-stat-label {
+            font-size: 12px;
+            color: #64748b;
+        }
+
+        .d8-subs {
+            background: white;
+            border-radius: 14px;
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+            flex: 1;
+        }
+
+        .d8-subs-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .d8-subs-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--klard-navy);
+        }
+
+        .d8-subs-link {
+            font-size: 12px;
+            color: var(--klard-teal);
+        }
+
+        .d8-sub-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .d8-sub-item:last-child { border-bottom: none; }
+
+        .d8-sub-icon {
+            width: 40px;
+            height: 40px;
+            background: #f1f5f9;
+            border-radius: 10px;
+            display: grid;
+            place-items: center;
+            font-size: 18px;
+        }
+
+        .d8-sub-info { flex: 1; }
+
+        .d8-sub-name {
+            font-weight: 500;
+            font-size: 13px;
+            color: var(--klard-navy);
+        }
+
+        .d8-sub-date {
+            font-size: 11px;
+            color: #94a3b8;
+        }
+
+        .d8-sub-amount {
+            font-weight: 600;
+            font-size: 13px;
+            color: var(--klard-navy);
+        }
+
+        .d8-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .d8-burner-preview {
+            background: var(--klard-navy);
+            border-radius: 14px;
+            padding: 20px;
+            color: white;
+        }
+
+        .d8-burner-title {
+            font-size: 12px;
+            opacity: 0.7;
+            margin-bottom: 16px;
+        }
+
+        .d8-burner-card {
+            background: linear-gradient(135deg, #15b5b0, #0d7c7a);
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .d8-burner-name {
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        .d8-burner-num {
+            font-family: 'SF Mono', monospace;
+            font-size: 14px;
+            letter-spacing: 1.5px;
+            margin-bottom: 14px;
+        }
+
+        .d8-burner-meta {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .d8-burner-meta-label {
+            font-size: 9px;
+            opacity: 0.7;
+        }
+
+        .d8-burner-meta-value {
+            font-size: 11px;
+        }
+
+        .d8-add-btn {
+            width: 100%;
+            padding: 12px;
+            background: rgba(255,255,255,0.08);
+            border: 1px dashed rgba(255,255,255,0.25);
+            border-radius: 8px;
+            color: white;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .d8-activity {
+            background: white;
+            border-radius: 14px;
+            padding: 20px;
+            border: 1px solid #e2e8f0;
+            flex: 1;
+        }
+
+        .d8-activity-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--klard-navy);
+            margin-bottom: 16px;
+        }
+
+        .d8-activity-item {
+            display: flex;
+            gap: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .d8-activity-item:last-child { border-bottom: none; }
+
+        .d8-activity-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            margin-top: 6px;
+        }
+
+        .d8-activity-dot.green { background: var(--klard-success); }
+        .d8-activity-dot.amber { background: var(--klard-warning); }
+
+        .d8-activity-text {
+            font-size: 12px;
+            color: var(--klard-navy);
+        }
+
+        .d8-activity-time {
+            font-size: 11px;
+            color: #94a3b8;
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .direction-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .direction-info {
+                padding: var(--space-lg);
+            }
+
+            .direction-info::after {
+                display: none;
+            }
+
+            .direction-mockup {
+                min-height: 500px;
+            }
+
+            .toc {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <div class="nav-logo">Klard Directions</div>
+        <div class="nav-progress">
+            <div class="nav-dot active" data-slide="0"></div>
+            <div class="nav-dot" data-slide="1"></div>
+            <div class="nav-dot" data-slide="2"></div>
+            <div class="nav-dot" data-slide="3"></div>
+            <div class="nav-dot" data-slide="4"></div>
+            <div class="nav-dot" data-slide="5"></div>
+            <div class="nav-dot" data-slide="6"></div>
+            <div class="nav-dot" data-slide="7"></div>
+            <div class="nav-dot" data-slide="8"></div>
+        </div>
+    </nav>
+
+    <!-- TOC Sidebar -->
+    <aside class="toc">
+        <div class="toc-item active" data-slide="0">Intro</div>
+        <div class="toc-item" data-slide="1">Clean</div>
+        <div class="toc-item" data-slide="2">Bold</div>
+        <div class="toc-item" data-slide="3">Glass</div>
+        <div class="toc-item" data-slide="4">Dense</div>
+        <div class="toc-item" data-slide="5">Mobile</div>
+        <div class="toc-item" data-slide="6">Playful</div>
+        <div class="toc-item" data-slide="7">Dark</div>
+        <div class="toc-item" data-slide="8">Hybrid</div>
+    </aside>
+
+    <!-- Slides -->
+    <div class="slides">
+        <!-- Title Slide -->
+        <section class="slide slide--title">
+            <div class="title-content">
+                <p class="title-eyebrow">UX Design Exploration</p>
+                <h1 class="title-main">Design<br><em>Directions</em></h1>
+                <p class="title-sub">Eight distinct visual approaches for Klard. Scroll to explore each direction and discover which resonates with your vision.</p>
+                <div class="title-scroll">
+                    <span>Scroll to explore</span>
+                    <div class="title-scroll-line"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Direction 1: Clean -->
+        <section class="slide slide--direction">
+            <div class="direction-layout">
+                <div class="direction-info">
+                    <span class="direction-number">01</span>
+                    <h2 class="direction-name">Clean & Minimal</h2>
+                    <p class="direction-desc">White space focused with subtle shadows. Maximum clarity lets the content breathe. Perfect for users who value simplicity over spectacle.</p>
+                    <div class="direction-traits">
+                        <span class="direction-trait">Spacious</span>
+                        <span class="direction-trait">Subtle</span>
+                        <span class="direction-trait">Trustworthy</span>
+                    </div>
+                </div>
+                <div class="direction-mockup">
+                    <div class="mockup-frame">
+                        <div class="mockup-browser">
+                            <div class="browser-dots">
+                                <div class="browser-dot browser-dot--red"></div>
+                                <div class="browser-dot browser-dot--yellow"></div>
+                                <div class="browser-dot browser-dot--green"></div>
+                            </div>
+                            <div class="browser-url">app.klard.io/dashboard</div>
+                        </div>
+                        <div class="mockup-content d1">
+                            <div class="d1-grid">
+                                <div class="d1-sidebar">
+                                    <div class="d1-logo">klard</div>
+                                    <div class="d1-nav">
+                                        <div class="d1-nav-item active">Dashboard</div>
+                                        <div class="d1-nav-item">Subscriptions</div>
+                                        <div class="d1-nav-item">BurnerCards</div>
+                                        <div class="d1-nav-item">Settings</div>
+                                    </div>
+                                </div>
+                                <div class="d1-main">
+                                    <div class="d1-header">
+                                        <div class="d1-title">Good morning</div>
+                                        <div class="d1-btn">+ Create Card</div>
+                                    </div>
+                                    <div class="d1-stats">
+                                        <div class="d1-stat">
+                                            <div class="d1-stat-label">Total Saved</div>
+                                            <div class="d1-stat-value green">$412</div>
+                                        </div>
+                                        <div class="d1-stat">
+                                            <div class="d1-stat-label">Active Cards</div>
+                                            <div class="d1-stat-value">7</div>
+                                        </div>
+                                        <div class="d1-stat">
+                                            <div class="d1-stat-label">Subscriptions</div>
+                                            <div class="d1-stat-value">23</div>
+                                        </div>
+                                        <div class="d1-stat">
+                                            <div class="d1-stat-label">Blocks</div>
+                                            <div class="d1-stat-value">4</div>
+                                        </div>
+                                    </div>
+                                    <div class="d1-cards">
+                                        <div class="d1-card">
+                                            <div class="d1-card-header">
+                                                <div class="d1-card-name">Netflix Trial</div>
+                                                <div class="d1-card-badge">Protected</div>
+                                            </div>
+                                            <div class="d1-card-num">•••• 4521</div>
+                                        </div>
+                                        <div class="d1-card">
+                                            <div class="d1-card-header">
+                                                <div class="d1-card-name">Spotify</div>
+                                                <div class="d1-card-badge">Protected</div>
+                                            </div>
+                                            <div class="d1-card-num">•••• 7823</div>
+                                        </div>
+                                        <div class="d1-card">
+                                            <div class="d1-card-header">
+                                                <div class="d1-card-name">Adobe CC</div>
+                                                <div class="d1-card-badge">Protected</div>
+                                            </div>
+                                            <div class="d1-card-num">•••• 9012</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Direction 2: Bold -->
+        <section class="slide slide--direction">
+            <div class="direction-layout">
+                <div class="direction-info">
+                    <span class="direction-number">02</span>
+                    <h2 class="direction-name">Bold & Vibrant</h2>
+                    <p class="direction-desc">Strong gradients and prominent CTAs create high energy. Makes protection feel powerful and dynamic. For users who want to feel empowered.</p>
+                    <div class="direction-traits">
+                        <span class="direction-trait">Energetic</span>
+                        <span class="direction-trait">Confident</span>
+                        <span class="direction-trait">Powerful</span>
+                    </div>
+                </div>
+                <div class="direction-mockup">
+                    <div class="mockup-frame">
+                        <div class="mockup-browser">
+                            <div class="browser-dots">
+                                <div class="browser-dot browser-dot--red"></div>
+                                <div class="browser-dot browser-dot--yellow"></div>
+                                <div class="browser-dot browser-dot--green"></div>
+                            </div>
+                            <div class="browser-url">app.klard.io/dashboard</div>
+                        </div>
+                        <div class="mockup-content d2">
+                            <div class="d2-layout">
+                                <div class="d2-sidebar">
+                                    <div class="d2-logo">klard</div>
+                                    <div class="d2-nav-item active">📊 Dashboard</div>
+                                    <div class="d2-nav-item">💳 My Cards</div>
+                                    <div class="d2-nav-item">📋 Subscriptions</div>
+                                    <div class="d2-nav-item">🛡️ Protection</div>
+                                    <div class="d2-nav-item">⚙️ Settings</div>
+                                </div>
+                                <div class="d2-main">
+                                    <div class="d2-header">
+                                        <div class="d2-title">Your Protection Hub</div>
+                                        <div class="d2-btn">+ New BurnerCard</div>
+                                    </div>
+                                    <div class="d2-hero">
+                                        <div class="d2-hero-label">Total Saved This Year</div>
+                                        <div class="d2-hero-value">$2,847</div>
+                                    </div>
+                                    <div class="d2-cards">
+                                        <div class="d2-card">
+                                            <div class="d2-card-icon">🔥</div>
+                                            <div class="d2-card-title">Active Cards</div>
+                                            <div class="d2-card-value">7</div>
+                                        </div>
+                                        <div class="d2-card">
+                                            <div class="d2-card-icon">🛡️</div>
+                                            <div class="d2-card-title">Blocks</div>
+                                            <div class="d2-card-value">23</div>
+                                        </div>
+                                        <div class="d2-card">
+                                            <div class="d2-card-icon">📊</div>
+                                            <div class="d2-card-title">Subscriptions</div>
+                                            <div class="d2-card-value">15</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Direction 3: Glass -->
+        <section class="slide slide--direction">
+            <div class="direction-layout">
+                <div class="direction-info">
+                    <span class="direction-number">03</span>
+                    <h2 class="direction-name">Glassmorphic Premium</h2>
+                    <p class="direction-desc">Heavy blur effects with glowing accents create a luxury feel. Depth and atmosphere for users who expect premium experiences.</p>
+                    <div class="direction-traits">
+                        <span class="direction-trait">Luxurious</span>
+                        <span class="direction-trait">Atmospheric</span>
+                        <span class="direction-trait">Modern</span>
+                    </div>
+                </div>
+                <div class="direction-mockup">
+                    <div class="mockup-frame">
+                        <div class="mockup-browser">
+                            <div class="browser-dots">
+                                <div class="browser-dot browser-dot--red"></div>
+                                <div class="browser-dot browser-dot--yellow"></div>
+                                <div class="browser-dot browser-dot--green"></div>
+                            </div>
+                            <div class="browser-url">app.klard.io/dashboard</div>
+                        </div>
+                        <div class="mockup-content d3">
+                            <div class="d3-glow d3-glow--1"></div>
+                            <div class="d3-glow d3-glow--2"></div>
+                            <div class="d3-container">
+                                <div class="d3-header">
+                                    <div class="d3-logo">klard<span>.</span></div>
+                                    <div class="d3-nav">
+                                        <div class="d3-nav-item active">Overview</div>
+                                        <div class="d3-nav-item">Cards</div>
+                                        <div class="d3-nav-item">Subs</div>
+                                        <div class="d3-nav-item">Insights</div>
+                                    </div>
+                                </div>
+                                <div class="d3-grid">
+                                    <div class="d3-card d3-card--hero">
+                                        <div class="d3-card-label">Protected This Month</div>
+                                        <div class="d3-card-value d3-card-value--teal">$847.50</div>
+                                        <div class="d3-burner">
+                                            <div class="d3-burner-row">
+                                                <div class="d3-burner-num">4521 •••• •••• 7823</div>
+                                            </div>
+                                            <div class="d3-burner-row">
+                                                <div>
+                                                    <div class="d3-burner-label">LINKED TO</div>
+                                                    <div class="d3-burner-value">Netflix Trial</div>
+                                                </div>
+                                                <div style="text-align: right;">
+                                                    <div class="d3-burner-label">STATUS</div>
+                                                    <div class="d3-burner-value" style="color: #10b981;">Active</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="d3-card">
+                                        <div class="d3-card-label">Active Cards</div>
+                                        <div class="d3-card-value">7</div>
+                                    </div>
+                                    <div class="d3-card">
+                                        <div class="d3-card-label">Subscriptions</div>
+                                        <div class="d3-card-value">23</div>
+                                    </div>
+                                    <div class="d3-card">
+                                        <div class="d3-card-label">Blocked</div>
+                                        <div class="d3-card-value">12</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Direction 4: Dense -->
+        <section class="slide slide--direction">
+            <div class="direction-layout">
+                <div class="direction-info">
+                    <span class="direction-number">04</span>
+                    <h2 class="direction-name">Data-Dense</h2>
+                    <p class="direction-desc">Information-rich tables and compact layouts for power users who want all details visible at once. Efficiency over aesthetics.</p>
+                    <div class="direction-traits">
+                        <span class="direction-trait">Efficient</span>
+                        <span class="direction-trait">Comprehensive</span>
+                        <span class="direction-trait">Professional</span>
+                    </div>
+                </div>
+                <div class="direction-mockup">
+                    <div class="mockup-frame">
+                        <div class="mockup-browser">
+                            <div class="browser-dots">
+                                <div class="browser-dot browser-dot--red"></div>
+                                <div class="browser-dot browser-dot--yellow"></div>
+                                <div class="browser-dot browser-dot--green"></div>
+                            </div>
+                            <div class="browser-url">app.klard.io/subscriptions</div>
+                        </div>
+                        <div class="mockup-content d4">
+                            <div class="d4-layout">
+                                <div class="d4-rail">
+                                    <div class="d4-icon active">📊</div>
+                                    <div class="d4-icon">💳</div>
+                                    <div class="d4-icon">📋</div>
+                                    <div class="d4-icon">🔔</div>
+                                </div>
+                                <div class="d4-main">
+                                    <div class="d4-topbar">
+                                        <div class="d4-title">Subscription Manager</div>
+                                        <div class="d4-search">
+                                            🔍 <input placeholder="Search...">
+                                        </div>
+                                    </div>
+                                    <div class="d4-stats">
+                                        <div class="d4-stat">
+                                            <div class="d4-stat-label">Monthly</div>
+                                            <div class="d4-stat-value">$247</div>
+                                        </div>
+                                        <div class="d4-stat">
+                                            <div class="d4-stat-label">Protected</div>
+                                            <div class="d4-stat-value green">$412</div>
+                                        </div>
+                                        <div class="d4-stat">
+                                            <div class="d4-stat-label">Active</div>
+                                            <div class="d4-stat-value">23</div>
+                                        </div>
+                                        <div class="d4-stat">
+                                            <div class="d4-stat-label">Cards</div>
+                                            <div class="d4-stat-value">7</div>
+                                        </div>
+                                        <div class="d4-stat">
+                                            <div class="d4-stat-label">Blocks</div>
+                                            <div class="d4-stat-value">4</div>
+                                        </div>
+                                    </div>
+                                    <div class="d4-table">
+                                        <div class="d4-table-header">
+                                            <div>Subscription</div>
+                                            <div>Amount</div>
+                                            <div>Cycle</div>
+                                            <div>Next Bill</div>
+                                            <div>Status</div>
+                                            <div></div>
+                                        </div>
+                                        <div class="d4-table-row">
+                                            <div><div class="d4-sub-name">Netflix</div><div class="d4-sub-cat">Entertainment</div></div>
+                                            <div>$22.99</div>
+                                            <div>Monthly</div>
+                                            <div>Jan 15</div>
+                                            <div><span class="d4-status protected">Protected</span></div>
+                                            <div>•••</div>
+                                        </div>
+                                        <div class="d4-table-row">
+                                            <div><div class="d4-sub-name">Spotify</div><div class="d4-sub-cat">Music</div></div>
+                                            <div>$16.99</div>
+                                            <div>Monthly</div>
+                                            <div>Jan 8</div>
+                                            <div><span class="d4-status protected">Protected</span></div>
+                                            <div>•••</div>
+                                        </div>
+                                        <div class="d4-table-row">
+                                            <div><div class="d4-sub-name">Adobe CC</div><div class="d4-sub-cat">Software</div></div>
+                                            <div>$54.99</div>
+                                            <div>Monthly</div>
+                                            <div>Jan 22</div>
+                                            <div><span class="d4-status unprotected">Unprotected</span></div>
+                                            <div>•••</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Direction 5: Mobile -->
+        <section class="slide slide--direction">
+            <div class="direction-layout">
+                <div class="direction-info">
+                    <span class="direction-number">05</span>
+                    <h2 class="direction-name">Mobile-First Cards</h2>
+                    <p class="direction-desc">Stacked card layouts with thumb-friendly interactions. Optimized for on-the-go control with a swipeable, native feel.</p>
+                    <div class="direction-traits">
+                        <span class="direction-trait">Touch-first</span>
+                        <span class="direction-trait">Portable</span>
+                        <span class="direction-trait">Intuitive</span>
+                    </div>
+                </div>
+                <div class="direction-mockup">
+                    <div class="mockup-frame">
+                        <div class="mockup-browser">
+                            <div class="browser-dots">
+                                <div class="browser-dot browser-dot--red"></div>
+                                <div class="browser-dot browser-dot--yellow"></div>
+                                <div class="browser-dot browser-dot--green"></div>
+                            </div>
+                            <div class="browser-url">app.klard.io (mobile)</div>
+                        </div>
+                        <div class="mockup-content d5">
+                            <div class="d5-phone">
+                                <div class="d5-statusbar">
+                                    <span>9:41</span>
+                                    <span>📶 🔋</span>
+                                </div>
+                                <div class="d5-header">
+                                    <div class="d5-greeting">Good morning</div>
+                                    <div class="d5-name">Drcraig 👋</div>
+                                </div>
+                                <div class="d5-card">
+                                    <div class="d5-card-label">Total Saved</div>
+                                    <div class="d5-card-value">$412.50</div>
+                                    <div class="d5-card-sub">This month</div>
+                                    <div class="d5-actions">
+                                        <div class="d5-action">
+                                            <div class="d5-action-icon">➕</div>
+                                            <div class="d5-action-label">New Card</div>
+                                        </div>
+                                        <div class="d5-action">
+                                            <div class="d5-action-icon">📊</div>
+                                            <div class="d5-action-label">Insights</div>
+                                        </div>
+                                        <div class="d5-action">
+                                            <div class="d5-action-icon">🔔</div>
+                                            <div class="d5-action-label">Alerts</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d5-section">
+                                    <div class="d5-section-title">Recent Activity</div>
+                                    <div class="d5-item">
+                                        <div class="d5-item-icon">🎬</div>
+                                        <div class="d5-item-info">
+                                            <div class="d5-item-name">Netflix</div>
+                                            <div class="d5-item-price">$22.99/mo</div>
+                                        </div>
+                                        <div class="d5-item-badge">Protected</div>
+                                    </div>
+                                    <div class="d5-item">
+                                        <div class="d5-item-icon">🎵</div>
+                                        <div class="d5-item-info">
+                                            <div class="d5-item-name">Spotify</div>
+                                            <div class="d5-item-price">$16.99/mo</div>
+                                        </div>
+                                        <div class="d5-item-badge">Protected</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Direction 6: Playful -->
+        <section class="slide slide--direction">
+            <div class="direction-layout">
+                <div class="direction-info">
+                    <span class="direction-number">06</span>
+                    <h2 class="direction-name">Playful & Friendly</h2>
+                    <p class="direction-desc">Rounded corners, emoji accents, and soft colors make finance feel approachable. Reduces intimidation for casual users.</p>
+                    <div class="direction-traits">
+                        <span class="direction-trait">Approachable</span>
+                        <span class="direction-trait">Warm</span>
+                        <span class="direction-trait">Delightful</span>
+                    </div>
+                </div>
+                <div class="direction-mockup">
+                    <div class="mockup-frame">
+                        <div class="mockup-browser">
+                            <div class="browser-dots">
+                                <div class="browser-dot browser-dot--red"></div>
+                                <div class="browser-dot browser-dot--yellow"></div>
+                                <div class="browser-dot browser-dot--green"></div>
+                            </div>
+                            <div class="browser-url">app.klard.io/dashboard</div>
+                        </div>
+                        <div class="mockup-content d6">
+                            <div class="d6-header">
+                                <div class="d6-logo"><span>k</span>lard</div>
+                                <div class="d6-avatar">😊</div>
+                            </div>
+                            <div class="d6-hero">
+                                <div class="d6-hero-content">
+                                    <div class="d6-hero-emoji">🛡️</div>
+                                    <div class="d6-hero-title">You're doing great!</div>
+                                    <div class="d6-hero-sub">Your BurnerCards saved you</div>
+                                    <div class="d6-hero-value">$412.50</div>
+                                </div>
+                            </div>
+                            <div class="d6-cards">
+                                <div class="d6-card">
+                                    <div class="d6-card-emoji">💳</div>
+                                    <div class="d6-card-title">Active Cards</div>
+                                    <div class="d6-card-value">7</div>
+                                </div>
+                                <div class="d6-card">
+                                    <div class="d6-card-emoji">🔥</div>
+                                    <div class="d6-card-title">Blocks</div>
+                                    <div class="d6-card-value">23</div>
+                                </div>
+                                <div class="d6-card">
+                                    <div class="d6-card-emoji">📋</div>
+                                    <div class="d6-card-title">Subscriptions</div>
+                                    <div class="d6-card-value">15</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Direction 7: Dark -->
+        <section class="slide slide--direction">
+            <div class="direction-layout">
+                <div class="direction-info">
+                    <span class="direction-number">07</span>
+                    <h2 class="direction-name">Dark-First Premium</h2>
+                    <p class="direction-desc">Monochromatic dark theme with minimal color creates sophistication. For night-owl power users who live in dark mode.</p>
+                    <div class="direction-traits">
+                        <span class="direction-trait">Sophisticated</span>
+                        <span class="direction-trait">Focused</span>
+                        <span class="direction-trait">Premium</span>
+                    </div>
+                </div>
+                <div class="direction-mockup">
+                    <div class="mockup-frame">
+                        <div class="mockup-browser">
+                            <div class="browser-dots">
+                                <div class="browser-dot browser-dot--red"></div>
+                                <div class="browser-dot browser-dot--yellow"></div>
+                                <div class="browser-dot browser-dot--green"></div>
+                            </div>
+                            <div class="browser-url">app.klard.io/dashboard</div>
+                        </div>
+                        <div class="mockup-content d7">
+                            <div class="d7-header">
+                                <div class="d7-logo">klard</div>
+                                <div class="d7-nav">
+                                    <div class="d7-nav-item active">Overview</div>
+                                    <div class="d7-nav-item">Cards</div>
+                                    <div class="d7-nav-item">Subscriptions</div>
+                                    <div class="d7-nav-item">Settings</div>
+                                </div>
+                            </div>
+                            <div class="d7-hero">
+                                <div class="d7-hero-label">Total Savings</div>
+                                <div class="d7-hero-value">$2,<span>847</span></div>
+                            </div>
+                            <div class="d7-grid">
+                                <div class="d7-card">
+                                    <div class="d7-card-label">Active Cards</div>
+                                    <div class="d7-card-value">7</div>
+                                    <div class="d7-card-change">+2 this week</div>
+                                </div>
+                                <div class="d7-card">
+                                    <div class="d7-card-label">Subscriptions</div>
+                                    <div class="d7-card-value">23</div>
+                                    <div class="d7-card-change">All tracked</div>
+                                </div>
+                                <div class="d7-card">
+                                    <div class="d7-card-label">Blocked</div>
+                                    <div class="d7-card-value">12</div>
+                                    <div class="d7-card-change">4 this month</div>
+                                </div>
+                                <div class="d7-card">
+                                    <div class="d7-card-label">Monthly</div>
+                                    <div class="d7-card-value">$247</div>
+                                    <div class="d7-card-change">-$43 vs last</div>
+                                </div>
+                            </div>
+                            <div class="d7-section-title">Your BurnerCards</div>
+                            <div class="d7-burners">
+                                <div class="d7-burner">
+                                    <div class="d7-burner-name">Netflix Trial</div>
+                                    <div class="d7-burner-num">4521 •••• •••• 7823</div>
+                                    <div class="d7-burner-row">
+                                        <div><div class="d7-burner-meta">EXPIRES</div><div class="d7-burner-val">01/26</div></div>
+                                        <div style="text-align:right"><div class="d7-burner-meta">LIMIT</div><div class="d7-burner-val">$25</div></div>
+                                    </div>
+                                </div>
+                                <div class="d7-burner">
+                                    <div class="d7-burner-name">Spotify</div>
+                                    <div class="d7-burner-num">8921 •••• •••• 3456</div>
+                                    <div class="d7-burner-row">
+                                        <div><div class="d7-burner-meta">EXPIRES</div><div class="d7-burner-val">03/26</div></div>
+                                        <div style="text-align:right"><div class="d7-burner-meta">LIMIT</div><div class="d7-burner-val">$20</div></div>
+                                    </div>
+                                </div>
+                                <div class="d7-burner">
+                                    <div class="d7-burner-name">Adobe CC</div>
+                                    <div class="d7-burner-num">2345 •••• •••• 9012</div>
+                                    <div class="d7-burner-row">
+                                        <div><div class="d7-burner-meta">EXPIRES</div><div class="d7-burner-val">06/26</div></div>
+                                        <div style="text-align:right"><div class="d7-burner-meta">LIMIT</div><div class="d7-burner-val">$60</div></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Direction 8: Hybrid -->
+        <section class="slide slide--direction">
+            <div class="direction-layout">
+                <div class="direction-info">
+                    <span class="direction-number">08</span>
+                    <h2 class="direction-name">Hybrid Dashboard</h2>
+                    <p class="direction-desc">Mixed density zones with sidebar activity feed. Balances overview with detail, combining the best of dense and spacious layouts.</p>
+                    <div class="direction-traits">
+                        <span class="direction-trait">Balanced</span>
+                        <span class="direction-trait">Adaptable</span>
+                        <span class="direction-trait">Complete</span>
+                    </div>
+                </div>
+                <div class="direction-mockup">
+                    <div class="mockup-frame">
+                        <div class="mockup-browser">
+                            <div class="browser-dots">
+                                <div class="browser-dot browser-dot--red"></div>
+                                <div class="browser-dot browser-dot--yellow"></div>
+                                <div class="browser-dot browser-dot--green"></div>
+                            </div>
+                            <div class="browser-url">app.klard.io/dashboard</div>
+                        </div>
+                        <div class="mockup-content d8">
+                            <div class="d8-layout">
+                                <div class="d8-main">
+                                    <div class="d8-header">
+                                        <div>
+                                            <div class="d8-greeting">Good morning</div>
+                                            <div class="d8-title">Drcraig</div>
+                                        </div>
+                                        <div style="text-align: right;">
+                                            <div class="d8-savings-label">Protected this month</div>
+                                            <div class="d8-savings-value">$412.50</div>
+                                        </div>
+                                    </div>
+                                    <div class="d8-stats">
+                                        <div class="d8-stat">
+                                            <div class="d8-stat-icon">💳</div>
+                                            <div class="d8-stat-value">7</div>
+                                            <div class="d8-stat-label">Active Cards</div>
+                                        </div>
+                                        <div class="d8-stat">
+                                            <div class="d8-stat-icon">🔥</div>
+                                            <div class="d8-stat-value">23</div>
+                                            <div class="d8-stat-label">Total Blocks</div>
+                                        </div>
+                                        <div class="d8-stat">
+                                            <div class="d8-stat-icon">📋</div>
+                                            <div class="d8-stat-value">15</div>
+                                            <div class="d8-stat-label">Subscriptions</div>
+                                        </div>
+                                    </div>
+                                    <div class="d8-subs">
+                                        <div class="d8-subs-header">
+                                            <div class="d8-subs-title">Upcoming Renewals</div>
+                                            <div class="d8-subs-link">View all →</div>
+                                        </div>
+                                        <div class="d8-sub-item">
+                                            <div class="d8-sub-icon">🎬</div>
+                                            <div class="d8-sub-info">
+                                                <div class="d8-sub-name">Netflix</div>
+                                                <div class="d8-sub-date">Jan 15</div>
+                                            </div>
+                                            <div class="d8-sub-amount">$22.99</div>
+                                        </div>
+                                        <div class="d8-sub-item">
+                                            <div class="d8-sub-icon">🎵</div>
+                                            <div class="d8-sub-info">
+                                                <div class="d8-sub-name">Spotify</div>
+                                                <div class="d8-sub-date">Jan 8</div>
+                                            </div>
+                                            <div class="d8-sub-amount">$16.99</div>
+                                        </div>
+                                        <div class="d8-sub-item">
+                                            <div class="d8-sub-icon">☁️</div>
+                                            <div class="d8-sub-info">
+                                                <div class="d8-sub-name">iCloud</div>
+                                                <div class="d8-sub-date">Jan 20</div>
+                                            </div>
+                                            <div class="d8-sub-amount">$2.99</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d8-sidebar">
+                                    <div class="d8-burner-preview">
+                                        <div class="d8-burner-title">Featured Card</div>
+                                        <div class="d8-burner-card">
+                                            <div class="d8-burner-name">Netflix Trial</div>
+                                            <div class="d8-burner-num">4521 •••• •••• 7823</div>
+                                            <div class="d8-burner-meta">
+                                                <div><div class="d8-burner-meta-label">EXPIRES</div><div class="d8-burner-meta-value">01/26</div></div>
+                                                <div><div class="d8-burner-meta-label">LIMIT</div><div class="d8-burner-meta-value">$25</div></div>
+                                            </div>
+                                        </div>
+                                        <div class="d8-add-btn">+ Create New Card</div>
+                                    </div>
+                                    <div class="d8-activity">
+                                        <div class="d8-activity-title">Activity</div>
+                                        <div class="d8-activity-item">
+                                            <div class="d8-activity-dot green"></div>
+                                            <div>
+                                                <div class="d8-activity-text">Blocked $49.99</div>
+                                                <div class="d8-activity-time">2h ago</div>
+                                            </div>
+                                        </div>
+                                        <div class="d8-activity-item">
+                                            <div class="d8-activity-dot green"></div>
+                                            <div>
+                                                <div class="d8-activity-text">Created Figma card</div>
+                                                <div class="d8-activity-time">Yesterday</div>
+                                            </div>
+                                        </div>
+                                        <div class="d8-activity-item">
+                                            <div class="d8-activity-dot amber"></div>
+                                            <div>
+                                                <div class="d8-activity-text">Spotify in 3 days</div>
+                                                <div class="d8-activity-time">Reminder</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        const navDots = document.querySelectorAll('.nav-dot');
+        const tocItems = document.querySelectorAll('.toc-item');
+        const slidesContainer = document.querySelector('.slides');
+
+        // Update active states on scroll
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const index = [...slides].indexOf(entry.target);
+
+                    // Update nav dots
+                    navDots.forEach((dot, i) => {
+                        dot.classList.toggle('active', i === index);
+                    });
+
+                    // Update TOC
+                    tocItems.forEach((item, i) => {
+                        item.classList.toggle('active', i === index);
+                    });
+                }
+            });
+        }, { threshold: 0.5 });
+
+        slides.forEach(slide => observer.observe(slide));
+
+        // Click navigation
+        navDots.forEach(dot => {
+            dot.addEventListener('click', () => {
+                const index = parseInt(dot.dataset.slide);
+                slides[index].scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        tocItems.forEach(item => {
+            item.addEventListener('click', () => {
+                const index = parseInt(item.dataset.slide);
+                slides[index].scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            const currentIndex = [...navDots].findIndex(dot => dot.classList.contains('active'));
+
+            if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+                e.preventDefault();
+                if (currentIndex < slides.length - 1) {
+                    slides[currentIndex + 1].scrollIntoView({ behavior: 'smooth' });
+                }
+            } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+                e.preventDefault();
+                if (currentIndex > 0) {
+                    slides[currentIndex - 1].scrollIntoView({ behavior: 'smooth' });
+                }
+            }
+        });
+    </script>
+</body>
+</html>
