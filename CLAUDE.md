@@ -280,4 +280,10 @@ Full specs in `docs/design/Klard Design System.md`.
 - Analytics: PostHog
 - Monitoring: Sentry, BetterStack
 
-Note: Auth backend (`klard-auth`) is now part of this monorepo.
+Note: Auth backend (`klard-auth`) is now part of this monorepo.## Formatting Balance
+
+- Use **paragraphs** for narrative, context, and flow
+- Use **bullet lists** for discrete items, options, or short points
+- Use **tables** ONLY for structured comparisons, data grids, or when column relationships matter
+- Avoid table overuse — if content reads naturally as prose, keep it as prose
+- Perfect balance: tables should be ~20-30% of structured content, not dominant
