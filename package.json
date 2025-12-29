@@ -13,7 +13,11 @@
     "dev:auth": "turbo dev --filter=klard-auth",
     "build:web": "turbo build --filter=klard-web",
     "build:auth": "turbo build --filter=klard-auth",
-    "test:auth": "turbo test --filter=klard-auth"
+    "test:auth": "turbo test --filter=klard-auth",
+    "storybook:web": "pnpm --filter klard-web storybook",
+    "storybook:mobile": "pnpm --filter klard-mobile storybook",
+    "storybook:build:web": "pnpm --filter klard-web storybook:build",
+    "storybook:build:mobile": "pnpm --filter klard-mobile storybook:build"
   },
   "repository": {
     "type": "git",

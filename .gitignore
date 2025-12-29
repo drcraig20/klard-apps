@@ -86,3 +86,6 @@ test-results/
 klard-auth/.env
 klard-auth/.env.local
 klard-auth/.env*.local
+
+# Storybook
+storybook-static/
