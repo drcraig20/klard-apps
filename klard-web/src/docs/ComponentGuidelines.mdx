@@ -1,0 +1,295 @@
+{/* ComponentGuidelines.mdx - Klard Component Usage Guidelines */}
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Getting Started/Component Guidelines" />
+
+# Component Guidelines
+
+This guide covers component organization, naming conventions, prop patterns, and best practices for building with the Klard Design System.
+
+## Component Categories
+
+Components are organized into six categories based on their function:
+
+| Category | Purpose | Examples |
+|----------|---------|----------|
+| **UI Primitives** | Base building blocks | Button, Input, Label, Checkbox, Separator |
+| **Form Components** | User input and validation | InputField, PasswordInput, SelectField, CheckboxField, CurrencyInput |
+| **Data Display** | Presenting information | Badge, StatCard, PriceDisplay, SubscriptionCard, ServiceLogo |
+| **Feedback** | User communication | Alert, AlertBanner, AlertCard, Toast, Spinner, Skeleton |
+| **Navigation** | Movement and structure | Tabs, Stepper, SegmentedControl, Sidebar |
+| **Layout** | Structural containers | Card, KlardCard, Modal, Dialog, Sheet |
+
+## Naming Conventions
+
+### Files
+
+Use **kebab-case** for all file names:
+
+```
+components/ui/
+├── button/
+│   ├── button.tsx          # Component implementation
+│   ├── button.styles.ts    # Style variants (CVA)
+│   └── button.stories.tsx  # Storybook stories
+├── input-field.tsx         # Simple components
+├── password-input.tsx
+└── checkbox-field.tsx
+```
+
+### Components
+
+Use **PascalCase** for component names and exports:
+
+```tsx
+// Good
+export function PasswordInput({ ... }) { }
+export function AlertBanner({ ... }) { }
+export function StatCard({ ... }) { }
+
+// Avoid
+export function passwordInput({ ... }) { }
+export function alert_banner({ ... }) { }
+```
+
+### Props Interfaces
+
+Name interfaces with the component name followed by `Props`:
+
+```tsx
+export interface ButtonProps { ... }
+export interface InputFieldProps { ... }
+export interface AlertBannerProps { ... }
+```
+
+## Props Patterns
+
+### Common Prop Patterns
+
+Most Klard components follow these standardized prop patterns:
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `variant` | string union | Visual style variant (e.g., `"default" \| "destructive" \| "outline"`) |
+| `size` | string union | Size modifier (e.g., `"sm" \| "md" \| "lg"`) |
+| `disabled` | boolean | Disables interaction |
+| `loading` | boolean | Shows loading state with spinner |
+| `className` | string | Additional CSS classes (merged with defaults) |
+| `asChild` | boolean | Renders as child element (Radix pattern) |
+
+### Button Props Example
+
+```tsx
+interface ButtonProps {
+  variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link"
+  size?: "default" | "sm" | "lg" | "icon"
+  loading?: boolean
+  disabled?: boolean
+  icon?: React.ReactNode
+  iconPosition?: "left" | "right"
+  fullWidth?: boolean
+  asChild?: boolean
+}
+```
+
+### Form Field Props
+
+Form components extend base input props with consistent patterns:
+
+```tsx
+interface FormFieldProps {
+  label?: string           // Field label
+  description?: string     // Help text below input
+  error?: string          // Error message
+  required?: boolean      // Shows required indicator
+}
+```
+
+### Data Display Props
+
+Components showing data follow these patterns:
+
+```tsx
+interface DataDisplayProps {
+  value: number | string   // Primary value
+  label?: string          // Descriptive label
+  trend?: "up" | "down" | "neutral"  // Change indicator
+  format?: "currency" | "percent" | "number"  // Formatting
+}
+```
+
+## Accessibility Guidelines
+
+All components must meet WCAG 2.1 AA standards.
+
+### ARIA Labels
+
+Provide meaningful labels for interactive elements:
+
+```tsx
+// Good - descriptive label
+<Button aria-label="Close subscription details modal">
+  <XIcon />
+</Button>
+
+// Good - using aria-labelledby
+<Dialog aria-labelledby="dialog-title">
+  <h2 id="dialog-title">Cancel Subscription</h2>
+</Dialog>
+
+// Avoid - missing label for icon-only button
+<Button><XIcon /></Button>
+```
+
+### Keyboard Navigation
+
+All interactive components support keyboard navigation:
+
+| Component | Keys | Action |
+|-----------|------|--------|
+| Button | `Enter`, `Space` | Activate |
+| Tabs | `Arrow Left/Right` | Navigate tabs |
+| Modal | `Escape` | Close |
+| Select | `Arrow Up/Down` | Navigate options |
+| Checkbox | `Space` | Toggle |
+
+### Focus States
+
+Every interactive element must have visible focus states:
+
+```tsx
+// Focus ring applied via Tailwind
+className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
+```
+
+### Screen Reader Support
+
+- Use semantic HTML elements (`button`, `input`, `nav`)
+- Provide `aria-live` regions for dynamic content
+- Hide decorative elements with `aria-hidden="true"`
+- Use `sr-only` class for screen reader-only text
+
+```tsx
+<button>
+  <Loader2 className="animate-spin" aria-hidden="true" />
+  <span className="sr-only">Loading...</span>
+</button>
+```
+
+## Best Practices
+
+### Variant Selection
+
+Choose variants based on action importance:
+
+| Variant | When to Use |
+|---------|-------------|
+| `default` | Primary actions (Submit, Save, Confirm) |
+| `secondary` | Secondary actions (Cancel, Back) |
+| `outline` | Tertiary actions, less emphasis |
+| `destructive` | Dangerous actions (Delete, Remove, Block) |
+| `ghost` | Inline actions, minimal chrome |
+| `link` | Navigation, inline links |
+
+### Size Selection
+
+Match size to context and hierarchy:
+
+| Size | When to Use |
+|------|-------------|
+| `sm` | Dense UIs, table actions, secondary controls |
+| `default` | Standard forms, most use cases |
+| `lg` | Hero sections, onboarding, primary CTAs |
+
+### Composition Patterns
+
+Build complex UIs by composing primitives:
+
+```tsx
+// Compose Card with internal components
+<Card>
+  <CardHeader>
+    <CardTitle>Monthly Spending</CardTitle>
+    <CardDescription>Your subscription costs</CardDescription>
+  </CardHeader>
+  <CardContent>
+    <PriceDisplay value={129.99} trend="up" />
+  </CardContent>
+  <CardFooter>
+    <Button variant="outline">View Details</Button>
+  </CardFooter>
+</Card>
+```
+
+### Loading States
+
+Always show loading feedback for async operations:
+
+```tsx
+// Button with loading state
+<Button loading={isSubmitting} disabled={isSubmitting}>
+  {isSubmitting ? "Saving..." : "Save Changes"}
+</Button>
+
+// Skeleton for content loading
+<Skeleton className="h-4 w-[200px]" />
+```
+
+### Error Handling
+
+Display errors clearly and accessibly:
+
+```tsx
+<InputField
+  label="Email"
+  error={errors.email?.message}
+  aria-invalid={!!errors.email}
+  aria-describedby="email-error"
+/>
+```
+
+## Import Examples
+
+Import components from `@/components/ui`:
+
+```tsx
+// Individual imports (recommended for tree-shaking)
+import { Button } from "@/components/ui/button/button"
+import { Input } from "@/components/ui/input"
+import { Card, CardHeader, CardContent } from "@/components/ui/card"
+
+// Form components
+import { InputField } from "@/components/ui/input-field"
+import { PasswordInput } from "@/components/ui/password-input"
+import { SelectField } from "@/components/ui/select-field"
+import { CheckboxField } from "@/components/ui/checkbox-field"
+
+// Feedback components
+import { AlertBanner } from "@/components/ui/alert-banner/alert-banner"
+import { Spinner } from "@/components/ui/spinner"
+import { Skeleton } from "@/components/ui/skeleton"
+
+// Data display
+import { Badge } from "@/components/ui/badge/badge"
+import { StatCard } from "@/components/ui/stat-card/stat-card"
+import { PriceDisplay } from "@/components/ui/price-display/price-display"
+```
+
+### With Style Variants
+
+Some components expose their style variants for custom usage:
+
+```tsx
+import { Button } from "@/components/ui/button/button"
+import { buttonVariants } from "@/components/ui/button/button.styles"
+
+// Use variants on other elements (e.g., links styled as buttons)
+<Link href="/dashboard" className={buttonVariants({ variant: "outline" })}>
+  Go to Dashboard
+</Link>
+```
+
+## Related Documentation
+
+- **[Design Tokens](/docs/getting-started-design-tokens--docs)** - Colors, typography, spacing
+- **[Introduction](/docs/getting-started-introduction--docs)** - Design principles and voice

@@ -38,10 +38,10 @@
     "check": "pnpm typecheck && pnpm lint && pnpm test"
   },
   "dependencies": {
-    "@better-auth/expo": "^1.4.7",
-    "@better-auth/passkey": "^1.4.7",
-    "better-auth": "^1.4.7",
-    "better-call": "^1.1.5",
+    "@better-auth/expo": "^1.4.9",
+    "@better-auth/passkey": "^1.4.9",
+    "better-auth": "^1.4.9",
+    "better-call": "^1.1.7",
     "compression": "^1.8.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
@@ -52,19 +52,19 @@
     "pg": "^8.16.3"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.3.8",
+    "@biomejs/biome": "^2.3.10",
     "@simplewebauthn/server": "^13.2.2",
     "@types/compression": "^1.8.1",
     "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
     "@types/morgan": "^1.9.10",
-    "@types/node": "^24.10.1",
-    "@types/pg": "^8.15.6",
+    "@types/node": "^25.0.3",
+    "@types/pg": "^8.16.0",
     "@types/supertest": "^6.0.3",
     "supertest": "^7.1.4",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
-    "vitest": "^4.0.15"
+    "vitest": "^4.0.16"
   }
 }

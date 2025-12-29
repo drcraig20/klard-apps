@@ -287,9 +287,42 @@ cp .env.example .env.local
 | `pnpm test:auth`  | Run auth server tests                |
 | `pnpm clean`      | Remove build artifacts               |
 
+### Storybook
+
+Both web and mobile apps include Storybook for component development and documentation:
+
+```bash
+# Web Storybook (localhost:6006)
+cd klard-web && pnpm storybook
+
+# Mobile Storybook (localhost:6007)
+cd klard-mobile && pnpm storybook
+
+# Build static Storybook
+cd klard-web && pnpm storybook:build
+cd klard-mobile && pnpm storybook:build
+```
+
+| Package | Port | Features |
+|---------|------|----------|
+| klard-web | 6006 | MDX docs, design tokens, component guidelines, autodocs |
+| klard-mobile | 6007 | React Native Web preview, theme switcher, autodocs |
+
 ## Documentation
 
-Comprehensive documentation is available in the `/docs` directory:
+Comprehensive documentation is available in multiple formats:
+
+### Interactive Component Library (Storybook)
+
+- **klard-web** — `pnpm storybook` in klard-web directory (port 6006)
+  - Design system introduction and guidelines
+  - Design tokens (colors, typography, spacing)
+  - Component documentation with controls
+- **klard-mobile** — `pnpm storybook` in klard-mobile directory (port 6007)
+  - React Native components via React Native Web
+  - Theme switching (light/dark)
+
+### Design Documentation
 
 - **Design System** — Complete design tokens, components, color palettes, and guidelines
   - [`Klard Design System.md`](docs/design/Klard%20Design%20System.md) — Main design document

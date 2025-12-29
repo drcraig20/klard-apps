@@ -1,0 +1,170 @@
+{/* DesignTokens.mdx - Klard Design Tokens Documentation */}
+import { Meta, ColorPalette, ColorItem } from '@storybook/blocks';
+
+<Meta title="Getting Started/Design Tokens" />
+
+# Design Tokens
+
+Design tokens are the foundational visual values that define the Klard design system.
+
+## Color Palette
+
+### Primary Colors
+
+The teal-navy palette represents financial trust, stability, and intelligence.
+
+<ColorPalette>
+  <ColorItem
+    title="Primary"
+    subtitle="Main brand color for CTAs and interactive elements"
+    colors={{ Light: '#0D7C7A', Dark: '#15B5B0' }}
+  />
+  <ColorItem
+    title="Secondary"
+    subtitle="Accent color for highlights and emphasis"
+    colors={{ Light: '#15B5B0', Dark: '#0D7C7A' }}
+  />
+</ColorPalette>
+
+### Semantic Colors
+
+<ColorPalette>
+  <ColorItem
+    title="Success / Savings"
+    subtitle="Positive outcomes and money saved"
+    colors={{ Light: '#059669', Dark: '#10B981' }}
+  />
+  <ColorItem
+    title="Warning"
+    subtitle="Alerts and attention needed"
+    colors={{ Light: '#D97706', Dark: '#F59E0B' }}
+  />
+  <ColorItem
+    title="Error / Destructive"
+    subtitle="Errors and blocked states"
+    colors={{ Light: '#DC2626', Dark: '#EF4444' }}
+  />
+  <ColorItem
+    title="Info"
+    subtitle="Informational messages"
+    colors={{ Light: '#2563EB', Dark: '#3B82F6' }}
+  />
+</ColorPalette>
+
+### Neutral Colors
+
+<ColorPalette>
+  <ColorItem
+    title="Background"
+    subtitle="Page and card backgrounds"
+    colors={{ Light: '#FFFFFF', Dark: '#0F172A' }}
+  />
+  <ColorItem
+    title="Foreground"
+    subtitle="Primary text color"
+    colors={{ Light: '#0F172A', Dark: '#F8FAFC' }}
+  />
+  <ColorItem
+    title="Muted"
+    subtitle="Secondary backgrounds"
+    colors={{ Light: '#F1F5F9', Dark: '#1E293B' }}
+  />
+  <ColorItem
+    title="Border"
+    subtitle="Dividers and outlines"
+    colors={{ Light: '#E2E8F0', Dark: '#334155' }}
+  />
+</ColorPalette>
+
+## Typography
+
+### Font Family
+
+- **Primary:** Inter (sans-serif)
+- **Monospace:** SF Mono, Menlo (for code and numbers)
+
+### Font Sizes
+
+| Token | Size | Line Height | Usage |
+|-------|------|-------------|-------|
+| `text-xs` | 12px | 16px | Captions, labels |
+| `text-sm` | 14px | 20px | Secondary text, buttons |
+| `text-base` | 16px | 24px | Body text |
+| `text-lg` | 18px | 28px | Emphasized body |
+| `text-xl` | 20px | 28px | Subheadings |
+| `text-2xl` | 24px | 32px | Section headings |
+| `text-3xl` | 30px | 36px | Page headings |
+| `text-4xl` | 36px | 40px | Hero headings |
+
+### Font Weights
+
+| Token | Weight | Usage |
+|-------|--------|-------|
+| `font-normal` | 400 | Body text |
+| `font-medium` | 500 | Labels, emphasis |
+| `font-semibold` | 600 | Subheadings, buttons |
+| `font-bold` | 700 | Headings |
+
+## Spacing
+
+Based on a 4px grid system:
+
+| Token | Value | Usage |
+|-------|-------|-------|
+| `space-1` | 4px | Tight spacing |
+| `space-2` | 8px | Default gap |
+| `space-3` | 12px | Medium gap |
+| `space-4` | 16px | Section spacing |
+| `space-6` | 24px | Card padding |
+| `space-8` | 32px | Large sections |
+
+## Border Radius
+
+| Token | Value | Usage |
+|-------|-------|-------|
+| `rounded-sm` | 4px | Inputs, small buttons |
+| `rounded` | 6px | Default radius |
+| `rounded-md` | 8px | Cards, dialogs |
+| `rounded-lg` | 12px | Large cards |
+| `rounded-xl` | 16px | Hero cards |
+| `rounded-full` | 9999px | Pills, avatars |
+
+## Shadows
+
+| Token | Usage |
+|-------|-------|
+| `shadow-sm` | Subtle elevation (inputs) |
+| `shadow` | Default elevation (cards) |
+| `shadow-md` | Medium elevation (dropdowns) |
+| `shadow-lg` | High elevation (modals) |
+
+## CSS Variables
+
+All tokens are available as CSS custom properties:
+
+```css
+/* Colors */
+--color-primary: theme(colors.primary);
+--color-background: theme(colors.background);
+--color-foreground: theme(colors.foreground);
+
+/* Spacing */
+--space-4: theme(spacing.4);
+
+/* Radius */
+--radius: theme(borderRadius.md);
+```
+
+## Usage in Code
+
+```tsx
+// Tailwind classes
+<Button className="bg-primary text-primary-foreground rounded-md px-4 py-2">
+  Click me
+</Button>
+
+// Using CSS variables
+<div style={{ backgroundColor: 'var(--color-primary)' }}>
+  Custom styled element
+</div>
+```
