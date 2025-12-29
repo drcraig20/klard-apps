@@ -83,11 +83,12 @@ workflow_status:
         note: "Platform-level PRD exists - will be enhanced/validated during workflow"
 
       - id: "create-ux-design"
-        status: "conditional"
+        status: "_bmad-output/ux-design-specification.md"
         agent: "ux-designer"
         command: "/bmad:bmm:workflows:create-ux-design"
-        output: null
-        note: "Conditional: Project has 30+ screens with UI - likely required"
+        output: "_bmad-output/ux-design-specification.md"
+        completed: "2025-12-28"
+        note: "Complete UX spec with component strategy, patterns, responsive/accessibility (Steps 11-13 redone with team review)"
 
   # ============================================
   # PHASE 2: Solutioning

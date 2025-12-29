@@ -32,7 +32,7 @@ Imagine signing up for a free trial without fear. Seven days later, when the ser
 
 **Our thesis:** Users shouldn't have to choose between curiosity and safety. Klard eliminates this false choice by delivering full subscription visibility and automated protection—without ever asking for bank credentials.
 
-**Business Model:** Premium-only with a generous 14-day trial (no credit card required). Trial includes full BurnerCard access so users experience the core protection value before committing. Research shows premium users deliver 7x higher lifetime value than freemium users.
+**Business Model:** Premium-only with a generous 30-day trial (no credit card required). Trial includes full BurnerCard access so users experience the core protection value before committing. Research shows premium users deliver 7x higher lifetime value than freemium users.
 
 **Target Markets:** Built for global scale. Now available in Canada, US, UK, and EU—with more regions coming.
 
@@ -103,6 +103,79 @@ Your full card details live securely with our PCI-certified payment partners. Kl
 2. **Brand Trust**: Every "Klard blocked $X" screenshot builds social proof flywheel
 3. **Switching Costs**: Users accumulate card history, rules, and subscription data
 4. **First-Mover Integration**: Deep card issuer partnerships with preferential rates
+
+---
+
+## Credit Card Objection Handling
+
+### The Classic Objection
+
+> *"Why do I need Klard? I already have a credit card. I can pay at the end of the month and I get rewards."*
+
+### Why Credit Cards Don't Solve This Problem
+
+**What problem does a credit card actually solve for subscription management?**
+
+- Does your credit card tell you Netflix raised prices by $3/month? **No.**
+- Does it decline a charge when a free trial converts to $49.99? **No.**
+- Does it show you all your subscriptions in one place? **No.**
+- Does it give you a one-time card for that sketchy trial you want to try? **No.**
+
+Credit cards are **approval machines**. They say YES to everything. Klard says YES when you want, and NO when you don't. That's the difference between a payment tool and a **control** tool.
+
+### The Data Reality
+
+| Metric | Reality |
+|--------|---------|
+| **Average subscription waste** | $252/year per person (C+R Research, 2023) |
+| **Credit card rewards** | ~1-2% cashback = ~$20-40/year on subscriptions |
+| **Net loss** | You're losing **$200+/year** even WITH rewards |
+
+The "I get rewards" argument actually **reinforces** our value prop. You're earning $30 in rewards while losing $250 to forgotten subscriptions. That's not smart money management—that's a leaky bucket with a pretty bow.
+
+### Systems Comparison
+
+| Credit Card | Klard |
+|-------------|-------|
+| **Payment rail** (moves money) | **Control layer** (decides IF money moves) |
+| Approves all authorized charges | Approves only what YOU want |
+| Reactive (dispute after the fact) | Proactive (block before it happens) |
+| No subscription intelligence | Full subscription visibility |
+
+They're not competitors—they're **layers**. Klard sits between you and the merchant. Your credit card sits between Klard and the bank. We're the bouncer; they're the cashier.
+
+### The Emotional Reality
+
+> *"I signed up for a 7-day trial of some productivity app. Set a reminder to cancel. Forgot. Got charged $89.99 for an annual plan. Called my credit card—they said it was a valid charge because I agreed to the terms. Spent 45 minutes trying to get a refund from a company with no phone number."*
+
+Credit cards don't protect you from **yourself**. Klard does. The "pay end of month" argument misses the point entirely—**the problem isn't WHEN you pay, it's WHETHER you wanted to pay at all.**
+
+### Investor-Ready Answer
+
+> **"Credit cards are designed to approve every charge. Klard is designed to approve only the charges you want. We're not replacing your credit card—we're adding an intelligence layer that prevents the $250/year in subscription waste that credit card rewards will never cover."**
+
+**If they push on rewards, flip it:**
+
+> **"Would you rather earn 2% back on charges you didn't want, or not pay for things you forgot to cancel? Klard saves users 10x more than credit card rewards ever could."**
+
+### The "I'll Just Check My Statement" Objection
+
+| Self-Management Claim | Reality |
+|----------------------|---------|
+| *"I'll review my statements"* | 85% of people don't audit subscriptions monthly |
+| *"I'll set reminders"* | 62% of free trial users forget to cancel |
+| *"I'll just dispute it"* | Average dispute takes 45+ minutes, often denied |
+
+Klard automates what humans consistently fail to do. That's not a nice-to-have—that's a **behavior gap** we fill.
+
+### Quick Reference: Objection Responses
+
+| Objection | Response |
+|-----------|----------|
+| *"Credit cards already exist"* | Credit cards approve everything. Klard gives you control over WHAT gets approved. |
+| *"I can pay at end of month"* | The problem isn't WHEN you pay—it's paying for things you forgot to cancel. |
+| *"I get rewards"* | 2% rewards don't offset $250/year in subscription waste. Klard saves 10x more. |
+| *"I just check my statement"* | 85% of people don't audit subscriptions monthly. Klard does it automatically. |
 
 ---
 
@@ -270,7 +343,7 @@ Last semester, he got charged $79 for an annual subscription to software he used
 - 😨 **Before Klard:** Paranoid about trials, avoids signing up for useful tools
 - 🎯 **After Klard:** Fearless, tries anything knowing he's protected
 
-**Success Moment:** Needs video editing software for a class project. 14-day trial. Creates one-time BurnerCard. Finishes project in 10 days. Card already locked. Vendor can't charge. Shares with entire study group: *"Game-changer for students."*
+**Success Moment:** Needs video editing software for a class project. 30-day trial gives plenty of time. Creates one-time BurnerCard. Finishes project in 10 days. Card already locked. Vendor can't charge. Shares with entire study group: *"Game-changer for students."*
 
 ---
 
@@ -359,7 +432,7 @@ Users find Klard through:
 **Phase 2: Onboarding (60-Second Value)**
 *Emotion: Intrigued, hopeful*
 
-1. Sign up (email or social, no CC required for 14-day trial)
+1. Sign up (email or social, no CC required for 30-day trial)
 2. Suggestion-based subscription entry (checkboxes, not forms)
 3. Create first BurnerCard for an upcoming trial
 4. See initial subscription "portrait" with estimated monthly spend
@@ -413,7 +486,7 @@ User experiences at least one of:
 
 ### Pricing Structure (Premium-Only)
 
-**Model:** No free tier. 14-day free trial of Saver+ (no credit card required). After trial → Choose Pro or Saver+.
+**Model:** No free tier. 30-day free trial of Saver+ (no credit card required). After trial → Choose Pro or Saver+.
 
 **Rationale:** Follows Anthropic's Claude pricing philosophy—premium-only positioning attracts high-value users with 7x higher LTV than freemium users.
 
@@ -503,7 +576,7 @@ User experiences at least one of:
 |--------|--------|
 | Email connection rate (Pro+) | ≥60% |
 | BurnerCard creation rate (Saver+) | ≥70% create first card in week 1 |
-| Time to first block | ≤14 days |
+| Time to first block | ≤30 days |
 | Subscriptions added (avg) | ≥8 per user |
 
 #### 🔄 Retention Metrics
@@ -529,7 +602,7 @@ User experiences at least one of:
 | Metric | Target |
 |--------|--------|
 | NPS (day 30 survey) | ≥50 |
-| "Aha Moment" rate (first block in 14 days) | ≥40% |
+| "Aha Moment" rate (first block in 30 days) | ≥65% |
 | Support tickets per 100 users | ≤5 |
 
 ---
@@ -683,7 +756,7 @@ User pays via Stripe → Klard credits internal ledger → Cards draw from Klard
 |--------|--------|------------------|
 | First subscription added | ≥80% of users Day 1 | Onboarding effectiveness |
 | First BurnerCard created | ≥70% of Saver+ users Week 1 | Core feature adoption |
-| First block event | ≥40% of Saver+ users in 14 days | "Aha moment" achieved |
+| First block event | ≥65% of Saver+ users in 30 days | "Aha moment" achieved |
 | Email connected | ≥60% of Pro+ users | Discovery value validated |
 | Trial → Paid conversion | ≥15% | Business model validated |
 | 30-Day retention | ≥45% | Stickiness confirmed |
