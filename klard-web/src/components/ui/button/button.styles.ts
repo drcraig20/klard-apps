@@ -16,9 +16,11 @@ const buttonVariants = cva(
         ghost:
           "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50",
         link: "text-primary underline-offset-4 hover:underline",
-        // Klard-specific variants
+        // Klard-specific variants with glassmorphism effects
         klard:
-          "bg-gradient-to-br from-[hsl(173,79%,27%)] to-[hsl(173,79%,20%)] dark:from-[hsl(176,78%,39%)] dark:to-[hsl(173,79%,27%)] text-white font-semibold shadow-[0_0_20px_rgba(13,124,122,0.3)] dark:shadow-[0_0_24px_rgba(21,181,176,0.35)] hover:opacity-90",
+          "bg-gradient-to-br from-[hsl(173,79%,27%)] to-[hsl(173,79%,20%)] dark:from-[hsl(176,78%,39%)] dark:to-[hsl(173,79%,27%)] text-white font-semibold shadow-[var(--rec-glow-primary)] hover:scale-[1.02] hover:shadow-[0_0_28px_rgba(13,124,122,0.4)] dark:hover:shadow-[0_0_32px_rgba(21,181,176,0.45)] active:scale-[0.98]",
+        burn:
+          "bg-success text-white font-semibold shadow-[var(--rec-glow-success)] hover:bg-success/90 hover:scale-[1.02] hover:shadow-[0_0_20px_rgba(5,150,105,0.35)] active:scale-[0.98]",
         social:
           "bg-transparent border border-border text-foreground font-medium hover:border-border/50 hover:bg-muted/50",
       },

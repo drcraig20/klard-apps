@@ -8,18 +8,20 @@ import { cva } from 'class-variance-authority';
 export const inputFieldVariants = cva(
   [
     'w-full h-12 px-4 text-base',
-    'bg-white dark:bg-slate-900',
+    // Glassmorphic background
+    'bg-white/[0.02] dark:bg-white/[0.01]',
     'text-slate-900 dark:text-slate-100',
-    'border rounded-xl',
+    'border border-[var(--rec-glass-border-color)] rounded-[var(--rec-radius-sm)]',
     'placeholder:text-slate-400 dark:placeholder:text-slate-500',
     'transition-all duration-150',
-    'focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary',
+    // Focus with glow effect
+    'focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary focus:shadow-[var(--rec-glow-primary)]',
   ],
   {
     variants: {
       hasError: {
-        true: 'border-red-500 focus:ring-red-500/30 focus:border-red-500',
-        false: 'border-slate-300 dark:border-slate-700 hover:border-slate-400 dark:hover:border-slate-600',
+        true: 'border-red-500 focus:ring-red-500/30 focus:border-red-500 focus:shadow-[var(--rec-glow-error)]',
+        false: 'hover:border-[var(--rec-color-border-strong)]',
       },
       disabled: {
         true: 'opacity-50 cursor-not-allowed bg-slate-50 dark:bg-slate-800',

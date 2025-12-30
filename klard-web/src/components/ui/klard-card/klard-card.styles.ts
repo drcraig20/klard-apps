@@ -1,15 +1,25 @@
 import { cva } from 'class-variance-authority';
 
+/**
+ * KlardCard Variants with Glassmorphism
+ *
+ * SOLID Compliance:
+ * - SRP: Only card styling variants
+ * - OCP: Add new variants without modifying existing
+ */
 export const klardCardVariants = cva(
-  'flex flex-col rounded-xl bg-card text-card-foreground transition-all',
+  // Base styles: glassmorphic background with blur
+  'flex flex-col rounded-xl bg-card/80 text-card-foreground transition-all duration-200 backdrop-blur-[var(--rec-glass-blur)] border border-[var(--rec-glass-border-color)]',
   {
     variants: {
       variant: {
-        default: 'border border-slate-200 dark:border-slate-800',
-        elevated: 'shadow-md border-0',
-        ghost: 'border-0 bg-transparent',
+        default: 'shadow-[var(--rec-shadow-card-sm)]',
+        elevated: 'shadow-[var(--rec-shadow-card-md)] border-0',
+        ghost: 'border-0 bg-transparent backdrop-blur-none',
+        glass:
+          'bg-[var(--rec-color-surface)] shadow-[var(--rec-shadow-card-md)]',
         interactive:
-          'border border-slate-200 dark:border-slate-800 hover:border-teal-500 hover:shadow-md cursor-pointer',
+          'shadow-[var(--rec-shadow-card-sm)] hover:border-primary hover:shadow-[var(--rec-glow-primary)] cursor-pointer',
       },
       padding: {
         none: 'p-0',
