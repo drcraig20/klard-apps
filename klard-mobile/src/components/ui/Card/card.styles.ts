@@ -34,6 +34,17 @@ export const cardStyles = sva({
         shadowRadius: 3,
         elevation: 2,
       }),
+      // Glassmorphic variant with blur effect (requires BlurView wrapper)
+      glass: (colors) => ({
+        backgroundColor: colors.glassBackground,
+        borderWidth: 1,
+        borderColor: colors.glassBorder,
+        shadowColor: colors.shadowColorMd,
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 1,
+        shadowRadius: 8,
+        elevation: 4,
+      }),
     },
     padding: {
       none: { padding: 0 },

@@ -26,15 +26,35 @@ export const variantStyles = StyleSheet.create({
   },
   primary: {
     backgroundColor: '#CCFBF1', // teal-100
+    shadowColor: 'rgb(21, 181, 176)',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 3,
   },
   success: {
     backgroundColor: '#DCFCE7', // green-100
+    shadowColor: 'rgb(16, 185, 129)',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 3,
   },
   warning: {
     backgroundColor: '#FEF3C7', // amber-100
+    shadowColor: 'rgb(245, 158, 11)',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 3,
   },
   error: {
     backgroundColor: '#FEE2E2', // red-100
+    shadowColor: 'rgb(239, 68, 68)',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 3,
   },
   outline: {
     backgroundColor: 'transparent',

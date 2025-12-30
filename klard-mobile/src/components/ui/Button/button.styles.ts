@@ -35,6 +35,23 @@ export const buttonContainerStyles = sva({
       link: {
         backgroundColor: 'transparent',
       },
+      // Klard-specific variants with glassmorphism effects
+      klard: (colors) => ({
+        backgroundColor: colors.primary,
+        shadowColor: colors.glowPrimary,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.5,
+        shadowRadius: 16,
+        elevation: 6,
+      }),
+      burn: (colors) => ({
+        backgroundColor: colors.success,
+        shadowColor: colors.glowSuccess,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.5,
+        shadowRadius: 12,
+        elevation: 5,
+      }),
     },
     size: {
       sm: {
@@ -97,6 +114,12 @@ export const buttonTextStyles = sva({
       link: (colors) => ({
         color: colors.primary,
         textDecorationLine: 'underline',
+      }),
+      klard: (colors) => ({
+        color: colors.primaryForeground,
+      }),
+      burn: (colors) => ({
+        color: colors.primaryForeground,
       }),
     },
     size: {

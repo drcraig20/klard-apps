@@ -1,14 +1,29 @@
 import { sva } from '@/styles/sva';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
+
+/**
+ * Glassmorphic blur container for the TabBar
+ * Uses expo-blur BlurView with glass border styling
+ */
+export const blurContainerStyles = sva({
+  base: (colors) => ({
+    flexDirection: 'row',
+    borderTopWidth: 1,
+    borderTopColor: colors.glassBorder,
+    backgroundColor: colors.glassBackground,
+    overflow: 'hidden',
+  }),
+});
 
 export const tabContainerStyles = sva({
   base: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     paddingVertical: 8,
-    paddingHorizontal: 16,
-    borderRadius: 8,
-    gap: 8,
+    paddingHorizontal: 12,
+    borderRadius: 12,
+    gap: 6,
   },
   variants: {
     state: {
@@ -17,8 +32,16 @@ export const tabContainerStyles = sva({
       },
       active: (colors) => ({
         backgroundColor: colors.activeBackground,
-        borderBottomWidth: 2,
-        borderBottomColor: colors.primary,
+        // Glow effect using shadow on active tab
+        shadowColor: colors.primary,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.4,
+        shadowRadius: 8,
+        ...Platform.select({
+          android: {
+            elevation: 4,
+          },
+        }),
       }),
       disabled: {
         opacity: 0.5,
@@ -82,9 +105,14 @@ export const layoutStyles = StyleSheet.create({
   },
   contentContainer: {
     paddingHorizontal: 16,
+    paddingVertical: 8,
     gap: 8,
+    alignItems: 'center',
   },
   iconContainer: {
-    marginRight: 4,
+    width: 24,
+    height: 24,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

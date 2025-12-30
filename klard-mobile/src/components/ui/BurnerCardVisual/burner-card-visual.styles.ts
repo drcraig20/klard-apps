@@ -84,6 +84,49 @@ export const styles = StyleSheet.create({
   },
 });
 
+/**
+ * Awaiting state specific styles
+ *
+ * SOLID: SRP - Awaiting-specific styling separated from base styles
+ */
+export const awaitingStyles = StyleSheet.create({
+  container: {
+    borderWidth: 2,
+    borderStyle: 'dashed',
+    borderColor: 'rgba(100, 116, 139, 0.5)',
+  },
+  labelContainer: {
+    alignItems: 'center',
+    marginVertical: 4,
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  ctaButton: {
+    alignSelf: 'center',
+    marginTop: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 8,
+  },
+  ctaText: {
+    fontSize: 14,
+    fontWeight: '600',
+  },
+});
+
+/**
+ * Burned state specific styles
+ *
+ * SOLID: SRP - Burned-specific styling separated from base styles
+ */
+export const burnedStyles = StyleSheet.create({
+  container: {
+    opacity: 0.6,
+  },
+});
+
 export const sizeMap = {
   sm: { width: 256, height: 160 },
   md: { width: 320, height: 192 },

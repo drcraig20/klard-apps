@@ -1,5 +1,16 @@
 import { sva } from '@/styles/sva';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Platform } from 'react-native';
+
+/**
+ * SubscriptionCard Styles
+ *
+ * Glassmorphism-enabled card with support for protected state glow effects.
+ *
+ * SOLID Compliance:
+ * - SRP: Only handles card styling
+ * - OCP: Extend via variants without modifying existing
+ * - DIP: Uses color abstractions
+ */
 
 export const cardStyles = sva({
   base: (colors) => ({
@@ -7,10 +18,22 @@ export const cardStyles = sva({
     alignItems: 'center',
     gap: 16,
     padding: 16,
-    backgroundColor: colors.card,
+    // Glassmorphism effect
+    backgroundColor: colors.cardGlass ?? colors.card,
     borderRadius: 12,
     borderWidth: 1,
-    borderColor: colors.border,
+    borderColor: colors.glassBorder ?? colors.border,
+    // Shadow
+    ...(Platform.OS === 'ios'
+      ? {
+          shadowColor: '#0F172A',
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.08,
+          shadowRadius: 12,
+        }
+      : {
+          elevation: 4,
+        }),
   }),
   variants: {
     variant: {
@@ -22,6 +45,21 @@ export const cardStyles = sva({
       true: (colors) => ({
         backgroundColor: colors.muted,
         borderColor: colors.primaryBorder,
+      }),
+    },
+    protected: {
+      true: (colors) => ({
+        borderColor: colors.successBorder ?? colors.success,
+        ...(Platform.OS === 'ios'
+          ? {
+              shadowColor: colors.success,
+              shadowOffset: { width: 0, height: 0 },
+              shadowOpacity: 0.25,
+              shadowRadius: 16,
+            }
+          : {
+              elevation: 6,
+            }),
       }),
     },
   },
@@ -85,6 +123,41 @@ export const cycleStyles = sva({
   }),
 });
 
+/**
+ * Protected badge styles
+ */
+export const protectedBadgeStyles = sva({
+  base: (colors) => ({
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 9999,
+    backgroundColor: colors.successBackground ?? `${colors.success}1A`, // 10% opacity fallback
+    borderWidth: 1,
+    borderColor: colors.successBorder ?? `${colors.success}33`, // 20% opacity fallback
+    ...(Platform.OS === 'ios'
+      ? {
+          shadowColor: colors.success,
+          shadowOffset: { width: 0, height: 0 },
+          shadowOpacity: 0.3,
+          shadowRadius: 8,
+        }
+      : {
+          elevation: 2,
+        }),
+  }),
+});
+
+export const protectedBadgeTextStyles = sva({
+  base: (colors) => ({
+    fontSize: 12,
+    fontWeight: '500',
+    color: colors.success,
+  }),
+});
+
 // Static layout styles
 export const layoutStyles = StyleSheet.create({
   logoContainer: {
@@ -105,6 +178,15 @@ export const layoutStyles = StyleSheet.create({
   },
   priceContainer: {
     alignItems: 'flex-end',
+  },
+  rightSection: {
+    alignItems: 'flex-end',
+    gap: 8,
+  },
+  badgeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
   },
 });
 
