@@ -21,6 +21,7 @@ const meta = {
         "default",
         "primary",
         "klard",
+        "burn",
         "secondary",
         "destructive",
         "outline",
@@ -79,6 +80,14 @@ export const Klard: Story = {
   args: {
     children: "Klard Button",
     variant: "klard",
+  },
+};
+
+// Burn variant (success/celebratory actions)
+export const Burn: Story = {
+  args: {
+    children: "Burn Card",
+    variant: "burn",
   },
 };
 
@@ -212,6 +221,7 @@ export const AllVariants: Story = {
       <Button variant="default">Default</Button>
       <Button variant="primary">Primary</Button>
       <Button variant="klard">Klard</Button>
+      <Button variant="burn">Burn</Button>
       <Button variant="secondary">Secondary</Button>
       <Button variant="destructive">Destructive</Button>
       <Button variant="outline">Outline</Button>
