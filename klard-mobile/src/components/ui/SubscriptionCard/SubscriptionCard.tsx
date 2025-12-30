@@ -10,8 +10,10 @@ import {
 import { Image } from 'expo-image';
 import * as Haptics from 'expo-haptics';
 import { format } from 'date-fns';
+import { Ionicons } from '@expo/vector-icons';
 
 import { Badge } from '../Badge';
+import { HealthIndicator, type HealthStatus } from '../HealthIndicator';
 import {
   cardStyles,
   logoFallbackStyles,
@@ -24,7 +26,20 @@ import {
   layoutStyles,
   statusConfig,
   billingCycleLabels,
+  protectedBadgeStyles,
+  protectedBadgeTextStyles,
 } from './subscription-card.styles';
+
+/**
+ * SubscriptionCard Component (Mobile)
+ *
+ * Displays subscription information with optional health status and protection indicators.
+ *
+ * SOLID Compliance:
+ * - SRP: Only renders subscription card UI
+ * - OCP: Extend via props (healthStatus, isProtected) not modification
+ * - DIP: Depends on design token abstractions via styles
+ */
 
 export interface SubscriptionData {
   id: string;
@@ -41,6 +56,10 @@ export interface SubscriptionData {
 export interface SubscriptionCardProps {
   subscription: SubscriptionData;
   variant?: 'default' | 'compact' | 'detailed';
+  /** Health status indicator for the subscription */
+  healthStatus?: HealthStatus;
+  /** Whether the subscription is protected by Klard */
+  isProtected?: boolean;
   showActions?: boolean;
   onPress?: () => void;
   style?: StyleProp<ViewStyle>;
@@ -50,6 +69,8 @@ export interface SubscriptionCardProps {
 export function SubscriptionCard({
   subscription,
   variant = 'default',
+  healthStatus,
+  isProtected = false,
   showActions = false,
   onPress,
   style,
@@ -135,13 +156,35 @@ export function SubscriptionCard({
         </Text>
       </View>
 
-      {/* Price */}
-      {!isCompact && (
-        <View style={layoutStyles.priceContainer}>
-          <Text style={priceStyles(isDark)}>{formattedPrice}</Text>
-          <Text style={cycleStyles(isDark)}>{billingCycleLabels[billingCycle]}</Text>
-        </View>
-      )}
+      {/* Right Section: Price, Health Status, Protected Badge */}
+      <View style={layoutStyles.rightSection}>
+        {/* Health Indicator and Protected Badge row */}
+        {(healthStatus || isProtected) && (
+          <View style={layoutStyles.badgeRow}>
+            {healthStatus && (
+              <HealthIndicator status={healthStatus} size="sm" showLabel />
+            )}
+            {isProtected && (
+              <View style={protectedBadgeStyles(isDark)}>
+                <Ionicons
+                  name="shield-checkmark"
+                  size={12}
+                  color={isDark ? '#10B981' : '#059669'}
+                />
+                <Text style={protectedBadgeTextStyles(isDark)}>Protected</Text>
+              </View>
+            )}
+          </View>
+        )}
+
+        {/* Price */}
+        {!isCompact && (
+          <View style={layoutStyles.priceContainer}>
+            <Text style={priceStyles(isDark)}>{formattedPrice}</Text>
+            <Text style={cycleStyles(isDark)}>{billingCycleLabels[billingCycle]}</Text>
+          </View>
+        )}
+      </View>
     </>
   );
 
@@ -150,12 +193,16 @@ export function SubscriptionCard({
       <Pressable
         onPress={handlePress}
         style={({ pressed }) => [
-          cardStyles(isDark, { variant, pressed: pressed ? 'true' : undefined }),
+          cardStyles(isDark, {
+            variant,
+            pressed: pressed ? 'true' : undefined,
+            protected: isProtected ? 'true' : undefined,
+          }),
           style,
         ]}
         testID={testID}
         accessibilityRole="button"
-        accessibilityLabel={`${name} subscription, ${formattedPrice} ${billingCycleLabels[billingCycle]}`}
+        accessibilityLabel={`${name} subscription, ${formattedPrice} ${billingCycleLabels[billingCycle]}${isProtected ? ', Protected' : ''}`}
       >
         {content}
       </Pressable>
@@ -165,7 +212,10 @@ export function SubscriptionCard({
   return (
     <View
       style={[
-        cardStyles(isDark, { variant }),
+        cardStyles(isDark, {
+          variant,
+          protected: isProtected ? 'true' : undefined,
+        }),
         style,
       ]}
       testID={testID}

@@ -13,7 +13,7 @@ import { buttonContainerStyles, buttonTextStyles } from './button.styles';
 import { useThemeColors } from '@/hooks/useThemeColors';
 
 export interface ButtonProps {
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'destructive' | 'link';
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'destructive' | 'link' | 'klard' | 'burn';
   size?: 'sm' | 'md' | 'lg';
   loading?: boolean;
   disabled?: boolean;
@@ -43,7 +43,12 @@ export function Button({
 
   const handlePress = async () => {
     if (disabled || loading) return;
-    await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    // Use success haptic for burn variant
+    if (variant === 'burn') {
+      await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    } else {
+      await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
+    }
     onPress?.();
   };
 

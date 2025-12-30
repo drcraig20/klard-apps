@@ -115,6 +115,7 @@ export function InputField({
             borderColor: getBorderColor(),
             borderWidth: isFocused ? 2 : 1,
           },
+          isFocused && styles.inputContainerFocused,
           disabled && styles.inputContainerDisabled,
         ]}
       >

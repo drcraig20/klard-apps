@@ -7,10 +7,12 @@ import {
   KeyboardAvoidingView,
   Platform,
   useColorScheme,
+  StyleSheet,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
+import { BlurView } from "expo-blur";
 
 import { spacing } from "@/constants/theme";
 import {
@@ -72,15 +74,22 @@ function Modal({
         behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={layoutStyles.container}
       >
-        {closeOnOverlay ? (
-          <Pressable
-            style={overlayStyles(isDark, {})}
-            onPress={handleOverlayPress}
-            testID="modal-overlay"
-          />
-        ) : (
-          <View style={overlayStyles(isDark, {})} testID="modal-overlay" />
-        )}
+        <BlurView
+          intensity={24}
+          tint="dark"
+          style={StyleSheet.absoluteFill}
+          testID="modal-blur-overlay"
+        >
+          {closeOnOverlay ? (
+            <Pressable
+              style={[overlayStyles(isDark, {}), StyleSheet.absoluteFill]}
+              onPress={handleOverlayPress}
+              testID="modal-overlay"
+            />
+          ) : (
+            <View style={[overlayStyles(isDark, {}), StyleSheet.absoluteFill]} testID="modal-overlay" />
+          )}
+        </BlurView>
 
         <View
           style={[

@@ -9,7 +9,7 @@ import {
 import * as Haptics from 'expo-haptics';
 import { cardStyles, staticStyles } from './card.styles';
 
-export type CardVariant = 'default' | 'elevated' | 'ghost' | 'interactive';
+export type CardVariant = 'default' | 'elevated' | 'ghost' | 'interactive' | 'glass';
 export type CardPadding = 'none' | 'sm' | 'md' | 'lg';
 
 export interface CardProps {

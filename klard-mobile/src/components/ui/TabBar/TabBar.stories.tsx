@@ -5,8 +5,13 @@ import { Ionicons } from '@expo/vector-icons';
 import { TabBar, type TabItem } from './TabBar';
 
 /**
- * TabBar component provides a horizontal scrollable tab navigation.
- * It supports icons, badges, disabled states, and haptic feedback on selection.
+ * TabBar component provides a horizontal scrollable tab navigation with glassmorphism design.
+ *
+ * Features:
+ * - Glassmorphic background using expo-blur BlurView
+ * - Active tab glow effect using primary teal color
+ * - Icons, badges, disabled states, and haptic feedback
+ * - 5-tab maximum recommendation (warns in development)
  */
 const meta: Meta<typeof TabBar> = {
   title: 'Navigation/TabBar',
@@ -19,14 +24,14 @@ const meta: Meta<typeof TabBar> = {
     },
     tabs: {
       control: 'object',
-      description: 'Array of tab items with value, label, icon, badge, and disabled props',
+      description: 'Array of tab items with value, label, icon, badge, and disabled props (max 5 recommended)',
     },
   },
   parameters: {
     docs: {
       description: {
         component:
-          'A horizontal scrollable tab bar with support for icons, notification badges, and disabled states.',
+          'A horizontal scrollable tab bar with glassmorphic background, active tab glow, icons, notification badges, and disabled states. Recommends a maximum of 5 tabs for optimal UX.',
       },
     },
   },
