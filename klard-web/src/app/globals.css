@@ -4,34 +4,103 @@
 @custom-variant dark (&:is([data-theme="dark"] *));
 
 :root {
-  /* Shared primitives */
+  /* ========================================================================
+   * RADIUS TOKENS
+   * Scale: sm (8px), md (12px), lg (16px), xl (24px)
+   * ======================================================================== */
   --rec-radius-sm: 8px;
   --rec-radius: 12px;
   --rec-radius-md: 16px;
   --rec-radius-lg: 24px;
+  --rec-radius-xl: 24px;
+  --rec-radius-2xl: 32px;
   --rec-radius-full: 9999px;
 
+  /* Component-specific radius */
+  --rec-radius-button: var(--rec-radius-md);
+  --rec-radius-card: var(--rec-radius-md);
+  --rec-radius-input: var(--rec-radius-sm);
+  --rec-radius-modal: var(--rec-radius-lg);
+  --rec-radius-toast: var(--rec-radius);
+  --rec-radius-badge: var(--rec-radius-full);
+
+  /* ========================================================================
+   * SHADOW TOKENS
+   * ======================================================================== */
   --rec-shadow-color: rgba(0, 0, 0, 0.5);
+  --rec-shadow-xs: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
+  --rec-shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.08), 0 1px 2px -1px rgba(15, 23, 42, 0.08);
+  --rec-shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.1), 0 2px 4px -2px rgba(15, 23, 42, 0.1);
+  --rec-shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.1), 0 4px 6px -4px rgba(15, 23, 42, 0.1);
+  --rec-shadow-xl: 0 20px 25px -5px rgba(15, 23, 42, 0.1), 0 8px 10px -6px rgba(15, 23, 42, 0.1);
+  --rec-shadow-2xl: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
+  --rec-shadow-inner: inset 0 2px 4px 0 rgba(15, 23, 42, 0.05);
+
+  /* Component-specific shadows */
   --rec-shadow-card-sm: 0px 1px 3px rgba(15, 23, 42, 0.08);
   --rec-shadow-card-md: 0px 4px 12px rgba(15, 23, 42, 0.12);
   --rec-shadow-card-lg: 0px 8px 24px rgba(15, 23, 42, 0.15);
+  --rec-shadow-card: 0 2px 12px rgba(15, 23, 42, 0.08);
+  --rec-shadow-card-elevated: 0 4px 20px rgba(15, 23, 42, 0.12);
   --rec-shadow-hero: 0 35px 120px rgba(15, 23, 42, 0.1);
 
+  /* ========================================================================
+   * ANIMATION TOKENS
+   * ======================================================================== */
+  --rec-animate-duration-instant: 0ms;
+  --rec-animate-duration-fastest: 50ms;
+  --rec-animate-duration-faster: 100ms;
   --rec-animate-duration-fast: 150ms;
-  --rec-animate-duration-default: 300ms;
-  --rec-animate-duration-slow: 800ms;
-  --rec-animate-ease-default: ease-in-out;
-  --rec-animate-ease-in: ease-in;
-  --rec-animate-ease-out: ease-out;
+  --rec-animate-duration-default: 200ms;
+  --rec-animate-duration-slow: 300ms;
+  --rec-animate-duration-slower: 500ms;
+  --rec-animate-duration-slowest: 700ms;
+  --rec-animate-ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+  --rec-animate-ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --rec-animate-ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --rec-animate-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
   --rec-animate-ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  --rec-animate-ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --rec-animate-ease-emphasized: cubic-bezier(0.2, 0, 0, 1);
 
+  /* ========================================================================
+   * GLASSMORPHISM TOKENS
+   * ======================================================================== */
   --rec-glass-blur: 12px;
+  --rec-glass-blur-card: 24px;
+  --rec-glass-blur-modal: 24px;
+  --rec-glass-blur-nav: 12px;
+  --rec-glass-blur-subtle: 8px;
   --rec-glass-border-width: 1px;
 
-  --rec-focus-ring-base: 0 0 0 3px;
+  /* ========================================================================
+   * SPACING TOKENS (Component-specific)
+   * Base unit: 4px grid
+   * ======================================================================== */
+  --rec-spacing-card: 32px;
+  --rec-spacing-card-sm: 16px;
+  --rec-spacing-card-lg: 40px;
+  --rec-spacing-section-gap: 48px;
+  --rec-spacing-content-gap: 24px;
+  --rec-spacing-item-gap: 16px;
+  --rec-spacing-inline-gap: 8px;
 
+  /* ========================================================================
+   * FOCUS TOKENS
+   * ======================================================================== */
+  --rec-focus-ring-base: 0 0 0 3px;
+  --rec-focus-ring-width: 2px;
+  --rec-focus-ring-offset: 2px;
+
+  /* ========================================================================
+   * LAYOUT TOKENS
+   * ======================================================================== */
   --rec-radial-top-size: 60% 80%;
   --rec-radial-bottom-size: 60% 80%;
+
+  /* ========================================================================
+   * SIDEBAR (shadcn)
+   * ======================================================================== */
   --sidebar: hsl(0 0% 98%);
   --sidebar-foreground: hsl(240 5.3% 26.1%);
   --sidebar-primary: hsl(240 5.9% 10%);
