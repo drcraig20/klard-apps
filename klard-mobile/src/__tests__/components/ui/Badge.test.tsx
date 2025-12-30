@@ -184,4 +184,93 @@ describe('Badge', () => {
       });
     });
   });
+
+  describe('Glow Effects', () => {
+    it('should apply success glow shadow styles', () => {
+      const { getByTestId } = render(
+        <Badge variant="success" testID="badge">
+          Active
+        </Badge>
+      );
+
+      const badge = getByTestId('badge');
+      // Verify badge renders with success variant (shadow applied via style)
+      expect(badge).toBeTruthy();
+      // Check that the style includes shadowColor
+      const flatStyle = Array.isArray(badge.props.style)
+        ? Object.assign({}, ...badge.props.style)
+        : badge.props.style;
+      expect(flatStyle.shadowColor).toBe('rgb(16, 185, 129)');
+    });
+
+    it('should apply warning glow shadow styles', () => {
+      const { getByTestId } = render(
+        <Badge variant="warning" testID="badge">
+          Pending
+        </Badge>
+      );
+
+      const badge = getByTestId('badge');
+      const flatStyle = Array.isArray(badge.props.style)
+        ? Object.assign({}, ...badge.props.style)
+        : badge.props.style;
+      expect(flatStyle.shadowColor).toBe('rgb(245, 158, 11)');
+    });
+
+    it('should apply error glow shadow styles', () => {
+      const { getByTestId } = render(
+        <Badge variant="error" testID="badge">
+          Failed
+        </Badge>
+      );
+
+      const badge = getByTestId('badge');
+      const flatStyle = Array.isArray(badge.props.style)
+        ? Object.assign({}, ...badge.props.style)
+        : badge.props.style;
+      expect(flatStyle.shadowColor).toBe('rgb(239, 68, 68)');
+    });
+
+    it('should apply primary glow shadow styles', () => {
+      const { getByTestId } = render(
+        <Badge variant="primary" testID="badge">
+          Primary
+        </Badge>
+      );
+
+      const badge = getByTestId('badge');
+      const flatStyle = Array.isArray(badge.props.style)
+        ? Object.assign({}, ...badge.props.style)
+        : badge.props.style;
+      expect(flatStyle.shadowColor).toBe('rgb(21, 181, 176)');
+    });
+
+    it('should not apply glow to default variant', () => {
+      const { getByTestId } = render(
+        <Badge variant="default" testID="badge">
+          Default
+        </Badge>
+      );
+
+      const badge = getByTestId('badge');
+      const flatStyle = Array.isArray(badge.props.style)
+        ? Object.assign({}, ...badge.props.style)
+        : badge.props.style;
+      expect(flatStyle.shadowColor).toBeUndefined();
+    });
+
+    it('should not apply glow to outline variant', () => {
+      const { getByTestId } = render(
+        <Badge variant="outline" testID="badge">
+          Outline
+        </Badge>
+      );
+
+      const badge = getByTestId('badge');
+      const flatStyle = Array.isArray(badge.props.style)
+        ? Object.assign({}, ...badge.props.style)
+        : badge.props.style;
+      expect(flatStyle.shadowColor).toBeUndefined();
+    });
+  });
 });

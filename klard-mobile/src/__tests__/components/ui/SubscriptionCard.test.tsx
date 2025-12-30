@@ -31,6 +31,26 @@ jest.mock('expo-image', () => {
   };
 });
 
+// Mock HealthIndicator
+jest.mock('@/components/ui/HealthIndicator', () => {
+  const React = require('react');
+  const { View, Text } = require('react-native');
+
+  const STATUS_LABELS: Record<string, string> = {
+    forgotten: 'Forgotten?',
+    'price-increased': 'Price went up',
+    healthy: 'All good',
+  };
+
+  return {
+    HealthIndicator: ({ status, testID = 'health-indicator' }: any) => (
+      <View testID={testID}>
+        <Text>{STATUS_LABELS[status]}</Text>
+      </View>
+    ),
+  };
+});
+
 const mockSubscription = {
   id: '1',
   name: 'Netflix',
@@ -152,6 +172,90 @@ describe('SubscriptionCard', () => {
         />
       );
       expect(screen.getByText('N')).toBeTruthy();
+    });
+  });
+
+  describe('Health Indicator', () => {
+    it('shows health indicator when healthStatus provided', () => {
+      render(
+        <SubscriptionCard
+          healthStatus="forgotten"
+          subscription={mockSubscription}
+          testID="card"
+        />
+      );
+      expect(screen.getByText('Forgotten?')).toBeTruthy();
+    });
+
+    it('renders with healthy status indicator', () => {
+      render(
+        <SubscriptionCard
+          healthStatus="healthy"
+          subscription={mockSubscription}
+          testID="card"
+        />
+      );
+      expect(screen.getByTestId('health-indicator')).toBeTruthy();
+    });
+
+    it('renders with price-increased status indicator', () => {
+      render(
+        <SubscriptionCard
+          healthStatus="price-increased"
+          subscription={mockSubscription}
+          testID="card"
+        />
+      );
+      expect(screen.getByText('Price went up')).toBeTruthy();
+    });
+
+    it('does not show health indicator when healthStatus is undefined', () => {
+      render(<SubscriptionCard subscription={mockSubscription} testID="card" />);
+      expect(screen.queryByTestId('health-indicator')).toBeNull();
+    });
+  });
+
+  describe('Protected Badge', () => {
+    it('shows protected badge when isProtected is true', () => {
+      render(
+        <SubscriptionCard
+          isProtected
+          subscription={mockSubscription}
+          testID="card"
+        />
+      );
+      expect(screen.getByText('Protected')).toBeTruthy();
+    });
+
+    it('does not show protected badge when isProtected is false', () => {
+      render(
+        <SubscriptionCard
+          isProtected={false}
+          subscription={mockSubscription}
+          testID="card"
+        />
+      );
+      expect(screen.queryByText('Protected')).toBeNull();
+    });
+
+    it('does not show protected badge by default', () => {
+      render(<SubscriptionCard subscription={mockSubscription} testID="card" />);
+      expect(screen.queryByText('Protected')).toBeNull();
+    });
+  });
+
+  describe('Combined Features', () => {
+    it('shows both health indicator and protected badge together', () => {
+      render(
+        <SubscriptionCard
+          healthStatus="forgotten"
+          isProtected
+          subscription={mockSubscription}
+          testID="card"
+        />
+      );
+      expect(screen.getByText('Forgotten?')).toBeTruthy();
+      expect(screen.getByText('Protected')).toBeTruthy();
     });
   });
 });

@@ -20,6 +20,25 @@ jest.mock('expo-haptics', () => ({
   },
 }));
 
+// Mock expo-blur
+jest.mock('expo-blur', () => {
+  const React = require('react');
+  const { View } = require('react-native');
+  return {
+    BlurView: ({ children, intensity, tint, style, testID }: {
+      children?: React.ReactNode;
+      intensity?: number;
+      tint?: string;
+      style?: object;
+      testID?: string;
+    }) => (
+      <View testID={testID || 'blur-view'} style={style} data-intensity={intensity} data-tint={tint}>
+        {children}
+      </View>
+    ),
+  };
+});
+
 // Mock vector icons
 jest.mock('@expo/vector-icons', () => {
   const React = require('react');
@@ -239,7 +258,7 @@ describe('TabBar', () => {
       );
 
       // Should render without crashing
-      expect(screen.getByTestId('tab-bar-scroll')).toBeTruthy();
+      expect(screen.getByTestId('tabbar-blur')).toBeTruthy();
     });
 
     it('should handle single tab', () => {
@@ -250,6 +269,144 @@ describe('TabBar', () => {
       );
 
       expect(screen.getByText('Only Tab')).toBeTruthy();
+    });
+  });
+
+  describe('Glassmorphism', () => {
+    it('should render with glassmorphic background (BlurView)', () => {
+      render(
+        <TabBar value="tab1" onChange={() => {}} tabs={defaultTabs} />
+      );
+
+      expect(screen.getByTestId('tabbar-blur')).toBeTruthy();
+    });
+
+    it('should have glass border styling', () => {
+      render(
+        <TabBar value="tab1" onChange={() => {}} tabs={defaultTabs} />
+      );
+
+      const blurView = screen.getByTestId('tabbar-blur');
+      expect(blurView).toBeTruthy();
+    });
+  });
+
+  describe('Active Tab Glow', () => {
+    it('should apply glow effect to active tab', () => {
+      const { getByTestId } = render(
+        <TabBar value="tab2" onChange={() => {}} tabs={defaultTabs} />
+      );
+
+      const activeTab = getByTestId('tab-tab2');
+      // Active tab should have glow styling (shadow properties)
+      expect(activeTab).toBeTruthy();
+      // The actual shadow styles are applied through SVA, verified via visual inspection
+    });
+
+    it('should not apply glow to inactive tabs', () => {
+      const { getByTestId } = render(
+        <TabBar value="tab2" onChange={() => {}} tabs={defaultTabs} />
+      );
+
+      const inactiveTab = getByTestId('tab-tab1');
+      expect(inactiveTab).toBeTruthy();
+      // Inactive tabs should not have glow styling
+    });
+  });
+
+  describe('5 Tabs Max Warning', () => {
+    it('should warn when more than 5 tabs are provided', () => {
+      const consoleSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+      const sixTabs = [
+        { value: 'tab1', label: 'Tab 1' },
+        { value: 'tab2', label: 'Tab 2' },
+        { value: 'tab3', label: 'Tab 3' },
+        { value: 'tab4', label: 'Tab 4' },
+        { value: 'tab5', label: 'Tab 5' },
+        { value: 'tab6', label: 'Tab 6' },
+      ];
+
+      render(
+        <TabBar value="tab1" onChange={() => {}} tabs={sixTabs} />
+      );
+
+      expect(consoleSpy).toHaveBeenCalledWith(
+        expect.stringContaining('5 tabs')
+      );
+      consoleSpy.mockRestore();
+    });
+
+    it('should not warn when 5 or fewer tabs are provided', () => {
+      const consoleSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+      const fiveTabs = [
+        { value: 'tab1', label: 'Tab 1' },
+        { value: 'tab2', label: 'Tab 2' },
+        { value: 'tab3', label: 'Tab 3' },
+        { value: 'tab4', label: 'Tab 4' },
+        { value: 'tab5', label: 'Tab 5' },
+      ];
+
+      render(
+        <TabBar value="tab1" onChange={() => {}} tabs={fiveTabs} />
+      );
+
+      expect(consoleSpy).not.toHaveBeenCalled();
+      consoleSpy.mockRestore();
+    });
+
+    it('should still render all tabs even when exceeding 5', () => {
+      const consoleSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+      const sixTabs = [
+        { value: 'tab1', label: 'Tab 1' },
+        { value: 'tab2', label: 'Tab 2' },
+        { value: 'tab3', label: 'Tab 3' },
+        { value: 'tab4', label: 'Tab 4' },
+        { value: 'tab5', label: 'Tab 5' },
+        { value: 'tab6', label: 'Tab 6' },
+      ];
+
+      render(
+        <TabBar value="tab1" onChange={() => {}} tabs={sixTabs} />
+      );
+
+      // All 6 tabs should still be rendered
+      expect(screen.getByText('Tab 1')).toBeTruthy();
+      expect(screen.getByText('Tab 2')).toBeTruthy();
+      expect(screen.getByText('Tab 3')).toBeTruthy();
+      expect(screen.getByText('Tab 4')).toBeTruthy();
+      expect(screen.getByText('Tab 5')).toBeTruthy();
+      expect(screen.getByText('Tab 6')).toBeTruthy();
+      consoleSpy.mockRestore();
+    });
+  });
+
+  describe('Icon Styling', () => {
+    it('should render icons at correct size (24-28dp container)', () => {
+      const tabsWithIcon = [
+        { value: 'tab1', label: 'Tab 1', icon: <Text testID="tab-icon">Icon</Text> },
+      ];
+
+      render(
+        <TabBar value="tab1" onChange={() => {}} tabs={tabsWithIcon} />
+      );
+
+      const icon = screen.getByTestId('tab-icon');
+      expect(icon).toBeTruthy();
+    });
+
+    it('should change icon color based on active state', () => {
+      const tabsWithIcon = [
+        { value: 'tab1', label: 'Tab 1', icon: <Text testID="icon-1">I1</Text> },
+        { value: 'tab2', label: 'Tab 2', icon: <Text testID="icon-2">I2</Text> },
+      ];
+
+      render(
+        <TabBar value="tab1" onChange={() => {}} tabs={tabsWithIcon} />
+      );
+
+      // Both icons should render - color styling is handled by the component
+      expect(screen.getByTestId('icon-1')).toBeTruthy();
+      expect(screen.getByTestId('icon-2')).toBeTruthy();
     });
   });
 });

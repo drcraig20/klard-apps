@@ -2,6 +2,11 @@
  * Tests for EmptyState Component (Mobile)
  *
  * TDD: Write failing tests first, then implement to pass.
+ * Tests verify: rendering, variants, actions, accessibility
+ *
+ * SOLID Compliance:
+ * - SRP: Tests only EmptyState component behavior
+ * - OCP: Tests extensible via new variant test cases
  */
 
 import React from 'react';
@@ -69,6 +74,23 @@ describe('EmptyState', () => {
     });
   });
 
+  describe('Variants', () => {
+    it('renders first-time variant with educational tone', () => {
+      render(<EmptyState variant="first-time" title="Create your first card" />);
+      expect(screen.getByTestId('empty-state-first-time')).toBeTruthy();
+    });
+
+    it('renders cleared variant with celebratory tone', () => {
+      render(<EmptyState variant="cleared" title="All clear!" />);
+      expect(screen.getByTestId('empty-state-cleared')).toBeTruthy();
+    });
+
+    it('renders error variant with recovery focus', () => {
+      render(<EmptyState variant="error" title="Something went wrong" />);
+      expect(screen.getByTestId('empty-state-error')).toBeTruthy();
+    });
+  });
+
   describe('Illustration', () => {
     it('should render illustration when provided', () => {
       render(
@@ -86,9 +108,33 @@ describe('EmptyState', () => {
 
       expect(screen.queryByTestId('empty-state-illustration')).toBeNull();
     });
+
+    it('should render custom icon when provided', () => {
+      const CustomIcon = () => <></>;
+      render(
+        <EmptyState
+          title="Custom icon test"
+          icon={<CustomIcon />}
+        />
+      );
+
+      expect(screen.getByTestId('empty-state-icon')).toBeTruthy();
+    });
   });
 
   describe('Actions', () => {
+    it('shows action button when provided', () => {
+      const onClick = jest.fn();
+      render(
+        <EmptyState
+          variant="first-time"
+          title="Test"
+          action={{ label: 'Get Started', onClick }}
+        />
+      );
+      expect(screen.getByText('Get Started')).toBeTruthy();
+    });
+
     it('should render primary action when provided', () => {
       const handlePress = jest.fn();
       render(
@@ -162,6 +208,36 @@ describe('EmptyState', () => {
 
       expect(handleSecondary).toHaveBeenCalledTimes(1);
       expect(handlePrimary).not.toHaveBeenCalled();
+    });
+
+    it('should call action onClick when action button is pressed', () => {
+      const handleClick = jest.fn();
+      render(
+        <EmptyState
+          title="No items"
+          action={{
+            label: 'Get Started',
+            onClick: handleClick,
+          }}
+        />
+      );
+
+      fireEvent.press(screen.getByText('Get Started'));
+
+      expect(handleClick).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('Description', () => {
+    it('shows description when provided', () => {
+      render(
+        <EmptyState
+          variant="first-time"
+          title="Test"
+          description="Some helpful text"
+        />
+      );
+      expect(screen.getByText('Some helpful text')).toBeTruthy();
     });
   });
 

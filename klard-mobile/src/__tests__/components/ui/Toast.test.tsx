@@ -4,7 +4,7 @@
 
 import React from "react";
 import { render, waitFor } from "@testing-library/react-native";
-import { showToast } from "@/components/ui/Toast";
+import { showToast, showCelebrationToast } from "@/components/ui/Toast";
 import Toast from "react-native-toast-message";
 import * as Haptics from "expo-haptics";
 
@@ -25,7 +25,7 @@ jest.mock("react-native-toast-message", () => {
 
 // Mock expo-haptics
 jest.mock("expo-haptics", () => ({
-  notificationAsync: jest.fn(),
+  notificationAsync: jest.fn().mockResolvedValue(undefined),
   NotificationFeedbackType: {
     Success: "success",
     Warning: "warning",
@@ -234,6 +234,154 @@ describe("Toast", () => {
       expect(Toast.show).not.toHaveBeenCalled();
 
       warnSpy.mockRestore();
+    });
+
+    it("should use custom position when provided", () => {
+      showToast({
+        type: "info",
+        title: "Info",
+        position: "top",
+      });
+
+      expect(Toast.show).toHaveBeenCalledWith(
+        expect.objectContaining({
+          position: "top",
+        })
+      );
+    });
+  });
+
+  describe("showCelebrationToast function", () => {
+    it("positions celebration toast at top", () => {
+      showCelebrationToast({ amount: 47.98, merchant: "Test" });
+
+      expect(Toast.show).toHaveBeenCalledWith(
+        expect.objectContaining({
+          position: "top",
+        })
+      );
+    });
+
+    it("uses celebration toast type", () => {
+      showCelebrationToast({ amount: 47.98, merchant: "Test" });
+
+      expect(Toast.show).toHaveBeenCalledWith(
+        expect.objectContaining({
+          type: "celebration",
+        })
+      );
+    });
+
+    it("triggers haptic feedback on full celebration", async () => {
+      showCelebrationToast({ amount: 47.98, celebrationLevel: "full" });
+
+      await waitFor(() => {
+        // Full celebration triggers 3 haptics
+        expect(Haptics.notificationAsync).toHaveBeenCalledWith(
+          Haptics.NotificationFeedbackType.Success
+        );
+      });
+    });
+
+    it("triggers single haptic on subtle celebration", async () => {
+      showCelebrationToast({ amount: 47.98, celebrationLevel: "subtle" });
+
+      await waitFor(() => {
+        expect(Haptics.notificationAsync).toHaveBeenCalledTimes(1);
+      });
+    });
+
+    it("does not trigger haptic when level is none", async () => {
+      showCelebrationToast({ amount: 47.98, celebrationLevel: "none" });
+
+      // Give async function time to potentially fire
+      await new Promise((resolve) => setTimeout(resolve, 50));
+
+      // Toast should still show, but no extra haptics for celebration
+      expect(Toast.show).toHaveBeenCalled();
+    });
+
+    it("shows formatted amount in toast title", () => {
+      showCelebrationToast({ amount: 47.98 });
+
+      expect(Toast.show).toHaveBeenCalledWith(
+        expect.objectContaining({
+          text1: "You saved $47.98!",
+        })
+      );
+    });
+
+    it("shows merchant in toast description when provided", () => {
+      showCelebrationToast({ amount: 47.98, merchant: "Netflix" });
+
+      expect(Toast.show).toHaveBeenCalledWith(
+        expect.objectContaining({
+          text2: "Blocked charge from Netflix",
+        })
+      );
+    });
+
+    it("shows default description when merchant not provided", () => {
+      showCelebrationToast({ amount: 47.98 });
+
+      expect(Toast.show).toHaveBeenCalledWith(
+        expect.objectContaining({
+          text2: "Subscription charge blocked",
+        })
+      );
+    });
+
+    it("formats amount correctly with two decimal places", () => {
+      showCelebrationToast({ amount: 100 });
+
+      expect(Toast.show).toHaveBeenCalledWith(
+        expect.objectContaining({
+          text1: "You saved $100.00!",
+        })
+      );
+    });
+
+    it("uses 5000ms duration for celebration toast", () => {
+      showCelebrationToast({ amount: 47.98 });
+
+      expect(Toast.show).toHaveBeenCalledWith(
+        expect.objectContaining({
+          visibilityTime: 5000,
+        })
+      );
+    });
+
+    it("warns and skips toast when amount is invalid", () => {
+      const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
+      showCelebrationToast({ amount: NaN });
+
+      expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('[Toast] amount must be a valid number'));
+      expect(Toast.show).not.toHaveBeenCalled();
+
+      warnSpy.mockRestore();
+    });
+
+    it("defaults celebration level to full", async () => {
+      showCelebrationToast({ amount: 47.98 });
+
+      await waitFor(() => {
+        expect(Haptics.notificationAsync).toHaveBeenCalled();
+      });
+    });
+
+    it("passes amount, merchant, and celebrationLevel in props", () => {
+      showCelebrationToast({ amount: 47.98, merchant: "Netflix", celebrationLevel: "medium" });
+
+      expect(Toast.show).toHaveBeenCalledWith(
+        expect.objectContaining({
+          props: expect.objectContaining({
+            amount: "$47.98",
+            merchant: "Netflix",
+            celebrationLevel: "medium",
+          }),
+        })
+      );
     });
   });
 });

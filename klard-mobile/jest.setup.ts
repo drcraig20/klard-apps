@@ -53,6 +53,20 @@ jest.mock('expo-constants', () => ({
   },
 }));
 
+// Mock expo-blur
+jest.mock('expo-blur', () => {
+  const View = require('react-native').View;
+  return {
+    BlurView: ({ children, intensity, tint, style, testID }: {
+      children?: React.ReactNode;
+      intensity?: number;
+      tint?: string;
+      style?: object;
+      testID?: string;
+    }) => View({ testID: testID || 'blur-view', style, children }),
+  };
+});
+
 // Mock react-native-reanimated
 jest.mock('react-native-reanimated', () => {
   const View = require('react-native').View;

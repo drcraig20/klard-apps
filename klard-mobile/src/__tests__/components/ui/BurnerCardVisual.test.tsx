@@ -2,10 +2,11 @@
  * Tests for BurnerCardVisual Component (Mobile)
  *
  * TDD: Write failing tests first, then implement to pass.
+ * Tests verify: rendering, sizes, status variants, accessibility, awaiting state
  */
 
 import React from 'react';
-import { render, screen } from '@testing-library/react-native';
+import { render, screen, fireEvent } from '@testing-library/react-native';
 import { BurnerCardVisual } from '@/components/ui/BurnerCardVisual';
 
 // Mock expo-linear-gradient
@@ -45,6 +46,16 @@ const mockUsedCard = {
   ...mockActiveCard,
   type: 'single-use' as const,
   status: 'used' as const,
+};
+
+const mockAwaitingCard = {
+  ...mockActiveCard,
+  status: 'awaiting' as const,
+};
+
+const mockBurnedCard = {
+  ...mockActiveCard,
+  status: 'burned' as const,
 };
 
 describe('BurnerCardVisual', () => {
@@ -224,6 +235,64 @@ describe('BurnerCardVisual', () => {
         ? Object.assign({}, ...progressFill.props.style)
         : progressFill.props.style;
       expect(flatStyle).toMatchObject({ width: '0%' });
+    });
+  });
+
+  describe('Awaiting State', () => {
+    it('should render awaiting state with dashed border', () => {
+      render(<BurnerCardVisual card={mockAwaitingCard} />);
+
+      const card = screen.getByTestId('burner-card-visual');
+      const flatStyle = Array.isArray(card.props.style)
+        ? Object.assign({}, ...card.props.style)
+        : card.props.style;
+      expect(flatStyle.borderStyle).toBe('dashed');
+    });
+
+    it('should show Awaiting Activation label when awaiting', () => {
+      render(<BurnerCardVisual card={mockAwaitingCard} />);
+
+      expect(screen.getByText('Awaiting Activation')).toBeTruthy();
+    });
+
+    it('should show KYC CTA button when awaiting with onActivate', () => {
+      const onActivate = jest.fn();
+      render(<BurnerCardVisual card={mockAwaitingCard} onActivate={onActivate} />);
+
+      expect(screen.getByText(/Activate Now/i)).toBeTruthy();
+    });
+
+    it('should call onActivate when CTA pressed', () => {
+      const onActivate = jest.fn();
+      render(<BurnerCardVisual card={mockAwaitingCard} onActivate={onActivate} />);
+
+      fireEvent.press(screen.getByText(/Activate Now/i));
+      expect(onActivate).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not show CTA button when onActivate is not provided', () => {
+      render(<BurnerCardVisual card={mockAwaitingCard} />);
+
+      expect(screen.queryByText(/Activate Now/i)).toBeNull();
+    });
+  });
+
+  describe('Burned Status', () => {
+    it('should render burned status card', () => {
+      render(<BurnerCardVisual card={mockBurnedCard} />);
+
+      const card = screen.getByTestId('burner-card-visual');
+      expect(card).toBeTruthy();
+    });
+
+    it('should apply reduced opacity when burned', () => {
+      render(<BurnerCardVisual card={mockBurnedCard} />);
+
+      const card = screen.getByTestId('burner-card-visual');
+      const flatStyle = Array.isArray(card.props.style)
+        ? Object.assign({}, ...card.props.style)
+        : card.props.style;
+      expect(flatStyle.opacity).toBe(0.6);
     });
   });
 });

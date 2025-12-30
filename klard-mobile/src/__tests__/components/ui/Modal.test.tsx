@@ -41,6 +41,25 @@ jest.mock("@expo/vector-icons", () => {
   };
 });
 
+// Mock expo-blur
+jest.mock("expo-blur", () => {
+  const React = require("react");
+  const { View } = require("react-native");
+  return {
+    BlurView: ({ children, intensity, tint, style, testID }: {
+      children?: React.ReactNode;
+      intensity?: number;
+      tint?: string;
+      style?: object;
+      testID?: string;
+    }) => (
+      <View testID={testID || "blur-view"} style={style} data-intensity={intensity} data-tint={tint}>
+        {children}
+      </View>
+    ),
+  };
+});
+
 describe("Modal", () => {
   beforeEach(() => {
     jest.clearAllMocks();
@@ -244,6 +263,42 @@ describe("Modal", () => {
 
       // Content should render with safe area consideration
       expect(screen.getByText("Content")).toBeTruthy();
+    });
+  });
+
+  describe("Glassmorphism Overlay with BlurView", () => {
+    it("should use BlurView for overlay backdrop blur effect", () => {
+      render(
+        <Modal open={true} onClose={() => {}}>
+          <Text>Content</Text>
+        </Modal>
+      );
+
+      // BlurView should be rendered as the overlay
+      const blurOverlay = screen.getByTestId("modal-blur-overlay");
+      expect(blurOverlay).toBeTruthy();
+    });
+
+    it("should apply 24 intensity blur to overlay", () => {
+      render(
+        <Modal open={true} onClose={() => {}}>
+          <Text>Content</Text>
+        </Modal>
+      );
+
+      const blurOverlay = screen.getByTestId("modal-blur-overlay");
+      expect(blurOverlay.props["data-intensity"]).toBe(24);
+    });
+
+    it("should use dark tint for overlay", () => {
+      render(
+        <Modal open={true} onClose={() => {}}>
+          <Text>Content</Text>
+        </Modal>
+      );
+
+      const blurOverlay = screen.getByTestId("modal-blur-overlay");
+      expect(blurOverlay.props["data-tint"]).toBe("dark");
     });
   });
 
