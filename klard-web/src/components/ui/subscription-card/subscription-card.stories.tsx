@@ -99,6 +99,15 @@ const meta = {
       options: ["default", "compact", "detailed"],
       description: "Card layout variant",
     },
+    healthStatus: {
+      control: "select",
+      options: [undefined, "forgotten", "price-increased", "healthy"],
+      description: "Health status indicator for the subscription",
+    },
+    isProtected: {
+      control: "boolean",
+      description: "Whether the subscription is protected by Klard",
+    },
     showActions: {
       control: "boolean",
       description: "Whether to show action buttons",
@@ -292,6 +301,104 @@ export const DifferentCurrencies: Story = {
           price: 10.99,
         }}
       />
+    </div>
+  ),
+};
+
+// Health Status: Forgotten
+export const WithHealthStatusForgotten: Story = {
+  args: {
+    subscription: mockSubscriptions.netflix,
+    healthStatus: "forgotten",
+    variant: "default",
+  },
+};
+
+// Health Status: Price Increased
+export const WithHealthStatusPriceIncreased: Story = {
+  args: {
+    subscription: mockSubscriptions.spotify,
+    healthStatus: "price-increased",
+    variant: "default",
+  },
+};
+
+// Health Status: Healthy
+export const WithHealthStatusHealthy: Story = {
+  args: {
+    subscription: mockSubscriptions.github,
+    healthStatus: "healthy",
+    variant: "default",
+  },
+};
+
+// Protected subscription
+export const Protected: Story = {
+  args: {
+    subscription: mockSubscriptions.netflix,
+    isProtected: true,
+    variant: "default",
+  },
+};
+
+// Protected with health status
+export const ProtectedWithHealthStatus: Story = {
+  args: {
+    subscription: mockSubscriptions.adobe,
+    isProtected: true,
+    healthStatus: "healthy",
+    variant: "default",
+  },
+};
+
+// All features showcase
+export const AllFeatures: Story = {
+  render: () => (
+    <div className="flex flex-col gap-4 max-w-md">
+      <div>
+        <p className="text-sm text-muted-foreground mb-2">Forgotten subscription</p>
+        <SubscriptionCard
+          subscription={mockSubscriptions.netflix}
+          healthStatus="forgotten"
+        />
+      </div>
+      <div>
+        <p className="text-sm text-muted-foreground mb-2">Price increased</p>
+        <SubscriptionCard
+          subscription={mockSubscriptions.spotify}
+          healthStatus="price-increased"
+        />
+      </div>
+      <div>
+        <p className="text-sm text-muted-foreground mb-2">Healthy subscription</p>
+        <SubscriptionCard
+          subscription={mockSubscriptions.github}
+          healthStatus="healthy"
+        />
+      </div>
+      <div>
+        <p className="text-sm text-muted-foreground mb-2">Protected subscription</p>
+        <SubscriptionCard
+          subscription={mockSubscriptions.adobe}
+          isProtected={true}
+        />
+      </div>
+      <div>
+        <p className="text-sm text-muted-foreground mb-2">Protected + Healthy</p>
+        <SubscriptionCard
+          subscription={mockSubscriptions.netflix}
+          isProtected={true}
+          healthStatus="healthy"
+        />
+      </div>
+      <div>
+        <p className="text-sm text-muted-foreground mb-2">Protected + Price Increased (needs attention)</p>
+        <SubscriptionCard
+          subscription={mockSubscriptions.spotify}
+          isProtected={true}
+          healthStatus="price-increased"
+        />
+      </div>
     </div>
   ),
 };

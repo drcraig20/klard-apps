@@ -17,7 +17,7 @@ const meta = {
   argTypes: {
     variant: {
       control: "select",
-      options: ["default", "elevated", "ghost", "interactive"],
+      options: ["default", "elevated", "ghost", "glass", "interactive"],
       description: "Visual style variant",
     },
     padding: {
@@ -81,6 +81,34 @@ export const Ghost: Story = {
       </div>
     ),
     variant: "ghost",
+  },
+};
+
+// Glass variant with gradient background to showcase effect
+export const Glass: Story = {
+  parameters: {
+    backgrounds: {
+      default: "gradient",
+      values: [
+        {
+          name: "gradient",
+          value:
+            "linear-gradient(135deg, #0D7C7A 0%, #15B5B0 50%, #0F172A 100%)",
+        },
+      ],
+    },
+  },
+  args: {
+    children: (
+      <div>
+        <h3 className="font-semibold mb-2 text-white">Glass Card</h3>
+        <p className="text-sm text-white/80">
+          Glassmorphism effect with backdrop blur and semi-transparent
+          background. Best viewed on gradient or image backgrounds.
+        </p>
+      </div>
+    ),
+    variant: "glass",
   },
 };
 
@@ -192,6 +220,18 @@ export const VariantComparison: Story = {
         <h3 className="font-semibold mb-1">Ghost</h3>
         <p className="text-sm text-muted-foreground">Minimal styling</p>
       </KlardCard>
+      <div
+        className="p-4 rounded-lg"
+        style={{
+          background:
+            "linear-gradient(135deg, #0D7C7A 0%, #15B5B0 50%, #0F172A 100%)",
+        }}
+      >
+        <KlardCard variant="glass">
+          <h3 className="font-semibold mb-1 text-white">Glass</h3>
+          <p className="text-sm text-white/80">Glassmorphism effect</p>
+        </KlardCard>
+      </div>
       <KlardCard variant="interactive" onPress={() => {}}>
         <h3 className="font-semibold mb-1">Interactive</h3>
         <p className="text-sm text-muted-foreground">Hover and click effects</p>

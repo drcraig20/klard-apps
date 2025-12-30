@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
+import { fn } from "@storybook/test";
 import { BurnerCardVisual, type BurnerCardData } from "./burner-card-visual";
 
 // Mock card data
@@ -63,6 +64,26 @@ const mockCards: Record<string, BurnerCardData> = {
     spentAmount: 199.99,
     spendLimit: 200.0,
   },
+  awaiting: {
+    nickname: "New Subscription",
+    type: "recurring",
+    status: "awaiting",
+    lastFour: "0000",
+    expiryMonth: "--",
+    expiryYear: "--",
+    spentAmount: 0,
+    spendLimit: 100.0,
+  },
+  burned: {
+    nickname: "Compromised Card",
+    type: "single-use",
+    status: "burned",
+    lastFour: "6666",
+    expiryMonth: "12",
+    expiryYear: "25",
+    spentAmount: 50.0,
+    spendLimit: 100.0,
+  },
 };
 
 const meta = {
@@ -89,6 +110,10 @@ const meta = {
     card: {
       control: "object",
       description: "Card data object",
+    },
+    onActivate: {
+      action: "onActivate",
+      description: "Callback when activate button is clicked (awaiting status only)",
     },
   },
 } satisfies Meta<typeof BurnerCardVisual>;
@@ -152,6 +177,31 @@ export const Used: Story = {
   },
 };
 
+// Awaiting activation card
+export const Awaiting: Story = {
+  args: {
+    card: mockCards.awaiting,
+    size: "md",
+  },
+};
+
+// Awaiting with CTA button
+export const AwaitingWithCTA: Story = {
+  args: {
+    card: mockCards.awaiting,
+    size: "md",
+    onActivate: fn(),
+  },
+};
+
+// Burned/destroyed card
+export const Burned: Story = {
+  args: {
+    card: mockCards.burned,
+    size: "md",
+  },
+};
+
 // Small size
 export const Small: Story = {
   args: {
@@ -199,7 +249,7 @@ export const SizeComparison: Story = {
 // All statuses
 export const AllStatuses: Story = {
   render: () => (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <div>
         <p className="text-sm text-muted-foreground mb-2">Active</p>
         <BurnerCardVisual card={mockCards.active} size="md" />
@@ -215,6 +265,14 @@ export const AllStatuses: Story = {
       <div>
         <p className="text-sm text-muted-foreground mb-2">Used</p>
         <BurnerCardVisual card={mockCards.used} size="md" />
+      </div>
+      <div>
+        <p className="text-sm text-muted-foreground mb-2">Awaiting</p>
+        <BurnerCardVisual card={mockCards.awaiting} size="md" />
+      </div>
+      <div>
+        <p className="text-sm text-muted-foreground mb-2">Burned</p>
+        <BurnerCardVisual card={mockCards.burned} size="md" />
       </div>
     </div>
   ),
@@ -319,6 +377,45 @@ export const CustomSpendingLimits: Story = {
           }}
           size="md"
         />
+      </div>
+    </div>
+  ),
+};
+
+// Compound pattern with sub-components
+export const CompoundPattern: Story = {
+  render: () => (
+    <div className="flex flex-col gap-6">
+      <div>
+        <p className="text-sm text-muted-foreground mb-2">
+          Using compound sub-components for custom layouts
+        </p>
+        <BurnerCardVisual card={mockCards.active} size="lg">
+          <div className="absolute top-2 right-2">
+            <BurnerCardVisual.CVC value="***" className="text-white/60" />
+          </div>
+        </BurnerCardVisual>
+      </div>
+      <div>
+        <p className="text-sm text-muted-foreground mb-2">
+          Awaiting card with custom CTA using compound pattern
+        </p>
+        <BurnerCardVisual card={mockCards.awaiting} size="md">
+          <BurnerCardVisual.Label>Complete KYC to activate</BurnerCardVisual.Label>
+          <BurnerCardVisual.CTA onClick={fn()}>
+            Verify Identity
+          </BurnerCardVisual.CTA>
+        </BurnerCardVisual>
+      </div>
+      <div>
+        <p className="text-sm text-muted-foreground mb-2">
+          Sub-components used standalone
+        </p>
+        <div className="flex gap-4 items-center p-4 bg-slate-100 dark:bg-slate-800 rounded-lg">
+          <BurnerCardVisual.Number value="**** **** **** 1234" className="text-foreground" />
+          <BurnerCardVisual.Expiry value="12/26" className="text-muted-foreground" />
+          <BurnerCardVisual.CVC value="123" className="text-muted-foreground" />
+        </div>
       </div>
     </div>
   ),
