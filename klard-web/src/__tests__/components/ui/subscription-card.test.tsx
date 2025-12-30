@@ -152,4 +152,65 @@ describe('SubscriptionCard', () => {
       expect(card.getAttribute('aria-label')).toContain('Netflix');
     });
   });
+
+  describe('Health Indicator', () => {
+    it('shows health indicator when healthStatus provided', () => {
+      render(<SubscriptionCard healthStatus="forgotten" subscription={mockSubscription} />);
+      expect(screen.getByText('Forgotten?')).toBeInTheDocument();
+    });
+
+    it('renders with healthy status indicator', () => {
+      render(<SubscriptionCard healthStatus="healthy" subscription={mockSubscription} />);
+      expect(screen.getByTestId('health-indicator')).toBeInTheDocument();
+    });
+
+    it('renders with price-increased status indicator', () => {
+      render(<SubscriptionCard healthStatus="price-increased" subscription={mockSubscription} />);
+      expect(screen.getByText('Price went up')).toBeInTheDocument();
+    });
+
+    it('does not show health indicator when healthStatus is undefined', () => {
+      render(<SubscriptionCard subscription={mockSubscription} />);
+      expect(screen.queryByTestId('health-indicator')).not.toBeInTheDocument();
+    });
+  });
+
+  describe('Protected Badge', () => {
+    it('shows protected badge when isProtected is true', () => {
+      render(<SubscriptionCard isProtected subscription={mockSubscription} />);
+      expect(screen.getByText('Protected')).toBeInTheDocument();
+    });
+
+    it('does not show protected badge when isProtected is false', () => {
+      render(<SubscriptionCard isProtected={false} subscription={mockSubscription} />);
+      expect(screen.queryByText('Protected')).not.toBeInTheDocument();
+    });
+
+    it('does not show protected badge by default', () => {
+      render(<SubscriptionCard subscription={mockSubscription} />);
+      expect(screen.queryByText('Protected')).not.toBeInTheDocument();
+    });
+
+    it('shows protected badge with shield icon', () => {
+      render(<SubscriptionCard isProtected subscription={mockSubscription} />);
+      const badge = screen.getByText('Protected');
+      expect(badge).toBeInTheDocument();
+      // The badge should have a success/teal variant
+      expect(badge.className).toMatch(/teal|success|green|primary/i);
+    });
+  });
+
+  describe('Combined Features', () => {
+    it('shows both health indicator and protected badge together', () => {
+      render(
+        <SubscriptionCard
+          healthStatus="forgotten"
+          isProtected
+          subscription={mockSubscription}
+        />
+      );
+      expect(screen.getByText('Forgotten?')).toBeInTheDocument();
+      expect(screen.getByText('Protected')).toBeInTheDocument();
+    });
+  });
 });

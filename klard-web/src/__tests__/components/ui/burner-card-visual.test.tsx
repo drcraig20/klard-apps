@@ -2,11 +2,11 @@
  * Tests for BurnerCardVisual Component (Web)
  *
  * TDD: Write failing tests first, then implement to pass.
- * Tests verify: rendering, sizes, status variants, accessibility
+ * Tests verify: rendering, sizes, status variants, accessibility, awaiting state
  */
 
-import { describe, it, expect } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { describe, it, expect, vi } from 'vitest';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { BurnerCardVisual } from '@/components/ui/burner-card-visual';
 
 const mockActiveCard = {
@@ -34,6 +34,16 @@ const mockUsedCard = {
   ...mockActiveCard,
   type: 'single-use' as const,
   status: 'used' as const,
+};
+
+const mockAwaitingCard = {
+  ...mockActiveCard,
+  status: 'awaiting' as const,
+};
+
+const mockBurnedCard = {
+  ...mockActiveCard,
+  status: 'burned' as const,
 };
 
 describe('BurnerCardVisual', () => {
@@ -216,6 +226,100 @@ describe('BurnerCardVisual', () => {
 
       const card = container.querySelector('[data-slot="burner-card-visual"]');
       expect(card).toHaveClass('custom-class');
+    });
+  });
+
+  describe('Awaiting State', () => {
+    it('should render awaiting state with dashed border', () => {
+      const { container } = render(<BurnerCardVisual card={mockAwaitingCard} />);
+
+      const card = container.querySelector('[data-slot="burner-card-visual"]');
+      expect(card?.className).toContain('border-dashed');
+    });
+
+    it('should show Awaiting Activation label when awaiting', () => {
+      render(<BurnerCardVisual card={mockAwaitingCard} />);
+
+      expect(screen.getByText('Awaiting Activation')).toBeInTheDocument();
+    });
+
+    it('should show KYC CTA button when awaiting with onActivate', () => {
+      const onActivate = vi.fn();
+      render(<BurnerCardVisual card={mockAwaitingCard} onActivate={onActivate} />);
+
+      expect(screen.getByRole('button', { name: /activate/i })).toBeInTheDocument();
+    });
+
+    it('should call onActivate when CTA clicked', () => {
+      const onActivate = vi.fn();
+      render(<BurnerCardVisual card={mockAwaitingCard} onActivate={onActivate} />);
+
+      fireEvent.click(screen.getByRole('button', { name: /activate/i }));
+      expect(onActivate).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not show CTA button when onActivate is not provided', () => {
+      render(<BurnerCardVisual card={mockAwaitingCard} />);
+
+      expect(screen.queryByRole('button', { name: /activate/i })).not.toBeInTheDocument();
+    });
+
+    it('should apply muted background when awaiting', () => {
+      const { container } = render(<BurnerCardVisual card={mockAwaitingCard} />);
+
+      const card = container.querySelector('[data-slot="burner-card-visual"]');
+      expect(card?.className).toContain('bg-muted');
+    });
+  });
+
+  describe('Status Glows', () => {
+    it('should apply teal glow when active', () => {
+      const { container } = render(<BurnerCardVisual card={mockActiveCard} />);
+
+      const card = container.querySelector('[data-slot="burner-card-visual"]');
+      // Check for teal glow shadow class
+      expect(card?.className).toMatch(/shadow-\[0_0_16px_rgba\(21,181,176/);
+    });
+
+    it('should apply amber glow when locked', () => {
+      const { container } = render(<BurnerCardVisual card={mockLockedCard} />);
+
+      const card = container.querySelector('[data-slot="burner-card-visual"]');
+      // Check for amber glow shadow class
+      expect(card?.className).toMatch(/shadow-\[0_0_16px_rgba\(245,158,11/);
+    });
+
+    it('should apply red glow when burned', () => {
+      const { container } = render(<BurnerCardVisual card={mockBurnedCard} />);
+
+      const card = container.querySelector('[data-slot="burner-card-visual"]');
+      // Check for red glow shadow class
+      expect(card?.className).toMatch(/shadow-\[0_0_16px_rgba\(239,68,68/);
+    });
+
+    it('should not apply glow when awaiting', () => {
+      const { container } = render(<BurnerCardVisual card={mockAwaitingCard} />);
+
+      const card = container.querySelector('[data-slot="burner-card-visual"]');
+      // Awaiting should not have any glow shadow
+      expect(card?.className).not.toMatch(/shadow-\[0_0_16px_rgba/);
+    });
+  });
+
+  describe('Burned Status', () => {
+    it('should apply burned gradient classes', () => {
+      const { container } = render(<BurnerCardVisual card={mockBurnedCard} />);
+
+      const card = container.querySelector('[data-slot="burner-card-visual"]');
+      expect(card?.className).toContain('from-red-500');
+      expect(card?.className).toContain('to-red-600');
+    });
+
+    it('should apply reduced opacity when burned', () => {
+      const { container } = render(<BurnerCardVisual card={mockBurnedCard} />);
+
+      const card = container.querySelector('[data-slot="burner-card-visual"]');
+      expect(card?.className).toContain('opacity-60');
     });
   });
 });

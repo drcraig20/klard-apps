@@ -2,11 +2,16 @@
  * Tests for EmptyState Component
  *
  * TDD: Write failing tests first, then implement to pass.
- * Tests verify: rendering, sub-components, actions, sizes, accessibility
+ * Tests verify: rendering, sub-components, variants, actions, sizes, accessibility
+ *
+ * SOLID Compliance:
+ * - SRP: Tests only EmptyState component behavior
+ * - OCP: Tests extensible via new variant test cases
  */
 
 import { describe, it, expect, vi } from "vitest"
 import { render, screen, fireEvent } from "@testing-library/react"
+import { axe, toHaveNoViolations } from "jest-axe"
 import {
   EmptyState,
   EmptyStateMedia,
@@ -16,13 +21,15 @@ import {
 } from "@/components/ui/empty-state"
 import { Button } from "@/components/ui/button"
 
+expect.extend(toHaveNoViolations)
+
 describe("EmptyState", () => {
   describe("Rendering", () => {
     it("should render with all sub-components", () => {
       render(
         <EmptyState>
           <EmptyStateMedia>
-            <span data-testid="illustration">🎨</span>
+            <span data-testid="illustration">icon</span>
           </EmptyStateMedia>
           <EmptyStateTitle>No subscriptions yet</EmptyStateTitle>
           <EmptyStateDescription>
@@ -64,6 +71,65 @@ describe("EmptyState", () => {
       )
 
       expect(screen.getByText("No items")).toBeInTheDocument()
+    })
+  })
+
+  describe("Variants", () => {
+    it("renders first-time variant with educational tone", () => {
+      render(
+        <EmptyState variant="first-time">
+          <EmptyStateTitle>Create your first card</EmptyStateTitle>
+        </EmptyState>
+      )
+      expect(screen.getByTestId("empty-state-first-time")).toBeInTheDocument()
+    })
+
+    it("renders cleared variant with celebratory tone", () => {
+      render(
+        <EmptyState variant="cleared">
+          <EmptyStateTitle>All clear!</EmptyStateTitle>
+        </EmptyState>
+      )
+      expect(screen.getByTestId("empty-state-cleared")).toBeInTheDocument()
+    })
+
+    it("renders error variant with recovery focus", () => {
+      render(
+        <EmptyState variant="error">
+          <EmptyStateTitle>Something went wrong</EmptyStateTitle>
+        </EmptyState>
+      )
+      expect(screen.getByTestId("empty-state-error")).toBeInTheDocument()
+    })
+
+    it("applies first-time variant styling", () => {
+      render(
+        <EmptyState variant="first-time">
+          <EmptyStateTitle>Welcome</EmptyStateTitle>
+        </EmptyState>
+      )
+      const container = document.querySelector('[data-slot="empty-state"]')
+      expect(container?.className).toContain("border-primary")
+    })
+
+    it("applies cleared variant styling", () => {
+      render(
+        <EmptyState variant="cleared">
+          <EmptyStateTitle>All done</EmptyStateTitle>
+        </EmptyState>
+      )
+      const container = document.querySelector('[data-slot="empty-state"]')
+      expect(container?.className).toContain("border-success")
+    })
+
+    it("applies error variant styling", () => {
+      render(
+        <EmptyState variant="error">
+          <EmptyStateTitle>Error occurred</EmptyStateTitle>
+        </EmptyState>
+      )
+      const container = document.querySelector('[data-slot="empty-state"]')
+      expect(container?.className).toContain("border-destructive")
     })
   })
 
@@ -164,6 +230,21 @@ describe("EmptyState", () => {
   })
 
   describe("EmptyStateActions", () => {
+    it("shows action button when provided", () => {
+      const onClick = vi.fn()
+      render(
+        <EmptyState variant="first-time">
+          <EmptyStateTitle>Test</EmptyStateTitle>
+          <EmptyStateActions>
+            <Button onClick={onClick}>Get Started</Button>
+          </EmptyStateActions>
+        </EmptyState>
+      )
+      expect(
+        screen.getByRole("button", { name: "Get Started" })
+      ).toBeInTheDocument()
+    })
+
     it("should render primary action button", () => {
       const handleClick = vi.fn()
       render(
@@ -292,6 +373,72 @@ describe("EmptyState", () => {
       expect(
         screen.getByLabelText("Empty subscriptions state")
       ).toBeInTheDocument()
+    })
+
+    it("should have aria-live for dynamic content updates", () => {
+      render(
+        <EmptyState>
+          <EmptyStateTitle>Dynamic content</EmptyStateTitle>
+        </EmptyState>
+      )
+
+      const container = document.querySelector('[data-slot="empty-state"]')
+      expect(container?.getAttribute("aria-live")).toBe("polite")
+    })
+  })
+
+  describe("Accessibility (jest-axe)", () => {
+    it("should have no accessibility violations with full structure", async () => {
+      const { container } = render(
+        <EmptyState>
+          <EmptyStateMedia>
+            <span>Icon</span>
+          </EmptyStateMedia>
+          <EmptyStateTitle>No subscriptions</EmptyStateTitle>
+          <EmptyStateDescription>Add your first subscription.</EmptyStateDescription>
+          <EmptyStateActions>
+            <Button>Add Subscription</Button>
+          </EmptyStateActions>
+        </EmptyState>
+      )
+      const results = await axe(container)
+      expect(results).toHaveNoViolations()
+    })
+
+    it("should have no accessibility violations with first-time variant", async () => {
+      const { container } = render(
+        <EmptyState variant="first-time">
+          <EmptyStateTitle>Welcome</EmptyStateTitle>
+          <EmptyStateDescription>Get started by creating your first card.</EmptyStateDescription>
+        </EmptyState>
+      )
+      const results = await axe(container)
+      expect(results).toHaveNoViolations()
+    })
+
+    it("should have no accessibility violations with cleared variant", async () => {
+      const { container } = render(
+        <EmptyState variant="cleared">
+          <EmptyStateTitle>All clear!</EmptyStateTitle>
+          <EmptyStateDescription>No pending items.</EmptyStateDescription>
+        </EmptyState>
+      )
+      const results = await axe(container)
+      expect(results).toHaveNoViolations()
+    })
+
+    it("should have no accessibility violations with error variant", async () => {
+      const { container } = render(
+        <EmptyState variant="error">
+          <EmptyStateTitle>Something went wrong</EmptyStateTitle>
+          <EmptyStateDescription>Please try again later.</EmptyStateDescription>
+          <EmptyStateActions>
+            <Button>Retry</Button>
+          </EmptyStateActions>
+        </EmptyState>
+      )
+      const results = await axe(container)
+      expect(results).toHaveNoViolations()
     })
   })
 })

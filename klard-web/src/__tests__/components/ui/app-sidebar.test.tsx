@@ -2,7 +2,8 @@
  * Tests for AppSidebar Component
  *
  * TDD: Write failing tests first, then implement to pass.
- * Tests verify: rendering, navigation items, active state, badges, accessibility
+ * Tests verify: rendering, navigation items, active state, badges, accessibility,
+ * gradient background, glow effects, glassmorphism
  */
 
 import { describe, it, expect, vi } from 'vitest';
@@ -49,14 +50,57 @@ describe('AppSidebar', () => {
       const dashboardLink = screen.getByRole('link', { name: /dashboard/i });
       expect(dashboardLink).toHaveAttribute('href', '/dashboard');
     });
+
+    it('should render navigation items with icons', () => {
+      render(<AppSidebar items={mockItems} />);
+
+      // All links should be rendered
+      const links = screen.getAllByRole('link');
+      expect(links.length).toBeGreaterThan(0);
+      expect(links.length).toBe(4);
+    });
   });
 
-  describe('Active State', () => {
+  describe('Gradient Background', () => {
+    it('should apply gradient background classes to sidebar', () => {
+      render(<AppSidebar items={mockItems} />);
+
+      const sidebar = screen.getByTestId('app-sidebar');
+      // Check for gradient classes (bg-linear-to-br from-primary to-emerald-400)
+      expect(sidebar.className).toMatch(/bg-linear-to-br/);
+      expect(sidebar.className).toMatch(/from-primary/);
+      expect(sidebar.className).toMatch(/to-emerald-400/);
+    });
+
+    it('should apply backdrop blur for glassmorphism effect', () => {
+      render(<AppSidebar items={mockItems} />);
+
+      const sidebar = screen.getByTestId('app-sidebar');
+      expect(sidebar.className).toMatch(/backdrop-blur/);
+    });
+  });
+
+  describe('Active State with Glow', () => {
     it('should apply active styles to active item', () => {
       render(<AppSidebar items={mockItems} activeItem="dashboard" />);
 
-      const dashboardButton = screen.getByRole('link', { name: /dashboard/i });
-      expect(dashboardButton).toHaveAttribute('data-active', 'true');
+      const dashboardLink = screen.getByRole('link', { name: /dashboard/i });
+      expect(dashboardLink).toHaveAttribute('data-active', 'true');
+    });
+
+    it('should apply glow shadow class to active nav item', () => {
+      render(<AppSidebar items={mockItems} activeItem="dashboard" />);
+
+      const dashboardLink = screen.getByRole('link', { name: /dashboard/i });
+      // Check for the glow shadow class
+      expect(dashboardLink.className).toMatch(/shadow-\[0_0_12px_rgba\(21,181,176,0\.4\)\]/);
+    });
+
+    it('should apply bg-white/20 to active nav item', () => {
+      render(<AppSidebar items={mockItems} activeItem="dashboard" />);
+
+      const dashboardLink = screen.getByRole('link', { name: /dashboard/i });
+      expect(dashboardLink.className).toMatch(/bg-white\/20/);
     });
 
     it('should apply aria-current to active item', () => {
@@ -69,9 +113,37 @@ describe('AppSidebar', () => {
     it('should not apply active styles to inactive items', () => {
       render(<AppSidebar items={mockItems} activeItem="dashboard" />);
 
-      const settingsButton = screen.getByRole('link', { name: /settings/i });
-      expect(settingsButton).not.toHaveAttribute('data-active', 'true');
-      expect(settingsButton).not.toHaveAttribute('aria-current', 'page');
+      const settingsLink = screen.getByRole('link', { name: /settings/i });
+      expect(settingsLink).not.toHaveAttribute('data-active', 'true');
+      expect(settingsLink).not.toHaveAttribute('aria-current', 'page');
+      // Should have hover styles instead
+      expect(settingsLink.className).toMatch(/hover:bg-white\/10/);
+    });
+  });
+
+  describe('Glassmorphism', () => {
+    it('should apply glass border to sidebar', () => {
+      render(<AppSidebar items={mockItems} />);
+
+      const sidebar = screen.getByTestId('app-sidebar');
+      expect(sidebar.className).toMatch(/border-white\/10/);
+    });
+
+    it('should apply border to active nav item', () => {
+      render(<AppSidebar items={mockItems} activeItem="dashboard" />);
+
+      const dashboardLink = screen.getByRole('link', { name: /dashboard/i });
+      expect(dashboardLink.className).toMatch(/border-white\/20/);
+    });
+  });
+
+  describe('Icon Styling', () => {
+    it('should apply size classes to icons in nav items', () => {
+      render(<AppSidebar items={mockItems} />);
+
+      const dashboardLink = screen.getByRole('link', { name: /dashboard/i });
+      // Icons should have size-5 class via [&>svg]:size-5
+      expect(dashboardLink.className).toMatch(/\[&>svg\]:size-5/);
     });
   });
 
@@ -82,13 +154,31 @@ describe('AppSidebar', () => {
       expect(screen.getByText('3')).toBeInTheDocument();
     });
 
+    it('should render badge inside the link element', () => {
+      render(<AppSidebar items={mockItems} />);
+
+      const alertsLink = screen.getByRole('link', { name: /alerts/i });
+      const badge = alertsLink.querySelector('[data-slot="badge"]');
+      expect(badge).toBeInTheDocument();
+      expect(badge).toHaveTextContent('3');
+    });
+
     it('should not render badge for items without badge', () => {
       render(<AppSidebar items={mockItems} />);
 
-      // Dashboard should not have a badge
-      const dashboardItem = screen.getByRole('link', { name: /dashboard/i }).closest('[data-slot="menu-item"]');
-      const badge = dashboardItem?.querySelector('[data-slot="badge"]');
+      const dashboardLink = screen.getByRole('link', { name: /dashboard/i });
+      const badge = dashboardLink.querySelector('[data-slot="badge"]');
       expect(badge).toBeNull();
+    });
+
+    it('should support badge variants', () => {
+      const itemsWithBadgeVariant: SidebarNavItem[] = [
+        { id: 'alerts', label: 'Alerts', href: '/alerts', icon: Bell, badge: 5, badgeVariant: 'alert' },
+      ];
+      render(<AppSidebar items={itemsWithBadgeVariant} />);
+
+      const badge = screen.getByText('5');
+      expect(badge.className).toMatch(/bg-red-500/);
     });
   });
 
@@ -128,14 +218,37 @@ describe('AppSidebar', () => {
 
       expect(screen.getByText('Application')).toBeInTheDocument();
     });
+
+    it('should apply uppercase styling to group label', () => {
+      render(<AppSidebar items={mockItems} groupLabel="Navigation" />);
+
+      const label = screen.getByText('Navigation');
+      expect(label.className).toMatch(/uppercase/);
+    });
   });
 
   describe('Custom className', () => {
-    it('should merge custom className', () => {
+    it('should merge custom className with gradient classes', () => {
       render(<AppSidebar items={mockItems} className="custom-class" />);
 
       const sidebar = screen.getByTestId('app-sidebar');
       expect(sidebar).toHaveClass('custom-class');
+      // Should also still have gradient classes
+      expect(sidebar.className).toMatch(/bg-linear-to-br/);
+    });
+  });
+
+  describe('Disabled State', () => {
+    it('should apply disabled styles to disabled items', () => {
+      const itemsWithDisabled: SidebarNavItem[] = [
+        { id: 'dashboard', label: 'Dashboard', href: '/dashboard', icon: Home, disabled: true },
+      ];
+      render(<AppSidebar items={itemsWithDisabled} />);
+
+      const dashboardLink = screen.getByRole('link', { name: /dashboard/i });
+      expect(dashboardLink).toHaveAttribute('aria-disabled', 'true');
+      expect(dashboardLink.className).toMatch(/opacity-50/);
+      expect(dashboardLink.className).toMatch(/pointer-events-none/);
     });
   });
 

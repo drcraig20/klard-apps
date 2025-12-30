@@ -3,7 +3,11 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { showToast } from "@/components/ui/toast";
+import { render, screen } from "@testing-library/react";
+import { showToast, showCelebrationToast } from "@/components/ui/toast";
+
+// Store the custom toast callback for testing
+let customToastCallback: ((t: string) => React.ReactNode) | null = null;
 
 // Mock sonner
 vi.mock("sonner", () => ({
@@ -12,15 +16,26 @@ vi.mock("sonner", () => ({
     error: vi.fn(),
     warning: vi.fn(),
     info: vi.fn(),
+    custom: vi.fn((callback, _options) => {
+      customToastCallback = callback;
+      return "toast-id";
+    }),
+    dismiss: vi.fn(),
   },
   Toaster: ({ children }: { children?: React.ReactNode }) => (
     <div data-testid="toaster">{children}</div>
   ),
 }));
 
+// Mock canvas-confetti
+vi.mock("canvas-confetti", () => ({
+  default: vi.fn(),
+}));
+
 describe("Toast", () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    customToastCallback = null;
   });
 
   describe("showToast function", () => {
@@ -139,6 +154,148 @@ describe("Toast", () => {
       expect(toast.info).not.toHaveBeenCalled();
 
       warnSpy.mockRestore();
+    });
+  });
+
+  describe("showCelebrationToast function", () => {
+    it("calls toast.custom with top-center position", async () => {
+      const { toast } = await import("sonner");
+
+      showCelebrationToast({ amount: 47.98, merchant: "Test" });
+
+      expect(toast.custom).toHaveBeenCalledWith(
+        expect.any(Function),
+        expect.objectContaining({
+          position: "top-center",
+        })
+      );
+    });
+
+    it("renders celebration toast with fixed-center class", async () => {
+      showCelebrationToast({ amount: 47.98, merchant: "Test" });
+
+      // Render the custom toast content
+      if (customToastCallback) {
+        const { container } = render(<>{customToastCallback("test-id")}</>);
+        const toastElement = container.querySelector('[data-testid="celebration-toast"]');
+        expect(toastElement).toHaveClass("fixed-center");
+      }
+    });
+
+    it("triggers confetti on full celebration", async () => {
+      const confetti = (await import("canvas-confetti")).default;
+
+      showCelebrationToast({ amount: 47.98, celebrationLevel: "full" });
+
+      expect(confetti).toHaveBeenCalledWith(
+        expect.objectContaining({
+          particleCount: 150,
+          spread: 360,
+        })
+      );
+    });
+
+    it("triggers confetti with medium settings", async () => {
+      const confetti = (await import("canvas-confetti")).default;
+
+      showCelebrationToast({ amount: 47.98, celebrationLevel: "medium" });
+
+      expect(confetti).toHaveBeenCalledWith(
+        expect.objectContaining({
+          particleCount: 80,
+          spread: 180,
+        })
+      );
+    });
+
+    it("triggers confetti with subtle settings", async () => {
+      const confetti = (await import("canvas-confetti")).default;
+
+      showCelebrationToast({ amount: 47.98, celebrationLevel: "subtle" });
+
+      expect(confetti).toHaveBeenCalledWith(
+        expect.objectContaining({
+          particleCount: 30,
+          spread: 90,
+        })
+      );
+    });
+
+    it("does not trigger confetti when level is none", async () => {
+      const confetti = (await import("canvas-confetti")).default;
+
+      showCelebrationToast({ amount: 47.98, celebrationLevel: "none" });
+
+      expect(confetti).not.toHaveBeenCalled();
+    });
+
+    it("shows amount in toast", async () => {
+      showCelebrationToast({ amount: 47.98 });
+
+      if (customToastCallback) {
+        render(<>{customToastCallback("test-id")}</>);
+        expect(screen.getByText("$47.98")).toBeInTheDocument();
+      }
+    });
+
+    it("shows merchant when provided", async () => {
+      showCelebrationToast({ amount: 47.98, merchant: "Netflix" });
+
+      if (customToastCallback) {
+        render(<>{customToastCallback("test-id")}</>);
+        expect(screen.getByText("Netflix")).toBeInTheDocument();
+      }
+    });
+
+    it("does not show merchant when not provided", async () => {
+      showCelebrationToast({ amount: 47.98 });
+
+      if (customToastCallback) {
+        render(<>{customToastCallback("test-id")}</>);
+        expect(screen.queryByTestId("celebration-merchant")).not.toBeInTheDocument();
+      }
+    });
+
+    it("formats amount correctly with two decimal places", async () => {
+      showCelebrationToast({ amount: 100 });
+
+      if (customToastCallback) {
+        render(<>{customToastCallback("test-id")}</>);
+        expect(screen.getByText("$100.00")).toBeInTheDocument();
+      }
+    });
+
+    it("warns and skips toast when amount is invalid", async () => {
+      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
+      const { toast } = await import("sonner");
+
+      showCelebrationToast({ amount: NaN });
+
+      expect(warnSpy).toHaveBeenCalledWith(expect.stringContaining('[Toast] amount must be a valid number'));
+      expect(toast.custom).not.toHaveBeenCalled();
+
+      warnSpy.mockRestore();
+    });
+
+    it("defaults celebration level to full", async () => {
+      const confetti = (await import("canvas-confetti")).default;
+
+      showCelebrationToast({ amount: 47.98 });
+
+      expect(confetti).toHaveBeenCalledWith(
+        expect.objectContaining({
+          particleCount: 150,
+        })
+      );
+    });
+
+    it("has role alert for accessibility", async () => {
+      showCelebrationToast({ amount: 47.98, merchant: "Test" });
+
+      if (customToastCallback) {
+        render(<>{customToastCallback("test-id")}</>);
+        expect(screen.getByRole("alert")).toBeInTheDocument();
+      }
     });
   });
 });
