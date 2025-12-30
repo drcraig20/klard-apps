@@ -73,15 +73,11 @@ export const cardTypeLabelVariants = cva("font-semibold text-sm", {
 })
 
 export const cardTypeDescriptionVariants = cva(
-  "text-xs text-muted-foreground leading-relaxed",
-  {}
+  "text-xs text-muted-foreground leading-relaxed"
 )
 
-export const recommendedBadgeVariants = cva(
-  [
-    "absolute -top-2 -right-2 px-2 py-0.5 rounded-full text-xs font-medium",
-    "bg-primary text-primary-foreground",
-    "shadow-sm",
-  ],
-  {}
-)
+export const recommendedBadgeVariants = cva([
+  "absolute -top-2 -right-2 px-2 py-0.5 rounded-full text-xs font-medium",
+  "bg-primary text-primary-foreground",
+  "shadow-sm",
+])

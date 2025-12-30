@@ -263,9 +263,7 @@ describe('BlockCelebration', () => {
         </BlockCelebration>
       );
       // EUR formatting varies by locale, check the amount element specifically
-      const amount = screen.getByTestId
-        ? screen.getByText(/99\.99/, { selector: '[data-slot="block-celebration-amount"]' })
-        : screen.getAllByText(/99\.99/)[1]; // Fallback to second match (visible one)
+      const amount = screen.getByText(/99\.99/, { selector: '[data-slot="block-celebration-amount"]' });
       expect(amount).toBeInTheDocument();
     });
 
