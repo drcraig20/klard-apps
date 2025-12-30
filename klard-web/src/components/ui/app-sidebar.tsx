@@ -14,13 +14,17 @@ import {
   SidebarHeader,
   SidebarInset,
   SidebarMenu,
-  SidebarMenuBadge,
-  SidebarMenuButton,
   SidebarMenuItem,
   SidebarMenuSkeleton,
   SidebarProvider,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
+import {
+  sidebarContainerVariants,
+  navItemVariants,
+  navBadgeVariants,
+  groupLabelVariants,
+} from './app-sidebar.styles';
 
 export interface SidebarNavItem {
   id: string;
@@ -28,6 +32,7 @@ export interface SidebarNavItem {
   href: string;
   icon: LucideIcon;
   badge?: number;
+  badgeVariant?: 'default' | 'alert' | 'success';
   disabled?: boolean;
 }
 
@@ -45,6 +50,13 @@ export interface AppSidebarSkeletonProps {
   count?: number;
 }
 
+/**
+ * AppSidebar Component with Bold Gradient and Glow Effects
+ *
+ * SOLID Compliance:
+ * - SRP: Sidebar renders navigation only
+ * - OCP: Extensible via nav items config and CVA variants
+ */
 function AppSidebar({
   items,
   activeItem,
@@ -56,12 +68,18 @@ function AppSidebar({
 }: Readonly<AppSidebarProps>) {
   return (
     <SidebarProvider>
-      <Sidebar data-testid="app-sidebar" className={className} collapsible={collapsible}>
+      <Sidebar
+        data-testid="app-sidebar"
+        className={cn(sidebarContainerVariants(), className)}
+        collapsible={collapsible}
+      >
         {header && <SidebarHeader>{header}</SidebarHeader>}
 
         <SidebarContent>
           <SidebarGroup>
-            <SidebarGroupLabel>{groupLabel}</SidebarGroupLabel>
+            <SidebarGroupLabel className={groupLabelVariants()}>
+              {groupLabel}
+            </SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 {items.map((item) => {
@@ -70,22 +88,30 @@ function AppSidebar({
 
                   return (
                     <SidebarMenuItem key={item.id} data-slot="menu-item">
-                      <SidebarMenuButton
-                        asChild
-                        isActive={isActive}
+                      <Link
+                        href={item.href}
+                        className={navItemVariants({
+                          active: isActive,
+                          disabled: item.disabled,
+                        })}
+                        data-active={isActive}
                         aria-current={isActive ? 'page' : undefined}
-                        disabled={item.disabled}
+                        aria-disabled={item.disabled}
                       >
-                        <Link href={item.href}>
-                          <Icon />
-                          <span>{item.label}</span>
-                        </Link>
-                      </SidebarMenuButton>
-                      {item.badge !== undefined && item.badge > 0 && (
-                        <SidebarMenuBadge data-slot="badge">
-                          {item.badge}
-                        </SidebarMenuBadge>
-                      )}
+                        <Icon />
+                        <span>{item.label}</span>
+                        {item.badge !== undefined && item.badge > 0 && (
+                          <span
+                            data-slot="badge"
+                            className={cn(
+                              navBadgeVariants({ variant: item.badgeVariant }),
+                              'ml-auto'
+                            )}
+                          >
+                            {item.badge}
+                          </span>
+                        )}
+                      </Link>
                     </SidebarMenuItem>
                   );
                 })}

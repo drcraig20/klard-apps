@@ -71,6 +71,7 @@ export {
   EmptyStateDescription,
   EmptyStateActions,
   type EmptyStateProps,
+  type EmptyStateVariant,
 } from './empty-state';
 export { Skeleton, type SkeletonProps, type SkeletonVariant } from './skeleton';
 export {
@@ -113,3 +114,44 @@ export {
 export { PriceDisplay, priceDisplayVariants, type PriceDisplayProps } from './price-display';
 export { StatCard, statCardVariants, type StatCardProps } from './stat-card';
 export { FormLabel, type FormLabelProps } from './form-label';
+export {
+  HealthIndicator,
+  healthIndicatorVariants,
+  healthIndicatorDotVariants,
+  type HealthIndicatorProps,
+  type HealthStatus,
+  type HealthIndicatorVariants,
+  type HealthIndicatorDotVariants,
+} from './health-indicator';
+export { ConfirmButton, type ConfirmButtonProps } from './confirm-button';
+export {
+  CardTypeSelector,
+  cardTypeSelectorVariants,
+  cardTypeOptionVariants,
+  type CardTypeSelectorProps,
+  type CardType as SelectorCardType,
+  type CardContext,
+} from './card-type-selector';
+export {
+  KYCActivationPrompt,
+  kycActivationPromptVariants,
+  type KYCActivationPromptProps,
+  type KYCActivationPromptVariants,
+} from './kyc-activation-prompt';
+export {
+  BlockCelebration,
+  blockCelebrationVariants,
+  amountVariants,
+  merchantVariants,
+  shareZoneVariants,
+  shareButtonVariants,
+  type BlockCelebrationProps,
+  type AmountProps,
+  type MerchantProps,
+  type ShareZoneProps,
+  type ShareButtonProps,
+  type CelebrationLevel,
+  type BlockCelebrationVariants,
+  type AmountVariants,
+  type MerchantVariants,
+} from './block-celebration';

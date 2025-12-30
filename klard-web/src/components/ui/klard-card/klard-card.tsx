@@ -3,7 +3,7 @@ import { type VariantProps } from 'class-variance-authority';
 import { cn } from '@/lib/utils';
 import { klardCardVariants } from './klard-card.styles';
 
-export type KlardCardVariant = 'default' | 'elevated' | 'ghost' | 'interactive';
+export type KlardCardVariant = 'default' | 'elevated' | 'ghost' | 'glass' | 'interactive';
 export type KlardCardPadding = 'none' | 'sm' | 'md' | 'lg';
 
 export interface KlardCardProps

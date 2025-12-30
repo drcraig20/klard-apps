@@ -1,23 +1,51 @@
+'use client';
+
 import * as React from "react"
 import { type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
 import { emptyStateVariants } from "./empty-state.styles"
 
+/**
+ * EmptyState Component
+ *
+ * Displays an empty state with 3 distinct variant tones:
+ * - first-time: Educational/onboarding tone for first-time users
+ * - cleared: Celebratory tone when all items are completed
+ * - error: Recovery-focused tone for error states
+ *
+ * SOLID Compliance:
+ * - SRP: Only renders empty state container UI
+ * - OCP: Extensible via variant prop without modification
+ * - DIP: Depends on design token abstractions via styles
+ */
+
+export type EmptyStateVariant = 'first-time' | 'cleared' | 'error' | 'default';
+
 export interface EmptyStateProps
   extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof emptyStateVariants> {}
+    VariantProps<typeof emptyStateVariants> {
+  /** The visual tone of the empty state */
+  variant?: EmptyStateVariant;
+}
 
 function EmptyState({
   className,
   size,
+  variant = 'default',
   children,
   ...props
 }: Readonly<EmptyStateProps>) {
+  // Generate testID based on variant for testing
+  const testId = variant && variant !== 'default'
+    ? `empty-state-${variant}`
+    : undefined;
+
   return (
     <div
       data-slot="empty-state"
-      className={cn(emptyStateVariants({ size }), className)}
+      data-testid={testId}
+      className={cn(emptyStateVariants({ size, variant }), className)}
       aria-live="polite"
       {...props}
     >
