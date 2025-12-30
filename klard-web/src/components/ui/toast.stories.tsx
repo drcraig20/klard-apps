@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { Toaster } from "sonner";
 import { Button } from "./button";
-import { showToast, type ToastType } from "./toast";
+import { showToast, showCelebrationToast, type ToastType, type CelebrationLevel } from "./toast";
 
 /**
  * Toast notification component built on Sonner.
@@ -196,5 +196,165 @@ export const Playground: Story = {
         </div>
       </div>
     );
+  },
+};
+
+// Helper component to trigger celebration toasts
+function CelebrationTrigger({
+  amount,
+  merchant,
+  celebrationLevel = "full",
+  label,
+}: {
+  amount: number;
+  merchant?: string;
+  celebrationLevel?: CelebrationLevel;
+  label: string;
+}) {
+  const handleClick = () => {
+    showCelebrationToast({
+      amount,
+      merchant,
+      celebrationLevel,
+    });
+  };
+
+  return (
+    <Button variant="default" onClick={handleClick}>
+      {label}
+    </Button>
+  );
+}
+
+// Celebration toast with full confetti burst
+export const CelebrationFull: Story = {
+  render: () => (
+    <CelebrationTrigger
+      amount={49.99}
+      celebrationLevel="full"
+      label="Show Full Celebration"
+    />
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: "Full celebration with maximum confetti burst from center and sides. Best for significant savings.",
+      },
+    },
+  },
+};
+
+// Celebration toast with medium confetti
+export const CelebrationMedium: Story = {
+  render: () => (
+    <CelebrationTrigger
+      amount={24.99}
+      celebrationLevel="medium"
+      label="Show Medium Celebration"
+    />
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: "Medium celebration with moderate confetti. Good for average savings amounts.",
+      },
+    },
+  },
+};
+
+// Celebration toast with subtle confetti
+export const CelebrationSubtle: Story = {
+  render: () => (
+    <CelebrationTrigger
+      amount={9.99}
+      celebrationLevel="subtle"
+      label="Show Subtle Celebration"
+    />
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: "Subtle celebration with minimal confetti. Appropriate for smaller savings.",
+      },
+    },
+  },
+};
+
+// Celebration toast without confetti
+export const CelebrationNone: Story = {
+  render: () => (
+    <CelebrationTrigger
+      amount={4.99}
+      celebrationLevel="none"
+      label="Show No Celebration"
+    />
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: "Celebration toast without confetti animation. Shows the savings notification only.",
+      },
+    },
+  },
+};
+
+// Celebration toast with merchant name
+export const CelebrationWithMerchant: Story = {
+  render: () => (
+    <CelebrationTrigger
+      amount={14.99}
+      merchant="Netflix"
+      celebrationLevel="full"
+      label="Show Celebration with Merchant"
+    />
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: "Celebration toast displaying the merchant name that was blocked.",
+      },
+    },
+  },
+};
+
+// Celebration playground with all levels
+export const CelebrationPlayground: Story = {
+  render: () => {
+    const triggerCelebration = (level: CelebrationLevel, amount: number) => {
+      showCelebrationToast({
+        amount,
+        merchant: "Example Subscription",
+        celebrationLevel: level,
+      });
+    };
+
+    return (
+      <div className="space-y-4">
+        <p className="text-sm text-muted-foreground">
+          Click any button to trigger a celebration toast with different confetti intensities.
+        </p>
+        <div className="flex flex-wrap gap-4">
+          <Button variant="default" onClick={() => triggerCelebration("full", 99.99)}>
+            Full ($99.99)
+          </Button>
+          <Button variant="default" onClick={() => triggerCelebration("medium", 49.99)}>
+            Medium ($49.99)
+          </Button>
+          <Button variant="outline" onClick={() => triggerCelebration("subtle", 19.99)}>
+            Subtle ($19.99)
+          </Button>
+          <Button variant="secondary" onClick={() => triggerCelebration("none", 9.99)}>
+            None ($9.99)
+          </Button>
+        </div>
+      </div>
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "Interactive playground to compare all celebration levels with different amounts.",
+      },
+    },
   },
 };

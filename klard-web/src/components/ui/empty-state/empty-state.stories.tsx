@@ -8,6 +8,9 @@ import {
   ShoppingBag,
   Bell,
   FolderOpen,
+  Sparkles,
+  CheckCircle2,
+  AlertTriangle,
 } from "lucide-react";
 import { Button } from "../button";
 import {
@@ -35,6 +38,11 @@ const meta = {
       control: "select",
       options: ["sm", "md", "lg"],
       description: "Empty state size affecting spacing",
+    },
+    variant: {
+      control: "select",
+      options: ["default", "first-time", "cleared", "error"],
+      description: "Visual tone variant affecting glow and styling",
     },
   },
 } satisfies Meta<typeof EmptyState>;
@@ -299,4 +307,169 @@ export const InCardContainer: Story = {
       </EmptyState>
     </div>
   ),
+};
+
+// First-time variant - Educational/onboarding tone
+export const FirstTime: Story = {
+  render: () => (
+    <EmptyState variant="first-time">
+      <EmptyStateMedia>
+        <div className="p-4 rounded-full bg-primary/10">
+          <Sparkles className="h-10 w-10 text-primary" />
+        </div>
+      </EmptyStateMedia>
+      <EmptyStateTitle>Welcome to Klard!</EmptyStateTitle>
+      <EmptyStateDescription>
+        Create your first virtual card to start protecting your subscriptions.
+        Virtual cards keep your real payment details safe while giving you full
+        control over recurring charges.
+      </EmptyStateDescription>
+      <EmptyStateActions>
+        <Button variant="klard">Create Your First Card</Button>
+        <Button variant="ghost">Learn How It Works</Button>
+      </EmptyStateActions>
+    </EmptyState>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Educational/onboarding variant with primary glow effect. Use for first-time user experiences when introducing new features or guiding users through initial setup.",
+      },
+    },
+  },
+};
+
+// Cleared variant - Celebratory "all done" tone
+export const Cleared: Story = {
+  render: () => (
+    <EmptyState variant="cleared">
+      <EmptyStateMedia>
+        <div className="p-4 rounded-full bg-success/10">
+          <CheckCircle2 className="h-10 w-10 text-success" />
+        </div>
+      </EmptyStateMedia>
+      <EmptyStateTitle>All caught up!</EmptyStateTitle>
+      <EmptyStateDescription>
+        You have reviewed all your pending subscriptions. Great job staying on
+        top of your recurring payments!
+      </EmptyStateDescription>
+    </EmptyState>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Celebratory variant with success glow effect. Use when users have completed all tasks or cleared their inbox/queue. Reinforces positive behavior.",
+      },
+    },
+  },
+};
+
+// Error variant - Recovery-focused tone
+export const ErrorVariant: Story = {
+  render: () => (
+    <EmptyState variant="error">
+      <EmptyStateMedia>
+        <div className="p-4 rounded-full bg-destructive/10">
+          <AlertTriangle className="h-10 w-10 text-destructive" />
+        </div>
+      </EmptyStateMedia>
+      <EmptyStateTitle>Unable to load subscriptions</EmptyStateTitle>
+      <EmptyStateDescription>
+        We encountered a problem loading your data. This might be a temporary
+        issue. Please try again or contact support if the problem persists.
+      </EmptyStateDescription>
+      <EmptyStateActions>
+        <Button variant="destructive">Try Again</Button>
+        <Button variant="outline">Contact Support</Button>
+      </EmptyStateActions>
+    </EmptyState>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Recovery-focused variant with destructive glow effect. Use for error states that require user action to resolve. Provides clear recovery paths.",
+      },
+    },
+  },
+};
+
+// Variant comparison - All 4 variants side by side
+export const VariantComparison: Story = {
+  render: () => (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div className="border rounded-lg">
+        <p className="text-xs text-muted-foreground p-2 bg-muted">
+          variant: default
+        </p>
+        <EmptyState variant="default">
+          <EmptyStateMedia>
+            <Inbox className="h-10 w-10 text-muted-foreground" />
+          </EmptyStateMedia>
+          <EmptyStateTitle>No items</EmptyStateTitle>
+          <EmptyStateDescription>
+            Standard neutral empty state for general use.
+          </EmptyStateDescription>
+        </EmptyState>
+      </div>
+      <div className="border rounded-lg">
+        <p className="text-xs text-muted-foreground p-2 bg-muted">
+          variant: first-time
+        </p>
+        <EmptyState variant="first-time">
+          <EmptyStateMedia>
+            <div className="p-3 rounded-full bg-primary/10">
+              <Sparkles className="h-8 w-8 text-primary" />
+            </div>
+          </EmptyStateMedia>
+          <EmptyStateTitle>Welcome!</EmptyStateTitle>
+          <EmptyStateDescription>
+            Educational tone with primary glow for onboarding.
+          </EmptyStateDescription>
+        </EmptyState>
+      </div>
+      <div className="border rounded-lg">
+        <p className="text-xs text-muted-foreground p-2 bg-muted">
+          variant: cleared
+        </p>
+        <EmptyState variant="cleared">
+          <EmptyStateMedia>
+            <div className="p-3 rounded-full bg-success/10">
+              <CheckCircle2 className="h-8 w-8 text-success" />
+            </div>
+          </EmptyStateMedia>
+          <EmptyStateTitle>All done!</EmptyStateTitle>
+          <EmptyStateDescription>
+            Celebratory tone with success glow for completion.
+          </EmptyStateDescription>
+        </EmptyState>
+      </div>
+      <div className="border rounded-lg">
+        <p className="text-xs text-muted-foreground p-2 bg-muted">
+          variant: error
+        </p>
+        <EmptyState variant="error">
+          <EmptyStateMedia>
+            <div className="p-3 rounded-full bg-destructive/10">
+              <AlertTriangle className="h-8 w-8 text-destructive" />
+            </div>
+          </EmptyStateMedia>
+          <EmptyStateTitle>Error occurred</EmptyStateTitle>
+          <EmptyStateDescription>
+            Recovery-focused tone with destructive glow.
+          </EmptyStateDescription>
+        </EmptyState>
+      </div>
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Side-by-side comparison of all 4 variant types: default (neutral), first-time (onboarding), cleared (celebratory), and error (recovery).",
+      },
+    },
+  },
 };
