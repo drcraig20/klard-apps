@@ -1,4 +1,4 @@
-import { sva } from '@/styles/sva';
+import { sva, type ThemeColors } from '@/styles/sva';
 import { StyleSheet } from 'react-native';
 
 export type AlertType = 'renewal' | 'price-increase' | 'price-decrease' | 'blocked' | 'savings' | 'system';
@@ -156,27 +156,17 @@ export const ctaTextStyles = sva({
   }),
 });
 
-// Helper to get icon color by type
-export function getIconColor(type: AlertType, isDark: boolean): string {
-  const colors = {
-    light: {
-      renewal: '#0D7C7A',
-      'price-increase': '#D97706',
-      'price-decrease': '#059669',
-      blocked: '#DC2626',
-      savings: '#059669',
-      system: '#475569',
-    },
-    dark: {
-      renewal: '#15B5B0',
-      'price-increase': '#F59E0B',
-      'price-decrease': '#10B981',
-      blocked: '#EF4444',
-      savings: '#10B981',
-      system: '#94A3B8',
-    },
+// Helper to get icon color by type from theme
+export function getIconColor(type: AlertType, colors: ThemeColors): string {
+  const colorMap = {
+    renewal: colors.primary,
+    'price-increase': colors.warning,
+    'price-decrease': colors.success,
+    blocked: colors.error,
+    savings: colors.success,
+    system: colors.textSecondary,
   };
-  return isDark ? colors.dark[type] : colors.light[type];
+  return colorMap[type];
 }
 
 // Static layout styles (not themed)

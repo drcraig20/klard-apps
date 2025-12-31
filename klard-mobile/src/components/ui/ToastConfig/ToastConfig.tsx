@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, Pressable, useColorScheme } from "react-native";
 import { BaseToastProps } from "react-native-toast-message";
 import { Ionicons } from "@expo/vector-icons";
+import { useThemeColors } from "@/hooks/useThemeColors";
 import {
   containerStyles,
   titleStyles,
@@ -26,8 +27,7 @@ interface CustomToastProps extends BaseToastProps {
  */
 function createToastComponent(type: 'success' | 'error' | 'warning' | 'info') {
   return function CustomToast({ text1, text2, props }: Readonly<CustomToastProps>) {
-    const colorScheme = useColorScheme();
-    const isDark = colorScheme === 'dark';
+    const { isDark, ...colors } = useThemeColors();
     const iconName = icons[type];
 
     // Build accessibility label
@@ -50,7 +50,7 @@ function createToastComponent(type: 'success' | 'error' | 'warning' | 'info') {
         <Ionicons
           name={iconName}
           size={24}
-          color={getIconColor(type, isDark)}
+          color={getIconColor(type, colors)}
           style={layoutStyles.icon}
         />
         <View style={layoutStyles.content}>

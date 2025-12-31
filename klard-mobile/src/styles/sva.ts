@@ -2,6 +2,9 @@
 import { ViewStyle, TextStyle, ImageStyle } from 'react-native';
 import { lightTheme, darkTheme, type ThemeColors } from './colors';
 
+// Re-export ThemeColors for use in style files
+export type { ThemeColors };
+
 type Style = ViewStyle | TextStyle | ImageStyle;
 type StyleDef<T extends Style = Style> = T | ((colors: ThemeColors) => T);
 

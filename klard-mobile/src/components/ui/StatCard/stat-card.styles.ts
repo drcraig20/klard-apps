@@ -1,4 +1,4 @@
-import { sva } from '@/styles/sva';
+import { sva, type ThemeColors } from '@/styles/sva';
 import { StyleSheet } from 'react-native';
 
 export const containerStyles = sva({
@@ -84,13 +84,14 @@ export const iconContainerStyles = sva({
   }),
 });
 
-// Helper to get trend color
-export function getTrendColor(direction: 'up' | 'down' | 'neutral', isDark: boolean): string {
-  const colors = {
-    light: { up: '#059669', down: '#DC2626', neutral: '#64748B' },
-    dark: { up: '#10B981', down: '#EF4444', neutral: '#CBD5E1' },
+// Helper to get trend color from theme
+export function getTrendColor(direction: 'up' | 'down' | 'neutral', colors: ThemeColors): string {
+  const colorMap = {
+    up: colors.success,
+    down: colors.error,
+    neutral: colors.textTertiary,
   };
-  return isDark ? colors.dark[direction] : colors.light[direction];
+  return colorMap[direction];
 }
 
 // Trend icon names

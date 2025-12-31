@@ -1,4 +1,4 @@
-import { sva } from '@/styles/sva';
+import { sva, type ThemeColors } from '@/styles/sva';
 import { StyleSheet } from 'react-native';
 
 export const amountStyles = sva({
@@ -56,13 +56,13 @@ export const changeAmountStyles = sva({
   },
 });
 
-// Helper to get change color
-export function getChangeColor(direction: 'increase' | 'decrease', isDark: boolean): string {
-  const colors = {
-    light: { increase: '#DC2626', decrease: '#059669' },
-    dark: { increase: '#EF4444', decrease: '#10B981' },
+// Helper to get change color from theme
+export function getChangeColor(direction: 'increase' | 'decrease', colors: ThemeColors): string {
+  const colorMap = {
+    increase: colors.error,
+    decrease: colors.success,
   };
-  return isDark ? colors.dark[direction] : colors.light[direction];
+  return colorMap[direction];
 }
 
 // Icon sizes per display size

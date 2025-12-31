@@ -1,4 +1,4 @@
-import { sva } from '@/styles/sva';
+import { sva, type ThemeColors } from '@/styles/sva';
 import { StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -104,13 +104,15 @@ export const actionButtonStyles = sva({
   },
 });
 
-// Helper to get icon color
-export function getIconColor(type: 'success' | 'error' | 'warning' | 'info', isDark: boolean): string {
-  const colors = {
-    light: { success: '#059669', error: '#DC2626', warning: '#D97706', info: '#0D7C7A' },
-    dark: { success: '#10B981', error: '#EF4444', warning: '#F59E0B', info: '#15B5B0' },
+// Helper to get icon color from theme
+export function getIconColor(type: 'success' | 'error' | 'warning' | 'info', colors: ThemeColors): string {
+  const colorMap = {
+    success: colors.success,
+    error: colors.error,
+    warning: colors.warning,
+    info: colors.primary,
   };
-  return isDark ? colors.dark[type] : colors.light[type];
+  return colorMap[type];
 }
 
 // Icon names

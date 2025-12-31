@@ -3,12 +3,12 @@ import {
   View,
   Text,
   Pressable,
-  useColorScheme,
   type ViewStyle,
   type StyleProp,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
+import { useThemeColors } from '@/hooks/useThemeColors';
 import {
   containerStyles,
   labelStyles,
@@ -56,7 +56,7 @@ export function StatCard({
   style,
   testID,
 }: Readonly<StatCardProps>) {
-  const isDark = useColorScheme() === 'dark';
+  const { isDark, ...colors } = useThemeColors();
   const isClickable = !!onClick;
   const sizeStyles = sizeConfig[size];
 
@@ -99,7 +99,7 @@ export function StatCard({
             <Ionicons
               name={trendIconNames[trend.direction]}
               size={sizeStyles.iconSize}
-              color={getTrendColor(trend.direction, isDark)}
+              color={getTrendColor(trend.direction, colors)}
             />
             <Text
               style={[

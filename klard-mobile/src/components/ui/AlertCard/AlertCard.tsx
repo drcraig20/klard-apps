@@ -3,7 +3,6 @@ import {
   View,
   Text,
   Pressable,
-  useColorScheme,
   type StyleProp,
   type ViewStyle,
 } from 'react-native';
@@ -87,12 +86,11 @@ export function AlertCard({
   style,
   testID,
 }: Readonly<AlertCardProps>) {
-  const isDark = useColorScheme() === 'dark';
-  const colors = useThemeColors();
+  const { isDark, ...colors } = useThemeColors();
   const { icon } = typeConfig[alert.type];
   const timeText = formatRelative(alert.timestamp);
   const iconSize = size === 'sm' ? 16 : 20;
-  const iconColor = getIconColor(alert.type, isDark);
+  const iconColor = getIconColor(alert.type, colors);
   const dismissIconColor = colors.mutedForeground;
 
   const handlePress = async () => {

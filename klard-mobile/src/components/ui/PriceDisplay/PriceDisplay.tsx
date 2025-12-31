@@ -2,11 +2,11 @@ import React, { useMemo } from 'react';
 import {
   View,
   Text,
-  useColorScheme,
   type ViewStyle,
   type StyleProp,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useThemeColors } from '@/hooks/useThemeColors';
 import {
   amountStyles,
   cycleLabelStyles,
@@ -39,7 +39,7 @@ export function PriceDisplay({
   style,
   testID,
 }: Readonly<PriceDisplayProps>) {
-  const isDark = useColorScheme() === 'dark';
+  const { isDark, ...colors } = useThemeColors();
 
   const formatter = useMemo(
     () =>
@@ -53,7 +53,7 @@ export function PriceDisplay({
   const formattedAmount = formatter.format(amount);
   const cycleLabel = billingCycle ? cycleLabels[billingCycle] : '';
   const changeAmount = showChange ? Math.abs(amount - showChange.from) : 0;
-  const changeColor = showChange ? getChangeColor(showChange.direction, isDark) : undefined;
+  const changeColor = showChange ? getChangeColor(showChange.direction, colors) : undefined;
 
   return (
     <View
