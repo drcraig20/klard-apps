@@ -1,14 +1,20 @@
 import { StyleSheet } from 'react-native';
+import { type ThemeColors } from '@/styles';
 
-// Klard design system colors
-export const colors = {
-  primary: '#0D7C7A',
-  trackOff: '#E2E8F0',
-  trackOn: '#0D7C7A',
-  thumbColor: '#FFFFFF',
-  text: '#0F172A',
-  textSecondary: '#475569',
-};
+/**
+ * Returns theme-aware colors for Switch component.
+ * Call this from the component with useThemeColors() result.
+ */
+export const getSwitchColors = (themeColors: ThemeColors) => ({
+  primary: themeColors.primary,
+  trackOff: themeColors.muted,
+  trackOn: themeColors.primary,
+  thumbColor: themeColors.background,
+  text: themeColors.foreground,
+  textSecondary: themeColors.textSecondary,
+});
+
+export type SwitchColors = ReturnType<typeof getSwitchColors>;
 
 export const styles = StyleSheet.create({
   container: {
@@ -24,14 +30,12 @@ export const styles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: '500',
-    color: colors.text,
   },
   labelDisabled: {
     opacity: 0.5,
   },
   description: {
     fontSize: 14,
-    color: colors.textSecondary,
   },
   descriptionDisabled: {
     opacity: 0.5,

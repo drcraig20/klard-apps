@@ -1,20 +1,27 @@
 import { StyleSheet } from 'react-native';
+import { type ThemeColors } from '@/styles';
 
 // ============================================================================
-// Color Constants
+// Theme-Aware Colors
 // ============================================================================
 
-export const inputColors = {
-  primary: '#0D7C7A',
-  error: '#DC2626',
-  border: '#CBD5E1',
-  placeholder: '#94A3B8',
-  icon: '#64748B',
-  text: '#0F172A',
-  textSecondary: '#475569',
-  background: '#FFFFFF',
-  backgroundDisabled: '#F1F5F9',
-};
+/**
+ * Returns theme-aware colors for PasswordInput component.
+ * Call this from the component with useThemeColors() result.
+ */
+export const getPasswordInputColors = (themeColors: ThemeColors) => ({
+  primary: themeColors.primary,
+  error: themeColors.error,
+  border: themeColors.border,
+  placeholder: themeColors.textDisabled,
+  icon: themeColors.textTertiary,
+  text: themeColors.foreground,
+  textSecondary: themeColors.textSecondary,
+  background: themeColors.background,
+  backgroundDisabled: themeColors.disabledBackground,
+});
+
+export type PasswordInputColors = ReturnType<typeof getPasswordInputColors>;
 
 // ============================================================================
 // Input Styles
@@ -27,24 +34,19 @@ export const inputStyles = StyleSheet.create({
   label: {
     fontSize: 14,
     fontWeight: '500',
-    color: inputColors.textSecondary,
     marginBottom: 8,
   },
   labelDisabled: {
     opacity: 0.5,
   },
-  required: {
-    color: inputColors.error,
-  },
+  required: {},
   inputContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: inputColors.background,
     borderRadius: 12,
     height: 48,
   },
   inputContainerDisabled: {
-    backgroundColor: inputColors.backgroundDisabled,
     opacity: 0.7,
   },
   input: {
@@ -52,14 +54,11 @@ export const inputStyles = StyleSheet.create({
     height: '100%',
     paddingHorizontal: 16,
     fontSize: 16,
-    color: inputColors.text,
   },
   inputWithRightIcon: {
     paddingRight: 48,
   },
-  inputDisabled: {
-    color: inputColors.icon,
-  },
+  inputDisabled: {},
   toggleButton: {
     position: 'absolute',
     right: 0,
@@ -70,12 +69,10 @@ export const inputStyles = StyleSheet.create({
   },
   error: {
     fontSize: 14,
-    color: inputColors.error,
     marginTop: 8,
   },
   helperText: {
     fontSize: 14,
-    color: inputColors.textSecondary,
     marginTop: 8,
   },
 });

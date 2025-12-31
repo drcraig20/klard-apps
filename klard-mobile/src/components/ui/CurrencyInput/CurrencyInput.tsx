@@ -9,7 +9,8 @@ import {
   type ViewStyle,
 } from 'react-native';
 import { FormField } from '@/components/ui/FormField';
-import { styles, colors } from './currency-input.styles';
+import { useThemeColors } from '@/hooks';
+import { styles, getCurrencyInputColors } from './currency-input.styles';
 import {
   getCurrencySymbol,
   parseCurrencyValue,
@@ -61,6 +62,8 @@ export function CurrencyInput({
   accessibilityLabel,
   ...props
 }: Readonly<CurrencyInputProps>) {
+  const themeColors = useThemeColors();
+  const colors = getCurrencyInputColors(themeColors);
   const [isFocused, setIsFocused] = useState(false);
   const isDisabled = disabled || !editable;
   const symbol = getCurrencySymbol(currency);
@@ -105,13 +108,21 @@ export function CurrencyInput({
         style={[
           styles.inputContainer,
           {
+            backgroundColor: colors.background,
             borderColor: getBorderColor(),
             borderWidth: isFocused ? 2 : 1,
           },
           isDisabled && styles.inputContainerDisabled,
+          isDisabled && { backgroundColor: colors.backgroundDisabled },
         ]}
       >
-        <Text style={[styles.symbol, isDisabled && styles.symbolDisabled]}>
+        <Text
+          style={[
+            styles.symbol,
+            { color: colors.textSecondary },
+            isDisabled && { color: colors.placeholder },
+          ]}
+        >
           {symbol}
         </Text>
         <TextInput
@@ -122,7 +133,11 @@ export function CurrencyInput({
           editable={!isDisabled}
           keyboardType="decimal-pad"
           placeholderTextColor={colors.placeholder}
-          style={[styles.input, isDisabled && styles.inputDisabled]}
+          style={[
+            styles.input,
+            { color: colors.text },
+            isDisabled && { color: colors.placeholder },
+          ]}
           accessibilityLabel={accessibilityLabel ?? label}
           accessibilityState={accessibilityState}
           testID="currency-input"

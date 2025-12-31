@@ -11,7 +11,8 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import { calculatePasswordStrength, type PasswordStrength } from '@klard-apps/commons';
 import { useThemeColors } from '@/hooks';
-import { inputStyles, strengthStyles, reqStyles, inputColors } from './password-input.styles';
+import { type ThemeColors } from '@/styles';
+import { inputStyles, strengthStyles, reqStyles, getPasswordInputColors } from './password-input.styles';
 import { LEVEL_WIDTHS, LEVEL_LABELS, REQUIREMENT_LABELS } from './password-input.constants';
 
 // ============================================================================
@@ -49,7 +50,7 @@ export interface PasswordInputProps extends Omit<TextInputProps, 'secureTextEntr
 
 interface PasswordStrengthBarProps {
   password: string;
-  colors: ReturnType<typeof useThemeColors>;
+  colors: ThemeColors & { isDark: boolean };
 }
 
 function PasswordStrengthBar({ password, colors }: Readonly<PasswordStrengthBarProps>) {
@@ -93,7 +94,7 @@ function PasswordStrengthBar({ password, colors }: Readonly<PasswordStrengthBarP
 
 interface PasswordRequirementsListProps {
   requirements: PasswordRequirementsState;
-  colors: ReturnType<typeof useThemeColors>;
+  colors: ThemeColors & { isDark: boolean };
 }
 
 function PasswordRequirementsList({ requirements, colors }: Readonly<PasswordRequirementsListProps>) {
@@ -140,7 +141,8 @@ export function PasswordInput({
   testID = 'password-input',
   ...props
 }: Readonly<PasswordInputProps>) {
-  const colors = useThemeColors();
+  const themeColors = useThemeColors();
+  const inputColors = getPasswordInputColors(themeColors);
   const [showPassword, setShowPassword] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
 
@@ -156,9 +158,9 @@ export function PasswordInput({
     <View style={[inputStyles.container, containerStyle]}>
       {/* Label */}
       {label && (
-        <Text style={[inputStyles.label, disabled && inputStyles.labelDisabled]}>
+        <Text style={[inputStyles.label, { color: inputColors.textSecondary }, disabled && inputStyles.labelDisabled]}>
           {label}
-          {required && <Text style={inputStyles.required}> *</Text>}
+          {required && <Text style={{ color: inputColors.error }}> *</Text>}
         </Text>
       )}
 
@@ -167,10 +169,12 @@ export function PasswordInput({
         style={[
           inputStyles.inputContainer,
           {
+            backgroundColor: inputColors.background,
             borderColor: getBorderColor(),
             borderWidth: isFocused ? 2 : 1,
           },
           disabled && inputStyles.inputContainerDisabled,
+          disabled && { backgroundColor: inputColors.backgroundDisabled },
         ]}
       >
         {/* TextInput */}
@@ -188,7 +192,8 @@ export function PasswordInput({
           style={[
             inputStyles.input,
             inputStyles.inputWithRightIcon,
-            disabled && inputStyles.inputDisabled,
+            { color: inputColors.text },
+            disabled && { color: inputColors.icon },
           ]}
           accessibilityLabel={label || 'Password'}
           accessibilityHint={helperText}
@@ -213,24 +218,24 @@ export function PasswordInput({
 
       {/* Error message */}
       {error && (
-        <Text style={inputStyles.error} accessibilityRole="alert">
+        <Text style={[inputStyles.error, { color: inputColors.error }]} accessibilityRole="alert">
           {error}
         </Text>
       )}
 
       {/* Helper text */}
       {helperText && !error && (
-        <Text style={inputStyles.helperText}>{helperText}</Text>
+        <Text style={[inputStyles.helperText, { color: inputColors.textSecondary }]}>{helperText}</Text>
       )}
 
       {/* Strength indicator */}
       {showStrength && typeof value === 'string' && (
-        <PasswordStrengthBar password={value} colors={colors} />
+        <PasswordStrengthBar password={value} colors={themeColors} />
       )}
 
       {/* Requirements checklist */}
       {requirements && (
-        <PasswordRequirementsList requirements={requirements} colors={colors} />
+        <PasswordRequirementsList requirements={requirements} colors={themeColors} />
       )}
     </View>
   );

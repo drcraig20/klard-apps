@@ -8,7 +8,8 @@ import {
   type ViewStyle,
 } from 'react-native';
 import * as Haptics from 'expo-haptics';
-import { styles, colors } from './switch.styles';
+import { useThemeColors } from '@/hooks';
+import { styles, getSwitchColors } from './switch.styles';
 
 export interface SwitchProps {
   /** Whether the switch is checked */
@@ -31,6 +32,9 @@ export function Switch({
   style,
   ...props
 }: Readonly<SwitchProps>) {
+  const themeColors = useThemeColors();
+  const colors = getSwitchColors(themeColors);
+
   const handleChange = (value: boolean) => {
     if (!disabled) {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -81,6 +85,9 @@ export function SwitchField({
   containerStyle,
   ...props
 }: Readonly<SwitchFieldProps>) {
+  const themeColors = useThemeColors();
+  const colors = getSwitchColors(themeColors);
+
   const handleChange = (value: boolean) => {
     if (!disabled) {
       Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -95,12 +102,12 @@ export function SwitchField({
       {(label || description) && (
         <View style={styles.textContainer}>
           {label && (
-            <Text style={[styles.label, disabled && styles.labelDisabled]}>
+            <Text style={[styles.label, { color: colors.text }, disabled && styles.labelDisabled]}>
               {label}
             </Text>
           )}
           {description && (
-            <Text style={[styles.description, disabled && styles.descriptionDisabled]}>
+            <Text style={[styles.description, { color: colors.textSecondary }, disabled && styles.descriptionDisabled]}>
               {description}
             </Text>
           )}
