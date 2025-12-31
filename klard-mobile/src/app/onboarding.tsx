@@ -2,10 +2,10 @@ import { View, ActivityIndicator, StyleSheet } from 'react-native';
 import { useAuthRedirect } from '@/hooks/useAuthRedirect';
 import { useOnboarding } from '@/hooks/useOnboarding';
 import { OnboardingScreen } from '@/components/onboarding/OnboardingScreen';
-import { Colors } from '@/styles/colors';
+import { darkTheme } from '@/styles/colors';
 
 // Use dark theme colors (onboarding is always dark mode)
-const colors = Colors.dark;
+const colors = darkTheme;
 
 export default function OnboardingRoute() {
   const { isPending: authPending } = useAuthRedirect({

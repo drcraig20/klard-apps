@@ -2,12 +2,12 @@ import { View, StyleSheet } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { LinearGradient } from 'expo-linear-gradient';
 import { SubscriptionForm } from '@/components/onboarding/SubscriptionForm';
-import { Colors } from '@/styles/colors';
+import { darkTheme } from '@/styles/colors';
 
 // Use dark theme colors (onboarding is always dark mode)
 const colors = {
-  ...Colors.dark,
-  backgroundElevated: Colors.dark.muted,
+  ...darkTheme,
+  backgroundElevated: darkTheme.muted,
 };
 
 /**

@@ -27,13 +27,13 @@ import {
 } from '@klard-apps/commons';
 import { useSubscriptionStore } from '@/stores/subscriptionStore';
 import { ServiceGrid } from './ServiceGrid';
-import { Colors } from '@/styles/colors';
+import { darkTheme } from '@/styles/colors';
 
 // Use dark theme colors (onboarding is always dark mode)
 const colors = {
-  ...Colors.dark,
-  primaryDark: Colors.dark.secondary,
-  error: Colors.dark.accentError,
+  ...darkTheme,
+  primaryDark: darkTheme.secondary,
+  error: darkTheme.accentError,
 };
 
 /**

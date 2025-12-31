@@ -15,13 +15,13 @@ import * as Haptics from 'expo-haptics';
 import { en } from '@klard-apps/commons';
 import { BurnerCardIllustration } from './illustrations';
 import { useOnboarding } from '@/hooks/useOnboarding';
-import { Colors } from '@/styles/colors';
+import { darkTheme } from '@/styles/colors';
 
 // Use dark theme colors (onboarding is always dark mode)
 const colors = {
-  ...Colors.dark,
-  primaryDark: Colors.dark.secondary,
-  backgroundElevated: Colors.dark.muted,
+  ...darkTheme,
+  primaryDark: darkTheme.secondary,
+  backgroundElevated: darkTheme.muted,
 };
 
 // Feature data (OCP: Extend by adding data, not modifying code)

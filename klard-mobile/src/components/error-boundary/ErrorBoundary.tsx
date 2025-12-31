@@ -1,6 +1,6 @@
 import { Component, ErrorInfo, ReactNode } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
-import { Colors } from '@/styles';
+import { lightTheme } from '@/styles';
 import { typography } from '@/styles';
 import { styles } from './error-boundary.styles';
 
@@ -39,7 +39,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
         return this.props.fallback;
       }
 
-      const colors = Colors.light; // Fallback to light theme in error state
+      const colors = lightTheme; // Fallback to light theme in error state
 
       return (
         <View style={[styles.container, { backgroundColor: colors.background }]}>

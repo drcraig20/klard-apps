@@ -19,13 +19,13 @@ import {
   ProtectIllustration,
   SaveIllustration,
 } from './illustrations';
-import { Colors } from '@/styles/colors';
+import { darkTheme } from '@/styles/colors';
 
 // Use dark theme colors (onboarding is always dark mode)
 const colors = {
-  ...Colors.dark,
-  primaryDark: Colors.dark.secondary,
-  backgroundElevated: Colors.dark.muted,
+  ...darkTheme,
+  primaryDark: darkTheme.secondary,
+  backgroundElevated: darkTheme.muted,
 };
 
 // Slide data (OCP: Extend by adding data, not modifying code)
