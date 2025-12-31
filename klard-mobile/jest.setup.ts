@@ -69,18 +69,31 @@ jest.mock('expo-blur', () => {
 
 // Mock react-native-reanimated
 jest.mock('react-native-reanimated', () => {
-  const View = require('react-native').View;
+  const { View, Text: RNText, ScrollView: RNScrollView } = require('react-native');
 
   const identity = (x: number) => x;
 
+  // Animated components that work as React components
+  const AnimatedView = View;
+  const AnimatedText = RNText;
+  const AnimatedScrollView = RNScrollView;
+
+  const Animated = {
+    View: AnimatedView,
+    Text: AnimatedText,
+    ScrollView: AnimatedScrollView,
+    createAnimatedComponent: (component: unknown) => component,
+    addWhitelistedUIProps: jest.fn(),
+  };
+
   return {
-    default: {
-      View,
-      Text: View,
-      ScrollView: View,
-      createAnimatedComponent: (component: unknown) => component,
-      addWhitelistedUIProps: jest.fn(),
-    },
+    __esModule: true,
+    default: Animated,
+    // Also export View, Text, etc. directly for named imports
+    View: AnimatedView,
+    Text: AnimatedText,
+    ScrollView: AnimatedScrollView,
+    createAnimatedComponent: Animated.createAnimatedComponent,
     useSharedValue: (initial: unknown) => ({ value: initial }),
     useAnimatedStyle: (callback: () => unknown) => callback(),
     withTiming: (value: unknown) => value,
@@ -191,3 +204,64 @@ jest.mock('@gorhom/bottom-sheet', () => {
     BottomSheetScrollView: View,
   };
 });
+
+// Mock ThemeContext - Provide default light theme for all tests
+jest.mock('@/contexts/ThemeContext', () => {
+  const { lightTheme } = jest.requireActual('@/styles/colors/light');
+  return {
+    ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
+    useTheme: () => ({
+      theme: 'light' as const,
+      themePreference: 'system' as const,
+      colors: lightTheme,
+      isDark: false,
+      setThemePreference: jest.fn(),
+    }),
+  };
+});
+
+// Mock useThemeColors hook - Centralized theme colors for all tests
+// Individual tests can override by calling jest.mock('@/hooks/useThemeColors', ...)
+jest.mock('@/hooks/useThemeColors', () => ({
+  useThemeColors: jest.fn(() => ({
+    // Core
+    primary: '#0D7C7A',
+    primaryForeground: '#FFFFFF',
+    secondary: '#15B5B0',
+    secondaryForeground: '#FFFFFF',
+    // Backgrounds
+    background: '#FFFFFF',
+    foreground: '#0F172A',
+    // Cards
+    card: '#FFFFFF',
+    cardForeground: '#0F172A',
+    // Muted
+    muted: '#F1F5F9',
+    mutedForeground: '#64748B',
+    // Borders
+    border: '#E2E8F0',
+    input: '#E2E8F0',
+    ring: '#0D7C7A',
+    // Status colors
+    success: '#059669',
+    successForeground: '#FFFFFF',
+    warning: '#D97706',
+    warningForeground: '#FFFFFF',
+    error: '#DC2626',
+    errorForeground: '#FFFFFF',
+    info: '#0284C7',
+    infoForeground: '#FFFFFF',
+    // Glow effects
+    glowPrimary: 'rgba(13, 124, 122, 0.2)',
+    glowSuccess: 'rgba(5, 150, 105, 0.2)',
+    glowWarning: 'rgba(217, 119, 6, 0.2)',
+    glowError: 'rgba(220, 38, 38, 0.2)',
+    // Misc
+    destructive: '#DC2626',
+    destructiveForeground: '#FFFFFF',
+    accent: '#15B5B0',
+    accentForeground: '#FFFFFF',
+    // Theme indicator
+    isDark: false,
+  })),
+}));
