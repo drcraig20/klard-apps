@@ -189,6 +189,18 @@ components/ui/Button/
 └── index.ts             # Re-export
 ```
 
+### Component File Naming
+
+| File Type | Convention | Example |
+|-----------|------------|---------|
+| Folder | PascalCase | `Button/`, `AlertCard/` |
+| Component | PascalCase | `Button.tsx`, `AlertCard.tsx` |
+| Styles | kebab-case | `button.styles.ts` |
+| Stories | kebab-case | `button.stories.tsx` |
+| Index | lowercase | `index.ts` |
+
+Note: Styles files use kebab-case for cross-platform alignment with web.
+
 ### 35+ UI Components
 
 Located in `src/components/ui/`:

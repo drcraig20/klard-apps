@@ -179,6 +179,16 @@ npx shadcn@latest add button input card alert checkbox
 
 **Reference:** `src/components/ui/button.tsx`, `src/lib/utils.ts`
 
+### Component File Naming
+
+| File Type | Convention | Example |
+|-----------|------------|---------|
+| Folder | kebab-case | `button/`, `alert-card/` |
+| Component | kebab-case | `button.tsx`, `alert-card.tsx` |
+| Styles | kebab-case | `button.styles.ts` |
+| Stories | kebab-case | `button.stories.tsx` |
+| Index | lowercase | `index.ts` |
+
 ---
 
 ## Form Handling
