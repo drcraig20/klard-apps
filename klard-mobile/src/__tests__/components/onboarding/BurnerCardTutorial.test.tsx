@@ -5,19 +5,6 @@ import * as Haptics from 'expo-haptics';
 import { en } from '@klard-apps/commons';
 import { useOnboarding } from '@/hooks/useOnboarding';
 
-// Mock expo-haptics
-jest.mock('expo-haptics', () => ({
-  impactAsync: jest.fn(),
-  selectionAsync: jest.fn(),
-  notificationAsync: jest.fn(),
-  ImpactFeedbackStyle: {
-    Medium: 'medium',
-  },
-  NotificationFeedbackType: {
-    Success: 'success',
-  },
-}));
-
 // Mock expo-router
 jest.mock('expo-router', () => ({
   router: {

@@ -8,15 +8,6 @@ import { useSubscriptionStore } from '@/stores/subscriptionStore';
 import { POPULAR_SERVICES } from '@klard-apps/commons';
 
 // Mock dependencies
-jest.mock('expo-haptics', () => ({
-  selectionAsync: jest.fn(),
-  notificationAsync: jest.fn(),
-  NotificationFeedbackType: {
-    Success: 'success',
-    Error: 'error',
-  },
-}));
-
 jest.mock('expo-router', () => ({
   router: {
     push: jest.fn(),
@@ -31,6 +22,19 @@ jest.mock('@react-native-community/datetimepicker', () => {
 jest.mock('@/stores/subscriptionStore', () => ({
   useSubscriptionStore: jest.fn(),
 }));
+
+// Override expo-blur mock - the global one doesn't work properly with React 19
+jest.mock('expo-blur', () => {
+  const React = require('react');
+  const { View } = require('react-native');
+  return {
+    BlurView: ({ children, style, testID }: {
+      children?: React.ReactNode;
+      style?: object;
+      testID?: string;
+    }) => React.createElement(View, { testID: testID || 'blur-view', style }, children),
+  };
+});
 
 // Mock Alert
 jest.spyOn(Alert, 'alert');

@@ -4,11 +4,6 @@ import * as Haptics from 'expo-haptics';
 import { ServiceGrid } from '@/components/onboarding/ServiceGrid';
 import { POPULAR_SERVICES } from '@klard-apps/commons';
 
-// Mock expo-haptics
-jest.mock('expo-haptics', () => ({
-  selectionAsync: jest.fn(),
-}));
-
 describe('ServiceGrid', () => {
   const mockOnSelect = jest.fn();
   const defaultProps = {
