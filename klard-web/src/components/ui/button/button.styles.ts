@@ -18,18 +18,20 @@ const buttonVariants = cva(
         link: "text-primary underline-offset-4 hover:underline",
         // Klard-specific variants with glassmorphism effects
         klard:
-          "bg-gradient-to-br from-[hsl(173,79%,27%)] to-[hsl(173,79%,20%)] dark:from-[hsl(176,78%,39%)] dark:to-[hsl(173,79%,27%)] text-white font-semibold shadow-[var(--rec-glow-primary)] hover:scale-[1.02] hover:shadow-[0_0_28px_rgba(13,124,122,0.4)] dark:hover:shadow-[0_0_32px_rgba(21,181,176,0.45)] active:scale-[0.98]",
+          "bg-gradient-to-br from-primary to-primary/80 dark:from-primary dark:to-primary/70 text-white font-semibold shadow-[var(--rec-glow-primary)] hover:scale-[1.02] hover:shadow-glow-primary active:scale-[0.98]",
         burn:
           "bg-success text-white font-semibold shadow-[var(--rec-glow-success)] hover:bg-success/90 hover:scale-[1.02] hover:shadow-[0_0_20px_rgba(5,150,105,0.35)] active:scale-[0.98]",
+        // social: Web-only - Mobile uses native auth sheets (Apple/Google Sign-In)
+        // See docs/design/component-variants.md for rationale
         social:
           "bg-transparent border border-border text-foreground font-medium hover:border-border/50 hover:bg-muted/50",
       },
       size: {
-        default: "h-9 px-4 py-2 has-[>svg]:px-3",
-        md: "h-9 px-4 py-2 has-[>svg]:px-3",
+        default: "h-10 px-4 py-2 has-[>svg]:px-3",
+        md: "h-10 px-4 py-2 has-[>svg]:px-3",
         sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
         lg: "h-12 rounded-[var(--radius-default)] px-8 has-[>svg]:px-4",
-        icon: "size-9",
+        icon: "size-10",
         "icon-sm": "size-8",
         "icon-lg": "size-10",
       },

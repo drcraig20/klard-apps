@@ -18,7 +18,7 @@ export const segmentedControlVariants = cva("", {
 })
 
 export const tabsListVariants = cva(
-  "bg-slate-100 dark:bg-slate-800",
+  "bg-muted",
   {
     variants: {
       size: {
@@ -38,7 +38,7 @@ export const tabsListVariants = cva(
 )
 
 export const tabsTriggerVariants = cva(
-  "data-[state=active]:bg-white data-[state=active]:text-teal-700 dark:data-[state=active]:bg-slate-950 dark:data-[state=active]:text-teal-400",
+  "data-[state=active]:bg-white data-[state=active]:text-primary dark:data-[state=active]:bg-background dark:data-[state=active]:text-primary",
   {
     variants: {
       size: {

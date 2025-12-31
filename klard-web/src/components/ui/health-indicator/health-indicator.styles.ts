@@ -14,9 +14,9 @@ const healthIndicatorVariants = cva(
   {
     variants: {
       status: {
-        forgotten: "text-red-600 dark:text-red-400",
-        "price-increased": "text-amber-600 dark:text-amber-400",
-        healthy: "text-green-600 dark:text-green-400",
+        forgotten: "text-error",
+        "price-increased": "text-warning",
+        healthy: "text-success",
       },
       size: {
         sm: "text-xs",
@@ -35,12 +35,9 @@ const healthIndicatorDotVariants = cva(
   {
     variants: {
       status: {
-        forgotten:
-          "bg-red-500 dark:bg-red-400 shadow-[0_0_8px_rgba(220,38,38,0.5)] dark:shadow-[0_0_8px_rgba(239,68,68,0.5)]",
-        "price-increased":
-          "bg-amber-500 dark:bg-amber-400 shadow-[0_0_8px_rgba(217,119,6,0.5)] dark:shadow-[0_0_8px_rgba(245,158,11,0.5)]",
-        healthy:
-          "bg-green-500 dark:bg-green-400 shadow-[0_0_8px_rgba(5,150,105,0.5)] dark:shadow-[0_0_8px_rgba(16,185,129,0.5)]",
+        forgotten: "bg-error shadow-glow-error",
+        "price-increased": "bg-warning shadow-glow-warning",
+        healthy: "bg-success shadow-glow-success",
       },
       size: {
         sm: "size-2",

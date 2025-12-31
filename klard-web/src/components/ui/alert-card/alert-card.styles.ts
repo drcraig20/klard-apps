@@ -5,10 +5,10 @@ export const alertCardVariants = cva(
   {
     variants: {
       tone: {
-        info: 'border-blue-200 bg-blue-50/50 dark:border-blue-900/40 dark:bg-blue-950/20',
+        info: 'border-info/20 bg-info/5 dark:border-info/30 dark:bg-info/10',
         warning:
-          'border-amber-200 bg-amber-50/50 dark:border-amber-900/40 dark:bg-amber-950/20',
-        error: 'border-red-200 bg-red-50/50 dark:border-red-900/40 dark:bg-red-950/20',
+          'border-warning/20 bg-warning/5 dark:border-warning/30 dark:bg-warning/10',
+        error: 'border-error/20 bg-error/5 dark:border-error/30 dark:bg-error/10',
       },
       size: {
         md: 'p-4',
