@@ -169,15 +169,6 @@ pnpm test -- src/__tests__/Button  # Single test
 
 ---
 
-## Storybook
-
-```bash
-pnpm storybook           # localhost:6007
-pnpm storybook:build     # Build static
-```
-
----
-
 ## Safe Area
 
 ```typescript

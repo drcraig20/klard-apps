@@ -118,11 +118,9 @@ pnpm ios                  # iOS simulator
 ### Storybook Development
 
 ```bash
-# Component development with Storybook
+# Component development with Storybook (web only)
 pnpm storybook:web           # Web components at localhost:6006
-pnpm storybook:mobile        # Mobile components at localhost:6007
 pnpm storybook:build:web     # Build web storybook
-pnpm storybook:build:mobile  # Build mobile storybook
 ```
 
 ## Architecture Overview
