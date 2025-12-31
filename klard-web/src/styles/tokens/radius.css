@@ -1,0 +1,38 @@
+/**
+ * Klard Design System - Radius Tokens (Web)
+ *
+ * Border radius values using 4px increments.
+ * Scale: none (0), sm (8px), md (12px), lg (16px), xl (24px), 2xl (32px), full (9999px).
+ *
+ * @see klard-mobile/src/styles/tokens/radius.ts (mobile counterpart)
+ * @see docs/design/tokens-reference.md (full documentation)
+ *
+ * SOLID Compliance:
+ * - SRP: Only border radius values
+ * - OCP: Extend via component-specific radius, not modifying base
+ */
+
+:root {
+  /* ========================================================================
+   * BASE RADIUS SCALE
+   * ======================================================================== */
+  --rec-radius-none: 0px;
+  --rec-radius-sm: 8px;
+  --rec-radius-md: 12px;
+  --rec-radius-lg: 16px;
+  --rec-radius-xl: 24px;
+  --rec-radius-2xl: 32px;
+  --rec-radius-full: 9999px;
+  --rec-radius-default: var(--rec-radius-md); /* 12px - alias for default */
+  --rec-radius: var(--rec-radius-default); /* legacy alias */
+
+  /* ========================================================================
+   * COMPONENT-SPECIFIC RADIUS (derived from base tokens)
+   * ======================================================================== */
+  --rec-radius-button: var(--rec-radius-md);
+  --rec-radius-card: var(--rec-radius-md);
+  --rec-radius-input: var(--rec-radius-sm);
+  --rec-radius-modal: var(--rec-radius-lg);
+  --rec-radius-toast: var(--rec-radius);
+  --rec-radius-badge: var(--rec-radius-full);
+}

@@ -1,0 +1,160 @@
+/**
+ * Klard Design System - Component Styles (Web)
+ *
+ * Reusable component-level styles for hero, buttons, and effects.
+ *
+ * @see docs/design/tokens-reference.md (full documentation)
+ */
+
+/* ========================================================================
+ * HERO SHELL COMPONENT
+ * Card container with decorative border lines
+ * ======================================================================== */
+.hero-shell {
+  position: relative;
+  border-radius: 36px;
+  border: 1px solid var(--rec-hero-shell-border);
+  box-shadow: var(--rec-shadow-hero);
+  background: var(--rec-hero-shell-background);
+}
+
+.hero-shell::before,
+.hero-shell::after {
+  content: "";
+  position: absolute;
+  inset-inline: 32px;
+  height: 1px;
+  border-top: 1px solid var(--rec-hero-shell-border);
+  opacity: 0.7;
+}
+
+.hero-shell::before {
+  top: 32px;
+}
+
+.hero-shell::after {
+  bottom: 32px;
+}
+
+/* ========================================================================
+ * GRADIENT BUTTON
+ * Primary CTA button with gradient background and glow effect
+ * ======================================================================== */
+.btn-gradient {
+  position: relative;
+  background-image: var(--rec-gradient-primary);
+  color: var(--rec-color-primary-foreground);
+  box-shadow: var(--rec-glow-primary);
+}
+
+.btn-gradient::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  opacity: 0;
+  box-shadow: 0 25px 55px rgba(15, 34, 64, 0.35);
+  transition: opacity var(--rec-animate-duration-fast) var(--rec-animate-ease-default);
+}
+
+.btn-gradient:hover::after {
+  opacity: 1;
+}
+
+/* ========================================================================
+ * CTA GLOW EFFECT
+ * Radial glow effect positioned below CTA elements
+ * ======================================================================== */
+.cta-glow {
+  position: absolute;
+  inset-inline: 0;
+  bottom: -30px;
+  height: 140px;
+  background: var(--rec-radial-highlight-top);
+  filter: blur(12px);
+  pointer-events: none;
+}
+
+/* ========================================================================
+ * PRIVACY PILL
+ * Inset border styling for privacy indicator badges
+ * ======================================================================== */
+.privacy-pill {
+  box-shadow: inset 0 0 0 1px var(--rec-color-border);
+}
+
+/* ========================================================================
+ * DASHBOARD GLOW
+ * Animated pulsing glow effect for dashboard cards
+ * ======================================================================== */
+.dashboard-glow {
+  position: relative;
+  isolation: isolate;
+}
+
+.dashboard-glow::before {
+  content: "";
+  position: absolute;
+  inset: -14px;
+  z-index: 0;
+  border-radius: 32px;
+  background:
+    radial-gradient(110% 110% at 50% 22%, var(--dashboard-glow-accent), transparent 58%),
+    radial-gradient(120% 120% at 50% 82%, var(--dashboard-glow-base), transparent 68%);
+  filter: blur(14px);
+  opacity: 0.55;
+  animation: dashboardPulse 1s ease-in-out infinite;
+  pointer-events: none;
+}
+
+.dashboard-glow > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ========================================================================
+ * SCROLL BEHAVIOR
+ * Smooth scrolling with reduced motion support
+ * ======================================================================== */
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .dashboard-glow::before {
+    animation: none;
+  }
+}
+
+/* ========================================================================
+ * KEYFRAME ANIMATIONS
+ * ======================================================================== */
+@keyframes dashboardPulse {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(0.98);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.03);
+  }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-10px); }
+  50% { transform: translateX(10px); }
+  75% { transform: translateX(-10px); }
+}
+
+/* ========================================================================
+ * ANIMATION UTILITY CLASSES
+ * ======================================================================== */
+.animate-shake {
+  animation: shake 200ms ease-in-out;
+}

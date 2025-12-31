@@ -1,0 +1,108 @@
+/**
+ * Klard Design System - Glassmorphism Tokens (Web)
+ *
+ * Glass effect values for blur, backgrounds, and overlays.
+ * Creates frosted glass appearance with backdrop-filter.
+ *
+ * @see klard-mobile/src/styles/tokens/effects.ts (mobile counterpart - glassmorphism section)
+ * @see docs/design/tokens-reference.md (full documentation)
+ *
+ * SOLID Compliance:
+ * - SRP: Only glassmorphism effect values
+ * - OCP: Extend by adding new glass variants
+ */
+
+:root {
+  /* ========================================================================
+   * BLUR VALUES
+   * ======================================================================== */
+  --rec-glass-blur: 12px;
+  --rec-glass-blur-card: 24px;
+  --rec-glass-blur-modal: 24px;
+  --rec-glass-blur-nav: 12px;
+  --rec-glass-blur-subtle: 8px;
+
+  /* ========================================================================
+   * BORDER
+   * ======================================================================== */
+  --rec-glass-border-width: 1px;
+  --rec-glass-border-color: rgba(148, 163, 184, 0.2);
+
+  /* ========================================================================
+   * SURFACE BACKGROUNDS (light theme defaults)
+   * ======================================================================== */
+  --rec-glass-surface: rgba(255, 255, 255, 0.8);
+  --rec-glass-surface-strong: rgba(255, 255, 255, 0.95);
+  --rec-glass-overlay: rgba(255, 255, 255, 0.85);
+  --rec-glass-overlay-soft: rgba(248, 250, 252, 0.75);
+  --rec-glass-overlay-strong: rgba(255, 255, 255, 0.95);
+  --rec-glass-backdrop: rgba(15, 23, 42, 0.5);
+}
+
+/* Dark theme glass overrides */
+[data-theme="dark"] {
+  --rec-glass-border-color: rgba(148, 163, 184, 0.12);
+  --rec-glass-surface: rgba(30, 41, 59, 0.6);
+  --rec-glass-surface-strong: rgba(12, 19, 36, 0.9);
+  --rec-glass-overlay: rgba(5, 8, 16, 0.85);
+  --rec-glass-overlay-soft: rgba(5, 8, 16, 0.75);
+  --rec-glass-overlay-strong: rgba(5, 8, 16, 0.95);
+  --rec-glass-backdrop: rgba(0, 0, 0, 0.5);
+}
+
+/* ========================================================================
+ * GLASS UTILITY CLASSES
+ * ======================================================================== */
+@layer utilities {
+  .klard-glass-panel {
+    background-color: var(--rec-glass-surface);
+    border: var(--rec-glass-border-width) solid var(--rec-glass-border-color);
+    box-shadow: var(--rec-shadow-card-md);
+    backdrop-filter: blur(var(--rec-glass-blur));
+  }
+
+  .klard-glass-panel-strong {
+    background-color: var(--rec-glass-surface-strong);
+    border: var(--rec-glass-border-width) solid var(--rec-glass-border-color);
+    box-shadow: var(--rec-shadow-card-lg);
+    backdrop-filter: blur(var(--rec-glass-blur));
+  }
+
+  .klard-glass-card {
+    background-color: var(--rec-glass-surface);
+    border: var(--rec-glass-border-width) solid var(--rec-glass-border-color);
+    backdrop-filter: blur(var(--rec-glass-blur-card));
+  }
+
+  .klard-glass-nav {
+    background-color: var(--rec-glass-surface);
+    border-bottom: var(--rec-glass-border-width) solid var(--rec-glass-border-color);
+    backdrop-filter: blur(var(--rec-glass-blur-nav));
+  }
+
+  .klard-glass-modal {
+    background-color: var(--rec-glass-surface-strong);
+    border: var(--rec-glass-border-width) solid var(--rec-glass-border-color);
+    backdrop-filter: blur(var(--rec-glass-blur-modal));
+  }
+
+  .bg-surface {
+    background-color: var(--rec-glass-surface);
+  }
+
+  .bg-surface-strong {
+    background-color: var(--rec-glass-surface-strong);
+  }
+
+  .bg-overlay {
+    background-color: var(--rec-glass-overlay);
+  }
+
+  .bg-overlay-soft {
+    background-color: var(--rec-glass-overlay-soft);
+  }
+
+  .bg-overlay-strong {
+    background-color: var(--rec-glass-overlay-strong);
+  }
+}

@@ -1,0 +1,17 @@
+/**
+ * Klard Design System - Focus Tokens (Web)
+ *
+ * Focus ring and accessibility styling values.
+ *
+ * @see docs/design/tokens-reference.md (full documentation)
+ *
+ * SOLID Compliance:
+ * - SRP: Only focus/accessibility values
+ */
+
+:root {
+  /* Focus ring base values */
+  --rec-focus-ring-base: 0 0 0 3px;
+  --rec-focus-ring-width: 2px;
+  --rec-focus-ring-offset: 2px;
+}

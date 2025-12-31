@@ -1,0 +1,127 @@
+/**
+ * Klard Design System - Utility Classes (Web)
+ *
+ * Custom utility classes for gradients, glass effects, and semantic styling.
+ *
+ * @see docs/design/tokens-reference.md (full documentation)
+ */
+
+@layer utilities {
+  .klard-hero-gradient {
+    background-image: var(--rec-gradient-background);
+  }
+
+  .klard-primary-gradient {
+    background-image: var(--rec-gradient-primary);
+  }
+
+  .klard-success-gradient {
+    background-image: var(--rec-gradient-success);
+  }
+
+  .klard-radial-top {
+    background-image: var(--rec-radial-highlight-top);
+  }
+
+  .klard-radial-bottom {
+    background-image: var(--rec-radial-highlight-bottom);
+  }
+
+  .klard-glass-panel {
+    background-color: var(--rec-color-surface);
+    border: var(--rec-glass-border-width) solid var(--rec-glass-border-color);
+    box-shadow: var(--rec-shadow-card-md);
+    backdrop-filter: blur(var(--rec-glass-blur));
+  }
+
+  .klard-glass-panel-strong {
+    background-color: var(--rec-color-surface-strong);
+    border: var(--rec-glass-border-width) solid var(--rec-glass-border-color);
+    box-shadow: var(--rec-shadow-card-lg);
+    backdrop-filter: blur(var(--rec-glass-blur));
+  }
+
+  .bg-surface {
+    background-color: var(--rec-color-surface);
+  }
+
+  .bg-surface-strong {
+    background-color: var(--rec-color-surface-strong);
+  }
+
+  .bg-overlay {
+    background-color: var(--rec-color-overlay);
+  }
+
+  .bg-overlay-soft {
+    background-color: var(--rec-color-overlay-soft);
+  }
+
+  .bg-overlay-strong {
+    background-color: var(--rec-color-overlay-strong);
+  }
+
+  .border-default {
+    border-color: var(--rec-color-border);
+  }
+
+  .border-strong {
+    border-color: var(--rec-color-border-strong);
+  }
+
+  .border-focus {
+    border-color: var(--rec-color-border-focus);
+  }
+
+  .ring-brand {
+    box-shadow: var(--rec-focus-ring);
+  }
+
+  .shadow-elevation-sm {
+    box-shadow: var(--rec-shadow-card-sm);
+  }
+
+  .shadow-elevation-md {
+    box-shadow: var(--rec-shadow-card-md);
+  }
+
+  .shadow-elevation-lg {
+    box-shadow: var(--rec-shadow-card-lg);
+  }
+
+  .shadow-glow-primary {
+    box-shadow: var(--rec-glow-primary);
+  }
+
+  .shadow-glow-success {
+    box-shadow: var(--rec-glow-success);
+  }
+
+  .shadow-glow-warning {
+    box-shadow: var(--rec-glow-warning);
+  }
+
+  .shadow-glow-error {
+    box-shadow: var(--rec-glow-error);
+  }
+
+  .bg-info-muted {
+    background-color: color-mix(in srgb, var(--rec-color-info) 10%, transparent);
+  }
+
+  .bg-success-muted {
+    background-color: color-mix(in srgb, var(--rec-color-success) 10%, transparent);
+  }
+
+  .bg-warning-muted {
+    background-color: color-mix(in srgb, var(--rec-color-warning) 10%, transparent);
+  }
+
+  .bg-error-muted {
+    background-color: color-mix(in srgb, var(--rec-color-error) 10%, transparent);
+  }
+
+  .focus-ring-brand {
+    box-shadow: var(--rec-focus-ring);
+  }
+}

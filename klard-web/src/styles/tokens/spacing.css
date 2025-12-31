@@ -1,0 +1,24 @@
+/**
+ * Klard Design System - Spacing Tokens (Web)
+ *
+ * Component-specific spacing values using 4px grid.
+ *
+ * @see klard-mobile/src/styles/tokens/spacing.ts (mobile counterpart)
+ * @see docs/design/tokens-reference.md (full documentation)
+ *
+ * SOLID Compliance:
+ * - SRP: Only spacing values
+ */
+
+:root {
+  /* Component spacing */
+  --rec-spacing-card: 32px;
+  --rec-spacing-card-sm: 16px;
+  --rec-spacing-card-lg: 40px;
+
+  /* Layout spacing */
+  --rec-spacing-section-gap: 48px;
+  --rec-spacing-content-gap: 24px;
+  --rec-spacing-item-gap: 16px;
+  --rec-spacing-inline-gap: 8px;
+}

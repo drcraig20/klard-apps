@@ -1,0 +1,61 @@
+/**
+ * Klard Design System - Animation Tokens (Web)
+ *
+ * Animation duration and easing values for smooth transitions.
+ * Duration naming: "normal" is primary (200ms), "default" is alias for compatibility.
+ *
+ * @see klard-mobile/src/styles/tokens/animation.ts (mobile counterpart)
+ * @see docs/design/tokens-reference.md (full documentation)
+ *
+ * SOLID Compliance:
+ * - SRP: Only animation timing values
+ * - OCP: Extend by adding new easing presets
+ */
+
+:root {
+  /* ========================================================================
+   * DURATION VALUES (milliseconds)
+   * ======================================================================== */
+  --rec-animate-duration-instant: 0ms;
+  --rec-animate-duration-fastest: 50ms;
+  --rec-animate-duration-faster: 100ms;
+  --rec-animate-duration-fast: 150ms;
+  --rec-animate-duration-normal: 200ms;
+  --rec-animate-duration-default: var(--rec-animate-duration-normal); /* alias */
+  --rec-animate-duration-slow: 300ms;
+  --rec-animate-duration-slower: 500ms;
+  --rec-animate-duration-slowest: 700ms;
+
+  /* ========================================================================
+   * EASING FUNCTIONS (cubic-bezier)
+   * ======================================================================== */
+  --rec-animate-ease-default: cubic-bezier(0.4, 0, 0.2, 1);
+  --rec-animate-ease-linear: linear;
+  --rec-animate-ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --rec-animate-ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --rec-animate-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Emphasized easings */
+  --rec-animate-ease-emphasized: cubic-bezier(0.2, 0, 0, 1);
+  --rec-animate-ease-emphasized-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1);
+  --rec-animate-ease-emphasized-accelerate: cubic-bezier(0.3, 0, 0.8, 0.15);
+
+  /* Spring-like easings */
+  --rec-animate-ease-spring: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  --rec-animate-ease-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+  /* Smooth transition */
+  --rec-animate-ease-smooth: cubic-bezier(0.25, 0.1, 0.25, 1);
+
+  /* ========================================================================
+   * COMPONENT-SPECIFIC DURATIONS
+   * ======================================================================== */
+  --rec-animate-duration-button-press: 100ms;
+  --rec-animate-duration-button-hover: 150ms;
+  --rec-animate-duration-card-hover: 200ms;
+  --rec-animate-duration-modal-enter: 300ms;
+  --rec-animate-duration-modal-exit: 200ms;
+  --rec-animate-duration-toast-enter: 300ms;
+  --rec-animate-duration-toast-exit: 200ms;
+  --rec-animate-duration-page-transition: 300ms;
+}

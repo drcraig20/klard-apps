@@ -1,0 +1,7 @@
+/**
+ * Klard Design System - Theme Index (Web)
+ *
+ * Imports light and dark theme definitions.
+ */
+@import "./light.css";
+@import "./dark.css";

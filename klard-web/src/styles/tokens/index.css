@@ -1,0 +1,15 @@
+/**
+ * Klard Design System - Token Index (Web)
+ *
+ * Aggregates all modular token CSS files for web.
+ * Mirrors the structure of klard-mobile/src/styles/tokens/.
+ *
+ * @see klard-mobile/src/styles/tokens/index.ts (mobile counterpart)
+ * @see docs/design/tokens-reference.md (full documentation)
+ */
+@import "./radius.css";
+@import "./shadows.css";
+@import "./animation.css";
+@import "./glassmorphism.css";
+@import "./spacing.css";
+@import "./focus.css";

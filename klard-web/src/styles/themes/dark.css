@@ -1,0 +1,160 @@
+/**
+ * Klard Design System - Dark Theme (Web)
+ *
+ * Dark theme color definitions.
+ *
+ * @see klard-web/src/styles/themes/light.css (light theme)
+ * @see docs/design/tokens-reference.md (full documentation)
+ */
+
+[data-theme="dark"] {
+  --rec-color-primary: #15b5b0;
+  --rec-color-primary-foreground: #ffffff;
+  --rec-color-secondary: #0d7c7a;
+  --rec-color-secondary-foreground: #f8fafc;
+
+  --rec-color-success: #10b981;
+  --rec-color-warning: #f59e0b;
+  --rec-color-error: #ef4444;
+  --rec-color-info: #60A5FA;
+  --rec-color-info-foreground: #FFFFFF;
+  --rec-color-accent-foreground: #ffffff;
+
+  --rec-color-background: #0f172a;
+  --rec-color-foreground: #f8fafc;
+  --rec-color-muted: #1e293b;
+  --rec-color-muted-foreground: #94a3b8;
+
+  --rec-color-card: #1e293b;
+  --rec-color-card-foreground: #f8fafc;
+  --rec-color-popover: #1e293b;
+  --rec-color-popover-foreground: #f8fafc;
+
+  --rec-color-border: rgba(148, 163, 184, 0.12);
+  --rec-color-border-strong: rgba(148, 163, 184, 0.2);
+  --rec-color-border-focus: rgba(148, 163, 184, 0.4);
+  --rec-color-input: #1e293b;
+  --rec-color-ring: #15b5b0;
+
+  --rec-color-destructive: #ef4444;
+  --rec-color-destructive-foreground: #ffffff;
+
+  --rec-color-surface: rgba(30, 41, 59, 0.6);
+  --rec-color-surface-strong: rgba(12, 19, 36, 0.9);
+  --rec-color-overlay: rgba(5, 8, 16, 0.85);
+  --rec-color-overlay-soft: rgba(5, 8, 16, 0.75);
+  --rec-color-overlay-strong: rgba(5, 8, 16, 0.95);
+
+  /* Glass border color */
+  --rec-glass-border-color: rgba(148, 163, 184, 0.12);
+
+  /* Gradients */
+  --rec-gradient-primary: linear-gradient(135deg, #15b5b0, #0d7c7a);
+  --rec-gradient-background: linear-gradient(180deg, #0f172a, #1e293b);
+  --rec-gradient-success: linear-gradient(135deg, #10b981, #059669);
+
+  /* Shadow overrides for dark theme */
+  --rec-shadow-card-sm: 0px 2px 8px rgba(0, 0, 0, 0.1);
+  --rec-shadow-card-md: 0px 8px 24px rgba(0, 0, 0, 0.15);
+  --rec-shadow-card-lg: 0px 16px 48px rgba(0, 0, 0, 0.2);
+
+  /* Glows */
+  --rec-glow-primary: 0 0 24px rgba(21, 181, 176, 0.35);
+  --rec-glow-success: 0 0 16px rgba(16, 185, 129, 0.25);
+  --rec-glow-warning: 0 0 16px rgba(245, 158, 11, 0.25);
+  --rec-glow-error: 0 0 16px rgba(239, 68, 68, 0.25);
+
+  /* Radial highlights */
+  --rec-radial-highlight-top: radial-gradient(
+    var(--rec-radial-top-size) at 50% 10%,
+    rgba(21, 181, 176, 0.45),
+    transparent 70%
+  );
+  --rec-radial-highlight-bottom: radial-gradient(
+    var(--rec-radial-bottom-size) at 50% 90%,
+    rgba(13, 124, 122, 0.35),
+    transparent 70%
+  );
+
+  /* Dashboard glow */
+  --dashboard-glow-accent: rgba(21, 181, 176, 0.6);
+  --dashboard-glow-base: rgba(13, 124, 122, 0.38);
+
+  /* Focus ring color */
+  --rec-focus-ring-color: rgba(21, 181, 176, 0.5);
+  --rec-focus-ring: var(--rec-focus-ring-base) var(--rec-focus-ring-color);
+
+  /* Hero shell colors */
+  --rec-hero-shell-background: #ffffff;
+  --rec-hero-shell-border: rgba(148, 163, 184, 0.2);
+
+  /* Text colors */
+  --text-secondary: #94a3b8;
+  --text-tertiary: #64748b;
+
+  /* Error colors (for existing components) */
+  --error-background: rgba(239, 68, 68, 0.1);
+  --error-foreground: #ef4444;
+  --error-border: rgba(239, 68, 68, 0.3);
+
+  /* Legacy bridges */
+  --background: var(--rec-color-background);
+  --foreground: var(--rec-color-foreground);
+  --hero-border: var(--rec-hero-shell-border);
+  --teal-300: #6de2dd;
+  --teal-400: #4fd7d0;
+  --teal-500: var(--rec-color-primary);
+  --teal-700: var(--rec-color-secondary);
+
+  --color-dark-navy: var(--rec-color-background);
+  --color-elevated-navy: var(--rec-color-card);
+  --color-vibrant-teal: var(--rec-color-primary);
+  --color-deep-teal: var(--rec-color-secondary);
+  --color-near-white: var(--rec-color-foreground);
+  --color-slate-gray: var(--rec-color-muted-foreground);
+  --color-medium-slate: #64748b;
+  --color-savings-green: var(--rec-color-success);
+  --color-alert-amber: var(--rec-color-warning);
+  --color-critical-coral: var(--rec-color-error);
+
+  --glow-teal-soft: var(--rec-glow-primary);
+
+  /* shadcn compatibility tokens */
+  --primary: var(--rec-color-primary);
+  --primary-foreground: var(--rec-color-primary-foreground);
+  --secondary: var(--rec-color-secondary);
+  --secondary-foreground: var(--rec-color-secondary-foreground);
+  --muted: var(--rec-color-muted);
+  --muted-foreground: var(--rec-color-muted-foreground);
+  --accent: var(--rec-color-secondary);
+  --accent-foreground: var(--rec-color-accent-foreground);
+  --accent-success: var(--rec-color-success);
+  --accent-warning: var(--rec-color-warning);
+  --accent-error: var(--rec-color-error);
+  --destructive: var(--rec-color-destructive);
+  --destructive-foreground: var(--rec-color-destructive-foreground);
+  --card: var(--rec-color-card);
+  --card-foreground: var(--rec-color-card-foreground);
+  --popover: var(--rec-color-popover);
+  --popover-foreground: var(--rec-color-popover-foreground);
+  --border: var(--rec-color-border);
+  --input: var(--rec-color-input);
+  --ring: var(--rec-color-ring);
+
+  /* Sidebar tokens (shadcn) */
+  --sidebar: var(--rec-color-muted);
+  --sidebar-foreground: var(--rec-color-foreground);
+  --sidebar-primary: var(--rec-color-primary);
+  --sidebar-primary-foreground: var(--rec-color-primary-foreground);
+  --sidebar-accent: #334155;
+  --sidebar-accent-foreground: var(--rec-color-foreground);
+  --sidebar-border: var(--rec-color-border);
+  --sidebar-ring: var(--rec-color-ring);
+
+  /* Chart colors */
+  --chart-1: var(--rec-color-primary);
+  --chart-2: var(--rec-color-secondary);
+  --chart-3: var(--rec-color-success);
+  --chart-4: var(--rec-color-warning);
+  --chart-5: var(--rec-color-error);
+}

@@ -1,0 +1,87 @@
+/**
+ * Klard Design System - Tailwind CSS 4 Mapping (Web)
+ *
+ * Maps design tokens to Tailwind CSS 4 theme variables.
+ * This enables using tokens with Tailwind utility classes.
+ *
+ * @see docs/design/tokens-reference.md (full documentation)
+ */
+
+@theme inline {
+  --color-background: var(--rec-color-background);
+  --color-foreground: var(--rec-color-foreground);
+  --font-sans: var(--font-geist-sans), "Inter", system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), monospace;
+
+  --color-primary: var(--rec-color-primary);
+  --color-primary-foreground: var(--rec-color-primary-foreground);
+  --color-secondary: var(--rec-color-secondary);
+  --color-secondary-foreground: var(--rec-color-secondary-foreground);
+
+  --color-muted: var(--rec-color-muted);
+  --color-muted-foreground: var(--rec-color-muted-foreground);
+
+  --color-card: var(--rec-color-card);
+  --color-card-foreground: var(--rec-color-card-foreground);
+  --color-popover: var(--rec-color-popover);
+  --color-popover-foreground: var(--rec-color-popover-foreground);
+
+  --color-border: var(--rec-color-border);
+  --color-border-strong: var(--rec-color-border-strong);
+  --color-input: var(--rec-color-input);
+  --color-ring: var(--rec-color-ring);
+
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--rec-color-destructive);
+  --color-destructive-foreground: var(--rec-color-destructive-foreground);
+
+  --color-success: var(--rec-color-success);
+  --color-warning: var(--rec-color-warning);
+  --color-error: var(--rec-color-error);
+  --color-info: var(--rec-color-info);
+  --color-info-foreground: var(--rec-color-info-foreground);
+  --color-accent-success: var(--rec-color-success);
+  --color-accent-warning: var(--rec-color-warning);
+  --color-accent-error: var(--rec-color-error);
+
+  --color-dark-navy: var(--color-dark-navy);
+  --color-elevated-navy: var(--color-elevated-navy);
+  --color-vibrant-teal: var(--color-vibrant-teal);
+  --color-deep-teal: var(--color-deep-teal);
+  --color-near-white: var(--color-near-white);
+  --color-slate-gray: var(--color-slate-gray);
+  --color-medium-slate: var(--color-medium-slate);
+  --color-savings-green: var(--color-savings-green);
+  --color-alert-amber: var(--color-alert-amber);
+  --color-critical-coral: var(--color-critical-coral);
+
+  --color-teal-300: var(--teal-300);
+  --color-teal-400: var(--teal-400);
+  --color-teal-500: var(--teal-500);
+  --color-teal-700: var(--teal-700);
+
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  --radius-sm: var(--rec-radius-sm);
+  --radius: var(--rec-radius);
+  --radius-md: var(--rec-radius-md);
+  --radius-lg: var(--rec-radius-lg);
+  --radius-full: var(--rec-radius-full);
+
+  /* Animation duration (expose "normal" for mobile compatibility) */
+  --animate-duration-normal: var(--rec-animate-duration-normal);
+}

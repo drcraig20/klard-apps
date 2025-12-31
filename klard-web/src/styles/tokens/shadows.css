@@ -1,0 +1,90 @@
+/**
+ * Klard Design System - Shadow Tokens (Web)
+ *
+ * Shadow and glow effect values for elevation and emphasis.
+ * Uses box-shadow with layered values for realistic depth.
+ *
+ * @see klard-mobile/src/styles/tokens/effects.ts (mobile counterpart)
+ * @see docs/design/tokens-reference.md (full documentation)
+ *
+ * SOLID Compliance:
+ * - SRP: Only shadow and glow values
+ * - OCP: Extend by adding new shadow variants
+ */
+
+:root {
+  /* ========================================================================
+   * BASE SHADOW SCALE
+   * ======================================================================== */
+  --rec-shadow-color: rgba(0, 0, 0, 0.5);
+  --rec-shadow-xs: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
+  --rec-shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.08), 0 1px 2px -1px rgba(15, 23, 42, 0.08);
+  --rec-shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.1), 0 2px 4px -2px rgba(15, 23, 42, 0.1);
+  --rec-shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.1), 0 4px 6px -4px rgba(15, 23, 42, 0.1);
+  --rec-shadow-xl: 0 20px 25px -5px rgba(15, 23, 42, 0.1), 0 8px 10px -6px rgba(15, 23, 42, 0.1);
+  --rec-shadow-2xl: 0 25px 50px -12px rgba(15, 23, 42, 0.25);
+  --rec-shadow-inner: inset 0 2px 4px 0 rgba(15, 23, 42, 0.05);
+
+  /* ========================================================================
+   * COMPONENT-SPECIFIC SHADOWS
+   * ======================================================================== */
+  --rec-shadow-card-sm: 0px 1px 3px rgba(15, 23, 42, 0.08);
+  --rec-shadow-card-md: 0px 4px 12px rgba(15, 23, 42, 0.12);
+  --rec-shadow-card-lg: 0px 8px 24px rgba(15, 23, 42, 0.15);
+  --rec-shadow-card: 0 2px 12px rgba(15, 23, 42, 0.08);
+  --rec-shadow-card-elevated: 0 4px 20px rgba(15, 23, 42, 0.12);
+  --rec-shadow-hero: 0 35px 120px rgba(15, 23, 42, 0.1);
+
+  /* ========================================================================
+   * GLOW EFFECTS (light theme defaults)
+   * ======================================================================== */
+  --rec-glow-primary: 0 0 20px rgba(13, 124, 122, 0.3);
+  --rec-glow-success: 0 0 16px rgba(5, 150, 105, 0.2);
+  --rec-glow-warning: 0 0 16px rgba(217, 119, 6, 0.2);
+  --rec-glow-error: 0 0 16px rgba(220, 38, 38, 0.2);
+}
+
+/* Dark theme shadow overrides */
+[data-theme="dark"] {
+  --rec-shadow-card-sm: 0px 2px 8px rgba(0, 0, 0, 0.1);
+  --rec-shadow-card-md: 0px 8px 24px rgba(0, 0, 0, 0.15);
+  --rec-shadow-card-lg: 0px 16px 48px rgba(0, 0, 0, 0.2);
+
+  --rec-glow-primary: 0 0 24px rgba(21, 181, 176, 0.35);
+  --rec-glow-success: 0 0 16px rgba(16, 185, 129, 0.25);
+  --rec-glow-warning: 0 0 16px rgba(245, 158, 11, 0.25);
+  --rec-glow-error: 0 0 16px rgba(239, 68, 68, 0.25);
+}
+
+/* ========================================================================
+ * SHADOW UTILITY CLASSES
+ * ======================================================================== */
+@layer utilities {
+  .shadow-elevation-sm {
+    box-shadow: var(--rec-shadow-card-sm);
+  }
+
+  .shadow-elevation-md {
+    box-shadow: var(--rec-shadow-card-md);
+  }
+
+  .shadow-elevation-lg {
+    box-shadow: var(--rec-shadow-card-lg);
+  }
+
+  .shadow-glow-primary {
+    box-shadow: var(--rec-glow-primary);
+  }
+
+  .shadow-glow-success {
+    box-shadow: var(--rec-glow-success);
+  }
+
+  .shadow-glow-warning {
+    box-shadow: var(--rec-glow-warning);
+  }
+
+  .shadow-glow-error {
+    box-shadow: var(--rec-glow-error);
+  }
+}
