@@ -18,9 +18,9 @@ export const backgroundStyles = sva({
   }),
 });
 
-// Helper to get backdrop color
-export function getBackdropColor(isDark: boolean): string {
-  return 'rgba(15, 23, 42, 0.5)';
+// Helper to get backdrop color from theme
+export function getBackdropColor(colors: { backdropOverlay: string }): string {
+  return colors.backdropOverlay;
 }
 
 // Static layout styles

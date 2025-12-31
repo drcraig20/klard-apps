@@ -91,6 +91,7 @@ function BurnerCardVisual({
     styles.card,
     dimensions,
     isAwaiting && awaitingStyles.container,
+    isAwaiting && { borderColor: colors.border },
     isBurned && burnedStyles.container,
     style
   ];

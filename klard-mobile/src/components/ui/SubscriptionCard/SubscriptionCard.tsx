@@ -3,12 +3,12 @@ import {
   View,
   Text,
   Pressable,
-  useColorScheme,
   type ViewStyle,
   type StyleProp,
 } from 'react-native';
 import { Image } from 'expo-image';
 import * as Haptics from 'expo-haptics';
+import { useThemeColors } from '@/hooks/useThemeColors';
 import { format } from 'date-fns';
 import { Ionicons } from '@expo/vector-icons';
 
@@ -76,7 +76,7 @@ export function SubscriptionCard({
   style,
   testID,
 }: Readonly<SubscriptionCardProps>) {
-  const isDark = useColorScheme() === 'dark';
+  const { isDark, success } = useThemeColors();
   const [logoError, setLogoError] = useState(false);
 
   const {
@@ -169,7 +169,7 @@ export function SubscriptionCard({
                 <Ionicons
                   name="shield-checkmark"
                   size={12}
-                  color={isDark ? '#10B981' : '#059669'}
+                  color={success}
                 />
                 <Text style={protectedBadgeTextStyles(isDark)}>Protected</Text>
               </View>

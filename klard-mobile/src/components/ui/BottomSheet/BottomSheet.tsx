@@ -1,6 +1,5 @@
 // klard-mobile/src/components/ui/BottomSheet/BottomSheet.tsx
 import React, { useRef, useEffect, useCallback, useMemo } from 'react';
-import { useColorScheme } from 'react-native';
 import BottomSheetLib, {
   BottomSheetView,
   BottomSheetBackdrop,
@@ -8,6 +7,7 @@ import BottomSheetLib, {
 } from '@gorhom/bottom-sheet';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import * as Haptics from 'expo-haptics';
+import { useThemeColors } from '@/hooks/useThemeColors';
 import {
   handleIndicatorStyles,
   backgroundStyles,
@@ -37,7 +37,7 @@ export function BottomSheet({
 }: Readonly<BottomSheetProps>) {
   const bottomSheetRef = useRef<BottomSheetLib>(null);
   const insets = useSafeAreaInsets();
-  const isDark = useColorScheme() === 'dark';
+  const { isDark, backdropOverlay } = useThemeColors();
 
   const snaps = useMemo(() => snapPoints ?? ['50%'], [snapPoints]);
 
@@ -67,11 +67,11 @@ export function BottomSheet({
         appearsOnIndex={0}
         opacity={0.5}
         pressBehavior="close"
-        style={[props.style, { backgroundColor: getBackdropColor(isDark) }]}
+        style={[props.style, { backgroundColor: getBackdropColor({ backdropOverlay }) }]}
         {...({ testID: 'bottom-sheet-backdrop' } as any)}
       />
     ),
-    [isDark]
+    [backdropOverlay]
   );
 
   return (
