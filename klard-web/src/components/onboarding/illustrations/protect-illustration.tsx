@@ -1,28 +1,8 @@
-'use client';
-
-import { useTheme } from 'next-themes';
-
 interface IllustrationProps {
   className?: string;
 }
 
 export function ProtectIllustration({ className }: Readonly<IllustrationProps>) {
-  const { resolvedTheme } = useTheme();
-  const isDark = resolvedTheme === 'dark';
-
-  // Theme-aware colors
-  const colors = {
-    primary: isDark ? '#15B5B0' : '#0D7C7A',
-    background: isDark ? '#0F172A' : '#FFFFFF',
-    foreground: isDark ? '#F8FAFC' : '#0F172A',
-    muted: isDark ? '#334155' : '#F1F5F9',
-    card: isDark ? '#1E293B' : '#FFFFFF',
-    mutedForeground: isDark ? '#94A3B8' : '#64748B',
-  };
-
-  // Derive border color with opacity
-  const cardBorderColor = `color-mix(in srgb, ${colors.foreground} 15%, transparent)`;
-
   return (
     <svg
       width={280}
@@ -44,19 +24,19 @@ export function ProtectIllustration({ className }: Readonly<IllustrationProps>) 
 
         {/* Card gradient */}
         <linearGradient id="card-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor={colors.muted} />
-          <stop offset="100%" stopColor={colors.card} />
+          <stop offset="0%" stopColor="var(--rec-color-muted)" />
+          <stop offset="100%" stopColor="var(--rec-color-card)" />
         </linearGradient>
 
         {/* Teal gradient for shield */}
         <linearGradient id="shield-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor={colors.primary} stopOpacity="0.9" />
-          <stop offset="100%" stopColor={colors.primary} stopOpacity="0.6" />
+          <stop offset="0%" stopColor="var(--rec-color-primary)" stopOpacity="0.9" />
+          <stop offset="100%" stopColor="var(--rec-color-primary)" stopOpacity="0.6" />
         </linearGradient>
       </defs>
 
       {/* Background */}
-      <rect width="280" height="200" fill={colors.background} opacity="0" />
+      <rect width="280" height="200" fill="var(--rec-color-background)" opacity="0" />
 
       {/* Credit Card - centered and slightly tilted */}
       <g transform="translate(40, 60) rotate(-5)">
@@ -79,7 +59,7 @@ export function ProtectIllustration({ className }: Readonly<IllustrationProps>) 
           height="120"
           rx="12"
           fill="url(#card-gradient)"
-          stroke={cardBorderColor}
+          stroke="var(--rec-color-border)"
           strokeWidth="1.5"
         />
 
@@ -90,7 +70,7 @@ export function ProtectIllustration({ className }: Readonly<IllustrationProps>) 
           width="35"
           height="28"
           rx="4"
-          fill={colors.mutedForeground}
+          fill="var(--rec-color-muted-foreground)"
           opacity="0.7"
         />
         <rect
@@ -99,33 +79,33 @@ export function ProtectIllustration({ className }: Readonly<IllustrationProps>) 
           width="27"
           height="20"
           rx="2"
-          fill={colors.mutedForeground}
+          fill="var(--rec-color-muted-foreground)"
           opacity="0.5"
         />
 
         {/* Card number (dots representing digits) */}
         <g opacity="0.6">
-          <circle cx="20" cy="75" r="3" fill={colors.foreground} />
-          <circle cx="32" cy="75" r="3" fill={colors.foreground} />
-          <circle cx="44" cy="75" r="3" fill={colors.foreground} />
-          <circle cx="56" cy="75" r="3" fill={colors.foreground} />
+          <circle cx="20" cy="75" r="3" fill="var(--rec-color-foreground)" />
+          <circle cx="32" cy="75" r="3" fill="var(--rec-color-foreground)" />
+          <circle cx="44" cy="75" r="3" fill="var(--rec-color-foreground)" />
+          <circle cx="56" cy="75" r="3" fill="var(--rec-color-foreground)" />
 
-          <circle cx="75" cy="75" r="3" fill={colors.foreground} />
-          <circle cx="87" cy="75" r="3" fill={colors.foreground} />
-          <circle cx="99" cy="75" r="3" fill={colors.foreground} />
-          <circle cx="111" cy="75" r="3" fill={colors.foreground} />
+          <circle cx="75" cy="75" r="3" fill="var(--rec-color-foreground)" />
+          <circle cx="87" cy="75" r="3" fill="var(--rec-color-foreground)" />
+          <circle cx="99" cy="75" r="3" fill="var(--rec-color-foreground)" />
+          <circle cx="111" cy="75" r="3" fill="var(--rec-color-foreground)" />
 
-          <circle cx="130" cy="75" r="3" fill={colors.foreground} />
-          <circle cx="142" cy="75" r="3" fill={colors.foreground} />
-          <circle cx="154" cy="75" r="3" fill={colors.foreground} />
-          <circle cx="166" cy="75" r="3" fill={colors.foreground} />
+          <circle cx="130" cy="75" r="3" fill="var(--rec-color-foreground)" />
+          <circle cx="142" cy="75" r="3" fill="var(--rec-color-foreground)" />
+          <circle cx="154" cy="75" r="3" fill="var(--rec-color-foreground)" />
+          <circle cx="166" cy="75" r="3" fill="var(--rec-color-foreground)" />
         </g>
 
         {/* Cardholder name placeholder */}
-        <rect x="20" y="95" width="80" height="6" rx="3" fill={colors.foreground} opacity="0.4" />
+        <rect x="20" y="95" width="80" height="6" rx="3" fill="var(--rec-color-foreground)" opacity="0.4" />
 
         {/* Expiry date placeholder */}
-        <rect x="20" y="106" width="35" height="5" rx="2.5" fill={colors.foreground} opacity="0.3" />
+        <rect x="20" y="106" width="35" height="5" rx="2.5" fill="var(--rec-color-foreground)" opacity="0.3" />
       </g>
 
       {/* Shield icon - overlaid on top with glow */}
@@ -135,7 +115,7 @@ export function ProtectIllustration({ className }: Readonly<IllustrationProps>) 
           cx="0"
           cy="0"
           r="45"
-          fill={colors.primary}
+          fill="var(--rec-color-primary)"
           opacity="0.15"
         />
 
@@ -149,7 +129,7 @@ export function ProtectIllustration({ className }: Readonly<IllustrationProps>) 
              L -30,-20
              C -30,-30 -20,-35 0,-35 Z"
           fill="url(#shield-gradient)"
-          stroke={colors.primary}
+          stroke="var(--rec-color-primary)"
           strokeWidth="2"
         />
 
@@ -162,7 +142,7 @@ export function ProtectIllustration({ className }: Readonly<IllustrationProps>) 
              C -12,30 -25,21 -25,8
              L -25,-18
              C -25,-26 -17,-30 0,-30 Z"
-          fill={colors.primary}
+          fill="var(--rec-color-primary)"
           opacity="0.3"
         />
 
@@ -179,11 +159,11 @@ export function ProtectIllustration({ className }: Readonly<IllustrationProps>) 
 
       {/* Decorative security elements - lock icons */}
       <g opacity="0.2">
-        <circle cx="30" cy="30" r="4" fill={colors.primary} />
-        <rect x="28" y="32" width="4" height="5" rx="1" fill={colors.primary} />
+        <circle cx="30" cy="30" r="4" fill="var(--rec-color-primary)" />
+        <rect x="28" y="32" width="4" height="5" rx="1" fill="var(--rec-color-primary)" />
 
-        <circle cx="250" cy="170" r="3" fill={colors.primary} />
-        <rect x="248.5" y="171.5" width="3" height="4" rx="0.75" fill={colors.primary} />
+        <circle cx="250" cy="170" r="3" fill="var(--rec-color-primary)" />
+        <rect x="248.5" y="171.5" width="3" height="4" rx="0.75" fill="var(--rec-color-primary)" />
       </g>
     </svg>
   );
