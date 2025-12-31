@@ -147,12 +147,12 @@ function ServiceChip({ service, isSelected, onClick }: Readonly<ServiceChipProps
         'bg-card/60 backdrop-blur-sm',
         'border',
         // Hover state - teal border/glow
-        'hover:border-primary hover:shadow-[0_0_12px_rgba(21,181,176,0.3)]',
+        'hover:border-primary hover:shadow-[var(--rec-glow-primary)]',
         // Focus state for accessibility
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2',
         // Selection state - teal background with white text
         isSelected
-          ? 'border-primary bg-primary text-primary-foreground shadow-[0_0_12px_rgba(21,181,176,0.3)]'
+          ? 'border-primary bg-primary text-primary-foreground shadow-[var(--rec-glow-primary)]'
           : 'border-border text-foreground'
       )}
       aria-pressed={isSelected}

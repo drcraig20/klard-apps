@@ -49,7 +49,7 @@ export const navItemVariants = cva(
       active: {
         true: [
           'bg-white/20',
-          'shadow-[0_0_12px_rgba(21,181,176,0.4)]',
+          'shadow-[var(--rec-glow-primary)]',
           'text-white font-medium',
           'border border-white/20',
         ],

@@ -7,17 +7,17 @@ const badgeVariants = cva(
       variant: {
         default: "bg-muted text-muted-foreground",
         primary:
-          "bg-primary/10 text-primary dark:bg-primary/20 shadow-[0_0_8px_rgba(21,181,176,0.3)]",
+          "bg-primary/10 text-primary dark:bg-primary/20 shadow-[var(--rec-glow-primary)]",
         success:
-          "bg-success/10 text-success dark:bg-success/20 shadow-[0_0_8px_rgba(16,185,129,0.3)]",
+          "bg-success/10 text-success dark:bg-success/20 shadow-[var(--rec-glow-success)]",
         warning:
-          "bg-warning/10 text-warning dark:bg-warning/20 shadow-[0_0_8px_rgba(245,158,11,0.3)]",
+          "bg-warning/10 text-warning dark:bg-warning/20 shadow-[var(--rec-glow-warning)]",
         error:
-          "bg-error/10 text-error dark:bg-error/20 shadow-[0_0_8px_rgba(239,68,68,0.3)]",
+          "bg-error/10 text-error dark:bg-error/20 shadow-[var(--rec-glow-error)]",
         outline: "bg-transparent border border-border text-muted-foreground",
         secondary: "bg-secondary text-secondary-foreground",
         destructive:
-          "bg-destructive text-destructive-foreground focus:ring-destructive/20 dark:focus:ring-destructive/40 shadow-[0_0_8px_rgba(239,68,68,0.3)]",
+          "bg-destructive text-destructive-foreground focus:ring-destructive/20 dark:focus:ring-destructive/40 shadow-[var(--rec-glow-error)]",
       },
       size: {
         sm: "text-xs px-1.5 py-0.5",
