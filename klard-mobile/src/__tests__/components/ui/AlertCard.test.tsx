@@ -3,14 +3,26 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react-nativ
 import * as Haptics from 'expo-haptics';
 import { AlertCard } from '@/components/ui/AlertCard';
 
-// Mock expo-haptics
-jest.mock('expo-haptics', () => ({
-  impactAsync: jest.fn(),
-  ImpactFeedbackStyle: {
-    Light: 'light',
-    Medium: 'medium',
-    Heavy: 'heavy',
-  },
+// Mock useThemeColors hook to provide theme context
+jest.mock('@/hooks/useThemeColors', () => ({
+  useThemeColors: () => ({
+    primary: '#0D7C7A',
+    primaryForeground: '#FFFFFF',
+    secondary: '#15B5B0',
+    success: '#059669',
+    warning: '#D97706',
+    error: '#DC2626',
+    muted: '#F1F5F9',
+    mutedForeground: '#64748B',
+    textSecondary: '#475569',
+    textTertiary: '#64748B',
+    foreground: '#0F172A',
+    background: '#FFFFFF',
+    card: '#FFFFFF',
+    cardForeground: '#0F172A',
+    border: 'rgba(148, 163, 184, 0.2)',
+    isDark: false,
+  }),
 }));
 
 // Mock expo-image

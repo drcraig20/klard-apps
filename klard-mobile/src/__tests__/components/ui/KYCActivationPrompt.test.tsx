@@ -6,18 +6,8 @@
  */
 
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react-native';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react-native';
 import { KYCActivationPrompt } from '@/components/ui/KYCActivationPrompt';
-
-// Mock expo-haptics (used internally by some components)
-jest.mock('expo-haptics', () => ({
-  impactAsync: jest.fn(),
-  ImpactFeedbackStyle: {
-    Light: 'light',
-    Medium: 'medium',
-    Heavy: 'heavy',
-  },
-}));
 
 // Mock vector icons to avoid ESM parse issues in Jest
 jest.mock('@expo/vector-icons', () => {
@@ -39,7 +29,8 @@ describe('KYCActivationPrompt', () => {
     it('uses activation framing not verification', () => {
       render(<KYCActivationPrompt cardName="Test Card" onActivate={jest.fn()} />);
 
-      expect(screen.getByText(/Activate/i)).toBeTruthy();
+      // Title and button both contain "Activate" - just check there's at least one
+      expect(screen.getAllByText(/Activate/i).length).toBeGreaterThan(0);
       expect(screen.queryByText(/Verify your identity/i)).toBeNull();
     });
 
@@ -91,13 +82,18 @@ describe('KYCActivationPrompt', () => {
       expect(screen.getByText('Activate Now')).toBeTruthy();
     });
 
-    it('calls onActivate when button pressed', () => {
+    it('calls onActivate when button pressed', async () => {
       const onActivate = jest.fn();
       render(<KYCActivationPrompt cardName="Test" onActivate={onActivate} />);
 
-      fireEvent.press(screen.getByText('Activate Now'));
+      // Button component wraps text in Pressable with accessibilityRole="button"
+      const button = screen.getByRole('button');
+      fireEvent.press(button);
 
-      expect(onActivate).toHaveBeenCalledTimes(1);
+      // handlePress in Button is async due to haptics, so we need to wait
+      await waitFor(() => {
+        expect(onActivate).toHaveBeenCalledTimes(1);
+      });
     });
   });
 

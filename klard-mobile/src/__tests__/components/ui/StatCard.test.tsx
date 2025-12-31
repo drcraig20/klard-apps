@@ -10,16 +10,6 @@ import { Text } from 'react-native';
 import { StatCard } from '@/components/ui/StatCard';
 import * as Haptics from 'expo-haptics';
 
-// Mock expo-haptics
-jest.mock('expo-haptics', () => ({
-  impactAsync: jest.fn(),
-  ImpactFeedbackStyle: {
-    Light: 'light',
-    Medium: 'medium',
-    Heavy: 'heavy',
-  },
-}));
-
 // Mock vector icons
 jest.mock('@expo/vector-icons', () => {
   const React = require('react');

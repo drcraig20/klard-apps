@@ -73,38 +73,44 @@ describe('ConfirmButton', () => {
   });
 
   describe('Confirmation State', () => {
-    it('shows confirmation on first press', () => {
+    it('shows confirmation on first press', async () => {
       const { getByText } = render(
         <ConfirmButton onConfirm={mockOnConfirm}>Delete</ConfirmButton>
       );
 
       fireEvent.press(getByText('Delete'));
 
-      expect(getByText('Are you sure?')).toBeTruthy();
+      await waitFor(() => {
+        expect(getByText('Are you sure?')).toBeTruthy();
+      });
     });
 
-    it('should show Yes and No buttons in confirmation state', () => {
+    it('should show Yes and No buttons in confirmation state', async () => {
       const { getByText } = render(
         <ConfirmButton onConfirm={mockOnConfirm}>Delete</ConfirmButton>
       );
 
       fireEvent.press(getByText('Delete'));
 
-      expect(getByText('Yes')).toBeTruthy();
-      expect(getByText('No')).toBeTruthy();
+      await waitFor(() => {
+        expect(getByText('Yes')).toBeTruthy();
+        expect(getByText('No')).toBeTruthy();
+      });
     });
 
-    it('should hide original children in confirmation state', () => {
+    it('should hide original children in confirmation state', async () => {
       const { getByText, queryByText } = render(
         <ConfirmButton onConfirm={mockOnConfirm}>Delete</ConfirmButton>
       );
 
       fireEvent.press(getByText('Delete'));
 
-      expect(queryByText('Delete')).toBeNull();
+      await waitFor(() => {
+        expect(queryByText('Delete')).toBeNull();
+      });
     });
 
-    it('should use custom confirmText', () => {
+    it('should use custom confirmText', async () => {
       const { getByText } = render(
         <ConfirmButton onConfirm={mockOnConfirm} confirmText="Really delete?">
           Delete
@@ -113,18 +119,23 @@ describe('ConfirmButton', () => {
 
       fireEvent.press(getByText('Delete'));
 
-      expect(getByText('Really delete?')).toBeTruthy();
+      await waitFor(() => {
+        expect(getByText('Really delete?')).toBeTruthy();
+      });
     });
   });
 
   describe('Auto Reset', () => {
-    it('auto-resets after 5 seconds', () => {
+    it('auto-resets after 5 seconds', async () => {
       const { getByText, queryByText } = render(
         <ConfirmButton onConfirm={mockOnConfirm}>Delete</ConfirmButton>
       );
 
       fireEvent.press(getByText('Delete'));
-      expect(getByText('Are you sure?')).toBeTruthy();
+
+      await waitFor(() => {
+        expect(getByText('Are you sure?')).toBeTruthy();
+      });
 
       act(() => {
         jest.advanceTimersByTime(5000);
@@ -134,7 +145,7 @@ describe('ConfirmButton', () => {
       expect(queryByText('Are you sure?')).toBeNull();
     });
 
-    it('should use custom resetTimeout', () => {
+    it('should use custom resetTimeout', async () => {
       const { getByText, queryByText } = render(
         <ConfirmButton onConfirm={mockOnConfirm} resetTimeout={3000}>
           Delete
@@ -142,7 +153,10 @@ describe('ConfirmButton', () => {
       );
 
       fireEvent.press(getByText('Delete'));
-      expect(getByText('Are you sure?')).toBeTruthy();
+
+      await waitFor(() => {
+        expect(getByText('Are you sure?')).toBeTruthy();
+      });
 
       act(() => {
         jest.advanceTimersByTime(2999);
@@ -155,12 +169,17 @@ describe('ConfirmButton', () => {
       expect(getByText('Delete')).toBeTruthy();
     });
 
-    it('should clear timeout when unmounted', () => {
+    it('should clear timeout when unmounted', async () => {
       const { getByText, unmount } = render(
         <ConfirmButton onConfirm={mockOnConfirm}>Delete</ConfirmButton>
       );
 
       fireEvent.press(getByText('Delete'));
+
+      await waitFor(() => {
+        expect(getByText('Are you sure?')).toBeTruthy();
+      });
+
       unmount();
 
       // Should not throw or cause issues
@@ -177,6 +196,11 @@ describe('ConfirmButton', () => {
       );
 
       fireEvent.press(getByText('Delete'));
+
+      await waitFor(() => {
+        expect(getByText('Yes')).toBeTruthy();
+      });
+
       fireEvent.press(getByText('Yes'));
 
       await waitFor(() => {
@@ -190,6 +214,11 @@ describe('ConfirmButton', () => {
       );
 
       fireEvent.press(getByText('Delete'));
+
+      await waitFor(() => {
+        expect(getByText('Yes')).toBeTruthy();
+      });
+
       fireEvent.press(getByText('Yes'));
 
       await waitFor(() => {
@@ -204,6 +233,11 @@ describe('ConfirmButton', () => {
       );
 
       fireEvent.press(getByText('Delete'));
+
+      await waitFor(() => {
+        expect(getByText('Yes')).toBeTruthy();
+      });
+
       fireEvent.press(getByText('Yes'));
 
       await waitFor(() => {
@@ -215,25 +249,41 @@ describe('ConfirmButton', () => {
   });
 
   describe('Cancel Action', () => {
-    it('resets on No press', () => {
+    it('resets on No press', async () => {
       const { getByText, queryByText } = render(
         <ConfirmButton onConfirm={mockOnConfirm}>Delete</ConfirmButton>
       );
 
       fireEvent.press(getByText('Delete'));
+
+      await waitFor(() => {
+        expect(getByText('No')).toBeTruthy();
+      });
+
       fireEvent.press(getByText('No'));
 
-      expect(getByText('Delete')).toBeTruthy();
-      expect(queryByText('Are you sure?')).toBeNull();
+      await waitFor(() => {
+        expect(getByText('Delete')).toBeTruthy();
+        expect(queryByText('Are you sure?')).toBeNull();
+      });
     });
 
-    it('should not call onConfirm when No is pressed', () => {
+    it('should not call onConfirm when No is pressed', async () => {
       const { getByText } = render(
         <ConfirmButton onConfirm={mockOnConfirm}>Delete</ConfirmButton>
       );
 
       fireEvent.press(getByText('Delete'));
+
+      await waitFor(() => {
+        expect(getByText('No')).toBeTruthy();
+      });
+
       fireEvent.press(getByText('No'));
+
+      await waitFor(() => {
+        expect(getByText('Delete')).toBeTruthy();
+      });
 
       expect(mockOnConfirm).not.toHaveBeenCalled();
     });
@@ -286,6 +336,10 @@ describe('ConfirmButton', () => {
       // Press to show confirmation
       fireEvent.press(getByText('Delete'));
 
+      await waitFor(() => {
+        expect(getByText('Yes')).toBeTruthy();
+      });
+
       // Rapid presses on Yes
       fireEvent.press(getByText('Yes'));
 
@@ -303,10 +357,24 @@ describe('ConfirmButton', () => {
 
       // First cycle - cancel
       fireEvent.press(getByText('Delete'));
+
+      await waitFor(() => {
+        expect(getByText('No')).toBeTruthy();
+      });
+
       fireEvent.press(getByText('No'));
+
+      await waitFor(() => {
+        expect(getByText('Delete')).toBeTruthy();
+      });
 
       // Second cycle - confirm
       fireEvent.press(getByText('Delete'));
+
+      await waitFor(() => {
+        expect(getByText('Yes')).toBeTruthy();
+      });
+
       fireEvent.press(getByText('Yes'));
 
       await waitFor(() => {
@@ -314,13 +382,22 @@ describe('ConfirmButton', () => {
       });
     });
 
-    it('should clear timeout when manually cancelled', () => {
+    it('should clear timeout when manually cancelled', async () => {
       const { getByText } = render(
         <ConfirmButton onConfirm={mockOnConfirm}>Delete</ConfirmButton>
       );
 
       fireEvent.press(getByText('Delete'));
+
+      await waitFor(() => {
+        expect(getByText('No')).toBeTruthy();
+      });
+
       fireEvent.press(getByText('No'));
+
+      await waitFor(() => {
+        expect(getByText('Delete')).toBeTruthy();
+      });
 
       // Advance past the reset timeout
       act(() => {
@@ -341,15 +418,17 @@ describe('ConfirmButton', () => {
       expect(getByRole('button')).toBeTruthy();
     });
 
-    it('should have correct accessibility labels', () => {
+    it('should have correct accessibility labels', async () => {
       const { getByText, getByLabelText } = render(
         <ConfirmButton onConfirm={mockOnConfirm}>Delete</ConfirmButton>
       );
 
       fireEvent.press(getByText('Delete'));
 
-      expect(getByLabelText('Confirm action')).toBeTruthy();
-      expect(getByLabelText('Cancel action')).toBeTruthy();
+      await waitFor(() => {
+        expect(getByLabelText('Confirm action')).toBeTruthy();
+        expect(getByLabelText('Cancel action')).toBeTruthy();
+      });
     });
   });
 });

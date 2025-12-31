@@ -10,16 +10,6 @@ import { Text } from 'react-native';
 import { SegmentedControl } from '@/components/ui/SegmentedControl';
 import * as Haptics from 'expo-haptics';
 
-// Mock expo-haptics
-jest.mock('expo-haptics', () => ({
-  impactAsync: jest.fn(),
-  ImpactFeedbackStyle: {
-    Light: 'light',
-    Medium: 'medium',
-    Heavy: 'heavy',
-  },
-}));
-
 const defaultOptions = [
   { value: 'option1', label: 'Option 1' },
   { value: 'option2', label: 'Option 2' },

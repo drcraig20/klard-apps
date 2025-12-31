@@ -11,7 +11,7 @@
  */
 
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react-native';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react-native';
 import { CardTypeSelector } from '@/components/ui/CardTypeSelector';
 
 describe('CardTypeSelector', () => {
@@ -114,36 +114,48 @@ describe('CardTypeSelector', () => {
   });
 
   describe('Selection Behavior', () => {
-    it("calls onSelect with 'one-time' when One-Time is clicked", () => {
+    it("calls onSelect with 'one-time' when One-Time is clicked", async () => {
       const onSelect = jest.fn();
       render(<CardTypeSelector onSelect={onSelect} />);
 
       fireEvent.press(screen.getByText('One-Time'));
-      expect(onSelect).toHaveBeenCalledWith('one-time');
+
+      await waitFor(() => {
+        expect(onSelect).toHaveBeenCalledWith('one-time');
+      });
     });
 
-    it("calls onSelect with 'recurring' when Recurring is clicked", () => {
+    it("calls onSelect with 'recurring' when Recurring is clicked", async () => {
       const onSelect = jest.fn();
       render(<CardTypeSelector onSelect={onSelect} />);
 
       fireEvent.press(screen.getByText('Recurring'));
-      expect(onSelect).toHaveBeenCalledWith('recurring');
+
+      await waitFor(() => {
+        expect(onSelect).toHaveBeenCalledWith('recurring');
+      });
     });
 
-    it("calls onSelect with 'category-locked' when Category-Locked is clicked", () => {
+    it("calls onSelect with 'category-locked' when Category-Locked is clicked", async () => {
       const onSelect = jest.fn();
       render(<CardTypeSelector onSelect={onSelect} showAdvanced />);
 
       fireEvent.press(screen.getByText('Category-Locked'));
-      expect(onSelect).toHaveBeenCalledWith('category-locked');
+
+      await waitFor(() => {
+        expect(onSelect).toHaveBeenCalledWith('category-locked');
+      });
     });
 
-    it("calls onSelect with 'merchant-locked' when Merchant-Locked is clicked", () => {
+    it("calls onSelect with 'merchant-locked' when Merchant-Locked is clicked", async () => {
       const onSelect = jest.fn();
       render(<CardTypeSelector onSelect={onSelect} showAdvanced />);
 
       fireEvent.press(screen.getByText('Merchant-Locked'));
-      expect(onSelect).toHaveBeenCalledWith('merchant-locked');
+
+      await waitFor(() => {
+        expect(onSelect).toHaveBeenCalledWith('merchant-locked');
+      });
     });
   });
 

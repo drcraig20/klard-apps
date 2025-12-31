@@ -20,6 +20,35 @@ jest.mock('expo-haptics', () => ({
   },
 }));
 
+// Mock useThemeColors hook to provide theme context
+jest.mock('@/hooks/useThemeColors', () => ({
+  useThemeColors: () => ({
+    primary: '#0D7C7A',
+    primaryForeground: '#FFFFFF',
+    secondary: '#15B5B0',
+    success: '#059669',
+    warning: '#D97706',
+    error: '#DC2626',
+    muted: '#F1F5F9',
+    mutedForeground: '#64748B',
+    textSecondary: '#475569',
+    foreground: '#0F172A',
+    background: '#FFFFFF',
+    // Glow colors used for badge shadows
+    glowPrimary: 'rgba(13, 124, 122, 0.3)',
+    glowSuccess: 'rgba(5, 150, 105, 0.2)',
+    glowWarning: 'rgba(217, 119, 6, 0.2)',
+    glowError: 'rgba(220, 38, 38, 0.2)',
+    // Background colors for badge variants
+    primaryBackground: '#E6F5F5',
+    successBackground: '#ECFDF5',
+    warningBackground: '#FEF3C7',
+    errorBackground: '#FEF2F2',
+    border: 'rgba(148, 163, 184, 0.2)',
+    isDark: false,
+  }),
+}));
+
 // Mock vector icons to avoid ESM parse issues in Jest
 jest.mock('@expo/vector-icons', () => {
   const React = require('react');
@@ -196,11 +225,11 @@ describe('Badge', () => {
       const badge = getByTestId('badge');
       // Verify badge renders with success variant (shadow applied via style)
       expect(badge).toBeTruthy();
-      // Check that the style includes shadowColor
+      // Check that the style includes shadowColor using design token (glowSuccess)
       const flatStyle = Array.isArray(badge.props.style)
         ? Object.assign({}, ...badge.props.style)
         : badge.props.style;
-      expect(flatStyle.shadowColor).toBe('rgb(16, 185, 129)');
+      expect(flatStyle.shadowColor).toBe('rgba(5, 150, 105, 0.2)');
     });
 
     it('should apply warning glow shadow styles', () => {
@@ -211,10 +240,11 @@ describe('Badge', () => {
       );
 
       const badge = getByTestId('badge');
+      // Check that the style includes shadowColor using design token (glowWarning)
       const flatStyle = Array.isArray(badge.props.style)
         ? Object.assign({}, ...badge.props.style)
         : badge.props.style;
-      expect(flatStyle.shadowColor).toBe('rgb(245, 158, 11)');
+      expect(flatStyle.shadowColor).toBe('rgba(217, 119, 6, 0.2)');
     });
 
     it('should apply error glow shadow styles', () => {
@@ -225,10 +255,11 @@ describe('Badge', () => {
       );
 
       const badge = getByTestId('badge');
+      // Check that the style includes shadowColor using design token (glowError)
       const flatStyle = Array.isArray(badge.props.style)
         ? Object.assign({}, ...badge.props.style)
         : badge.props.style;
-      expect(flatStyle.shadowColor).toBe('rgb(239, 68, 68)');
+      expect(flatStyle.shadowColor).toBe('rgba(220, 38, 38, 0.2)');
     });
 
     it('should apply primary glow shadow styles', () => {
@@ -239,10 +270,11 @@ describe('Badge', () => {
       );
 
       const badge = getByTestId('badge');
+      // Check that the style includes shadowColor using design token (glowPrimary)
       const flatStyle = Array.isArray(badge.props.style)
         ? Object.assign({}, ...badge.props.style)
         : badge.props.style;
-      expect(flatStyle.shadowColor).toBe('rgb(21, 181, 176)');
+      expect(flatStyle.shadowColor).toBe('rgba(13, 124, 122, 0.3)');
     });
 
     it('should not apply glow to default variant', () => {

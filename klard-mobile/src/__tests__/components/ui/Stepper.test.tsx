@@ -8,16 +8,16 @@ import React from 'react';
 import { render, screen } from '@testing-library/react-native';
 import { Stepper } from '@/components/ui/Stepper';
 
-// Mock hooks
-jest.mock('@/hooks', () => ({
-  useThemeColors: () => ({
-    primary: '#0D7C7A',
-    muted: '#E2E8F0',
-    textPrimary: '#0F172A',
-    textSecondary: '#64748B',
-    background: '#FFFFFF',
-  }),
-}));
+// Mock vector icons
+jest.mock('@expo/vector-icons', () => {
+  const React = require('react');
+  const { Text } = require('react-native');
+  return {
+    Ionicons: ({ name, testID }: { name: string; testID?: string }) => (
+      <Text testID={testID || 'ionicon'}>{name}</Text>
+    ),
+  };
+});
 
 const mockSteps = [
   { label: 'Step 1', description: 'First step' },

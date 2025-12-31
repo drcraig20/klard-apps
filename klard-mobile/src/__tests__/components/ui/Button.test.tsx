@@ -7,11 +7,39 @@ import { Button } from '@/components/ui/Button';
 // Mock expo-haptics
 jest.mock('expo-haptics', () => ({
   impactAsync: jest.fn(),
+  notificationAsync: jest.fn(),
   ImpactFeedbackStyle: {
     Light: 'light',
     Medium: 'medium',
     Heavy: 'heavy',
   },
+  NotificationFeedbackType: {
+    Success: 'success',
+    Warning: 'warning',
+    Error: 'error',
+  },
+}));
+
+// Mock useThemeColors hook to provide theme context
+jest.mock('@/hooks/useThemeColors', () => ({
+  useThemeColors: () => ({
+    primary: '#0D7C7A',
+    primaryForeground: '#FFFFFF',
+    secondary: '#15B5B0',
+    secondaryForeground: '#FFFFFF',
+    success: '#059669',
+    warning: '#D97706',
+    error: '#DC2626',
+    muted: '#F1F5F9',
+    mutedForeground: '#64748B',
+    textSecondary: '#475569',
+    foreground: '#0F172A',
+    background: '#FFFFFF',
+    destructive: '#DC2626',
+    destructiveForeground: '#FFFFFF',
+    border: 'rgba(148, 163, 184, 0.2)',
+    isDark: false,
+  }),
 }));
 
 describe('Button', () => {

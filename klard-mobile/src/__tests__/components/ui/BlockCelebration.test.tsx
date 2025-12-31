@@ -206,7 +206,7 @@ describe('BlockCelebration', () => {
   });
 
   describe('ShareButton Interaction', () => {
-    it('calls onShare when pressed', () => {
+    it('calls onShare when pressed', async () => {
       const handleShare = jest.fn();
       render(
         <BlockCelebration level="first">
@@ -215,7 +215,10 @@ describe('BlockCelebration', () => {
       );
 
       fireEvent.press(screen.getByTestId('block-celebration-share-button'));
-      expect(handleShare).toHaveBeenCalledTimes(1);
+
+      await waitFor(() => {
+        expect(handleShare).toHaveBeenCalledTimes(1);
+      });
     });
 
     it('triggers haptic on press', async () => {
