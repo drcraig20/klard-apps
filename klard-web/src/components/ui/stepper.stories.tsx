@@ -141,7 +141,7 @@ export const Interactive: Story = {
 
         <div className="p-4 border rounded-md">
           {isComplete ? (
-            <p className="text-center text-green-600 font-medium">
+            <p className="text-center text-success font-medium">
               All steps completed!
             </p>
           ) : (

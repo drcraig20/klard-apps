@@ -152,7 +152,7 @@ const InteractiveTemplate = () => {
         placeholder="Pick a date"
       />
       {date && (
-        <p className="mt-4 text-sm text-slate-600">
+        <p className="mt-4 text-sm text-muted-foreground">
           Selected: {date.toLocaleDateString()}
         </p>
       )}

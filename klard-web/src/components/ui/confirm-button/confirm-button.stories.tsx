@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { fn } from "@storybook/test";
 import { ConfirmButton } from "./confirm-button";
+
+const action = (name: string) => () => console.log(`Action: ${name}`);
 
 const meta = {
   title: "Actions/ConfirmButton",
@@ -35,7 +36,7 @@ const meta = {
     },
   },
   args: {
-    onConfirm: fn(),
+    onConfirm: action("onConfirm"),
   },
 } satisfies Meta<typeof ConfirmButton>;
 

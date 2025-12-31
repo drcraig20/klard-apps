@@ -115,7 +115,7 @@ const InteractiveTemplate = () => {
         onSearch={handleSearch}
         placeholder="Type to search..."
       />
-      <div className="text-sm text-slate-600 dark:text-slate-400">
+      <div className="text-sm text-muted-foreground">
         <p>Input value: "{value}"</p>
         <p>Debounced search: "{searchTerm}"</p>
       </div>
@@ -165,7 +165,7 @@ const LoadingSimulationTemplate = () => {
           {results.map((result, i) => (
             <li
               key={i}
-              className="p-2 bg-slate-100 dark:bg-slate-800 rounded text-sm"
+              className="p-2 bg-muted rounded text-sm"
             >
               {result}
             </li>
@@ -210,13 +210,13 @@ const FilterListTemplate = () => {
         {filteredItems.map((item) => (
           <li
             key={item}
-            className="p-2 bg-slate-100 dark:bg-slate-800 rounded text-sm"
+            className="p-2 bg-muted rounded text-sm"
           >
             {item}
           </li>
         ))}
         {filteredItems.length === 0 && (
-          <li className="p-2 text-sm text-slate-500">No results found</li>
+          <li className="p-2 text-sm text-muted-foreground">No results found</li>
         )}
       </ul>
     </div>
@@ -232,7 +232,7 @@ export const AllStates: Story = {
   render: () => (
     <div className="space-y-4 max-w-sm">
       <div>
-        <p className="text-sm text-slate-500 mb-2">Empty</p>
+        <p className="text-sm text-muted-foreground mb-2">Empty</p>
         <SearchInput
           value=""
           onChange={() => {}}
@@ -240,7 +240,7 @@ export const AllStates: Story = {
         />
       </div>
       <div>
-        <p className="text-sm text-slate-500 mb-2">With value</p>
+        <p className="text-sm text-muted-foreground mb-2">With value</p>
         <SearchInput
           value="search term"
           onChange={() => {}}
@@ -248,7 +248,7 @@ export const AllStates: Story = {
         />
       </div>
       <div>
-        <p className="text-sm text-slate-500 mb-2">Loading</p>
+        <p className="text-sm text-muted-foreground mb-2">Loading</p>
         <SearchInput
           value="loading"
           onChange={() => {}}
@@ -257,7 +257,7 @@ export const AllStates: Story = {
         />
       </div>
       <div>
-        <p className="text-sm text-slate-500 mb-2">Disabled</p>
+        <p className="text-sm text-muted-foreground mb-2">Disabled</p>
         <SearchInput
           value="disabled"
           onChange={() => {}}

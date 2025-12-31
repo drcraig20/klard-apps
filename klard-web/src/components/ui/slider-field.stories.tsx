@@ -170,7 +170,7 @@ const InteractiveTemplate = () => {
         label="Interactive Slider"
         showValue
       />
-      <p className="text-sm text-slate-600 dark:text-slate-400">
+      <p className="text-sm text-muted-foreground">
         Current value: {value}
       </p>
     </div>
@@ -186,14 +186,14 @@ const VolumeControlTemplate = () => {
   const [volume, setVolume] = useState(75);
 
   return (
-    <div className="space-y-4 max-w-md p-4 bg-slate-50 dark:bg-slate-900 rounded-lg">
+    <div className="space-y-4 max-w-md p-4 bg-muted rounded-lg">
       <SliderField
         value={volume}
         onChange={setVolume}
         label="Volume"
         showValue
       />
-      <div className="flex justify-between text-xs text-slate-500">
+      <div className="flex justify-between text-xs text-muted-foreground">
         <span>Mute</span>
         <span>Max</span>
       </div>
@@ -220,7 +220,7 @@ const PriceRangeTemplate = () => {
         label="Max Price"
         showValue
       />
-      <p className="text-sm text-slate-600 dark:text-slate-400">
+      <p className="text-sm text-muted-foreground">
         Showing products under ${price}
       </p>
     </div>
@@ -238,8 +238,8 @@ const SettingsPanelTemplate = () => {
   const [saturation, setSaturation] = useState(100);
 
   return (
-    <div className="space-y-6 max-w-md p-4 bg-slate-50 dark:bg-slate-900 rounded-lg">
-      <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+    <div className="space-y-6 max-w-md p-4 bg-muted rounded-lg">
+      <h3 className="text-lg font-semibold text-foreground">
         Display Settings
       </h3>
       <SliderField
@@ -286,7 +286,7 @@ const RatingSelectorTemplate = () => {
         label="Rate your experience"
         showValue
       />
-      <p className="text-center text-lg font-medium text-slate-900 dark:text-slate-100">
+      <p className="text-center text-lg font-medium text-foreground">
         {labels[rating - 1]}
       </p>
     </div>

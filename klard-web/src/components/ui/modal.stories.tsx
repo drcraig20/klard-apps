@@ -318,7 +318,7 @@ export const AlertModals: Story = {
           footer={<Button onClick={() => setInfoOpen(false)}>Got it</Button>}
         >
           <div className="flex items-start gap-3">
-            <Info className="size-5 text-blue-500 shrink-0 mt-0.5" />
+            <Info className="size-5 text-primary shrink-0 mt-0.5" />
             <p className="text-sm text-muted-foreground">
               This is an informational message.
             </p>
@@ -336,7 +336,7 @@ export const AlertModals: Story = {
           footer={<Button onClick={() => setSuccessOpen(false)}>Continue</Button>}
         >
           <div className="flex items-start gap-3">
-            <CheckCircle className="size-5 text-green-500 shrink-0 mt-0.5" />
+            <CheckCircle className="size-5 text-success shrink-0 mt-0.5" />
             <p className="text-sm text-muted-foreground">
               Your changes have been saved successfully.
             </p>
@@ -361,7 +361,7 @@ export const AlertModals: Story = {
           }
         >
           <div className="flex items-start gap-3">
-            <AlertTriangle className="size-5 text-yellow-500 shrink-0 mt-0.5" />
+            <AlertTriangle className="size-5 text-warning shrink-0 mt-0.5" />
             <p className="text-sm text-muted-foreground">
               This action may have unintended consequences.
             </p>
@@ -379,7 +379,7 @@ export const AlertModals: Story = {
           footer={<Button onClick={() => setErrorOpen(false)}>Dismiss</Button>}
         >
           <div className="flex items-start gap-3">
-            <X className="size-5 text-red-500 shrink-0 mt-0.5" />
+            <X className="size-5 text-destructive shrink-0 mt-0.5" />
             <p className="text-sm text-muted-foreground">
               An error occurred while processing your request.
             </p>
@@ -437,7 +437,7 @@ export const MinimalModal: Story = {
           size="sm"
         >
           <div className="text-center py-4">
-            <CheckCircle className="size-12 text-green-500 mx-auto mb-4" />
+            <CheckCircle className="size-12 text-success mx-auto mb-4" />
             <h3 className="text-lg font-semibold">Payment Successful</h3>
             <p className="text-sm text-muted-foreground mt-2">
               Your payment has been processed.

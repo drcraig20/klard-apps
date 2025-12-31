@@ -93,7 +93,7 @@ export const Glass: Story = {
         {
           name: "gradient",
           value:
-            "linear-gradient(135deg, #0D7C7A 0%, #15B5B0 50%, #0F172A 100%)",
+            "linear-gradient(135deg, hsl(var(--primary)) 0%, hsl(var(--secondary)) 50%, hsl(var(--foreground)) 100%)",
         },
       ],
     },
@@ -133,7 +133,7 @@ export const Interactive: Story = {
 export const NoPadding: Story = {
   args: {
     children: (
-      <div className="p-4 bg-teal-50 dark:bg-teal-900/20">
+      <div className="p-4 bg-primary/10">
         <p className="text-sm">Content with custom padding inside</p>
       </div>
     ),
@@ -220,13 +220,7 @@ export const VariantComparison: Story = {
         <h3 className="font-semibold mb-1">Ghost</h3>
         <p className="text-sm text-muted-foreground">Minimal styling</p>
       </KlardCard>
-      <div
-        className="p-4 rounded-lg"
-        style={{
-          background:
-            "linear-gradient(135deg, #0D7C7A 0%, #15B5B0 50%, #0F172A 100%)",
-        }}
-      >
+      <div className="p-4 rounded-lg bg-gradient-to-br from-primary via-secondary to-foreground">
         <KlardCard variant="glass">
           <h3 className="font-semibold mb-1 text-white">Glass</h3>
           <p className="text-sm text-white/80">Glassmorphism effect</p>
@@ -265,8 +259,8 @@ export const FeatureCard: Story = {
   render: () => (
     <KlardCard variant="elevated" padding="lg">
       <div className="flex items-start gap-4">
-        <div className="p-3 rounded-full bg-teal-100 dark:bg-teal-900/50">
-          <CreditCard className="h-6 w-6 text-teal-700 dark:text-teal-300" />
+        <div className="p-3 rounded-full bg-primary/10">
+          <CreditCard className="h-6 w-6 text-primary" />
         </div>
         <div>
           <h3 className="font-semibold text-lg">Virtual Cards</h3>
@@ -321,13 +315,13 @@ export const DashboardWidget: Story = {
         </div>
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <p className="text-2xl font-bold text-teal-600 dark:text-teal-400">
+            <p className="text-2xl font-bold text-primary">
               $234.56
             </p>
             <p className="text-sm text-muted-foreground">Total Spending</p>
           </div>
           <div>
-            <p className="text-2xl font-bold text-green-600 dark:text-green-400">
+            <p className="text-2xl font-bold text-success">
               $45.00
             </p>
             <p className="text-sm text-muted-foreground">Saved This Month</p>
@@ -359,7 +353,7 @@ export const NestedCards: Story = {
         <KlardCard variant="ghost" padding="sm">
           <div className="flex justify-between items-center">
             <span className="text-sm">New card created</span>
-            <span className="text-teal-600 text-sm">Gaming Card</span>
+            <span className="text-primary text-sm">Gaming Card</span>
           </div>
         </KlardCard>
       </div>

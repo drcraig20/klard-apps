@@ -156,7 +156,7 @@ const InteractiveTemplate = () => {
         placeholder="Make a selection"
       />
       {value && (
-        <p className="mt-4 text-sm text-slate-600">
+        <p className="mt-4 text-sm text-muted-foreground">
           Selected: {countryOptions.find((o) => o.value === value)?.label}
         </p>
       )}

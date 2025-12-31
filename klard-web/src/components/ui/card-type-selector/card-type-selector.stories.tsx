@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react";
 import { useState } from "react";
-import { fn } from "@storybook/test";
 import { CardTypeSelector, type CardType } from "./card-type-selector";
+
+const action = (name: string) => () => console.log(`Action: ${name}`);
 
 const meta = {
   title: "Forms/CardTypeSelector",
@@ -33,7 +34,7 @@ const meta = {
     },
   },
   args: {
-    onSelect: fn(),
+    onSelect: action("onSelect"),
   },
 } satisfies Meta<typeof CardTypeSelector>;
 
@@ -134,19 +135,19 @@ export const ContextComparison: Story = {
       <div>
         <p className="text-sm font-medium mb-2">Trial Context (One-Time recommended)</p>
         <div className="w-[400px]">
-          <CardTypeSelector context="trial" onSelect={fn()} />
+          <CardTypeSelector context="trial" onSelect={action("select")} />
         </div>
       </div>
       <div>
         <p className="text-sm font-medium mb-2">Subscription Context (Recurring recommended)</p>
         <div className="w-[400px]">
-          <CardTypeSelector context="subscription" onSelect={fn()} />
+          <CardTypeSelector context="subscription" onSelect={action("select")} />
         </div>
       </div>
       <div>
         <p className="text-sm font-medium mb-2">General Context (No recommendation)</p>
         <div className="w-[400px]">
-          <CardTypeSelector context="general" onSelect={fn()} />
+          <CardTypeSelector context="general" onSelect={action("select")} />
         </div>
       </div>
     </div>

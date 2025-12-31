@@ -140,7 +140,7 @@ const InteractiveTemplate = () => {
         label="Interactive checkbox"
         description="Click to toggle the state"
       />
-      <p className="text-sm text-slate-600 dark:text-slate-400">
+      <p className="text-sm text-muted-foreground">
         State: {checked ? "Checked" : "Unchecked"}
       </p>
     </div>
@@ -172,7 +172,7 @@ const TermsExampleTemplate = () => {
       />
       <button
         disabled={!termsAccepted}
-        className="mt-4 px-4 py-2 bg-teal-600 text-white rounded disabled:opacity-50 disabled:cursor-not-allowed"
+        className="mt-4 px-4 py-2 bg-primary text-primary-foreground rounded disabled:opacity-50 disabled:cursor-not-allowed"
       >
         Create Account
       </button>

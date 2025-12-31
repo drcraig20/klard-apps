@@ -209,8 +209,8 @@ export const NoCards: Story = {
   render: () => (
     <EmptyState>
       <EmptyStateMedia>
-        <div className="p-4 rounded-full bg-teal-100 dark:bg-teal-900/50">
-          <CreditCard className="h-8 w-8 text-teal-700 dark:text-teal-300" />
+        <div className="p-4 rounded-full bg-primary/10">
+          <CreditCard className="h-8 w-8 text-primary" />
         </div>
       </EmptyStateMedia>
       <EmptyStateTitle>No virtual cards</EmptyStateTitle>
@@ -269,11 +269,11 @@ export const WithCustomIllustration: Story = {
     <EmptyState>
       <EmptyStateMedia>
         <div className="relative">
-          <div className="w-24 h-24 rounded-full bg-gradient-to-br from-teal-100 to-teal-200 dark:from-teal-900 dark:to-teal-800 flex items-center justify-center">
-            <CreditCard className="h-10 w-10 text-teal-600 dark:text-teal-300" />
+          <div className="w-24 h-24 rounded-full bg-gradient-to-br from-primary/20 to-primary/30 flex items-center justify-center">
+            <CreditCard className="h-10 w-10 text-primary" />
           </div>
-          <div className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-white dark:bg-slate-800 border-2 border-teal-500 flex items-center justify-center">
-            <span className="text-teal-600 dark:text-teal-400 text-lg font-bold">
+          <div className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-background border-2 border-primary flex items-center justify-center">
+            <span className="text-primary text-lg font-bold">
               +
             </span>
           </div>

@@ -259,7 +259,7 @@ export const SubscriptionPricing: Story = {
           size="md"
           showChange={{ from: 19.99, direction: "decrease" }}
         />
-        <p className="text-xs text-green-600 mt-1">Save $60/year</p>
+        <p className="text-xs text-success mt-1">Save $60/year</p>
       </div>
     </div>
   ),

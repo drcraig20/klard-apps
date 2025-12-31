@@ -201,7 +201,7 @@ const InteractiveTemplate = () => {
         label="Interactive Amount"
         helperText="Type to see the value update"
       />
-      <p className="mt-4 text-sm text-slate-600">
+      <p className="mt-4 text-sm text-muted-foreground">
         Current value: ${amount.toFixed(2)}
       </p>
     </div>
@@ -233,8 +233,8 @@ const PaymentFormTemplate = () => {
         label="Tip (optional)"
         min={0}
       />
-      <div className="pt-4 border-t border-slate-200 dark:border-slate-700">
-        <p className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+      <div className="pt-4 border-t border-border">
+        <p className="text-lg font-semibold text-foreground">
           Total: ${total.toFixed(2)}
         </p>
       </div>

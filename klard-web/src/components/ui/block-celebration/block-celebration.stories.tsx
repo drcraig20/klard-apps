@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { fn } from "@storybook/test";
 import { BlockCelebration } from "./block-celebration";
+
+const action = (name: string) => () => console.log(`Action: ${name}`);
 
 const meta = {
   title: "Feedback/BlockCelebration",
@@ -85,7 +86,7 @@ export const WithShareButton: Story = {
     <BlockCelebration level="first">
       <BlockCelebration.Amount value={47.98} />
       <BlockCelebration.ShareZone>
-        <BlockCelebration.ShareButton onShare={fn()} />
+        <BlockCelebration.ShareButton onShare={action("share")} />
       </BlockCelebration.ShareZone>
     </BlockCelebration>
   ),
@@ -98,7 +99,7 @@ export const FullComposition: Story = {
       <BlockCelebration.Amount value={47.98} />
       <BlockCelebration.Merchant name="TrialService" />
       <BlockCelebration.ShareZone>
-        <BlockCelebration.ShareButton onShare={fn()} />
+        <BlockCelebration.ShareButton onShare={action("share")} />
       </BlockCelebration.ShareZone>
     </BlockCelebration>
   ),

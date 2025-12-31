@@ -151,7 +151,7 @@ const InteractiveTemplate = () => {
         label="Interactive switch"
         description="Click to toggle the state"
       />
-      <p className="text-sm text-slate-600 dark:text-slate-400">
+      <p className="text-sm text-muted-foreground">
         State: {enabled ? "On" : "Off"}
       </p>
     </div>
@@ -170,8 +170,8 @@ const SettingsPanelTemplate = () => {
   const [autoSave, setAutoSave] = useState(true);
 
   return (
-    <div className="space-y-6 max-w-md p-4 bg-slate-50 dark:bg-slate-900 rounded-lg">
-      <h3 className="text-lg font-semibold text-slate-900 dark:text-slate-100">
+    <div className="space-y-6 max-w-md p-4 bg-muted rounded-lg">
+      <h3 className="text-lg font-semibold text-foreground">
         Settings
       </h3>
       <div className="space-y-4">

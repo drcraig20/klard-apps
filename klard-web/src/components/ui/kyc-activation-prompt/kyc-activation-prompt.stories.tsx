@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { fn } from "@storybook/test";
 import { KYCActivationPrompt } from "./kyc-activation-prompt";
+
+const action = (name: string) => () => console.log(`Action: ${name}`);
 
 const meta = {
   title: "Feedback/KYCActivationPrompt",
@@ -27,7 +28,7 @@ const meta = {
     },
   },
   args: {
-    onActivate: fn(),
+    onActivate: action("onActivate"),
   },
 } satisfies Meta<typeof KYCActivationPrompt>;
 
@@ -58,7 +59,7 @@ export const CardOverlay: Story = {
   },
   decorators: [
     (Story) => (
-      <div className="relative w-[350px] h-[200px] bg-slate-800 rounded-xl p-4">
+      <div className="relative w-[350px] h-[200px] bg-card rounded-xl p-4">
         <Story />
       </div>
     ),
@@ -90,7 +91,7 @@ export const AllVariants: Story = {
         <KYCActivationPrompt
           cardName="Subscription Shield"
           variant="inline"
-          onActivate={fn()}
+          onActivate={action("activate")}
         />
       </div>
       <div>
@@ -98,16 +99,16 @@ export const AllVariants: Story = {
         <KYCActivationPrompt
           cardName="Trial Blocker"
           variant="modal"
-          onActivate={fn()}
+          onActivate={action("activate")}
         />
       </div>
       <div>
         <p className="text-sm font-medium mb-2">Card Overlay Variant</p>
-        <div className="relative w-[350px] h-[180px] bg-slate-800 rounded-xl p-4">
+        <div className="relative w-[350px] h-[180px] bg-card rounded-xl p-4">
           <KYCActivationPrompt
             cardName="Netflix Blocker"
             variant="card-overlay"
-            onActivate={fn()}
+            onActivate={action("activate")}
           />
         </div>
       </div>

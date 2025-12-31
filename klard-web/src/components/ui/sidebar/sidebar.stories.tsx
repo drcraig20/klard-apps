@@ -389,7 +389,7 @@ export const WithGroupActions: Story = {
               <SidebarMenu>
                 <SidebarMenuItem>
                   <SidebarMenuButton>
-                    <span className="flex h-4 w-4 items-center justify-center rounded bg-blue-500 text-[10px] text-white">
+                    <span className="flex h-4 w-4 items-center justify-center rounded bg-primary text-[10px] text-white">
                       P
                     </span>
                     <span>Project Alpha</span>
@@ -397,7 +397,7 @@ export const WithGroupActions: Story = {
                 </SidebarMenuItem>
                 <SidebarMenuItem>
                   <SidebarMenuButton>
-                    <span className="flex h-4 w-4 items-center justify-center rounded bg-green-500 text-[10px] text-white">
+                    <span className="flex h-4 w-4 items-center justify-center rounded bg-success text-[10px] text-white">
                       B
                     </span>
                     <span>Project Beta</span>

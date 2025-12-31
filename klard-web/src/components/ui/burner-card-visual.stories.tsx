@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { fn } from "@storybook/test";
 import { BurnerCardVisual, type BurnerCardData } from "./burner-card-visual";
+
+// Action helper for stories
+const action = (name: string) => () => console.log(`Action: ${name}`);
 
 // Mock card data
 const mockCards: Record<string, BurnerCardData> = {
@@ -190,7 +192,7 @@ export const AwaitingWithCTA: Story = {
   args: {
     card: mockCards.awaiting,
     size: "md",
-    onActivate: fn(),
+    onActivate: action("onActivate"),
   },
 };
 
@@ -325,7 +327,7 @@ export const SpendingProgress: Story = {
 // Card wallet example
 export const CardWallet: Story = {
   render: () => (
-    <div className="p-6 bg-slate-100 dark:bg-slate-900 rounded-xl">
+    <div className="p-6 bg-muted rounded-xl">
       <h3 className="font-semibold text-lg mb-4">My Cards</h3>
       <div className="flex gap-4 overflow-x-auto pb-2">
         <BurnerCardVisual card={mockCards.active} size="sm" />
@@ -339,7 +341,7 @@ export const CardWallet: Story = {
 // Featured card display
 export const FeaturedCard: Story = {
   render: () => (
-    <div className="flex flex-col items-center gap-4 p-8 bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 rounded-2xl">
+    <div className="flex flex-col items-center gap-4 p-8 bg-gradient-to-br from-muted/50 to-muted rounded-2xl">
       <BurnerCardVisual card={mockCards.active} size="lg" />
       <div className="text-center">
         <p className="font-semibold">Primary Card</p>
@@ -402,7 +404,7 @@ export const CompoundPattern: Story = {
         </p>
         <BurnerCardVisual card={mockCards.awaiting} size="md">
           <BurnerCardVisual.Label>Complete KYC to activate</BurnerCardVisual.Label>
-          <BurnerCardVisual.CTA onClick={fn()}>
+          <BurnerCardVisual.CTA onClick={action("verify")}>
             Verify Identity
           </BurnerCardVisual.CTA>
         </BurnerCardVisual>
@@ -411,7 +413,7 @@ export const CompoundPattern: Story = {
         <p className="text-sm text-muted-foreground mb-2">
           Sub-components used standalone
         </p>
-        <div className="flex gap-4 items-center p-4 bg-slate-100 dark:bg-slate-800 rounded-lg">
+        <div className="flex gap-4 items-center p-4 bg-muted rounded-lg">
           <BurnerCardVisual.Number value="**** **** **** 1234" className="text-foreground" />
           <BurnerCardVisual.Expiry value="12/26" className="text-muted-foreground" />
           <BurnerCardVisual.CVC value="123" className="text-muted-foreground" />
