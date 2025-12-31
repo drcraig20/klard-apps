@@ -4,6 +4,9 @@
  * Animation values optimized for React Native and Reanimated.
  * Uses milliseconds for duration and spring configs for natural motion.
  *
+ * @see klard-web/src/styles/tokens/animation.css (web counterpart)
+ * @see docs/design/tokens-reference.md (full documentation)
+ *
  * SOLID Compliance:
  * - SRP: Only animation values
  * - OCP: Extend by adding new animation presets

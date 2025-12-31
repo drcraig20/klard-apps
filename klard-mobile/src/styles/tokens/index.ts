@@ -4,6 +4,10 @@
  * Single source of truth for all design tokens in the mobile app.
  * Import from here for consistent styling across components.
  *
+ * @see klard-web/src/styles/tokens/index.css (web counterpart)
+ * @see klard-web/src/styles/index.ts (web style exports)
+ * @see docs/design/tokens-reference.md (full documentation)
+ *
  * SOLID Compliance:
  * - SRP: Re-exports only, no logic
  * - OCP: Add new token files without modifying existing

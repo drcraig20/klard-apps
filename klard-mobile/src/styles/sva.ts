@@ -1,6 +1,6 @@
 // klard-mobile/src/styles/sva.ts
 import { ViewStyle, TextStyle, ImageStyle } from 'react-native';
-import { Colors, ThemeColors } from './colors';
+import { lightTheme, darkTheme, type ThemeColors } from './colors';
 
 type Style = ViewStyle | TextStyle | ImageStyle;
 type StyleDef<T extends Style = Style> = T | ((colors: ThemeColors) => T);
@@ -52,8 +52,8 @@ export function sva<V extends Record<string, Record<string, StyleDef>>>(
 ) {
   // Pre-compile both themes at module load
   const compiled = {
-    light: compileConfig(config, Colors.light),
-    dark: compileConfig(config, Colors.dark),
+    light: compileConfig(config, lightTheme),
+    dark: compileConfig(config, darkTheme),
   };
 
   // Return selector function

@@ -1,8 +1,11 @@
 /**
  * Klard Design System - Spacing Tokens (Mobile)
  *
- * Base unit: 4px grid system
+ * Base unit: 4px grid system.
  * These are the canonical values - all spacing should use these tokens.
+ *
+ * @see klard-web/src/app/globals.css (web counterpart - spacing section)
+ * @see docs/design/tokens-reference.md (full documentation)
  *
  * SOLID Compliance:
  * - SRP: Only spacing values

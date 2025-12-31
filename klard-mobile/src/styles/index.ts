@@ -1,12 +1,20 @@
 /**
- * Klard Mobile Styles - Main Export
+ * Klard Design System - Mobile Styles Entry Point
  *
- * This module exports all styling utilities and design tokens.
+ * Main export for all mobile styling utilities and design tokens.
  * Prefer using the tokens from ./tokens for new code.
+ *
+ * @see klard-web/src/styles/index.ts (web counterpart)
+ * @see klard-mobile/src/styles/tokens/index.ts (token exports)
+ * @see docs/design/tokens-reference.md (full documentation)
+ *
+ * SOLID Compliance:
+ * - SRP: Re-exports only, no implementation logic
+ * - OCP: Add new exports without modifying existing
  */
 
 // Colors (canonical source for mobile)
-export { Colors, type ColorScheme, type ThemeColors } from './colors';
+export { lightTheme, darkTheme, type ColorScheme, type ThemeColors } from './colors';
 
 // SVA styling system
 export { sva, type SVAConfig, type VariantProps } from './sva';

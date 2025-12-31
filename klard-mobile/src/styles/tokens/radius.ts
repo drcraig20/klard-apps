@@ -1,8 +1,11 @@
 /**
  * Klard Design System - Border Radius Tokens (Mobile)
  *
- * Scale: sm (8px), md (12px), lg (16px), xl (24px)
+ * Scale: sm (8px), md (12px), lg (16px), xl (24px).
  * These are the canonical values from the design system.
+ *
+ * @see klard-web/src/styles/tokens/radius.css (web counterpart)
+ * @see docs/design/tokens-reference.md (full documentation)
  *
  * SOLID Compliance:
  * - SRP: Only border radius values

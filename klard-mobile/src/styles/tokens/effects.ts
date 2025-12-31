@@ -4,6 +4,10 @@
  * Visual effects for shadows, glows, and glassmorphism.
  * React Native compatible - uses numeric values and rgba strings.
  *
+ * @see klard-web/src/styles/tokens/shadows.css (web shadow counterpart)
+ * @see klard-web/src/styles/tokens/glassmorphism.css (web glass counterpart)
+ * @see docs/design/tokens-reference.md (full documentation)
+ *
  * SOLID Compliance:
  * - SRP: Only visual effect values
  * - OCP: Extend by adding new effect types
