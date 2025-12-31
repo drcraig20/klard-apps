@@ -11,15 +11,15 @@ export function ProtectIllustration({
   width = 280,
   height = 200
 }: Readonly<IllustrationProps>) {
-  const { colors, isDark } = useTheme();
+  const { colors } = useTheme();
   const primaryColor = colors.primary;
   const cardBg = colors.card;
   const borderColor = colors.border;
   const shieldColor = primaryColor;
   // Gradient end color for card background
   const cardGradientEnd = colors.surface3;
-  // Color for magnetic strip
-  const magneticStripColor = isDark ? '#000000' : colors.textTertiary;
+  // Color for magnetic strip (use textTertiary for both themes for consistency)
+  const magneticStripColor = colors.textTertiary;
   // Card number/text fill color
   const cardTextColor = colors.foreground;
 
@@ -149,7 +149,7 @@ export function ProtectIllustration({
         <Path
           d="M 22 28 L 27 35 L 40 20"
           fill="none"
-          stroke="#FFFFFF"
+          stroke={colors.primaryForeground}
           strokeWidth="3"
           strokeLinecap="round"
           strokeLinejoin="round"

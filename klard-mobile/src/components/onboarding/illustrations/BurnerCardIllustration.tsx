@@ -11,15 +11,15 @@ export function BurnerCardIllustration({
   width = 200,
   height = 140
 }: Readonly<IllustrationProps>) {
-  const { colors, isDark } = useTheme();
+  const { colors } = useTheme();
   const primaryColor = colors.primary;
   const cardBg = colors.card;
   const borderColor = colors.border;
   const errorColor = colors.error;
   // Gradient end color for card background
   const cardGradientEnd = colors.surface3;
-  // Color for magnetic strip
-  const magneticStripColor = isDark ? '#000000' : colors.textTertiary;
+  // Color for magnetic strip (use textTertiary for both themes for consistency)
+  const magneticStripColor = colors.textTertiary;
   // Card number/text fill color
   const cardTextColor = colors.foreground;
 
@@ -148,7 +148,7 @@ export function BurnerCardIllustration({
         <Path
           d="M 14 20 L 18 25 L 28 13"
           fill="none"
-          stroke="#FFFFFF"
+          stroke={colors.primaryForeground}
           strokeWidth="2.5"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -178,7 +178,7 @@ export function BurnerCardIllustration({
         <Path
           d="M 14 14 L 26 26 M 26 14 L 14 26"
           fill="none"
-          stroke="#FFFFFF"
+          stroke={colors.primaryForeground}
           strokeWidth="2.5"
           strokeLinecap="round"
         />

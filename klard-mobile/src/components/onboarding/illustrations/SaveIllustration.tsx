@@ -191,12 +191,12 @@ export function SaveIllustration({
           opacity="0.3"
         />
         {/* Minus sign */}
-        <Rect x="10" y="11" width="8" height="2" fill="#FFFFFF" rx="1" />
+        <Rect x="10" y="11" width="8" height="2" fill={colors.primaryForeground} rx="1" />
         {/* Percentage symbol */}
         <G transform="translate(22, 7)">
-          <Circle cx="0" cy="0" r="2" fill="#FFFFFF" />
-          <Path d="M 1 1 L 10 14" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" />
-          <Circle cx="11" cy="15" r="2" fill="#FFFFFF" />
+          <Circle cx="0" cy="0" r="2" fill={colors.primaryForeground} />
+          <Path d="M 1 1 L 10 14" stroke={colors.primaryForeground} strokeWidth="2" strokeLinecap="round" />
+          <Circle cx="11" cy="15" r="2" fill={colors.primaryForeground} />
         </G>
       </G>
     </Svg>
