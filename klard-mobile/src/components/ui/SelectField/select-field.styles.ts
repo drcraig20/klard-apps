@@ -137,20 +137,19 @@ export const optionTextStyles = sva({
   },
 });
 
+import type { ThemeColors } from '@/styles/colors/semantic';
+
 // Helper to get icon color
-export function getIconColor(disabled: boolean, isDark: boolean): string {
-  if (disabled) {
-    return isDark ? '#64748B' : '#94A3B8';
-  }
-  return isDark ? '#94A3B8' : '#475569';
+export function getIconColor(colors: ThemeColors, disabled: boolean): string {
+  return disabled ? colors.textDisabled : colors.textTertiary;
 }
 
-export function getCloseIconColor(isDark: boolean): string {
-  return isDark ? '#F8FAFC' : '#0F172A';
+export function getCloseIconColor(colors: ThemeColors): string {
+  return colors.foreground;
 }
 
-export function getPrimaryColor(isDark: boolean): string {
-  return isDark ? '#15B5B0' : '#0D7C7A';
+export function getPrimaryColor(colors: ThemeColors): string {
+  return colors.primary;
 }
 
 // Static layout styles

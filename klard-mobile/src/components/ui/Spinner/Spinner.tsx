@@ -3,10 +3,10 @@ import {
   ActivityIndicator,
   Text,
   View,
-  useColorScheme,
   type StyleProp,
   type ViewStyle,
 } from "react-native";
+import { useThemeColors } from "@/hooks/useThemeColors";
 import { labelStyles, getSpinnerColor, sizeMap, layoutStyles } from "./spinner.styles";
 
 export interface SpinnerProps {
@@ -24,9 +24,8 @@ export function Spinner({
   style,
   testID,
 }: Readonly<SpinnerProps>) {
-  const colorScheme = useColorScheme();
-  const isDark = colorScheme === "dark";
-  const spinnerColor = color ?? getSpinnerColor(isDark);
+  const { isDark, ...colors } = useThemeColors();
+  const spinnerColor = color ?? getSpinnerColor(colors);
   const activityIndicatorSize = sizeMap[size];
 
   if (label) {

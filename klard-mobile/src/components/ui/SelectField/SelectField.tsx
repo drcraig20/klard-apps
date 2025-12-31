@@ -5,12 +5,12 @@ import {
   Pressable,
   Modal,
   FlatList,
-  useColorScheme,
   type StyleProp,
   type ViewStyle,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
+import { useThemeColors } from '@/hooks/useThemeColors';
 import {
   labelStyles,
   triggerStyles,
@@ -64,7 +64,7 @@ export function SelectField({
   disabled = false,
   containerStyle,
 }: Readonly<SelectFieldProps>) {
-  const isDark = useColorScheme() === 'dark';
+  const { isDark, ...colors } = useThemeColors();
   const [isOpen, setIsOpen] = useState(false);
 
   const selectedOption = options.find((opt) => opt.value === value);
@@ -86,9 +86,9 @@ export function SelectField({
     setIsOpen(false);
   };
 
-  const chevronColor = getIconColor(disabled, isDark);
-  const closeIconColor = getCloseIconColor(isDark);
-  const primaryColor = getPrimaryColor(isDark);
+  const chevronColor = getIconColor(colors, disabled);
+  const closeIconColor = getCloseIconColor(colors);
+  const primaryColor = getPrimaryColor(colors);
 
   return (
     <View style={[layoutStyles.container, containerStyle]}>

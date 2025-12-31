@@ -8,9 +8,11 @@ export const labelStyles = sva({
   }),
 });
 
+import type { ThemeColors } from '@/styles/colors/semantic';
+
 // Helper to get default spinner color
-export function getSpinnerColor(isDark: boolean): string {
-  return isDark ? '#15B5B0' : '#0D7C7A';
+export function getSpinnerColor(colors: ThemeColors): string {
+  return colors.primary;
 }
 
 // Size mapping for ActivityIndicator

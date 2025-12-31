@@ -4,12 +4,12 @@ import {
   TextInput,
   Pressable,
   ActivityIndicator,
-  useColorScheme,
   type TextInputProps,
   type StyleProp,
   type ViewStyle,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useThemeColors } from '@/hooks/useThemeColors';
 import {
   containerStyles,
   inputStyles,
@@ -46,12 +46,12 @@ export function SearchInput({
   containerStyle,
   ...props
 }: Readonly<SearchInputProps>) {
-  const isDark = useColorScheme() === 'dark';
+  const { isDark, ...colors } = useThemeColors();
   const [isFocused, setIsFocused] = useState(false);
   const debounceTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const iconColor = getIconColor(isDark);
-  const placeholderColor = getPlaceholderColor(isDark);
+  const iconColor = getIconColor(colors);
+  const placeholderColor = getPlaceholderColor(colors);
 
   useEffect(() => {
     return () => {

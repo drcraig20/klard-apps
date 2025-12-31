@@ -45,14 +45,16 @@ export const inputStyles = sva({
   },
 });
 
+import type { ThemeColors } from '@/styles/colors/semantic';
+
 // Helper to get icon color
-export function getIconColor(isDark: boolean): string {
-  return isDark ? '#94A3B8' : '#64748B';
+export function getIconColor(colors: ThemeColors): string {
+  return colors.textTertiary;
 }
 
 // Helper to get placeholder color
-export function getPlaceholderColor(isDark: boolean): string {
-  return isDark ? '#64748B' : '#94A3B8';
+export function getPlaceholderColor(colors: ThemeColors): string {
+  return colors.textTertiary;
 }
 
 // Static layout styles

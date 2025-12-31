@@ -6,7 +6,6 @@ import {
   Pressable,
   KeyboardAvoidingView,
   Platform,
-  useColorScheme,
   StyleSheet,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -14,6 +13,7 @@ import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { BlurView } from "expo-blur";
 
+import { useThemeColors } from "@/hooks/useThemeColors";
 import { spacing } from "@/constants/theme";
 import {
   overlayStyles,
@@ -47,7 +47,7 @@ function Modal({
   closeOnOverlay = true,
   testID = "modal",
 }: Readonly<ModalProps>) {
-  const isDark = useColorScheme() === "dark";
+  const { isDark, ...colors } = useThemeColors();
   const insets = useSafeAreaInsets();
 
   const handleClose = async () => {
@@ -118,7 +118,7 @@ function Modal({
               <Ionicons
                 name="close"
                 size={24}
-                color={getCloseIconColor(isDark)}
+                color={getCloseIconColor(colors)}
               />
             </Pressable>
           </View>

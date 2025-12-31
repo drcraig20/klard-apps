@@ -4,12 +4,12 @@ import {
   Text,
   Pressable,
   Platform,
-  useColorScheme,
   type StyleProp,
   type ViewStyle,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
+import { useThemeColors } from '@/hooks/useThemeColors';
 import {
   labelStyles,
   requiredStyles,
@@ -74,7 +74,7 @@ export function DatePicker({
   required = false,
   containerStyle,
 }: Readonly<DatePickerProps>) {
-  const isDark = useColorScheme() === 'dark';
+  const { isDark, ...colors } = useThemeColors();
   const [showPicker, setShowPicker] = useState(false);
 
   const validValue = isValidDate(value) ? value : null;
@@ -108,7 +108,7 @@ export function DatePicker({
   };
 
   const displayedComponents = getDisplayedComponents(mode);
-  const iconColor = getIconColor(disabled, isDark);
+  const iconColor = getIconColor(colors, disabled);
 
   return (
     <View style={[layoutStyles.container, containerStyle]}>

@@ -56,9 +56,11 @@ export const footerStyles = sva({
   }),
 });
 
+import type { ThemeColors } from '@/styles/colors/semantic';
+
 // Helper to get close icon color
-export function getCloseIconColor(isDark: boolean): string {
-  return isDark ? '#94A3B8' : '#64748B';
+export function getCloseIconColor(colors: ThemeColors): string {
+  return colors.textTertiary;
 }
 
 // Static layout styles

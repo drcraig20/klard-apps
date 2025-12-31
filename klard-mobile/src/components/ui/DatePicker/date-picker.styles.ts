@@ -82,12 +82,11 @@ export const errorStyles = sva({
   }),
 });
 
+import type { ThemeColors } from '@/styles/colors/semantic';
+
 // Helper to get icon color
-export function getIconColor(disabled: boolean, isDark: boolean): string {
-  if (disabled) {
-    return isDark ? '#64748B' : '#94A3B8';
-  }
-  return isDark ? '#94A3B8' : '#64748B';
+export function getIconColor(colors: ThemeColors, disabled: boolean): string {
+  return disabled ? colors.textDisabled : colors.textTertiary;
 }
 
 // Static layout styles
