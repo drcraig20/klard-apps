@@ -54,44 +54,44 @@ describe("Badge", () => {
       render(<Badge>Default</Badge>)
 
       const badge = screen.getByText("Default")
-      // Default variant has slate background
-      expect(badge.className).toMatch(/bg-slate-100|slate/)
+      // Default variant uses muted design token
+      expect(badge.className).toMatch(/bg-muted/)
     })
 
-    it("should apply primary variant with teal colors", () => {
+    it("should apply primary variant with primary design token", () => {
       render(<Badge variant="primary">Primary</Badge>)
 
       const badge = screen.getByText("Primary")
-      expect(badge.className).toMatch(/bg-teal-100|teal/)
+      expect(badge.className).toMatch(/bg-primary\/10|text-primary/)
     })
 
-    it("should apply success variant with green colors", () => {
+    it("should apply success variant with success design token", () => {
       render(<Badge variant="success">Success</Badge>)
 
       const badge = screen.getByText("Success")
-      expect(badge.className).toMatch(/bg-green-100|green/)
+      expect(badge.className).toMatch(/bg-success\/10|text-success/)
     })
 
-    it("should apply warning variant with amber colors", () => {
+    it("should apply warning variant with warning design token", () => {
       render(<Badge variant="warning">Warning</Badge>)
 
       const badge = screen.getByText("Warning")
-      expect(badge.className).toMatch(/bg-amber-100|amber/)
+      expect(badge.className).toMatch(/bg-warning\/10|text-warning/)
     })
 
-    it("should apply error variant with red colors", () => {
+    it("should apply error variant with error design token", () => {
       render(<Badge variant="error">Error</Badge>)
 
       const badge = screen.getByText("Error")
-      expect(badge.className).toMatch(/bg-red-100|red/)
+      expect(badge.className).toMatch(/bg-error\/10|text-error/)
     })
 
     it("should apply outline variant with border only", () => {
       render(<Badge variant="outline">Outline</Badge>)
 
       const badge = screen.getByText("Outline")
-      expect(badge.className).toMatch(/border|outline/)
-      expect(badge.className).toMatch(/bg-transparent|transparent/)
+      expect(badge.className).toMatch(/border/)
+      expect(badge.className).toMatch(/bg-transparent/)
     })
   })
 
@@ -226,7 +226,7 @@ describe("Badge", () => {
       )
 
       const button = screen.getByRole("button", { name: "Button Badge" })
-      expect(button.className).toMatch(/teal/)
+      expect(button.className).toMatch(/bg-primary\/10|text-primary/)
     })
   })
 

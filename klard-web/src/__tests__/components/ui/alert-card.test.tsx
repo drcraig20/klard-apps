@@ -55,12 +55,13 @@ describe("AlertCard", () => {
           />
         )
         const card = document.querySelector('[data-slot="alert-card"]')
+        // Design tokens use semantic names: info, warning, error
         if (tone === "info") {
-          expect(card).toHaveClass(/blue/)
+          expect(card).toHaveClass(/border-info|bg-info/)
         } else if (tone === "warning") {
-          expect(card).toHaveClass(/amber/)
+          expect(card).toHaveClass(/border-warning|bg-warning/)
         } else if (tone === "error") {
-          expect(card).toHaveClass(/red/)
+          expect(card).toHaveClass(/border-error|bg-error/)
         }
       })
     })

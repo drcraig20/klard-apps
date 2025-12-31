@@ -93,9 +93,9 @@ describe('Button', () => {
       rerender(<Button size="md">Medium</Button>);
       const mdButton = screen.getByRole('button');
 
-      // Both should have h-9 class
-      expect(defaultClasses).toContain('h-9');
-      expect(mdButton.className).toContain('h-9');
+      // Both should have h-10 class (Klard design system default)
+      expect(defaultClasses).toContain('h-10');
+      expect(mdButton.className).toContain('h-10');
     });
   });
 
