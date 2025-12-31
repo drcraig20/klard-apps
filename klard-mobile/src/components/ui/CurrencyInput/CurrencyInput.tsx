@@ -9,7 +9,7 @@ import {
   type ViewStyle,
 } from 'react-native';
 import { FormField } from '@/components/ui/FormField';
-import { useThemeColors } from '@/hooks';
+import { useThemeColors } from '@/contexts/ThemeContext';
 import { styles, getCurrencyInputColors } from './currency-input.styles';
 import {
   getCurrencySymbol,

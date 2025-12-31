@@ -74,7 +74,8 @@
       "WebSearch",
       "mcp__plugin_Notion_notion__notion-create-pages",
       "mcp__plugin_Notion_notion__notion-update-page",
-      "mcp__todoist__add-tasks"
+      "mcp__todoist__add-tasks",
+      "Bash(npx eslint:*)"
     ],
     "deny": [],
     "ask": []

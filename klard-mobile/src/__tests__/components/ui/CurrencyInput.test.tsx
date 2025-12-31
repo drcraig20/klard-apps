@@ -1,6 +1,16 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
 import { CurrencyInput } from '@/components/ui/CurrencyInput';
+import { mockLightColors } from '@/__tests__/__mocks__/theme';
+
+// Mock theme context
+jest.mock('@/contexts/ThemeContext', () => ({
+  useThemeColors: () => mockLightColors,
+  useTheme: () => ({
+    colors: mockLightColors,
+    isDark: false,
+  }),
+}));
 
 describe('CurrencyInput', () => {
   const mockOnChange = jest.fn();

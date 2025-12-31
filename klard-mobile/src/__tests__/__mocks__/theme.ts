@@ -202,6 +202,7 @@ export function createThemeContextMock(isDark = false) {
       isDark,
       setThemePreference: jest.fn(),
     }),
+    useThemeColors: () => colors,
   };
 }
 

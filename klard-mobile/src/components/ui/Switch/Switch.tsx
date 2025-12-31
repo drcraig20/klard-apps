@@ -8,7 +8,7 @@ import {
   type ViewStyle,
 } from 'react-native';
 import * as Haptics from 'expo-haptics';
-import { useThemeColors } from '@/hooks';
+import { useThemeColors } from '@/contexts/ThemeContext';
 import { styles, getSwitchColors } from './switch.styles';
 
 export interface SwitchProps {

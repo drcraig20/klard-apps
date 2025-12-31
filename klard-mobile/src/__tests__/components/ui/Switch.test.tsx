@@ -18,6 +18,16 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react-native';
 import { Text } from 'react-native';
 import { Switch, SwitchField } from '@/components/ui/Switch';
+import { mockLightColors } from '@/__tests__/__mocks__/theme';
+
+// Mock theme context
+jest.mock('@/contexts/ThemeContext', () => ({
+  useThemeColors: () => mockLightColors,
+  useTheme: () => ({
+    colors: mockLightColors,
+    isDark: false,
+  }),
+}));
 
 // Mock expo-haptics
 jest.mock('expo-haptics', () => ({

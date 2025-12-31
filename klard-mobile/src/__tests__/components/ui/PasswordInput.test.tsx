@@ -19,16 +19,30 @@ jest.mock('@/lib/i18n', () => ({
   t: (key: string, fallback?: string) => fallback || key,
 }));
 
-// Mock theme hook
-jest.mock('@/hooks', () => ({
+// Mock theme context
+jest.mock('@/contexts/ThemeContext', () => ({
   useThemeColors: () => ({
     primary: '#0D7C7A',
-    accentError: '#DC2626',
-    accentWarning: '#D97706',
-    accentSuccess: '#059669',
+    error: '#DC2626',
+    warning: '#D97706',
+    success: '#059669',
     muted: '#E2E8F0',
     textSecondary: '#64748B',
     textTertiary: '#94A3B8',
+    textDisabled: '#94A3B8',
+    foreground: '#0F172A',
+    background: '#FFFFFF',
+    border: '#E2E8F0',
+    disabledBackground: '#F1F5F9',
+    placeholder: '#94A3B8',
+  }),
+  useTheme: () => ({
+    colors: {
+      primary: '#0D7C7A',
+      error: '#DC2626',
+      textTertiary: '#94A3B8',
+    },
+    isDark: false,
   }),
 }));
 

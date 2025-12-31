@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { calculatePasswordStrength, type PasswordStrength } from '@klard-apps/commons';
-import { useThemeColors } from '@/hooks';
+import { useThemeColors } from '@/contexts/ThemeContext';
 import { type ThemeColors } from '@/styles';
 import { inputStyles, strengthStyles, reqStyles, getPasswordInputColors } from './password-input.styles';
 import { LEVEL_WIDTHS, LEVEL_LABELS, REQUIREMENT_LABELS } from './password-input.constants';
