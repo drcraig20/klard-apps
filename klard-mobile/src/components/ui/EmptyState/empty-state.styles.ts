@@ -1,7 +1,7 @@
 import { StyleSheet, Platform } from 'react-native';
 
 import { sva } from '@/styles/sva';
-import { Colors } from '@/styles/colors';
+import { lightTheme } from '@/styles/colors';
 import { typography } from '@/styles/typography';
 import { spacing, borderRadius } from '@/styles/spacing';
 
@@ -199,13 +199,13 @@ export const styles = StyleSheet.create({
   },
   title: {
     ...typography.h3,
-    color: Colors.light.foreground,
+    color: lightTheme.foreground,
     textAlign: 'center',
     marginBottom: spacing.sm,
   },
   description: {
     ...typography.body,
-    color: Colors.light.mutedForeground,
+    color: lightTheme.mutedForeground,
     textAlign: 'center',
     maxWidth: 280,
     marginBottom: spacing.md,

@@ -8,7 +8,7 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Button } from '@/components/ui/Button';
-import { Colors } from '@/styles/colors';
+import { lightTheme, darkTheme } from '@/styles/colors';
 import {
   containerStyles,
   iconContainerStyles,
@@ -51,7 +51,7 @@ export function KYCActivationPrompt({
   style,
 }: Readonly<KYCActivationPromptProps>) {
   const isDark = useColorScheme() === 'dark';
-  const colors = isDark ? Colors.dark : Colors.light;
+  const colors = isDark ? darkTheme : lightTheme;
   const testId = `kyc-prompt-${variant}`;
 
   return (

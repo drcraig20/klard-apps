@@ -1,5 +1,5 @@
 import { StyleSheet } from 'react-native';
-import { Colors } from '@/styles';
+import { lightTheme, darkTheme } from '@/styles';
 
 /**
  * HealthIndicator Styles (Mobile)
@@ -49,38 +49,38 @@ export const textSizeStyles = StyleSheet.create({
 // Light theme colors
 export const lightThemeColors = {
   forgotten: {
-    dot: Colors.light.error,
-    text: Colors.light.error,
-    glowColor: Colors.light.glowError,
+    dot: lightTheme.error,
+    text: lightTheme.error,
+    glowColor: lightTheme.glowError,
   },
   'price-increased': {
-    dot: Colors.light.warning,
-    text: Colors.light.warning,
-    glowColor: Colors.light.glowWarning,
+    dot: lightTheme.warning,
+    text: lightTheme.warning,
+    glowColor: lightTheme.glowWarning,
   },
   healthy: {
-    dot: Colors.light.success,
-    text: Colors.light.success,
-    glowColor: Colors.light.glowSuccess,
+    dot: lightTheme.success,
+    text: lightTheme.success,
+    glowColor: lightTheme.glowSuccess,
   },
 } as const;
 
 // Dark theme colors
 export const darkThemeColors = {
   forgotten: {
-    dot: Colors.dark.error,
-    text: Colors.dark.error,
-    glowColor: Colors.dark.glowError,
+    dot: darkTheme.error,
+    text: darkTheme.error,
+    glowColor: darkTheme.glowError,
   },
   'price-increased': {
-    dot: Colors.dark.warning,
-    text: Colors.dark.warning,
-    glowColor: Colors.dark.glowWarning,
+    dot: darkTheme.warning,
+    text: darkTheme.warning,
+    glowColor: darkTheme.glowWarning,
   },
   healthy: {
-    dot: Colors.dark.success,
-    text: Colors.dark.success,
-    glowColor: Colors.dark.glowSuccess,
+    dot: darkTheme.success,
+    text: darkTheme.success,
+    glowColor: darkTheme.glowSuccess,
   },
 } as const;
 

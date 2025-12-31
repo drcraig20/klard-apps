@@ -14,7 +14,7 @@ import {
   pulseIndicatorStyles,
   layoutStyles,
 } from './protection-status.styles';
-import { Colors } from '@/styles/colors';
+import { lightTheme, darkTheme } from '@/styles/colors';
 
 export interface ProtectionStatusProps {
   /** Number of active cards watching */
@@ -43,7 +43,7 @@ export function ProtectionStatus({
 }: Readonly<ProtectionStatusProps>) {
   const isDark = useColorScheme() === 'dark';
   const pulseAnim = useRef(new Animated.Value(1)).current;
-  const colors = isDark ? Colors.dark : Colors.light;
+  const colors = isDark ? darkTheme : lightTheme;
 
   const message = activeCards === 1
     ? '1 card watching'

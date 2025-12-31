@@ -1,105 +1,138 @@
-import { StyleSheet } from 'react-native';
+import { sva } from '@/styles/sva';
+import type { ThemeColors } from '@/styles';
 
-export const styles = StyleSheet.create({
+export const badgeContainerStyles = sva({
   base: {
     flexDirection: 'row',
     alignItems: 'center',
     borderRadius: 9999,
     gap: 4,
   },
+  variants: {
+    variant: {
+      default: (colors: ThemeColors) => ({
+        backgroundColor: colors.muted,
+      }),
+      primary: (colors: ThemeColors) => ({
+        backgroundColor: colors.primaryBackground,
+        shadowColor: colors.glowPrimary,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.3,
+        shadowRadius: 8,
+        elevation: 3,
+      }),
+      success: (colors: ThemeColors) => ({
+        backgroundColor: colors.successBackground,
+        shadowColor: colors.glowSuccess,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.3,
+        shadowRadius: 8,
+        elevation: 3,
+      }),
+      warning: (colors: ThemeColors) => ({
+        backgroundColor: colors.warningBackground,
+        shadowColor: colors.glowWarning,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.3,
+        shadowRadius: 8,
+        elevation: 3,
+      }),
+      error: (colors: ThemeColors) => ({
+        backgroundColor: colors.errorBackground,
+        shadowColor: colors.glowError,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.3,
+        shadowRadius: 8,
+        elevation: 3,
+      }),
+      secondary: (colors: ThemeColors) => ({
+        backgroundColor: colors.muted,
+      }),
+      destructive: (colors: ThemeColors) => ({
+        backgroundColor: colors.errorBackground,
+        shadowColor: colors.glowError,
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 0.3,
+        shadowRadius: 8,
+        elevation: 3,
+      }),
+      outline: (colors: ThemeColors) => ({
+        backgroundColor: 'transparent',
+        borderWidth: 1,
+        borderColor: colors.border,
+      }),
+    },
+    size: {
+      sm: {
+        paddingHorizontal: 6,
+        paddingVertical: 2,
+      },
+      md: {
+        paddingHorizontal: 10,
+        paddingVertical: 2,
+      },
+    },
+  },
+  defaultVariants: {
+    variant: 'default',
+    size: 'md',
+  },
+});
+
+export const badgeTextStyles = sva({
+  base: {
+    fontWeight: '500',
+  },
+  variants: {
+    variant: {
+      default: (colors: ThemeColors) => ({
+        color: colors.mutedForeground,
+      }),
+      primary: (colors: ThemeColors) => ({
+        color: colors.primary,
+      }),
+      success: (colors: ThemeColors) => ({
+        color: colors.success,
+      }),
+      warning: (colors: ThemeColors) => ({
+        color: colors.warning,
+      }),
+      error: (colors: ThemeColors) => ({
+        color: colors.error,
+      }),
+      secondary: (colors: ThemeColors) => ({
+        color: colors.secondary,
+      }),
+      destructive: (colors: ThemeColors) => ({
+        color: colors.error,
+      }),
+      outline: (colors: ThemeColors) => ({
+        color: colors.textSecondary,
+      }),
+    },
+    size: {
+      sm: {
+        fontSize: 12,
+      },
+      md: {
+        fontSize: 14,
+      },
+    },
+  },
+  defaultVariants: {
+    variant: 'default',
+    size: 'md',
+  },
+});
+
+// Static styles that don't need theme colors
+export const staticStyles = {
   iconContainer: {
     flexShrink: 0,
-  },
-  text: {
-    fontWeight: '500',
   },
   removeButton: {
     marginLeft: 2,
     padding: 2,
     borderRadius: 9999,
   },
-});
-
-export const variantStyles = StyleSheet.create({
-  default: {
-    backgroundColor: '#F1F5F9', // slate-100
-  },
-  primary: {
-    backgroundColor: '#CCFBF1', // teal-100
-    shadowColor: 'rgb(21, 181, 176)',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 3,
-  },
-  success: {
-    backgroundColor: '#DCFCE7', // green-100
-    shadowColor: 'rgb(16, 185, 129)',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 3,
-  },
-  warning: {
-    backgroundColor: '#FEF3C7', // amber-100
-    shadowColor: 'rgb(245, 158, 11)',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 3,
-  },
-  error: {
-    backgroundColor: '#FEE2E2', // red-100
-    shadowColor: 'rgb(239, 68, 68)',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 3,
-  },
-  outline: {
-    backgroundColor: 'transparent',
-    borderWidth: 1,
-    borderColor: '#CBD5E1', // slate-300
-  },
-});
-
-export const textStyles = StyleSheet.create({
-  default: {
-    color: '#334155', // slate-700
-  },
-  primary: {
-    color: '#0D7C7A', // teal-700
-  },
-  success: {
-    color: '#15803D', // green-700
-  },
-  warning: {
-    color: '#B45309', // amber-700
-  },
-  error: {
-    color: '#B91C1C', // red-700
-  },
-  outline: {
-    color: '#475569', // slate-600
-  },
-});
-
-export const sizeStyles = StyleSheet.create({
-  sm: {
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-  },
-  md: {
-    paddingHorizontal: 10,
-    paddingVertical: 2,
-  },
-});
-
-export const textSizeStyles = StyleSheet.create({
-  sm: {
-    fontSize: 12,
-  },
-  md: {
-    fontSize: 14,
-  },
-});
+} as const;

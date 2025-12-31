@@ -35,5 +35,7 @@ export const variantIconColors: Record<NonNullable<BadgeProps["variant"]>, strin
   success: "#15803D", // green-700
   warning: "#B45309", // amber-700
   error: "#B91C1C", // red-700
+  secondary: "#15B5B0", // secondary teal
+  destructive: "#B91C1C", // red-700 (same as error)
   outline: "#475569", // slate-600
 };

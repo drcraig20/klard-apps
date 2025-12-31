@@ -3,16 +3,18 @@ import {
   View,
   Text,
   Pressable,
+  useColorScheme,
   type ViewStyle,
   type StyleProp,
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 
-import { styles, variantStyles, textStyles, sizeStyles, textSizeStyles } from './badge.styles';
+import { useThemeColors } from '@/hooks/useThemeColors';
+import { badgeContainerStyles, badgeTextStyles, staticStyles } from './badge.styles';
 
 export interface BadgeProps {
-  variant?: 'default' | 'primary' | 'success' | 'warning' | 'error' | 'outline';
+  variant?: 'default' | 'primary' | 'success' | 'warning' | 'error' | 'secondary' | 'destructive' | 'outline';
   size?: 'sm' | 'md';
   icon?: React.ReactNode;
   removable?: boolean;
@@ -32,25 +34,53 @@ export function Badge({
   style,
   testID,
 }: Readonly<BadgeProps>) {
+  const colorScheme = useColorScheme();
+  const isDark = colorScheme === 'dark';
+  const colors = useThemeColors();
+
   const handleRemove = async () => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
     onRemove?.();
   };
 
+  // Get the text color for the icon based on variant
+  const getIconColor = () => {
+    switch (variant) {
+      case 'primary':
+        return colors.primary;
+      case 'success':
+        return colors.success;
+      case 'warning':
+        return colors.warning;
+      case 'error':
+      case 'destructive':
+        return colors.error;
+      case 'secondary':
+        return colors.secondary;
+      case 'outline':
+        return colors.textSecondary;
+      default:
+        return colors.mutedForeground;
+    }
+  };
+
   return (
     <View
-      style={[styles.base, variantStyles[variant], sizeStyles[size], style]}
+      style={[
+        ...badgeContainerStyles(isDark, { variant, size }),
+        style,
+      ]}
       testID={testID}
       accessibilityRole="text"
     >
-      {icon && <View style={styles.iconContainer}>{icon}</View>}
-      <Text style={[styles.text, textStyles[variant], textSizeStyles[size]]}>
+      {icon && <View style={staticStyles.iconContainer}>{icon}</View>}
+      <Text style={badgeTextStyles(isDark, { variant, size })}>
         {children}
       </Text>
       {removable && (
         <Pressable
           onPress={handleRemove}
-          style={styles.removeButton}
+          style={staticStyles.removeButton}
           accessibilityLabel="Remove"
           accessibilityRole="button"
           hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
@@ -58,7 +88,7 @@ export function Badge({
           <Ionicons
             name="close"
             size={size === 'sm' ? 10 : 12}
-            color={textStyles[variant].color}
+            color={getIconColor()}
           />
         </Pressable>
       )}
