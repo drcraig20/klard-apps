@@ -3,6 +3,8 @@
 import { toast } from "sonner";
 import confetti from "canvas-confetti";
 
+import { getConfettiColors } from "@/lib/utils";
+
 export type ToastType = "success" | "error" | "warning" | "info";
 export type ToastPosition = "top-center" | "center-screen" | "bottom";
 export type CelebrationLevel = "full" | "medium" | "subtle" | "none";
@@ -85,6 +87,8 @@ function triggerConfetti(level: CelebrationLevel): void {
 
   const config = CELEBRATION_CONFIG[level];
 
+  const colors = getConfettiColors();
+
   // Fire confetti from center
   confetti({
     particleCount: config.particleCount,
@@ -93,26 +97,27 @@ function triggerConfetti(level: CelebrationLevel): void {
     decay: config.decay,
     scalar: config.scalar,
     origin: { x: 0.5, y: 0.5 },
-    colors: ['#0D7C7A', '#15B5B0', '#059669', '#10B981', '#FFD700'],
+    colors,
     ticks: 200,
   });
 
   // For full celebration, add extra bursts from sides
   if (level === 'full') {
     setTimeout(() => {
+      const sideColors = getConfettiColors();
       confetti({
         particleCount: 50,
         angle: 60,
         spread: 55,
         origin: { x: 0 },
-        colors: ['#0D7C7A', '#15B5B0', '#FFD700'],
+        colors: sideColors,
       });
       confetti({
         particleCount: 50,
         angle: 120,
         spread: 55,
         origin: { x: 1 },
-        colors: ['#0D7C7A', '#15B5B0', '#FFD700'],
+        colors: sideColors,
       });
     }, 150);
   }

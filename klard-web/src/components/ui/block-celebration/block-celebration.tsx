@@ -5,7 +5,7 @@ import { createContext, useContext, useEffect, useRef } from 'react';
 import { Share2 } from 'lucide-react';
 import confetti from 'canvas-confetti';
 
-import { cn } from '@/lib/utils';
+import { cn, getConfettiColors } from '@/lib/utils';
 import {
   blockCelebrationVariants,
   amountVariants,
@@ -89,7 +89,7 @@ function triggerConfetti(level: CelebrationLevel): void {
     spread: config.spread,
     startVelocity: config.startVelocity,
     origin: config.origin,
-    colors: ['#059669', '#10B981', '#0D7C7A', '#15B5B0', '#34D399'],
+    colors: getConfettiColors(),
     ticks: 200,
     gravity: 1.2,
     scalar: 1.1,
