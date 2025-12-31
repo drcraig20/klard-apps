@@ -1,13 +1,22 @@
 'use client';
 
-import { useThemeColors } from '@/hooks';
+import { useTheme } from 'next-themes';
 
 interface IllustrationProps {
   className?: string;
 }
 
 export function TrackIllustration({ className }: Readonly<IllustrationProps>) {
-  const colors = useThemeColors();
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === 'dark';
+
+  // Theme-aware colors
+  const colors = {
+    primary: isDark ? '#15B5B0' : '#0D7C7A',
+    background: isDark ? '#0F172A' : '#FFFFFF',
+    foreground: isDark ? '#F8FAFC' : '#0F172A',
+    surface: isDark ? 'rgba(30, 41, 59, 0.6)' : 'rgba(255, 255, 255, 0.8)',
+  };
 
   // Derive card background with opacity from the surface color
   const cardBorderColor = `color-mix(in srgb, ${colors.foreground} 10%, transparent)`;

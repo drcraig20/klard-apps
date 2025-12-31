@@ -1,13 +1,24 @@
 'use client';
 
-import { useThemeColors } from '@/hooks';
+import { useTheme } from 'next-themes';
 
 interface IllustrationProps {
   className?: string;
 }
 
 export function ProtectIllustration({ className }: Readonly<IllustrationProps>) {
-  const colors = useThemeColors();
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === 'dark';
+
+  // Theme-aware colors
+  const colors = {
+    primary: isDark ? '#15B5B0' : '#0D7C7A',
+    background: isDark ? '#0F172A' : '#FFFFFF',
+    foreground: isDark ? '#F8FAFC' : '#0F172A',
+    muted: isDark ? '#334155' : '#F1F5F9',
+    card: isDark ? '#1E293B' : '#FFFFFF',
+    mutedForeground: isDark ? '#94A3B8' : '#64748B',
+  };
 
   // Derive border color with opacity
   const cardBorderColor = `color-mix(in srgb, ${colors.foreground} 15%, transparent)`;

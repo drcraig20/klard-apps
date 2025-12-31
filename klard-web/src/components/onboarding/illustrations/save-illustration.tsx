@@ -1,13 +1,21 @@
 'use client';
 
-import { useThemeColors } from '@/hooks';
+import { useTheme } from 'next-themes';
 
 interface IllustrationProps {
   className?: string;
 }
 
 export function SaveIllustration({ className }: Readonly<IllustrationProps>) {
-  const colors = useThemeColors();
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === 'dark';
+
+  // Theme-aware colors
+  const colors = {
+    success: isDark ? '#10B981' : '#059669',
+    primary: isDark ? '#15B5B0' : '#0D7C7A',
+    background: isDark ? '#0F172A' : '#FFFFFF',
+  };
 
   return (
     <svg
