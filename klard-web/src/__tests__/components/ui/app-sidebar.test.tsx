@@ -92,8 +92,8 @@ describe('AppSidebar', () => {
       render(<AppSidebar items={mockItems} activeItem="dashboard" />);
 
       const dashboardLink = screen.getByRole('link', { name: /dashboard/i });
-      // Check for the glow shadow class
-      expect(dashboardLink.className).toMatch(/shadow-\[0_0_12px_rgba\(21,181,176,0\.4\)\]/);
+      // Check for the glow shadow class (uses CSS custom property)
+      expect(dashboardLink.className).toMatch(/shadow-\[var\(--rec-glow-primary\)\]/);
     });
 
     it('should apply bg-white/20 to active nav item', () => {

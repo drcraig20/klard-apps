@@ -245,42 +245,42 @@ describe("Badge", () => {
       render(<Badge variant="success">Active</Badge>)
 
       const badge = screen.getByText("Active")
-      expect(badge.className).toMatch(/shadow-\[0_0_8px/)
+      expect(badge.className).toMatch(/shadow-\[var\(--rec-glow-success\)\]/)
     })
 
     it("should apply warning glow effect", () => {
       render(<Badge variant="warning">Pending</Badge>)
 
       const badge = screen.getByText("Pending")
-      expect(badge.className).toMatch(/shadow-\[0_0_8px/)
+      expect(badge.className).toMatch(/shadow-\[var\(--rec-glow-warning\)\]/)
     })
 
     it("should apply error glow effect", () => {
       render(<Badge variant="error">Failed</Badge>)
 
       const badge = screen.getByText("Failed")
-      expect(badge.className).toMatch(/shadow-\[0_0_8px/)
+      expect(badge.className).toMatch(/shadow-\[var\(--rec-glow-error\)\]/)
     })
 
     it("should apply primary glow effect", () => {
       render(<Badge variant="primary">Primary</Badge>)
 
       const badge = screen.getByText("Primary")
-      expect(badge.className).toMatch(/shadow-\[0_0_8px/)
+      expect(badge.className).toMatch(/shadow-\[var\(--rec-glow-primary\)\]/)
     })
 
     it("should not apply glow to default variant", () => {
       render(<Badge>Default</Badge>)
 
       const badge = screen.getByText("Default")
-      expect(badge.className).not.toMatch(/shadow-\[0_0_8px/)
+      expect(badge.className).not.toMatch(/shadow-\[var\(--rec-glow-/)
     })
 
     it("should not apply glow to outline variant", () => {
       render(<Badge variant="outline">Outline</Badge>)
 
       const badge = screen.getByText("Outline")
-      expect(badge.className).not.toMatch(/shadow-\[0_0_8px/)
+      expect(badge.className).not.toMatch(/shadow-\[var\(--rec-glow-/)
     })
   })
 
