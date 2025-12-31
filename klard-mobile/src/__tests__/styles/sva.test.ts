@@ -1,12 +1,11 @@
 // klard-mobile/src/__tests__/styles/sva.test.ts
 import { sva } from '@/styles/sva';
 
-// Mock the Colors import
+// Mock the colors module to provide lightTheme and darkTheme
+// These are the named exports that sva.ts imports
 jest.mock('@/styles/colors', () => ({
-  Colors: {
-    light: { primary: '#0D7C7A', background: '#FFFFFF' },
-    dark: { primary: '#15B5B0', background: '#0F172A' },
-  },
+  lightTheme: { primary: '#0D7C7A', background: '#FFFFFF' },
+  darkTheme: { primary: '#15B5B0', background: '#0F172A' },
 }));
 
 describe('sva', () => {

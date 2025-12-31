@@ -2,25 +2,6 @@ import { renderHook } from '@testing-library/react-native';
 import * as Haptics from 'expo-haptics';
 import { useHaptics } from '@/hooks/useHaptics';
 
-// Mock expo-haptics
-jest.mock('expo-haptics', () => ({
-  impactAsync: jest.fn(),
-  notificationAsync: jest.fn(),
-  selectionAsync: jest.fn(),
-  ImpactFeedbackStyle: {
-    Light: 'light',
-    Medium: 'medium',
-    Heavy: 'heavy',
-    Rigid: 'rigid',
-    Soft: 'soft',
-  },
-  NotificationFeedbackType: {
-    Success: 'success',
-    Warning: 'warning',
-    Error: 'error',
-  },
-}));
-
 describe('useHaptics', () => {
   beforeEach(() => {
     jest.clearAllMocks();
