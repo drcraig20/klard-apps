@@ -81,7 +81,20 @@ pnpm build:auth       # Build auth only
 pnpm test:auth        # Run auth tests
 pnpm --filter klard-web test      # Run web tests
 pnpm --filter klard-mobile test   # Run mobile tests
+```
 
+### Testing by Package
+
+| Package | Framework | Config | Key Command |
+|---------|-----------|--------|-------------|
+| klard-web | Vitest | vitest.config.ts | `pnpm --filter klard-web test` |
+| klard-mobile | Jest | jest.config.js | `pnpm --filter klard-mobile test` |
+| klard-auth | Vitest | vitest.config.ts | `pnpm test:auth` |
+| commons | Vitest | vitest.config.ts | `cd commons && pnpm test` |
+
+**Note:** Web uses Vitest (faster, ESM-native), Mobile uses Jest (required by jest-expo).
+
+```bash
 # Code quality
 pnpm lint             # ESLint across all packages
 
@@ -137,6 +150,35 @@ klard-apps/
     └────────────┘  └────────────┘  └────────────┘
 ```
 
+### Turborepo Pipeline
+
+Build orchestration via `turbo.json`:
+
+```json
+{
+  "pipeline": {
+    "build": {
+      "dependsOn": ["^build"],  // Build dependencies first
+      "outputs": ["dist/**", ".next/**", "build/**"]
+    },
+    "dev": {
+      "cache": false,
+      "persistent": true
+    },
+    "test": {
+      "dependsOn": ["build"]
+    },
+    "lint": {}
+  }
+}
+```
+
+**Key behaviors:**
+- `^build` means "build my dependencies before me"
+- commons always builds first (other packages depend on it)
+- Caching enabled for build artifacts
+- Dev servers run persistently without caching
+
 ### Data Flow
 
 ```
@@ -162,6 +204,25 @@ klard-apps/
 | commons | TypeScript library | Zod 4, tsup |
 
 All packages use TypeScript 5.9.3 with **strict mode**.
+
+### Version Matrix
+
+Last updated: 2025-12-30
+
+| Package | Library | Version | Docs Current |
+|---------|---------|---------|--------------|
+| klard-web | Next.js | 16.1.1 | Yes |
+| klard-web | React | 19.2.3 | Yes |
+| klard-web | Tailwind CSS | 4.1.18 | Yes |
+| klard-mobile | React Native | 0.83.1 | Yes |
+| klard-mobile | Expo | 54.0.30 | Yes |
+| klard-mobile | Expo Router | 6.0.21 | Yes |
+| klard-auth | Express | 5.2.1 | Yes |
+| all | TypeScript | 5.9.3 | Yes |
+| all | better-auth | 1.4.9 | Yes |
+| all | Zod | 4.x | Yes |
+
+> **Maintainers:** Update this table when upgrading dependencies.
 
 ---
 
@@ -250,17 +311,35 @@ import { Component } from "@/components/Component"
 
 ### Commons Package Structure
 
+Shared library consumed by all packages. **Must build first** before other packages.
+
 ```
 commons/src/
 ├── types/          # TypeScript interfaces (subscription, user)
-├── validation/     # Zod schemas
-├── constants/      # Plans, app constants
-└── index.ts        # Re-exports all
+├── validation/     # Zod schemas for runtime validation
+├── constants/      # Plans, billing cycles, app constants
+└── index.ts        # Re-exports all public API
 ```
 
-Import shared code:
+**Key Exports:**
 ```typescript
-import { UserSchema, SubscriptionType, PLANS } from "@klard-apps/commons"
+// Types
+import { User, Subscription, Plan } from "@klard-apps/commons";
+
+// Validation schemas
+import { UserSchema, SubscriptionSchema, LoginSchema } from "@klard-apps/commons";
+
+// Constants
+import { PLANS, BILLING_CYCLES, APP_CONFIG } from "@klard-apps/commons";
+```
+
+**Build Requirement:**
+```bash
+# Must run before other packages can build
+cd commons && pnpm build
+
+# Or use Turborepo (handles automatically)
+pnpm build  # commons builds first via pipeline
 ```
 
 ## Klard Design System

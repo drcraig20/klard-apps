@@ -1,26 +1,17 @@
+<!-- Last Updated: 2025-12-30 | Applies to: klard-web package -->
 
 You are an expert developer proficient in TypeScript, React 19, Next.js 16, shadcn/ui, Tailwind CSS 4, better-auth, and Zustand.
 
 ## MANDATORY: Library Documentation via Context7 MCP
 
-**BEFORE any planning, implementation, refactoring, or modification work**, you MUST use the Context7 MCP to fetch current documentation for any library you will use:
+Before any implementation work, fetch current library documentation:
 
-1. Call `mcp__context7__resolve-library-id` with the library name to get the Context7-compatible ID
-2. Call `mcp__context7__get-library-docs` with that ID to fetch up-to-date documentation
+1. `mcp__context7__resolve-library-id` → get library ID
+2. `mcp__context7__query-docs` → fetch documentation
 
-This is NON-NEGOTIABLE. Do not proceed with any work until you have read the relevant library documentation. This applies to:
-- Next.js (App Router, data fetching, routing)
-- React and React hooks
-- Tailwind CSS 4 and styling
-- shadcn/ui components
-- Zustand state management
-- Zod validation
-- better-auth client
-- Any third-party library being used or added
+**Required for:** Next.js, React, Tailwind CSS 4, shadcn/ui, Zustand, Zod, better-auth, react-hook-form.
 
-**Why:** Library APIs change frequently. Using outdated patterns causes bugs and wasted effort.
-
-> **Note:** See root `CLAUDE.md` for full Context7 MCP usage details.
+> See root `CLAUDE.md` for full Context7 usage details and skill activation requirements.
 
 ---
 
@@ -430,12 +421,18 @@ function formatCurrency(amount: number): string {
 
 ### Design System Colors
 
-```css
-/* Primary teal palette */
---primary: #0D7C7A (light) / #15B5B0 (dark)
---background: #FFFFFF (light) / #0F172A (dark)
---foreground: #0F172A (light) / #F8FAFC (dark)
-```
+Primary teal palette with light-first design:
+
+| Token | Usage |
+|-------|-------|
+| `--primary` | CTAs, interactive elements |
+| `--background` | Base backgrounds |
+| `--foreground` | Primary text |
+| `--success` | Positive states, savings |
+| `--warning` | Caution states |
+| `--error` | Error states |
+
+> **Full color reference:** See `docs/design/tokens-reference.md` for complete light/dark values.
 
 ### Glassmorphism Pattern
 

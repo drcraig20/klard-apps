@@ -1,23 +1,19 @@
+<!-- Last Updated: 2025-12-30 | Applies to: klard-mobile package -->
 
 You are an expert in TypeScript, React Native, Expo 54, and Mobile UI development.
 
 ## MANDATORY: Library Documentation via Context7 MCP
 
-**BEFORE any planning, implementation, refactoring, or modification work**, you MUST use the Context7 MCP to fetch current documentation for any library you will use:
+Before any implementation work, fetch current library documentation:
 
-1. Call `mcp__context7__resolve-library-id` with the library name to get the Context7-compatible ID
-2. Call `mcp__context7__get-library-docs` with that ID to fetch up-to-date documentation
+1. `mcp__context7__resolve-library-id` → get library ID
+2. `mcp__context7__query-docs` → fetch documentation
 
-This is NON-NEGOTIABLE. Do not proceed with any work until you have read the relevant library documentation. This applies to:
-- Expo SDK 54 and all expo-* packages
-- React Native 0.83 core and community packages
-- Expo Router 6 (NOT react-navigation)
-- State management (Zustand)
-- Any third-party library being used or added
+**Required for:** Expo SDK 54, React Native 0.83, Expo Router 6, Zustand, better-auth/expo.
 
-**Why:** Library APIs change frequently. Using outdated patterns causes bugs and wasted effort.
+> See root `CLAUDE.md` for full Context7 usage details and skill activation requirements.
 
-> **Note:** See root `CLAUDE.md` for full Context7 MCP usage details.
+---
 
 ## MANDATORY: Expo SDK First
 
@@ -185,18 +181,20 @@ function MyComponent() {
 
 ### Color Tokens
 
-120+ color tokens per theme. Key tokens:
+120+ color tokens per theme. Key semantic tokens:
 
-| Token | Light | Dark | Usage |
-|-------|-------|------|-------|
-| `primary` | `#0D7C7A` | `#15B5B0` | CTAs, interactive |
-| `background` | `#FFFFFF` | `#0F172A` | Base background |
-| `foreground` | `#0F172A` | `#F8FAFC` | Primary text |
-| `muted` | `#F1F5F9` | `#1E293B` | Secondary backgrounds |
-| `success` | `#059669` | `#10B981` | Positive states |
-| `error` | `#DC2626` | `#EF4444` | Error states |
+| Token | Usage |
+|-------|-------|
+| `primary` | CTAs, interactive elements |
+| `background` | Base backgrounds |
+| `foreground` | Primary text |
+| `success` | Positive states |
+| `error` | Error states |
+| `muted` | Secondary backgrounds |
 
-**Reference:** `src/hooks/useThemeColors.ts`, `src/styles/colors.ts`
+> **Full color reference:** See `docs/design/tokens-reference.md` for complete light/dark hex values.
+
+**Reference:** `src/hooks/useThemeColors.ts`, `src/styles/colors/`
 
 ### ThemeContext Provider
 
