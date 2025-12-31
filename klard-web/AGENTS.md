@@ -20,6 +20,8 @@ This is NON-NEGOTIABLE. Do not proceed with any work until you have read the rel
 
 **Why:** Library APIs change frequently. Using outdated patterns causes bugs and wasted effort.
 
+> **Note:** See root `CLAUDE.md` for full Context7 MCP usage details.
+
 ---
 
 ## Tech Stack
@@ -354,6 +356,41 @@ describe('Button', () => {
 
 ---
 
+## Storybook
+
+Component development and documentation using Storybook 10.
+
+### Running Storybook
+
+```bash
+pnpm storybook           # Start at localhost:6006
+pnpm storybook:build     # Build static storybook
+```
+
+### Writing Stories
+
+```typescript
+// button.stories.tsx
+import type { Meta, StoryObj } from '@storybook/react';
+import { Button } from './button';
+
+const meta: Meta<typeof Button> = {
+  component: Button,
+  tags: ['autodocs'],
+};
+
+export default meta;
+type Story = StoryObj<typeof Button>;
+
+export const Primary: Story = {
+  args: { variant: 'klard', children: 'Click me' },
+};
+```
+
+**Reference:** `.storybook/`, `src/components/ui/*/*.stories.tsx`
+
+---
+
 ## Code Style
 
 - **TypeScript:** Strict mode, prefer interfaces over types
@@ -414,6 +451,35 @@ function formatCurrency(amount: number): string {
 ```
 
 **Reference:** `docs/design/Klard Design System.md`
+
+### Design Tokens Structure
+
+The design system uses modular CSS files in `src/styles/`:
+
+```
+src/styles/
+├── tokens/              # CSS custom properties
+│   ├── animation.css    # Transition & animation tokens
+│   ├── focus.css        # Focus ring styles
+│   ├── glassmorphism.css # Glass effects
+│   ├── radius.css       # Border radius scale
+│   ├── shadows.css      # Shadow tokens
+│   └── spacing.css      # Spacing scale
+├── themes/              # Theme-specific colors
+│   ├── light.css        # Light theme variables
+│   └── dark.css         # Dark theme variables
+├── components.css       # Component-specific styles
+├── utilities.css        # Utility classes
+└── index.ts             # TypeScript exports
+```
+
+Import order in `globals.css`:
+```css
+@import "tailwindcss";
+@import "../styles/index.css";  /* Design system */
+```
+
+**Reference:** `src/styles/`, `docs/design/tokens-reference.md`
 
 ---
 

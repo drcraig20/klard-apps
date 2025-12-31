@@ -10,12 +10,14 @@ You are an expert in TypeScript, React Native, Expo 54, and Mobile UI developmen
 
 This is NON-NEGOTIABLE. Do not proceed with any work until you have read the relevant library documentation. This applies to:
 - Expo SDK 54 and all expo-* packages
-- React Native 0.81 core and community packages
+- React Native 0.83 core and community packages
 - Expo Router 6 (NOT react-navigation)
 - State management (Zustand)
 - Any third-party library being used or added
 
 **Why:** Library APIs change frequently. Using outdated patterns causes bugs and wasted effort.
+
+> **Note:** See root `CLAUDE.md` for full Context7 MCP usage details.
 
 ## MANDATORY: Expo SDK First
 
@@ -45,7 +47,7 @@ This is NON-NEGOTIABLE. Do not proceed with any work until you have read the rel
 
 | Category | Technology | Notes |
 |----------|------------|-------|
-| Framework | React Native 0.81 + Expo 54 | Managed workflow |
+| Framework | React Native 0.83 + Expo 54 | Managed workflow |
 | Navigation | Expo Router 6 | File-based routing (NOT react-navigation) |
 | Styling | Custom SVA System | Style Variance Authority (NOT Tailwind/styled-components) |
 | Auth | better-auth/expo | Platform-specific auth client |
@@ -138,6 +140,27 @@ export const componentStyles = createSVA({
 
 **Reference:** `src/styles/sva.ts`, `src/styles/colors.ts`
 
+### Color System Structure
+
+Colors are organized in `src/styles/colors/`:
+
+```
+src/styles/colors/
+├── palette.ts    # Raw color values (hex codes)
+├── semantic.ts   # Semantic mappings (success, error, etc.)
+├── light.ts      # Light theme color set
+├── dark.ts       # Dark theme color set
+└── index.ts      # Unified exports
+```
+
+Import pattern:
+```typescript
+import { lightColors, darkColors } from "@/styles/colors";
+// or
+import { Colors } from "@/styles/colors";
+const theme = Colors[isDark ? 'dark' : 'light'];
+```
+
 ---
 
 ## Theme System
@@ -174,6 +197,25 @@ function MyComponent() {
 | `error` | `#DC2626` | `#EF4444` | Error states |
 
 **Reference:** `src/hooks/useThemeColors.ts`, `src/styles/colors.ts`
+
+### ThemeContext Provider
+
+For components needing theme context without hooks:
+
+```typescript
+// src/contexts/ThemeContext.tsx
+import { ThemeContext, useTheme } from "@/contexts";
+
+// In _layout.tsx - wrap app with provider
+<ThemeContext.Provider value={{ isDark, toggleTheme }}>
+  {children}
+</ThemeContext.Provider>
+
+// In components - use context or hook
+const { isDark } = useTheme();
+```
+
+**Reference:** `src/contexts/ThemeContext.tsx`
 
 ---
 
@@ -384,6 +426,23 @@ describe("Button", () => {
 ```
 
 **Reference:** `src/__tests__/`, `jest.setup.ts`
+
+---
+
+## Storybook
+
+React Native component development using Storybook with react-native-web.
+
+### Running Storybook
+
+```bash
+pnpm storybook           # Start at localhost:6007
+pnpm storybook:build     # Build static storybook
+```
+
+Stories use react-native-web for browser rendering.
+
+**Reference:** `.storybook-web/`, `src/components/ui/*/*.stories.tsx`
 
 ---
 

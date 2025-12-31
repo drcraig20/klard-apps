@@ -11,6 +11,18 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is NON-NEGOTIABLE. Applies to: better-auth, Express 5, pg (PostgreSQL), Zod.
 
+> **Note:** See root `CLAUDE.md` for full Context7 MCP usage and skill activation requirements.
+
+---
+
+## MANDATORY: Skill Evaluation
+
+Before implementation work, evaluate available skills per root `CLAUDE.md` requirements.
+
+## MANDATORY: SOLID Principles
+
+All code must follow SOLID principles. Use `Skill(solid-design-principles)` for implementation guidance.
+
 ---
 
 ## Commands
@@ -22,8 +34,9 @@ pnpm start            # Run production build
 pnpm typecheck        # Type checking only
 pnpm lint             # Biome linter
 pnpm lint:fix         # Auto-fix lint issues
-pnpm test             # Run all tests
-pnpm test:watch       # Tests in watch mode
+pnpm test             # Run all tests (vitest run)
+pnpm test:watch       # Tests in watch mode (vitest)
+pnpm test:coverage    # Run tests with coverage
 pnpm test -- tests/unit/config.test.ts  # Run single test file
 pnpm check            # Run typecheck + lint + test
 ```
@@ -246,8 +259,9 @@ Lookup codes use prefix `010.` for this service (for tracing across microservice
 ### Running Tests
 
 ```bash
-pnpm test                              # All tests
-pnpm test:watch                        # Watch mode
+pnpm test                              # All tests (vitest run)
+pnpm test:watch                        # Watch mode (vitest)
+pnpm test:coverage                     # With coverage
 pnpm test -- tests/unit/config.test.ts # Single file
 ```
 

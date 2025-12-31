@@ -79,6 +79,8 @@ pnpm build:auth       # Build auth only
 
 # Testing
 pnpm test:auth        # Run auth tests
+pnpm --filter klard-web test      # Run web tests
+pnpm --filter klard-mobile test   # Run mobile tests
 
 # Code quality
 pnpm lint             # ESLint across all packages
@@ -98,6 +100,16 @@ cd commons && pnpm dev      # Watch mode
 cd klard-mobile
 pnpm android              # Android emulator
 pnpm ios                  # iOS simulator
+```
+
+### Storybook Development
+
+```bash
+# Component development with Storybook
+pnpm storybook:web           # Web components at localhost:6006
+pnpm storybook:mobile        # Mobile components at localhost:6007
+pnpm storybook:build:web     # Build web storybook
+pnpm storybook:build:mobile  # Build mobile storybook
 ```
 
 ## Architecture Overview
@@ -145,7 +157,7 @@ klard-apps/
 | Package | Framework | Key Dependencies |
 |---------|-----------|------------------|
 | klard-web | Next.js 16, React 19 | Tailwind 4, shadcn/ui, better-auth, React Compiler |
-| klard-mobile | React Native 0.81, Expo 54 | Expo Router 6, SVA styling, better-auth/expo |
+| klard-mobile | React Native 0.83, Expo 54 | Expo Router 6, SVA styling, better-auth/expo |
 | klard-auth | Express 5, Node 20+ | better-auth, PostgreSQL, JWT/OIDC |
 | commons | TypeScript library | Zod 4, tsup |
 
@@ -280,7 +292,9 @@ Full specs in `docs/design/Klard Design System.md`.
 - Analytics: PostHog
 - Monitoring: Sentry, BetterStack
 
-Note: Auth backend (`klard-auth`) is now part of this monorepo.## Formatting Balance
+Note: Auth backend (`klard-auth`) is now part of this monorepo.
+
+## Formatting Balance
 
 - Use **paragraphs** for narrative, context, and flow
 - Use **bullet lists** for discrete items, options, or short points
