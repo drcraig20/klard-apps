@@ -113,7 +113,7 @@ export const SearchInput = forwardRef<HTMLInputElement, SearchInputProps>(
         {loading && (
           <div
             data-slot="loading-spinner"
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500"
+            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
           >
             <Loader2 className="h-4 w-4 animate-spin" />
           </div>

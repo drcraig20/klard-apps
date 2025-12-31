@@ -25,7 +25,7 @@ export const containerStyles = sva({
     // Base shadow
     ...(Platform.OS === 'ios'
       ? {
-          shadowColor: '#0F172A',
+          shadowColor: colors.foreground,
           shadowOffset: { width: 0, height: 2 },
           shadowOpacity: 0.08,
           shadowRadius: 12,
@@ -79,7 +79,7 @@ export const containerStyles = sva({
         borderColor: colors.glassBorder ?? colors.border,
         ...(Platform.OS === 'ios'
           ? {
-              shadowColor: '#0F172A',
+              shadowColor: colors.foreground,
               shadowOffset: { width: 0, height: 2 },
               shadowOpacity: 0.08,
               shadowRadius: 12,
@@ -180,8 +180,8 @@ export const shareButtonStyles = sva({
 });
 
 export const shareButtonTextStyles = sva({
-  base: () => ({
-    color: '#FFFFFF',
+  base: (colors) => ({
+    color: colors.primaryForeground,
     fontSize: 14,
     fontWeight: '500',
   }),

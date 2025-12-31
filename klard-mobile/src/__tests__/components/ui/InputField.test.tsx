@@ -2,6 +2,7 @@ import React from 'react';
 import { render, fireEvent, waitFor } from '@testing-library/react-native';
 import { Text } from 'react-native';
 import { InputField } from '@/components/ui/InputField';
+import { mockLightColors } from '@/__tests__/__mocks__';
 
 // Mock @expo/vector-icons
 jest.mock('@expo/vector-icons', () => ({
@@ -9,6 +10,11 @@ jest.mock('@expo/vector-icons', () => ({
     const { Text } = require('react-native');
     return <Text {...props}>{name}</Text>;
   },
+}));
+
+// Mock useThemeColors hook
+jest.mock('@/hooks/useThemeColors', () => ({
+  useThemeColors: () => ({ ...mockLightColors, isDark: false }),
 }));
 
 describe('InputField', () => {

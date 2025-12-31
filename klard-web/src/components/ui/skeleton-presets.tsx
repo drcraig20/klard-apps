@@ -43,7 +43,7 @@ export function SubscriptionCardSkeleton({
     <div
       data-slot="skeleton.subscription-card"
       className={cn(
-        'flex items-center gap-4 p-4 border rounded-lg border-slate-200 dark:border-slate-700',
+        'flex items-center gap-4 p-4 border rounded-lg border-border',
         className
       )}
     >

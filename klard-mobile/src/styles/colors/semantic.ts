@@ -142,6 +142,17 @@ export interface ThemeColors {
   burnerExpiredGradientEnd: string;
   burnerUsedGradientStart: string;
   burnerUsedGradientEnd: string;
+
+  // Burner card text (for text on gradient backgrounds)
+  burnerCardTextPrimary: string;
+  burnerCardTextSecondary: string;
+  burnerCardTextTertiary: string;
+  burnerCardOverlayLight: string;
+  burnerCardOverlayMedium: string;
+  burnerCardOverlayStrong: string;
+
+  // Skeleton shimmer
+  shimmerHighlight: string;
 }
 
 export type ColorScheme = 'light' | 'dark';

@@ -26,9 +26,6 @@ export const layoutStyles = StyleSheet.create({
 });
 
 // Shimmer gradient colors (theme-aware)
-export function getShimmerColors(isDark: boolean): [string, string, string] {
-  if (isDark) {
-    return ['transparent', 'rgba(255,255,255,0.1)', 'transparent'];
-  }
-  return ['transparent', 'rgba(255,255,255,0.3)', 'transparent'];
+export function getShimmerColors(shimmerHighlight: string): [string, string, string] {
+  return ['transparent', shimmerHighlight, 'transparent'];
 }

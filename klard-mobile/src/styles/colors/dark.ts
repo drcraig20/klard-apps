@@ -149,4 +149,15 @@ export const darkTheme: ThemeColors = {
   burnerExpiredGradientEnd: '#64748B',
   burnerUsedGradientStart: '#64748B',
   burnerUsedGradientEnd: '#475569',
+
+  // ===== BURNER CARD TEXT (on gradient backgrounds) =====
+  burnerCardTextPrimary: '#FFFFFF',
+  burnerCardTextSecondary: 'rgba(255, 255, 255, 0.8)',
+  burnerCardTextTertiary: 'rgba(255, 255, 255, 0.7)',
+  burnerCardOverlayLight: 'rgba(255, 255, 255, 0.2)',
+  burnerCardOverlayMedium: 'rgba(255, 255, 255, 0.3)',
+  burnerCardOverlayStrong: 'rgba(255, 255, 255, 0.9)',
+
+  // ===== SKELETON SHIMMER =====
+  shimmerHighlight: 'rgba(255, 255, 255, 0.1)',
 };

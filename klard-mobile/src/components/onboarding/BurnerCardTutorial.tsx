@@ -180,7 +180,7 @@ export function BurnerCardTutorial({ onSkip }: Readonly<BurnerCardTutorialProps>
 
           {/* Illustration */}
           <View style={styles.illustrationWrapper}>
-            <BurnerCardIllustration theme="dark" width={200} height={140} />
+            <BurnerCardIllustration width={200} height={140} />
           </View>
 
           {/* Headline */}

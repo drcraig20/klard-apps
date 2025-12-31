@@ -34,13 +34,13 @@ function getStepState(index: number, currentStep: number, explicitStatus?: StepS
 const circleStyles: Record<StepState, string> = {
   completed: 'bg-teal-600 dark:bg-teal-500 text-white',
   current: 'bg-teal-600 dark:bg-teal-500 text-white ring-4 ring-teal-100 dark:ring-teal-900',
-  upcoming: 'bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400',
+  upcoming: 'bg-muted text-muted-foreground',
 };
 
 const labelStyles: Record<StepState, string> = {
-  completed: 'text-slate-900 dark:text-slate-100',
-  current: 'text-slate-900 dark:text-slate-100 font-medium',
-  upcoming: 'text-slate-500 dark:text-slate-400',
+  completed: 'text-foreground',
+  current: 'text-foreground font-medium',
+  upcoming: 'text-muted-foreground',
 };
 
 function Stepper({
@@ -115,7 +115,7 @@ function Stepper({
                     {step.label}
                   </span>
                   {step.description && (
-                    <span className="text-xs text-slate-500 dark:text-slate-400">
+                    <span className="text-xs text-muted-foreground">
                       {step.description}
                     </span>
                   )}
@@ -130,7 +130,7 @@ function Stepper({
                     'mx-4 h-0.5 flex-1 rounded-full transition-colors',
                     index < currentStep
                       ? 'bg-teal-600 dark:bg-teal-500'
-                      : 'bg-slate-200 dark:bg-slate-700'
+                      : 'bg-muted'
                   )}
                   aria-hidden="true"
                 />
@@ -144,7 +144,7 @@ function Stepper({
                     'ml-4 mt-2 h-8 w-0.5 rounded-full transition-colors',
                     index < currentStep
                       ? 'bg-teal-600 dark:bg-teal-500'
-                      : 'bg-slate-200 dark:bg-slate-700'
+                      : 'bg-muted'
                   )}
                   aria-hidden="true"
                 />

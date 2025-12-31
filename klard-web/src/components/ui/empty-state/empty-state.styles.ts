@@ -17,8 +17,8 @@ export const emptyStateVariants = cva(
     // Glassmorphism effect
     "bg-card/80 backdrop-blur-[12px]",
     "border rounded-xl",
-    // Shadow
-    "shadow-[0_2px_12px_rgba(15,23,42,0.08)]",
+    // Shadow - uses CSS variable for theme compliance
+    "shadow-[0_2px_12px_rgb(var(--rec-shadow-color)/0.08)]",
   ],
   {
     variants: {
@@ -32,22 +32,22 @@ export const emptyStateVariants = cva(
         "first-time": [
           "border-primary/30",
           "bg-primary/5",
-          "shadow-[0_2px_12px_rgba(15,23,42,0.08),0_0_16px_rgba(13,124,122,0.15)]",
-          "dark:shadow-[0_2px_12px_rgba(15,23,42,0.08),0_0_16px_rgba(21,181,176,0.2)]",
+          "shadow-[0_2px_12px_rgb(var(--rec-shadow-color)/0.08),0_0_16px_rgba(13,124,122,0.15)]",
+          "dark:shadow-[0_2px_12px_rgb(var(--rec-shadow-color)/0.08),0_0_16px_rgba(21,181,176,0.2)]",
         ],
         /** Celebratory tone - all items completed/cleared */
         cleared: [
           "border-success/40",
           "bg-success/5",
-          "shadow-[0_2px_12px_rgba(15,23,42,0.08),0_0_16px_rgba(5,150,105,0.2)]",
-          "dark:shadow-[0_2px_12px_rgba(15,23,42,0.08),0_0_16px_rgba(16,185,129,0.25)]",
+          "shadow-[0_2px_12px_rgb(var(--rec-shadow-color)/0.08),0_0_16px_rgba(5,150,105,0.2)]",
+          "dark:shadow-[0_2px_12px_rgb(var(--rec-shadow-color)/0.08),0_0_16px_rgba(16,185,129,0.25)]",
         ],
         /** Recovery-focused tone - error state with action needed */
         error: [
           "border-destructive/30",
           "bg-destructive/5",
-          "shadow-[0_2px_12px_rgba(15,23,42,0.08),0_0_16px_rgba(220,38,38,0.15)]",
-          "dark:shadow-[0_2px_12px_rgba(15,23,42,0.08),0_0_16px_rgba(239,68,68,0.2)]",
+          "shadow-[0_2px_12px_rgb(var(--rec-shadow-color)/0.08),0_0_16px_rgba(220,38,38,0.15)]",
+          "dark:shadow-[0_2px_12px_rgb(var(--rec-shadow-color)/0.08),0_0_16px_rgba(239,68,68,0.2)]",
         ],
         /** Default variant - no specific tone */
         default: "border-border/50",

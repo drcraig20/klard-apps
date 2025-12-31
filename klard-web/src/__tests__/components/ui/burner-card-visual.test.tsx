@@ -273,28 +273,28 @@ describe('BurnerCardVisual', () => {
   });
 
   describe('Status Glows', () => {
-    it('should apply teal glow when active', () => {
+    it('should apply primary glow when active', () => {
       const { container } = render(<BurnerCardVisual card={mockActiveCard} />);
 
       const card = container.querySelector('[data-slot="burner-card-visual"]');
-      // Check for teal glow shadow class
-      expect(card?.className).toMatch(/shadow-\[0_0_16px_rgba\(21,181,176/);
+      // Check for primary glow shadow class using CSS variable
+      expect(card?.className).toContain('shadow-[var(--rec-glow-primary)]');
     });
 
-    it('should apply amber glow when locked', () => {
+    it('should apply warning glow when locked', () => {
       const { container } = render(<BurnerCardVisual card={mockLockedCard} />);
 
       const card = container.querySelector('[data-slot="burner-card-visual"]');
-      // Check for amber glow shadow class
-      expect(card?.className).toMatch(/shadow-\[0_0_16px_rgba\(245,158,11/);
+      // Check for warning glow shadow class using CSS variable
+      expect(card?.className).toContain('shadow-[var(--rec-glow-warning)]');
     });
 
-    it('should apply red glow when burned', () => {
+    it('should apply error glow when burned', () => {
       const { container } = render(<BurnerCardVisual card={mockBurnedCard} />);
 
       const card = container.querySelector('[data-slot="burner-card-visual"]');
-      // Check for red glow shadow class
-      expect(card?.className).toMatch(/shadow-\[0_0_16px_rgba\(239,68,68/);
+      // Check for error glow shadow class using CSS variable
+      expect(card?.className).toContain('shadow-[var(--rec-glow-error)]');
     });
 
     it('should not apply glow when awaiting', () => {

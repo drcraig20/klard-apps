@@ -18,7 +18,7 @@ export const subscriptionCardVariants = cva(
     'bg-card/80 backdrop-blur-[12px]',
     'border border-border/50',
     // Shadow
-    'shadow-[0_2px_12px_rgba(15,23,42,0.08)]',
+    'shadow-[0_2px_12px_rgb(var(--rec-shadow-color)/0.08)]',
   ],
   {
     variants: {
@@ -28,14 +28,14 @@ export const subscriptionCardVariants = cva(
         detailed: 'p-5',
       },
       interactive: {
-        true: 'cursor-pointer hover:bg-accent/60 hover:border-primary/30 hover:shadow-[0_4px_20px_rgba(15,23,42,0.12)]',
+        true: 'cursor-pointer hover:bg-accent/60 hover:border-primary/30 hover:shadow-[0_4px_20px_rgb(var(--rec-shadow-color)/0.12)]',
         false: '',
       },
       protected: {
         true: [
           'border-success/40',
-          'shadow-[0_2px_12px_rgba(15,23,42,0.08),0_0_16px_rgba(5,150,105,0.2)]',
-          'dark:shadow-[0_2px_12px_rgba(15,23,42,0.08),0_0_16px_rgba(16,185,129,0.25)]',
+          'shadow-[0_2px_12px_rgb(var(--rec-shadow-color)/0.08),0_0_16px_rgba(5,150,105,0.2)]',
+          'dark:shadow-[0_2px_12px_rgb(var(--rec-shadow-color)/0.08),0_0_16px_rgba(16,185,129,0.25)]',
         ],
         false: '',
       },
@@ -44,7 +44,7 @@ export const subscriptionCardVariants = cva(
       {
         interactive: true,
         protected: true,
-        className: 'hover:shadow-[0_4px_20px_rgba(15,23,42,0.12),0_0_24px_rgba(5,150,105,0.3)] dark:hover:shadow-[0_4px_20px_rgba(15,23,42,0.12),0_0_24px_rgba(16,185,129,0.35)]',
+        className: 'hover:shadow-[0_4px_20px_rgb(var(--rec-shadow-color)/0.12),0_0_24px_rgba(5,150,105,0.3)] dark:hover:shadow-[0_4px_20px_rgb(var(--rec-shadow-color)/0.12),0_0_24px_rgba(16,185,129,0.35)]',
       },
     ],
     defaultVariants: {

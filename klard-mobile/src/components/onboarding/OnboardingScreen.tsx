@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { useCallback, useRef, useState, useEffect } from 'react';
+import { useCallback, useRef, useState, useEffect, useMemo } from 'react';
 import {
   Animated,
   Pressable,
@@ -19,47 +19,54 @@ import {
   ProtectIllustration,
   SaveIllustration,
 } from './illustrations';
-import { darkTheme } from '@/styles/colors';
+import { useTheme } from '@/contexts/ThemeContext';
+import type { ThemeColors } from '@/styles/colors';
 
-// Use dark theme colors (onboarding is always dark mode)
-const colors = {
-  ...darkTheme,
-  primaryDark: darkTheme.secondary,
-  backgroundElevated: darkTheme.muted,
-};
+// Slide data type
+interface SlideData {
+  id: string;
+  headline: string;
+  body: string;
+  Illustration: typeof TrackIllustration;
+  accentColor: string;
+}
 
-// Slide data (OCP: Extend by adding data, not modifying code)
-const slides = [
-  {
-    id: 'track',
-    headline: en.onboarding.welcome.slides.track.headline,
-    body: en.onboarding.welcome.slides.track.body,
-    Illustration: TrackIllustration,
-    accentColor: colors.primary,
-  },
-  {
-    id: 'protect',
-    headline: en.onboarding.welcome.slides.protect.headline,
-    body: en.onboarding.welcome.slides.protect.body,
-    Illustration: ProtectIllustration,
-    accentColor: colors.primary,
-  },
-  {
-    id: 'save',
-    headline: en.onboarding.welcome.slides.save.headline,
-    body: en.onboarding.welcome.slides.save.body,
-    Illustration: SaveIllustration,
-    accentColor: colors.success,
-  },
-];
+// Slide data factory (OCP: Extend by adding data, not modifying code)
+function getSlides(colors: ThemeColors): SlideData[] {
+  return [
+    {
+      id: 'track',
+      headline: en.onboarding.welcome.slides.track.headline,
+      body: en.onboarding.welcome.slides.track.body,
+      Illustration: TrackIllustration,
+      accentColor: colors.primary,
+    },
+    {
+      id: 'protect',
+      headline: en.onboarding.welcome.slides.protect.headline,
+      body: en.onboarding.welcome.slides.protect.body,
+      Illustration: ProtectIllustration,
+      accentColor: colors.primary,
+    },
+    {
+      id: 'save',
+      headline: en.onboarding.welcome.slides.save.headline,
+      body: en.onboarding.welcome.slides.save.body,
+      Illustration: SaveIllustration,
+      accentColor: colors.success,
+    },
+  ];
+}
 
 // Single Slide Component (SRP: Renders one slide only)
 interface OnboardingSlideProps {
-  slide: (typeof slides)[0];
+  slide: SlideData;
   index: number;
   scrollX: Animated.Value;
   screenWidth: number;
   screenHeight: number;
+  colors: ThemeColors;
+  isDark: boolean;
 }
 
 function OnboardingSlide({
@@ -68,6 +75,8 @@ function OnboardingSlide({
   scrollX,
   screenWidth,
   screenHeight,
+  colors,
+  isDark,
 }: Readonly<OnboardingSlideProps>) {
   const inputRange = [
     (index - 1) * screenWidth,
@@ -118,8 +127,18 @@ function OnboardingSlide({
           { transform: [{ scale: iconScale }, { rotate: iconRotate }] },
         ]}
       >
-        <BlurView intensity={40} tint="dark" style={styles.iconGlass}>
-          <slide.Illustration theme="dark" width={200} height={140} />
+        <BlurView
+          intensity={40}
+          tint={isDark ? 'dark' : 'light'}
+          style={[
+            styles.iconGlass,
+            {
+              borderColor: colors.border,
+              shadowColor: colors.shadowColor,
+            },
+          ]}
+        >
+          <slide.Illustration width={200} height={140} />
         </BlurView>
       </Animated.View>
 
@@ -130,8 +149,8 @@ function OnboardingSlide({
           { opacity: contentOpacity, transform: [{ translateY: contentTranslateY }] },
         ]}
       >
-        <Text style={styles.headline}>{slide.headline}</Text>
-        <Text style={styles.body}>{slide.body}</Text>
+        <Text style={[styles.headline, { color: colors.foreground }]}>{slide.headline}</Text>
+        <Text style={[styles.body, { color: colors.muted }]}>{slide.body}</Text>
       </Animated.View>
     </View>
   );
@@ -142,9 +161,10 @@ interface PaginationDotProps {
   index: number;
   scrollX: Animated.Value;
   screenWidth: number;
+  colors: ThemeColors;
 }
 
-function PaginationDot({ index, scrollX, screenWidth }: Readonly<PaginationDotProps>) {
+function PaginationDot({ index, scrollX, screenWidth, colors }: Readonly<PaginationDotProps>) {
   const inputRange = [
     (index - 1) * screenWidth,
     index * screenWidth,
@@ -179,6 +199,12 @@ interface OnboardingScreenProps {
 
 // Main Onboarding Component (SRP: Orchestrates onboarding flow)
 export function OnboardingScreen({ onSkip }: Readonly<OnboardingScreenProps>) {
+  // Get theme colors from context
+  const { colors, isDark } = useTheme();
+
+  // Memoize slides to prevent recreation on every render
+  const slides = useMemo(() => getSlides(colors), [colors]);
+
   // Use reactive dimensions hook instead of static Dimensions.get()
   const { width: screenWidth, height: screenHeight } = useWindowDimensions();
 
@@ -218,7 +244,7 @@ export function OnboardingScreen({ onSkip }: Readonly<OnboardingScreenProps>) {
         setCurrentIndex(index);
       }
     },
-    [currentIndex, screenWidth]
+    [currentIndex, screenWidth, slides.length]
   );
 
   const goToNext = useCallback(() => {
@@ -227,7 +253,7 @@ export function OnboardingScreen({ onSkip }: Readonly<OnboardingScreenProps>) {
       scrollViewRef.current?.scrollTo({ x: nextIndex * screenWidth, animated: true });
       setCurrentIndex(nextIndex);
     }
-  }, [currentIndex, screenWidth]);
+  }, [currentIndex, screenWidth, slides.length]);
 
   const isLastSlide = currentIndex === slides.length - 1;
 
@@ -266,12 +292,12 @@ export function OnboardingScreen({ onSkip }: Readonly<OnboardingScreenProps>) {
   }, [isLastSlide, goToNext]);
 
   return (
-    <View style={styles.container}>
-      <StatusBar style="light" />
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <StatusBar style={isDark ? 'light' : 'dark'} />
 
       {/* Background gradient */}
       <LinearGradient
-        colors={[colors.background, colors.backgroundElevated, colors.background]}
+        colors={[colors.background, colors.muted, colors.background]}
         style={StyleSheet.absoluteFillObject}
         start={{ x: 0, y: 0 }}
         end={{ x: 0, y: 1 }}
@@ -280,7 +306,9 @@ export function OnboardingScreen({ onSkip }: Readonly<OnboardingScreenProps>) {
       {/* Skip button */}
       <Animated.View style={[styles.skipContainer, { opacity: fadeAnim }]}>
         <Pressable onPress={handleSkip} style={styles.skipButton}>
-          <Text style={styles.skipText}>{en.onboarding.navigation.skip}</Text>
+          <Text style={[styles.skipText, { color: colors.muted }]}>
+            {en.onboarding.navigation.skip}
+          </Text>
         </Pressable>
       </Animated.View>
 
@@ -306,6 +334,8 @@ export function OnboardingScreen({ onSkip }: Readonly<OnboardingScreenProps>) {
             scrollX={scrollX}
             screenWidth={screenWidth}
             screenHeight={screenHeight}
+            colors={colors}
+            isDark={isDark}
           />
         ))}
       </Animated.ScrollView>
@@ -319,18 +349,27 @@ export function OnboardingScreen({ onSkip }: Readonly<OnboardingScreenProps>) {
       >
         {/* Pagination dots */}
         <View style={styles.pagination}>
-          {slides.map((slide) => (
+          {slides.map((slide, index) => (
             <PaginationDot
               key={slide.id}
-              index={slides.indexOf(slide)}
+              index={index}
               scrollX={scrollX}
               screenWidth={screenWidth}
+              colors={colors}
             />
           ))}
         </View>
 
         {/* CTA Button */}
-        <Animated.View style={[styles.buttonWrapper, { transform: [{ scale: buttonScale }] }]}>
+        <Animated.View
+          style={[
+            styles.buttonWrapper,
+            {
+              transform: [{ scale: buttonScale }],
+              shadowColor: colors.primary,
+            },
+          ]}
+        >
           <Pressable
             onPressIn={onButtonPressIn}
             onPressOut={onButtonPressOut}
@@ -338,12 +377,12 @@ export function OnboardingScreen({ onSkip }: Readonly<OnboardingScreenProps>) {
             style={styles.buttonPressable}
           >
             <LinearGradient
-              colors={[colors.primary, colors.primaryDark]}
+              colors={[colors.primary, colors.secondary]}
               style={styles.button}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
             >
-              <Text style={styles.buttonText}>
+              <Text style={[styles.buttonText, { color: colors.primaryForeground }]}>
                 {isLastSlide ? en.onboarding.navigation.getStarted : en.onboarding.navigation.next}
               </Text>
             </LinearGradient>
@@ -357,7 +396,6 @@ export function OnboardingScreen({ onSkip }: Readonly<OnboardingScreenProps>) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: colors.background,
   },
   scrollView: {
     flex: 1,
@@ -393,9 +431,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: colors.border,
-    // Native blur handles glassmorphism
-    shadowColor: colors.shadowColor,
+    // borderColor and shadowColor are set dynamically
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.1,
     shadowRadius: 16,
@@ -409,7 +445,7 @@ const styles = StyleSheet.create({
   headline: {
     fontSize: 32,
     fontWeight: '700',
-    color: colors.foreground,
+    // color is set dynamically
     textAlign: 'center',
     lineHeight: 40,
     marginBottom: 16,
@@ -417,7 +453,7 @@ const styles = StyleSheet.create({
   },
   body: {
     fontSize: 17,
-    color: colors.muted,
+    // color is set dynamically
     textAlign: 'center',
     lineHeight: 26,
     maxWidth: 320,
@@ -434,7 +470,7 @@ const styles = StyleSheet.create({
   },
   skipText: {
     fontSize: 16,
-    color: colors.muted,
+    // color is set dynamically
     fontWeight: '500',
   },
   bottomSection: {
@@ -459,8 +495,7 @@ const styles = StyleSheet.create({
   buttonWrapper: {
     width: '100%',
     maxWidth: 320,
-    // Teal glow effect
-    shadowColor: colors.primary,
+    // shadowColor is set dynamically for teal glow effect
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.35,
     shadowRadius: 24,
@@ -479,7 +514,7 @@ const styles = StyleSheet.create({
   buttonText: {
     fontSize: 18,
     fontWeight: '600',
-    color: colors.foreground,
+    // color is set dynamically
     letterSpacing: 0.3,
   },
 });

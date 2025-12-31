@@ -103,11 +103,11 @@ export function DatePicker({
       {label ? (
         <label
           htmlFor={inputId}
-          className="mb-2 block text-sm font-medium text-slate-700 dark:text-slate-300"
+          className="mb-2 block text-sm font-medium text-foreground"
         >
           {label}
           {required ? (
-            <span className="ml-1 text-red-500" aria-hidden="true">
+            <span className="ml-1 text-destructive" aria-hidden="true">
               *
             </span>
           ) : null}
@@ -129,12 +129,12 @@ export function DatePicker({
             aria-describedby={error ? errorId : undefined}
             className={cn(
               'h-12 w-full justify-start text-left font-normal',
-              !displayValue && 'text-slate-500 dark:text-slate-400',
+              !displayValue && 'text-muted-foreground',
               error && 'border-red-500 focus-visible:ring-red-500/30 focus-visible:border-red-500',
               disabled && 'cursor-not-allowed opacity-50'
             )}
           >
-            <CalendarIcon className="mr-2 h-4 w-4 text-slate-400" data-testid="calendar-icon" />
+            <CalendarIcon className="mr-2 h-4 w-4 text-muted-foreground" data-testid="calendar-icon" />
             {displayValue ?? placeholder}
           </Button>
         </PopoverTrigger>
@@ -152,7 +152,7 @@ export function DatePicker({
       </Popover>
 
       {error ? (
-        <p id={errorId} className="mt-2 text-sm text-red-500" role="alert">
+        <p id={errorId} className="mt-2 text-sm text-destructive" role="alert">
           {error}
         </p>
       ) : null}

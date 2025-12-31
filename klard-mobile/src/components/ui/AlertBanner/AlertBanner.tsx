@@ -1,21 +1,10 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  Pressable,
-  useColorScheme,
-  type ViewStyle,
-  type StyleProp,
-} from 'react-native';
+import { View, Text, Pressable, type ViewStyle, type StyleProp } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
-import {
-  alertContainerStyles,
-  alertTextStyles,
-  getIconColor,
-  layoutStyles,
-  type AlertType,
-} from './alert-banner.styles';
+import { useTheme } from '@/contexts/ThemeContext';
+import { alertContainerStyles, alertTextStyles, layoutStyles, type AlertType } from './alert-banner.styles';
+import { getAlertColors } from './alert-banner.constants';
 
 type AlertSize = 'default' | 'compact';
 
@@ -51,8 +40,9 @@ export function AlertBanner({
   style,
   testID,
 }: Readonly<AlertBannerProps>) {
-  const isDark = useColorScheme() === 'dark';
-  const iconColor = getIconColor(type, isDark);
+  const { colors, isDark } = useTheme();
+  const alertColors = getAlertColors(colors);
+  const variantColors = alertColors[type];
 
   const handleDismiss = async () => {
     await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
@@ -71,7 +61,7 @@ export function AlertBanner({
             testID="alert-icon"
             name={typeIconMap[type]}
             size={20}
-            color={iconColor}
+            color={variantColors.icon}
           />
         )}
       </View>
@@ -94,7 +84,7 @@ export function AlertBanner({
           onPress={handleDismiss}
           style={layoutStyles.dismiss}
         >
-          <Ionicons name="close" size={18} color={iconColor} />
+          <Ionicons name="close" size={18} color={variantColors.icon} />
         </Pressable>
       ) : null}
     </View>

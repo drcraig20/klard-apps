@@ -20,7 +20,7 @@ const buttonVariants = cva(
         klard:
           "bg-gradient-to-br from-primary to-primary/80 dark:from-primary dark:to-primary/70 text-white font-semibold shadow-[var(--rec-glow-primary)] hover:scale-[1.02] hover:shadow-glow-primary active:scale-[0.98]",
         burn:
-          "bg-success text-white font-semibold shadow-[var(--rec-glow-success)] hover:bg-success/90 hover:scale-[1.02] hover:shadow-[0_0_20px_rgba(5,150,105,0.35)] active:scale-[0.98]",
+          "bg-success text-white font-semibold shadow-[var(--rec-glow-success)] hover:bg-success/90 hover:scale-[1.02] hover:shadow-glow-success active:scale-[0.98]",
         // social: Web-only - Mobile uses native auth sheets (Apple/Google Sign-In)
         // See docs/design/component-variants.md for rationale
         social:

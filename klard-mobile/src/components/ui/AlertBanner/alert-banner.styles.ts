@@ -69,24 +69,8 @@ export const alertTextStyles = sva({
   },
 });
 
-// Helper to get icon color
-export function getIconColor(type: AlertType, isDark: boolean): string {
-  const colors = {
-    light: {
-      success: '#059669',
-      error: '#DC2626',
-      warning: '#D97706',
-      info: '#1E40AF',
-    },
-    dark: {
-      success: '#34D399',
-      error: '#EF4444',
-      warning: '#FBBF24',
-      info: '#60A5FA',
-    },
-  };
-  return isDark ? colors.dark[type] : colors.light[type];
-}
+// Note: Icon colors are now handled via getAlertColors() in alert-banner.constants.ts
+// which uses the centralized theme system
 
 // Static layout styles
 export const layoutStyles = StyleSheet.create({

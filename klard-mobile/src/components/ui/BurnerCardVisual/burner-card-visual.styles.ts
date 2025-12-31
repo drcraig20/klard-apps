@@ -14,11 +14,11 @@ export const styles = StyleSheet.create({
   brand: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#FFFFFF',
+    // Color applied inline via theme token
     letterSpacing: 1,
   },
   typeBadge: {
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    // Background color applied inline via theme token
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 4,
@@ -26,13 +26,13 @@ export const styles = StyleSheet.create({
   typeText: {
     fontSize: 10,
     fontWeight: '600',
-    color: '#FFFFFF',
+    // Color applied inline via theme token
     textTransform: 'uppercase',
   },
   cardNumber: {
     fontSize: 18,
     fontWeight: '500',
-    color: '#FFFFFF',
+    // Color applied inline via theme token
     letterSpacing: 3,
     textAlign: 'center',
   },
@@ -47,39 +47,39 @@ export const styles = StyleSheet.create({
   nickname: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    // Color applied inline via theme token
     marginBottom: 2,
   },
   expiry: {
     fontSize: 12,
-    color: 'rgba(255, 255, 255, 0.8)',
+    // Color applied inline via theme token
   },
   spending: {
     alignItems: 'flex-end',
   },
   spendLabel: {
     fontSize: 10,
-    color: 'rgba(255, 255, 255, 0.7)',
+    // Color applied inline via theme token
     textTransform: 'uppercase',
     marginBottom: 2,
   },
   spendAmount: {
     fontSize: 12,
     fontWeight: '600',
-    color: '#FFFFFF',
+    // Color applied inline via theme token
   },
   progressContainer: {
     marginTop: 12,
   },
   progressTrack: {
     height: 4,
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    // Background color applied inline via theme token
     borderRadius: 2,
     overflow: 'hidden',
   },
   progressFill: {
     height: '100%',
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    // Background color applied inline via theme token
     borderRadius: 2,
   },
 });

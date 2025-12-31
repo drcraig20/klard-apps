@@ -137,7 +137,7 @@ describe('FormField', () => {
       expect(screen.queryByRole('alert')).toBeNull();
     });
 
-    it('should apply error styling (red text)', () => {
+    it('should apply error styling (destructive text)', () => {
       render(
         <FormField error="Error message">
           <input />
@@ -145,7 +145,7 @@ describe('FormField', () => {
       );
 
       const error = screen.getByRole('alert');
-      expect(error.className).toContain('text-red-500');
+      expect(error.className).toContain('text-destructive');
     });
   });
 
@@ -179,7 +179,7 @@ describe('FormField', () => {
       );
 
       const helper = screen.getByText('Helper text');
-      expect(helper.className).toContain('text-slate-500');
+      expect(helper.className).toContain('text-muted-foreground');
     });
   });
 

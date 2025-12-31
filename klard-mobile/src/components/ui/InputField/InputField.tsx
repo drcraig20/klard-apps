@@ -10,7 +10,18 @@ import {
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-import { styles, colors } from './input-field.styles';
+import { useThemeColors } from '@/hooks/useThemeColors';
+import {
+  containerStyles,
+  labelStyles,
+  requiredStyles,
+  inputContainerStyles,
+  inputStyles,
+  iconContainerStyles,
+  rightActionButtonStyles,
+  errorTextStyles,
+  helperTextStyles,
+} from './input-field.styles';
 import { keyboardTypeMap, autoCapitalizeMap } from './input-field.constants';
 
 export interface InputFieldProps extends TextInputProps {
@@ -53,6 +64,7 @@ export function InputField({
 }: Readonly<InputFieldProps>) {
   const [showPassword, setShowPassword] = useState(false);
   const [isFocused, setIsFocused] = useState(false);
+  const { isDark, ...colors } = useThemeColors();
 
   const isPassword = type === 'password';
   const isSearch = type === 'search';
@@ -88,39 +100,32 @@ export function InputField({
   const keyboardType = keyboardTypeMap[type] ?? 'default';
   const autoCapitalize = autoCapitalizeMap[type] ?? 'sentences';
 
-  // Dynamic border color
-  const getBorderColor = () => {
-    if (error) return colors.error;
-    if (isFocused) return colors.primary;
-    return colors.border;
-  };
-
   const disabled = !editable;
 
   return (
-    <View style={[styles.container, containerStyle]}>
+    <View style={[containerStyles(isDark), containerStyle]}>
       {/* Label */}
       {label && (
-        <Text style={[styles.label, disabled && styles.labelDisabled]}>
+        <Text style={labelStyles(isDark, { disabled: disabled ? 'true' : undefined })}>
           {label}
-          {required && <Text style={styles.required}> *</Text>}
+          {required && <Text style={requiredStyles(isDark)}> *</Text>}
         </Text>
       )}
 
       {/* Input container */}
       <View
-        style={[
-          styles.inputContainer,
-          {
-            borderColor: getBorderColor(),
-            borderWidth: isFocused ? 2 : 1,
-          },
-          isFocused && styles.inputContainerFocused,
-          disabled && styles.inputContainerDisabled,
-        ]}
+        style={inputContainerStyles(isDark, {
+          focused: isFocused ? 'true' : undefined,
+          error: error ? 'true' : undefined,
+          disabled: disabled ? 'true' : undefined,
+        })}
       >
         {/* Left icon */}
-        {leftIcon && <View style={styles.leftIconContainer}>{leftIcon}</View>}
+        {leftIcon && (
+          <View style={iconContainerStyles(isDark, { position: 'left' })}>
+            {leftIcon}
+          </View>
+        )}
 
         {/* TextInput */}
         <TextInput
@@ -133,13 +138,12 @@ export function InputField({
           keyboardType={keyboardType}
           autoCapitalize={autoCapitalize}
           autoCorrect={type === 'email' || type === 'password' ? false : undefined}
-          placeholderTextColor={colors.placeholder}
-          style={[
-            styles.input,
-            leftIcon ? styles.inputWithLeftIcon : undefined,
-            (hasRightAction || showRightIcon) ? styles.inputWithRightIcon : undefined,
-            disabled ? styles.inputDisabled : undefined,
-          ]}
+          placeholderTextColor={colors.textDisabled}
+          style={inputStyles(isDark, {
+            withLeftIcon: leftIcon ? 'true' : undefined,
+            withRightIcon: (hasRightAction || showRightIcon) ? 'true' : undefined,
+            disabled: disabled ? 'true' : undefined,
+          })}
           accessibilityLabel={label}
           accessibilityHint={helperText}
           testID="input-field"
@@ -151,14 +155,14 @@ export function InputField({
           <Pressable
             onPress={handleTogglePassword}
             disabled={disabled}
-            style={styles.rightActionButton}
+            style={rightActionButtonStyles(isDark)}
             accessibilityLabel={showPassword ? 'Hide password' : 'Show password'}
             accessibilityRole="button"
           >
             <Ionicons
               name={showPassword ? 'eye-off-outline' : 'eye-outline'}
               size={20}
-              color={colors.icon}
+              color={colors.textTertiary}
             />
           </Pressable>
         )}
@@ -168,27 +172,31 @@ export function InputField({
           <Pressable
             onPress={handleClear}
             disabled={disabled}
-            style={styles.rightActionButton}
+            style={rightActionButtonStyles(isDark)}
             accessibilityLabel="Clear search"
             accessibilityRole="button"
           >
-            <Ionicons name="close-circle" size={20} color={colors.icon} />
+            <Ionicons name="close-circle" size={20} color={colors.textTertiary} />
           </Pressable>
         )}
 
         {/* Right icon (only shown if no action button) */}
-        {showRightIcon && <View style={styles.rightIconContainer}>{rightIcon}</View>}
+        {showRightIcon && (
+          <View style={iconContainerStyles(isDark, { position: 'right' })}>
+            {rightIcon}
+          </View>
+        )}
       </View>
 
       {/* Error message */}
       {error && (
-        <Text style={styles.error} accessibilityRole="alert">
+        <Text style={errorTextStyles(isDark)} accessibilityRole="alert">
           {error}
         </Text>
       )}
 
       {/* Helper text */}
-      {helperText && !error && <Text style={styles.helperText}>{helperText}</Text>}
+      {helperText && !error && <Text style={helperTextStyles(isDark)}>{helperText}</Text>}
     </View>
   );
 }

@@ -57,32 +57,32 @@ describe('ProgressBar', () => {
   });
 
   describe('Variants', () => {
-    it('should apply default variant color (teal-600)', () => {
+    it('should apply default variant color (primary)', () => {
       const { container } = render(<ProgressBar value={50} />);
 
       const indicator = container.querySelector('[data-slot="progress-indicator"]');
-      expect(indicator?.className).toContain('bg-teal-600');
+      expect(indicator?.className).toContain('bg-primary');
     });
 
-    it('should apply success variant color (green-600)', () => {
+    it('should apply success variant color (success)', () => {
       const { container } = render(<ProgressBar value={50} variant="success" />);
 
       const indicator = container.querySelector('[data-slot="progress-indicator"]');
-      expect(indicator?.className).toContain('bg-green-600');
+      expect(indicator?.className).toContain('bg-success');
     });
 
-    it('should apply warning variant color (amber-500)', () => {
+    it('should apply warning variant color (warning)', () => {
       const { container } = render(<ProgressBar value={50} variant="warning" />);
 
       const indicator = container.querySelector('[data-slot="progress-indicator"]');
-      expect(indicator?.className).toContain('bg-amber-500');
+      expect(indicator?.className).toContain('bg-warning');
     });
 
-    it('should apply error variant color (red-600)', () => {
+    it('should apply error variant color (destructive)', () => {
       const { container } = render(<ProgressBar value={50} variant="error" />);
 
       const indicator = container.querySelector('[data-slot="progress-indicator"]');
-      expect(indicator?.className).toContain('bg-red-600');
+      expect(indicator?.className).toContain('bg-destructive');
     });
   });
 

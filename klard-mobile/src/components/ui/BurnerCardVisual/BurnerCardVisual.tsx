@@ -78,12 +78,13 @@ function BurnerCardVisual({
   const accessibilityLabel = `${nickname} card ending in ${lastFour}, ${status}, spent ${formatCurrency(spentAmount)} of ${formatCurrency(spendLimit)}`;
 
   // Determine text colors based on status
-  const textPrimaryColor = isAwaiting ? colors.foreground : '#FFFFFF';
-  const textSecondaryColor = isAwaiting ? colors.mutedForeground : 'rgba(255, 255, 255, 0.8)';
-  const textTertiaryColor = isAwaiting ? colors.textTertiary : 'rgba(255, 255, 255, 0.7)';
-  const badgeBgColor = isAwaiting ? 'rgba(100, 116, 139, 0.2)' : 'rgba(255, 255, 255, 0.2)';
-  const progressTrackColor = isAwaiting ? 'rgba(100, 116, 139, 0.3)' : 'rgba(255, 255, 255, 0.3)';
-  const progressFillColor = isAwaiting ? 'rgba(100, 116, 139, 0.6)' : 'rgba(255, 255, 255, 0.9)';
+  // Awaiting state uses regular theme colors, active cards use burner card text tokens
+  const textPrimaryColor = isAwaiting ? colors.foreground : colors.burnerCardTextPrimary;
+  const textSecondaryColor = isAwaiting ? colors.mutedForeground : colors.burnerCardTextSecondary;
+  const textTertiaryColor = isAwaiting ? colors.textTertiary : colors.burnerCardTextTertiary;
+  const badgeBgColor = isAwaiting ? colors.mutedForeground + '33' : colors.burnerCardOverlayLight;
+  const progressTrackColor = isAwaiting ? colors.mutedForeground + '4D' : colors.burnerCardOverlayMedium;
+  const progressFillColor = isAwaiting ? colors.mutedForeground + '99' : colors.burnerCardOverlayStrong;
 
   // Build container styles
   const containerStyles = [

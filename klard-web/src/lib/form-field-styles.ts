@@ -10,9 +10,9 @@ export const inputFieldVariants = cva(
     'w-full h-12 px-4 text-base',
     // Glassmorphic background
     'bg-white/[0.02] dark:bg-white/[0.01]',
-    'text-slate-900 dark:text-slate-100',
+    'text-foreground',
     'border border-[var(--rec-glass-border-color)] rounded-[var(--rec-radius-sm)]',
-    'placeholder:text-slate-400 dark:placeholder:text-slate-500',
+    'placeholder:text-muted-foreground',
     'transition-all duration-150',
     // Focus with glow effect
     'focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary focus:shadow-[var(--rec-glow-primary)]',
@@ -20,11 +20,11 @@ export const inputFieldVariants = cva(
   {
     variants: {
       hasError: {
-        true: 'border-red-500 focus:ring-red-500/30 focus:border-red-500 focus:shadow-[var(--rec-glow-error)]',
+        true: 'border-destructive focus:ring-destructive/30 focus:border-destructive focus:shadow-[var(--rec-glow-error)]',
         false: 'hover:border-[var(--rec-color-border-strong)]',
       },
       disabled: {
-        true: 'opacity-50 cursor-not-allowed bg-slate-50 dark:bg-slate-800',
+        true: 'opacity-50 cursor-not-allowed bg-muted',
         false: '',
       },
       hasLeftIcon: {
@@ -45,23 +45,22 @@ export const inputFieldVariants = cva(
   }
 );
 
-export const labelStyles = 'block text-sm font-medium text-slate-700 dark:text-slate-300 mb-2';
+export const labelStyles = 'block text-sm font-medium text-foreground mb-2';
 
-export const errorStyles = 'mt-2 text-sm text-red-500';
+export const errorStyles = 'mt-2 text-sm text-destructive';
 
-export const helperTextStyles = 'mt-2 text-sm text-slate-500 dark:text-slate-400';
+export const helperTextStyles = 'mt-2 text-sm text-muted-foreground';
 
 export const iconButtonStyles = [
   'absolute right-3 top-1/2 -translate-y-1/2',
-  'text-slate-400 hover:text-slate-600',
-  'dark:text-slate-500 dark:hover:text-slate-300',
+  'text-muted-foreground hover:text-foreground',
   'transition-colors p-1 rounded',
   'focus:outline-none focus:ring-2 focus:ring-primary/30',
 ].join(' ');
 
 export const leftIconStyles = [
   'absolute left-3 top-1/2 -translate-y-1/2',
-  'text-slate-400 dark:text-slate-500',
+  'text-muted-foreground',
   'pointer-events-none',
 ].join(' ');
 

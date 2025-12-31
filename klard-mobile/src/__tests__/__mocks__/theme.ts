@@ -29,10 +29,20 @@ export const mockLightColors = {
   muted: '#F1F5F9',
   mutedForeground: '#64748B',
 
+  // Text hierarchy
+  textPrimary: '#0F172A',
+  textSecondary: '#475569',
+  textTertiary: '#64748B',
+  textDisabled: '#94A3B8',
+
   // Borders
   border: '#E2E8F0',
   input: '#E2E8F0',
   ring: '#0D7C7A',
+
+  // Glassmorphism & Backgrounds
+  glassBackground: 'rgba(255, 255, 255, 0.8)',
+  disabledBackground: '#F1F5F9',
 
   // Status colors
   success: '#059669',
@@ -55,6 +65,25 @@ export const mockLightColors = {
   destructiveForeground: '#FFFFFF',
   accent: '#15B5B0',
   accentForeground: '#FFFFFF',
+
+  // Burner card gradients
+  burnerActiveGradientStart: '#0D7C7A',
+  burnerActiveGradientEnd: '#085E5C',
+  burnerLockedGradientStart: '#D97706',
+  burnerLockedGradientEnd: '#B45309',
+  burnerExpiredGradientStart: '#64748B',
+  burnerExpiredGradientEnd: '#475569',
+  burnerUsedGradientStart: '#475569',
+  burnerUsedGradientEnd: '#334155',
+  accentError: '#DC2626',
+
+  // Burner card text (on gradient backgrounds)
+  burnerCardTextPrimary: '#FFFFFF',
+  burnerCardTextSecondary: 'rgba(255, 255, 255, 0.8)',
+  burnerCardTextTertiary: 'rgba(255, 255, 255, 0.7)',
+  burnerCardOverlayLight: 'rgba(255, 255, 255, 0.2)',
+  burnerCardOverlayMedium: 'rgba(255, 255, 255, 0.3)',
+  burnerCardOverlayStrong: 'rgba(255, 255, 255, 0.9)',
 
   // Theme indicator
   isDark: false,
@@ -80,10 +109,20 @@ export const mockDarkColors = {
   muted: '#334155',
   mutedForeground: '#94A3B8',
 
+  // Text hierarchy
+  textPrimary: '#F8FAFC',
+  textSecondary: '#CBD5E1',
+  textTertiary: '#94A3B8',
+  textDisabled: '#64748B',
+
   // Borders
   border: '#334155',
   input: '#334155',
   ring: '#15B5B0',
+
+  // Glassmorphism & Backgrounds
+  glassBackground: 'rgba(30, 41, 59, 0.6)',
+  disabledBackground: '#1E293B',
 
   // Status colors
   success: '#10B981',
@@ -106,6 +145,25 @@ export const mockDarkColors = {
   destructiveForeground: '#FFFFFF',
   accent: '#0D7C7A',
   accentForeground: '#FFFFFF',
+
+  // Burner card gradients
+  burnerActiveGradientStart: '#15B5B0',
+  burnerActiveGradientEnd: '#0D7C7A',
+  burnerLockedGradientStart: '#F59E0B',
+  burnerLockedGradientEnd: '#D97706',
+  burnerExpiredGradientStart: '#94A3B8',
+  burnerExpiredGradientEnd: '#64748B',
+  burnerUsedGradientStart: '#64748B',
+  burnerUsedGradientEnd: '#475569',
+  accentError: '#EF4444',
+
+  // Burner card text (on gradient backgrounds)
+  burnerCardTextPrimary: '#FFFFFF',
+  burnerCardTextSecondary: 'rgba(255, 255, 255, 0.8)',
+  burnerCardTextTertiary: 'rgba(255, 255, 255, 0.7)',
+  burnerCardOverlayLight: 'rgba(255, 255, 255, 0.2)',
+  burnerCardOverlayMedium: 'rgba(255, 255, 255, 0.3)',
+  burnerCardOverlayStrong: 'rgba(255, 255, 255, 0.9)',
 
   // Theme indicator
   isDark: true,

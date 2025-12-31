@@ -7,7 +7,7 @@ export const protectionStatusVariants = cva(
     "bg-teal-50 dark:bg-teal-900/20",
     "text-teal-700 dark:text-teal-300",
     "border border-teal-200 dark:border-teal-700/50",
-    "shadow-[0_0_12px_rgba(13,124,122,0.15)] dark:shadow-[0_0_12px_rgba(21,181,176,0.25)]",
+    "shadow-[var(--rec-glow-primary)]",
     "transition-all duration-200",
   ],
   {

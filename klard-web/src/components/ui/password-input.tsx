@@ -55,9 +55,9 @@ function PasswordStrengthBar({ password }: Readonly<PasswordStrengthBarProps>) {
   if (!password) return null;
 
   const levelColors: Record<string, string> = {
-    weak: 'bg-red-500',
-    fair: 'bg-amber-500',
-    good: 'bg-emerald-500',
+    weak: 'bg-destructive',
+    fair: 'bg-warning',
+    good: 'bg-success',
     strong: 'bg-primary',
   };
 
@@ -77,7 +77,7 @@ function PasswordStrengthBar({ password }: Readonly<PasswordStrengthBarProps>) {
 
   return (
     <div className="mt-2 space-y-1" data-testid="password-strength-indicator">
-      <div className="h-1.5 w-full bg-slate-200 dark:bg-slate-700 rounded-full overflow-hidden">
+      <div className="h-1.5 w-full bg-muted rounded-full overflow-hidden">
         <div
           className={cn(
             'h-full transition-all duration-300 rounded-full',
@@ -87,11 +87,11 @@ function PasswordStrengthBar({ password }: Readonly<PasswordStrengthBarProps>) {
         />
       </div>
       <div className="flex justify-between items-center">
-        <span className="text-xs text-slate-500 dark:text-slate-400">
+        <span className="text-xs text-muted-foreground">
           {levelLabels[strength.level]}
         </span>
         {strength.feedback.length > 0 && (
-          <span className="text-xs text-slate-400 dark:text-slate-500">
+          <span className="text-xs text-muted-foreground">
             {strength.feedback[0]}
           </span>
         )}
@@ -122,13 +122,13 @@ function PasswordRequirementsList({ requirements }: Readonly<PasswordRequirement
             data-requirement={key}
             className={cn(
               'flex items-center gap-2 text-sm transition-colors',
-              isMet ? 'text-emerald-600 dark:text-emerald-400' : 'text-slate-500 dark:text-slate-400'
+              isMet ? 'text-success' : 'text-muted-foreground'
             )}
           >
             {isMet ? (
-              <Check size={14} className="text-emerald-500 flex-shrink-0" />
+              <Check size={14} className="text-success flex-shrink-0" />
             ) : (
-              <X size={14} className="text-slate-400 flex-shrink-0" />
+              <X size={14} className="text-muted-foreground flex-shrink-0" />
             )}
             <span>{requirementLabels[key]}</span>
           </div>
@@ -177,7 +177,7 @@ export const PasswordInput = forwardRef<HTMLInputElement, PasswordInputProps>(
             className={labelStyles}
           >
             {label}
-            {required && <span className="text-red-500 ml-1" aria-hidden="true">*</span>}
+            {required && <span className="text-destructive ml-1" aria-hidden="true">*</span>}
           </label>
         )}
 

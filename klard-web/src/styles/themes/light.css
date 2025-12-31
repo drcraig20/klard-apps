@@ -60,6 +60,12 @@
   --rec-glow-warning: 0 0 16px rgba(217, 119, 6, 0.2);
   --rec-glow-error: 0 0 16px rgba(220, 38, 38, 0.2);
 
+  /* Shadow colors (RGB values for composable shadows) */
+  --rec-shadow-color: 15 23 42; /* slate-900 RGB for shadows */
+  --rec-shadow-primary: 13 124 122; /* teal-700 RGB */
+  --rec-shadow-success: 5 150 105; /* green-600 RGB */
+  --rec-shadow-error: 220 38 38; /* red-600 RGB */
+
   /* Radial highlights */
   --rec-radial-highlight-top: radial-gradient(
     var(--rec-radial-top-size) at 50% 10%,

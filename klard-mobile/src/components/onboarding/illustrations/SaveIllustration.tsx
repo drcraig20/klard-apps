@@ -1,20 +1,22 @@
 import React from 'react';
 import Svg, { Path, Rect, G, Defs, LinearGradient, Stop, Circle, Polygon } from 'react-native-svg';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface IllustrationProps {
-  theme?: 'light' | 'dark';
   width?: number;
   height?: number;
 }
 
 export function SaveIllustration({
-  theme = 'dark',
   width = 280,
   height = 200
 }: Readonly<IllustrationProps>) {
-  const primaryColor = theme === 'dark' ? '#15B5B0' : '#0D7C7A';
-  const successColor = theme === 'dark' ? '#10B981' : '#059669';
-  const bgColor = theme === 'dark' ? '#0F172A' : '#FFFFFF';
+  const { colors } = useTheme();
+  const primaryColor = colors.primary;
+  const successColor = colors.success;
+  const bgColor = colors.background;
+  // Graph axis line color
+  const axisColor = colors.foreground;
 
   return (
     <Svg
@@ -55,8 +57,8 @@ export function SaveIllustration({
 
       {/* Graph baseline */}
       <G opacity="0.2">
-        <Rect x="40" y="160" width="200" height="1" fill={theme === 'dark' ? '#F8FAFC' : '#0F172A'} />
-        <Rect x="40" y="60" width="1" height="100" fill={theme === 'dark' ? '#F8FAFC' : '#0F172A'} />
+        <Rect x="40" y="160" width="200" height="1" fill={axisColor} />
+        <Rect x="40" y="60" width="1" height="100" fill={axisColor} />
       </G>
 
       {/* Trend line path */}

@@ -33,10 +33,10 @@ function SliderField({
       {(label || showValue) && (
         <div className="flex justify-between text-sm">
           {label && (
-            <span className="text-slate-600 dark:text-slate-400">{label}</span>
+            <span className="text-muted-foreground">{label}</span>
           )}
           {showValue && (
-            <span className="text-slate-500 dark:text-slate-500 tabular-nums">
+            <span className="text-muted-foreground tabular-nums">
               {value}
             </span>
           )}
@@ -54,16 +54,16 @@ function SliderField({
         step={step}
         disabled={disabled}
       >
-        <SliderPrimitive.Track className="relative h-2 w-full grow overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700">
-          <SliderPrimitive.Range className="absolute h-full bg-teal-600 dark:bg-teal-500" />
+        <SliderPrimitive.Track className="relative h-2 w-full grow overflow-hidden rounded-full bg-muted">
+          <SliderPrimitive.Range className="absolute h-full bg-primary" />
         </SliderPrimitive.Track>
         <SliderPrimitive.Thumb
           className={cn(
-            'block h-5 w-5 rounded-full border-2 border-teal-600 bg-white shadow-md',
+            'block h-5 w-5 rounded-full border-2 border-primary bg-white shadow-md',
             'ring-offset-white transition-colors',
             'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-500 focus-visible:ring-offset-2',
             'disabled:pointer-events-none disabled:opacity-50',
-            'dark:border-teal-500 dark:bg-slate-900 dark:ring-offset-slate-900',
+            'dark:border-primary dark:bg-background dark:ring-offset-background',
           )}
         />
       </SliderPrimitive.Root>

@@ -12,10 +12,10 @@ const sizeMap = {
 } as const;
 
 const variantMap = {
-  default: 'bg-teal-600 dark:bg-teal-500',
-  success: 'bg-green-600 dark:bg-green-500',
-  warning: 'bg-amber-500 dark:bg-amber-400',
-  error: 'bg-red-600 dark:bg-red-500',
+  default: 'bg-primary',
+  success: 'bg-success',
+  warning: 'bg-warning',
+  error: 'bg-destructive',
 } as const;
 
 export type ProgressBarSize = keyof typeof sizeMap;
@@ -49,10 +49,10 @@ function ProgressBar({
       {(showLabel || label) && (
         <div className="flex justify-between text-sm">
           {label && (
-            <span className="text-slate-600 dark:text-slate-400">{label}</span>
+            <span className="text-muted-foreground">{label}</span>
           )}
           {showLabel && (
-            <span className="text-slate-500 dark:text-slate-500 tabular-nums">
+            <span className="text-muted-foreground tabular-nums">
               {Math.round(percentage)}%
             </span>
           )}
@@ -61,7 +61,7 @@ function ProgressBar({
       <ProgressPrimitive.Root
         data-slot="progress"
         className={cn(
-          'relative w-full overflow-hidden rounded-full bg-slate-200 dark:bg-slate-700',
+          'relative w-full overflow-hidden rounded-full bg-muted',
           sizeMap[size]
         )}
         value={percentage}

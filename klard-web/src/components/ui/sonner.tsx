@@ -17,11 +17,11 @@ export function Toaster({ position = "bottom-right" }: Readonly<ToasterProps>) {
       closeButton
       toastOptions={{
         classNames: {
-          toast: "border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 shadow-lg rounded-xl",
-          title: "text-slate-900 dark:text-slate-50 font-medium text-sm",
-          description: "text-slate-500 dark:text-slate-400 text-xs",
-          actionButton: "bg-teal-600 text-white hover:bg-teal-700 dark:bg-teal-500 dark:hover:bg-teal-600",
-          cancelButton: "bg-slate-100 text-slate-600 hover:bg-slate-200 dark:bg-slate-800 dark:text-slate-300 dark:hover:bg-slate-700",
+          toast: "border-border bg-card shadow-lg rounded-xl",
+          title: "text-card-foreground font-medium text-sm",
+          description: "text-muted-foreground text-xs",
+          actionButton: "bg-primary text-primary-foreground hover:bg-primary/90",
+          cancelButton: "bg-muted text-muted-foreground hover:bg-muted/80",
           success: "border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-950/50",
           error: "border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-950/50",
           warning: "border-amber-200 dark:border-amber-800 bg-amber-50 dark:bg-amber-950/50",

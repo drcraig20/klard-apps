@@ -53,7 +53,7 @@ function PriceDisplay({
     >
       <span>{formattedAmount}</span>
       {cycleLabel && (
-        <span className="text-slate-500 dark:text-slate-400 font-normal">
+        <span className="text-muted-foreground font-normal">
           {cycleLabel}
         </span>
       )}
@@ -63,8 +63,8 @@ function PriceDisplay({
           className={cn(
             "ml-1 inline-flex items-center gap-0.5 text-sm font-normal",
             showChange.direction === "increase"
-              ? "text-red-500 dark:text-red-400"
-              : "text-green-500 dark:text-green-400"
+              ? "text-destructive"
+              : "text-success"
           )}
         >
           {showChange.direction === "increase" ? (

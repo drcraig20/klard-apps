@@ -2,12 +2,12 @@ import { useEffect, useRef } from 'react';
 import {
   View,
   Animated,
-  useColorScheme,
   type StyleProp,
   type ViewStyle,
   type DimensionValue,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useThemeColors } from '@/hooks/useThemeColors';
 import { skeletonStyles, layoutStyles, getShimmerColors } from './skeleton.styles';
 
 export type SkeletonVariant = 'rectangular' | 'circular' | 'text';
@@ -27,7 +27,7 @@ export function Skeleton({
   animated = true,
   style,
 }: Readonly<SkeletonProps>) {
-  const isDark = useColorScheme() === 'dark';
+  const { isDark, shimmerHighlight } = useThemeColors();
   const animatedValue = useRef(new Animated.Value(0)).current;
   const shouldAnimate = animated && process.env.NODE_ENV !== 'test';
 
@@ -60,7 +60,7 @@ export function Skeleton({
     }
   }, [shouldAnimate, animatedValue]);
 
-  const shimmerColors = getShimmerColors(isDark);
+  const shimmerColors = getShimmerColors(shimmerHighlight);
 
   return (
     <View

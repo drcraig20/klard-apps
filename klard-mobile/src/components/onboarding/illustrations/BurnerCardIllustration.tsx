@@ -1,21 +1,27 @@
 import React from 'react';
 import Svg, { Path, Rect, G, Defs, LinearGradient, Stop, Circle } from 'react-native-svg';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface IllustrationProps {
-  theme?: 'light' | 'dark';
   width?: number;
   height?: number;
 }
 
 export function BurnerCardIllustration({
-  theme = 'dark',
   width = 200,
   height = 140
 }: Readonly<IllustrationProps>) {
-  const primaryColor = theme === 'dark' ? '#15B5B0' : '#0D7C7A';
-  const cardBg = theme === 'dark' ? '#1E293B' : '#FFFFFF';
-  const borderColor = theme === 'dark' ? '#334155' : '#E2E8F0';
-  const errorColor = theme === 'dark' ? '#EF4444' : '#DC2626';
+  const { colors, isDark } = useTheme();
+  const primaryColor = colors.primary;
+  const cardBg = colors.card;
+  const borderColor = colors.border;
+  const errorColor = colors.error;
+  // Gradient end color for card background
+  const cardGradientEnd = colors.surface3;
+  // Color for magnetic strip
+  const magneticStripColor = isDark ? '#000000' : colors.textTertiary;
+  // Card number/text fill color
+  const cardTextColor = colors.foreground;
 
   return (
     <Svg
@@ -34,7 +40,7 @@ export function BurnerCardIllustration({
         {/* Card gradient */}
         <LinearGradient id="burnerCardGradient" x1="0%" y1="0%" x2="100%" y2="100%">
           <Stop offset="0%" stopColor={cardBg} stopOpacity="1" />
-          <Stop offset="100%" stopColor={theme === 'dark' ? '#334155' : '#F1F5F9'} stopOpacity="1" />
+          <Stop offset="100%" stopColor={cardGradientEnd} stopOpacity="1" />
         </LinearGradient>
 
         {/* Shield gradient */}
@@ -98,20 +104,20 @@ export function BurnerCardIllustration({
           y="35"
           width="140"
           height="16"
-          fill={theme === 'dark' ? '#000000' : '#64748B'}
+          fill={magneticStripColor}
           opacity="0.2"
         />
         {/* Card number placeholders */}
         <G opacity="0.4">
-          <Rect x="15" y="58" width="24" height="6" fill={theme === 'dark' ? '#F8FAFC' : '#0F172A'} rx="1.5" />
-          <Rect x="43" y="58" width="24" height="6" fill={theme === 'dark' ? '#F8FAFC' : '#0F172A'} rx="1.5" />
-          <Rect x="71" y="58" width="24" height="6" fill={theme === 'dark' ? '#F8FAFC' : '#0F172A'} rx="1.5" />
-          <Rect x="99" y="58" width="24" height="6" fill={theme === 'dark' ? '#F8FAFC' : '#0F172A'} rx="1.5" />
+          <Rect x="15" y="58" width="24" height="6" fill={cardTextColor} rx="1.5" />
+          <Rect x="43" y="58" width="24" height="6" fill={cardTextColor} rx="1.5" />
+          <Rect x="71" y="58" width="24" height="6" fill={cardTextColor} rx="1.5" />
+          <Rect x="99" y="58" width="24" height="6" fill={cardTextColor} rx="1.5" />
         </G>
         {/* Expiry and CVV placeholders */}
         <G opacity="0.3">
-          <Rect x="15" y="72" width="16" height="5" fill={theme === 'dark' ? '#F8FAFC' : '#0F172A'} rx="1" />
-          <Rect x="109" y="72" width="16" height="5" fill={theme === 'dark' ? '#F8FAFC' : '#0F172A'} rx="1" />
+          <Rect x="15" y="72" width="16" height="5" fill={cardTextColor} rx="1" />
+          <Rect x="109" y="72" width="16" height="5" fill={cardTextColor} rx="1" />
         </G>
       </G>
 

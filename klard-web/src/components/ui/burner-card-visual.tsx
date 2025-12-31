@@ -36,12 +36,12 @@ const cardVariants = cva(
   {
     variants: {
       status: {
-        active: 'from-teal-700 to-teal-800 shadow-[0_0_16px_rgba(21,181,176,0.3)]',
-        locked: 'from-amber-600 to-amber-700 shadow-[0_0_16px_rgba(245,158,11,0.3)]',
+        active: 'from-teal-700 to-teal-800 shadow-[var(--rec-glow-primary)]',
+        locked: 'from-amber-600 to-amber-700 shadow-[var(--rec-glow-warning)]',
         expired: 'from-slate-500 to-slate-600',
         used: 'from-slate-600 to-slate-700',
         awaiting: 'bg-muted border-2 border-dashed border-muted-foreground/50 from-transparent to-transparent',
-        burned: 'from-red-500 to-red-600 shadow-[0_0_16px_rgba(239,68,68,0.3)] opacity-60',
+        burned: 'from-red-500 to-red-600 shadow-[var(--rec-glow-error)] opacity-60',
       },
       size: {
         sm: 'w-64 h-40',

@@ -39,7 +39,7 @@ function Skeleton({
       aria-hidden="true"
       role="status"
       className={cn(
-        'bg-slate-200/80 dark:bg-slate-700/60',
+        'bg-muted/80',
         animated && 'animate-pulse',
         variantMap[variant],
         className

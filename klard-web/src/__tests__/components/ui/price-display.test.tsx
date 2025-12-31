@@ -126,7 +126,7 @@ describe("PriceDisplay", () => {
       expect(screen.queryByTestId("price-change-indicator")).not.toBeInTheDocument()
     })
 
-    it("should show increase indicator with red color", () => {
+    it("should show increase indicator with destructive color", () => {
       render(
         <PriceDisplay
           amount={12.99}
@@ -136,10 +136,10 @@ describe("PriceDisplay", () => {
 
       const indicator = screen.getByTestId("price-change-indicator")
       expect(indicator).toBeInTheDocument()
-      expect(indicator.className).toMatch(/text-red-500|red/)
+      expect(indicator.className).toContain("text-destructive")
     })
 
-    it("should show decrease indicator with green color", () => {
+    it("should show decrease indicator with success color", () => {
       render(
         <PriceDisplay
           amount={7.99}
@@ -149,7 +149,7 @@ describe("PriceDisplay", () => {
 
       const indicator = screen.getByTestId("price-change-indicator")
       expect(indicator).toBeInTheDocument()
-      expect(indicator.className).toMatch(/text-green-500|green/)
+      expect(indicator.className).toContain("text-success")
     })
 
     it("should display the price difference amount for increase", () => {

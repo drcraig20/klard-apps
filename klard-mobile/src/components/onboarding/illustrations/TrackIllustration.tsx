@@ -1,20 +1,20 @@
 import React from 'react';
 import Svg, { Path, Rect, G, Defs, LinearGradient, Stop } from 'react-native-svg';
+import { useTheme } from '@/contexts/ThemeContext';
 
 interface IllustrationProps {
-  theme?: 'light' | 'dark';
   width?: number;
   height?: number;
 }
 
 export function TrackIllustration({
-  theme = 'dark',
   width = 280,
   height = 200
 }: Readonly<IllustrationProps>) {
-  const primaryColor = theme === 'dark' ? '#15B5B0' : '#0D7C7A';
-  const cardBg = theme === 'dark' ? '#1E293B' : '#FFFFFF';
-  const borderColor = theme === 'dark' ? '#334155' : '#E2E8F0';
+  const { colors } = useTheme();
+  const primaryColor = colors.primary;
+  const cardBg = colors.card;
+  const borderColor = colors.border;
 
   return (
     <Svg

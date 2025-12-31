@@ -149,4 +149,15 @@ export const lightTheme: ThemeColors = {
   burnerExpiredGradientEnd: '#475569',
   burnerUsedGradientStart: '#475569',
   burnerUsedGradientEnd: '#334155',
+
+  // ===== BURNER CARD TEXT (on gradient backgrounds) =====
+  burnerCardTextPrimary: '#FFFFFF',
+  burnerCardTextSecondary: 'rgba(255, 255, 255, 0.8)',
+  burnerCardTextTertiary: 'rgba(255, 255, 255, 0.7)',
+  burnerCardOverlayLight: 'rgba(255, 255, 255, 0.2)',
+  burnerCardOverlayMedium: 'rgba(255, 255, 255, 0.3)',
+  burnerCardOverlayStrong: 'rgba(255, 255, 255, 0.9)',
+
+  // ===== SKELETON SHIMMER =====
+  shimmerHighlight: 'rgba(255, 255, 255, 0.3)',
 };

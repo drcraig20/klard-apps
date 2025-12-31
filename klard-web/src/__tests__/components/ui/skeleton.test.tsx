@@ -23,7 +23,7 @@ describe('Skeleton', () => {
 
       const skeleton = container.querySelector('[data-slot="skeleton"]');
       expect(skeleton?.className).toContain('animate-pulse');
-      expect(skeleton?.className).toContain('bg-slate-200');
+      expect(skeleton?.className).toContain('bg-muted');
     });
   });
 

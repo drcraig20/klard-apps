@@ -6,25 +6,24 @@ import {
   SaveIllustration,
   BurnerCardIllustration
 } from '@/components/onboarding/illustrations';
+import { mockLightColors } from '@/__tests__/__mocks__/theme';
+
+// Mock ThemeContext - inline mock to avoid Jest hoisting issues
+jest.mock('@/contexts/ThemeContext', () => ({
+  useTheme: () => ({
+    colors: mockLightColors,
+    isDark: false,
+    toggleTheme: jest.fn(),
+    setTheme: jest.fn(),
+  }),
+  useThemeColors: () => mockLightColors,
+  ThemeProvider: ({ children }: { children: React.ReactNode }) => children,
+}));
 
 describe('Onboarding Illustrations', () => {
   describe('TrackIllustration', () => {
     it('should render without error', () => {
       const { getByLabelText } = render(<TrackIllustration />);
-
-      const illustration = getByLabelText('Floating subscription cards showing Netflix, Spotify, and a generic service');
-      expect(illustration).toBeTruthy();
-    });
-
-    it('should render with light theme', () => {
-      const { getByLabelText } = render(<TrackIllustration theme="light" />);
-
-      const illustration = getByLabelText('Floating subscription cards showing Netflix, Spotify, and a generic service');
-      expect(illustration).toBeTruthy();
-    });
-
-    it('should render with dark theme', () => {
-      const { getByLabelText } = render(<TrackIllustration theme="dark" />);
 
       const illustration = getByLabelText('Floating subscription cards showing Netflix, Spotify, and a generic service');
       expect(illustration).toBeTruthy();
@@ -46,20 +45,6 @@ describe('Onboarding Illustrations', () => {
       expect(illustration).toBeTruthy();
     });
 
-    it('should render with light theme', () => {
-      const { getByLabelText } = render(<ProtectIllustration theme="light" />);
-
-      const illustration = getByLabelText('Credit card protected by a shield with teal glow');
-      expect(illustration).toBeTruthy();
-    });
-
-    it('should render with dark theme', () => {
-      const { getByLabelText } = render(<ProtectIllustration theme="dark" />);
-
-      const illustration = getByLabelText('Credit card protected by a shield with teal glow');
-      expect(illustration).toBeTruthy();
-    });
-
     it('should render with custom dimensions', () => {
       const { getByLabelText } = render(<ProtectIllustration width={300} height={250} />);
 
@@ -76,20 +61,6 @@ describe('Onboarding Illustrations', () => {
       expect(illustration).toBeTruthy();
     });
 
-    it('should render with light theme', () => {
-      const { getByLabelText } = render(<SaveIllustration theme="light" />);
-
-      const illustration = getByLabelText('Upward trending arrow with dollar signs showing savings growth');
-      expect(illustration).toBeTruthy();
-    });
-
-    it('should render with dark theme', () => {
-      const { getByLabelText } = render(<SaveIllustration theme="dark" />);
-
-      const illustration = getByLabelText('Upward trending arrow with dollar signs showing savings growth');
-      expect(illustration).toBeTruthy();
-    });
-
     it('should render with custom dimensions', () => {
       const { getByLabelText } = render(<SaveIllustration width={300} height={250} />);
 
@@ -101,20 +72,6 @@ describe('Onboarding Illustrations', () => {
   describe('BurnerCardIllustration', () => {
     it('should render without error', () => {
       const { getByLabelText } = render(<BurnerCardIllustration />);
-
-      const illustration = getByLabelText('Virtual BurnerCard with shield protection blocking unwanted charges');
-      expect(illustration).toBeTruthy();
-    });
-
-    it('should render with light theme', () => {
-      const { getByLabelText } = render(<BurnerCardIllustration theme="light" />);
-
-      const illustration = getByLabelText('Virtual BurnerCard with shield protection blocking unwanted charges');
-      expect(illustration).toBeTruthy();
-    });
-
-    it('should render with dark theme', () => {
-      const { getByLabelText } = render(<BurnerCardIllustration theme="dark" />);
 
       const illustration = getByLabelText('Virtual BurnerCard with shield protection blocking unwanted charges');
       expect(illustration).toBeTruthy();

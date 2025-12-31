@@ -48,11 +48,11 @@ export function FormField({
       {label && (
         <Label
           htmlFor={id}
-          className="flex items-center gap-1 text-sm font-medium text-slate-700 dark:text-slate-300"
+          className="flex items-center gap-1 text-sm font-medium text-foreground"
         >
           {label}
           {required && (
-            <span className="text-red-500" aria-hidden="true">
+            <span className="text-destructive" aria-hidden="true">
               *
             </span>
           )}
@@ -60,12 +60,12 @@ export function FormField({
       )}
       {children}
       {error && (
-        <p id={`${id}-error`} className="text-sm text-red-500" role="alert">
+        <p id={`${id}-error`} className="text-sm text-destructive" role="alert">
           {error}
         </p>
       )}
       {helperText && !error && (
-        <p id={`${id}-helper`} className="text-sm text-slate-500 dark:text-slate-400">
+        <p id={`${id}-helper`} className="text-sm text-muted-foreground">
           {helperText}
         </p>
       )}

@@ -28,7 +28,7 @@ function Spinner({ className, size = "md", label, ...props }: Readonly<SpinnerPr
     return (
       <div className="flex items-center gap-2">
         {spinner}
-        <span className="text-sm text-slate-600 dark:text-slate-400">{label}</span>
+        <span className="text-sm text-muted-foreground">{label}</span>
       </div>
     )
   }

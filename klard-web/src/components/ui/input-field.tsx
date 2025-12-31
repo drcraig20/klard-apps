@@ -85,7 +85,7 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
         {label && (
           <label htmlFor={inputId} className={labelStyles}>
             {label}
-            {required && <span className="text-red-500 ml-1" aria-hidden="true">*</span>}
+            {required && <span className="text-destructive ml-1" aria-hidden="true">*</span>}
           </label>
         )}
         <div className={inputContainerStyles}>
@@ -142,7 +142,7 @@ export const InputField = forwardRef<HTMLInputElement, InputFieldProps>(
           )}
           {/* Right icon (only shown if no action button) */}
           {showRightIcon && (
-            <div className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 pointer-events-none">
+            <div className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none">
               {rightIcon}
             </div>
           )}

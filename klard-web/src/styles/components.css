@@ -53,7 +53,7 @@
   inset: 0;
   border-radius: inherit;
   opacity: 0;
-  box-shadow: 0 25px 55px rgba(15, 34, 64, 0.35);
+  box-shadow: var(--rec-shadow-2xl);
   transition: opacity var(--rec-animate-duration-fast) var(--rec-animate-ease-default);
 }
 

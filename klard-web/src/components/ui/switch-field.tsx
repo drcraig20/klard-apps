@@ -46,7 +46,7 @@ export function SwitchField({
               htmlFor={id}
               className={cn(
                 'text-sm font-medium leading-none cursor-pointer',
-                'text-slate-900 dark:text-slate-100',
+                'text-foreground',
                 disabled && 'opacity-50 cursor-not-allowed'
               )}
             >
@@ -57,7 +57,7 @@ export function SwitchField({
             <p
               id={descriptionId}
               className={cn(
-                'text-sm text-slate-500 dark:text-slate-400',
+                'text-sm text-muted-foreground',
                 disabled && 'opacity-50'
               )}
             >
