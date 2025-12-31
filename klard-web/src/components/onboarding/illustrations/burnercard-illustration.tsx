@@ -1,15 +1,13 @@
+'use client';
+
+import { useThemeColors } from '@/hooks';
+
 interface IllustrationProps {
-  theme?: 'light' | 'dark';
   className?: string;
 }
 
-export function BurnerCardIllustration({ theme = 'dark', className }: Readonly<IllustrationProps>) {
-  const primaryColor = theme === 'dark' ? '#15B5B0' : '#0D7C7A';
-  const backgroundColor = theme === 'dark' ? '#0F172A' : '#FFFFFF';
-  const cardGradientStart = theme === 'dark' ? '#1E293B' : '#F1F5F9';
-  const cardGradientEnd = theme === 'dark' ? '#0F172A' : '#E2E8F0';
-  const dangerColor = theme === 'dark' ? '#EF4444' : '#DC2626';
-  const textColor = theme === 'dark' ? '#F8FAFC' : '#0F172A';
+export function BurnerCardIllustration({ className }: Readonly<IllustrationProps>) {
+  const colors = useThemeColors();
 
   return (
     <svg
@@ -32,19 +30,19 @@ export function BurnerCardIllustration({ theme = 'dark', className }: Readonly<I
 
         {/* Card gradient */}
         <linearGradient id="burnercard-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor={primaryColor} stopOpacity="0.9" />
-          <stop offset="100%" stopColor={primaryColor} stopOpacity="0.7" />
+          <stop offset="0%" stopColor={colors.primary} stopOpacity="0.9" />
+          <stop offset="100%" stopColor={colors.primary} stopOpacity="0.7" />
         </linearGradient>
 
         {/* Danger gradient for blocked charge */}
         <radialGradient id="danger-gradient" cx="50%" cy="50%">
-          <stop offset="0%" stopColor={dangerColor} stopOpacity="0.8" />
-          <stop offset="100%" stopColor={dangerColor} stopOpacity="0.3" />
+          <stop offset="0%" stopColor={colors.error} stopOpacity="0.8" />
+          <stop offset="100%" stopColor={colors.error} stopOpacity="0.3" />
         </radialGradient>
       </defs>
 
       {/* Background */}
-      <rect width="280" height="200" fill={backgroundColor} opacity="0" />
+      <rect width="280" height="200" fill={colors.background} opacity="0" />
 
       {/* Credit Card - centered with glow */}
       <g transform="translate(40, 50)" filter="url(#burnercard-glow)">
@@ -67,7 +65,7 @@ export function BurnerCardIllustration({ theme = 'dark', className }: Readonly<I
           height="120"
           rx="12"
           fill="url(#burnercard-gradient)"
-          stroke={primaryColor}
+          stroke={colors.primary}
           strokeWidth="2"
         />
 
@@ -167,7 +165,7 @@ export function BurnerCardIllustration({ theme = 'dark', className }: Readonly<I
         />
 
         {/* Red X icon */}
-        <g stroke={dangerColor} strokeWidth="5" strokeLinecap="round">
+        <g stroke={colors.error} strokeWidth="5" strokeLinecap="round">
           <line x1="-12" y1="-12" x2="12" y2="12" />
           <line x1="12" y1="-12" x2="-12" y2="12" />
         </g>
@@ -176,7 +174,7 @@ export function BurnerCardIllustration({ theme = 'dark', className }: Readonly<I
         <text
           x="0"
           y="50"
-          fill={dangerColor}
+          fill={colors.error}
           fontSize="11"
           fontWeight="bold"
           fontFamily="Inter, sans-serif"
@@ -191,11 +189,11 @@ export function BurnerCardIllustration({ theme = 'dark', className }: Readonly<I
       <g opacity="0.15">
         <path
           d="M 25,25 L 30,25 L 30,30 C 30,33 27.5,35 25,37 C 22.5,35 20,33 20,30 L 20,25 Z"
-          fill={primaryColor}
+          fill={colors.primary}
         />
         <path
           d="M 250,165 L 255,165 L 255,170 C 255,173 252.5,175 250,177 C 247.5,175 245,173 245,170 L 245,165 Z"
-          fill={primaryColor}
+          fill={colors.primary}
         />
       </g>
 
@@ -205,7 +203,7 @@ export function BurnerCardIllustration({ theme = 'dark', className }: Readonly<I
         cy="30"
         r="35"
         fill="none"
-        stroke={dangerColor}
+        stroke={colors.error}
         strokeWidth="2"
         opacity="0.3"
       />

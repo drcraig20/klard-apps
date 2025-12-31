@@ -1,12 +1,13 @@
+'use client';
+
+import { useThemeColors } from '@/hooks';
+
 interface IllustrationProps {
-  theme?: 'light' | 'dark';
   className?: string;
 }
 
-export function SaveIllustration({ theme = 'dark', className }: Readonly<IllustrationProps>) {
-  const successColor = theme === 'dark' ? '#10B981' : '#059669';
-  const backgroundColor = theme === 'dark' ? '#0F172A' : '#FFFFFF';
-  const accentColor = theme === 'dark' ? '#15B5B0' : '#0D7C7A';
+export function SaveIllustration({ className }: Readonly<IllustrationProps>) {
+  const colors = useThemeColors();
 
   return (
     <svg
@@ -29,19 +30,19 @@ export function SaveIllustration({ theme = 'dark', className }: Readonly<Illustr
 
         {/* Green gradient for arrow */}
         <linearGradient id="arrow-gradient" x1="0%" y1="100%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor={successColor} stopOpacity="0.7" />
-          <stop offset="100%" stopColor={successColor} stopOpacity="1" />
+          <stop offset="0%" stopColor={colors.success} stopOpacity="0.7" />
+          <stop offset="100%" stopColor={colors.success} stopOpacity="1" />
         </linearGradient>
 
         {/* Teal to green gradient for path */}
         <linearGradient id="path-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor={accentColor} stopOpacity="0.6" />
-          <stop offset="100%" stopColor={successColor} stopOpacity="0.8" />
+          <stop offset="0%" stopColor={colors.primary} stopOpacity="0.6" />
+          <stop offset="100%" stopColor={colors.success} stopOpacity="0.8" />
         </linearGradient>
       </defs>
 
       {/* Background */}
-      <rect width="280" height="200" fill={backgroundColor} opacity="0" />
+      <rect width="280" height="200" fill={colors.background} opacity="0" />
 
       {/* Trend line path - upward curve */}
       <g opacity="0.8">
@@ -55,11 +56,11 @@ export function SaveIllustration({ theme = 'dark', className }: Readonly<Illustr
       </g>
 
       {/* Data points along the trend */}
-      <circle cx="30" cy="150" r="5" fill={accentColor} opacity="0.6" />
-      <circle cx="100" cy="110" r="5" fill={accentColor} opacity="0.7" />
-      <circle cx="140" cy="80" r="5" fill={successColor} opacity="0.7" />
-      <circle cx="180" cy="50" r="5" fill={successColor} opacity="0.8" />
-      <circle cx="220" cy="30" r="6" fill={successColor} filter="url(#success-glow)" />
+      <circle cx="30" cy="150" r="5" fill={colors.primary} opacity="0.6" />
+      <circle cx="100" cy="110" r="5" fill={colors.primary} opacity="0.7" />
+      <circle cx="140" cy="80" r="5" fill={colors.success} opacity="0.7" />
+      <circle cx="180" cy="50" r="5" fill={colors.success} opacity="0.8" />
+      <circle cx="220" cy="30" r="6" fill={colors.success} filter="url(#success-glow)" />
 
       {/* Upward arrow - main focal point */}
       <g transform="translate(220, 30)" filter="url(#success-glow)">
@@ -68,7 +69,7 @@ export function SaveIllustration({ theme = 'dark', className }: Readonly<Illustr
           cx="0"
           cy="0"
           r="28"
-          fill={successColor}
+          fill={colors.success}
           opacity="0.2"
         />
 
@@ -85,7 +86,7 @@ export function SaveIllustration({ theme = 'dark', className }: Readonly<Illustr
         {/* Arrow head */}
         <path
           d="M 0,-15 L 12,0 L 0,-8 L -12,0 Z"
-          fill={successColor}
+          fill={colors.success}
         />
       </g>
 
@@ -97,7 +98,7 @@ export function SaveIllustration({ theme = 'dark', className }: Readonly<Illustr
           y="50"
           fontSize="32"
           fontWeight="700"
-          fill={successColor}
+          fill={colors.success}
         >
           $
         </text>
@@ -108,7 +109,7 @@ export function SaveIllustration({ theme = 'dark', className }: Readonly<Illustr
           y="130"
           fontSize="24"
           fontWeight="600"
-          fill={successColor}
+          fill={colors.success}
           opacity="0.8"
         >
           $
@@ -120,7 +121,7 @@ export function SaveIllustration({ theme = 'dark', className }: Readonly<Illustr
           y="160"
           fontSize="20"
           fontWeight="600"
-          fill={successColor}
+          fill={colors.success}
           opacity="0.6"
         >
           $
@@ -136,7 +137,7 @@ export function SaveIllustration({ theme = 'dark', className }: Readonly<Illustr
           width="65"
           height="24"
           rx="12"
-          fill={successColor}
+          fill={colors.success}
           opacity="0.2"
         />
         <rect
@@ -145,7 +146,7 @@ export function SaveIllustration({ theme = 'dark', className }: Readonly<Illustr
           width="63"
           height="22"
           rx="11"
-          fill={successColor}
+          fill={colors.success}
           opacity="0.3"
         />
 
@@ -155,7 +156,7 @@ export function SaveIllustration({ theme = 'dark', className }: Readonly<Illustr
           y="16"
           fontSize="11"
           fontWeight="700"
-          fill={successColor}
+          fill={colors.success}
           textAnchor="middle"
         >
           SAVED
@@ -169,7 +170,7 @@ export function SaveIllustration({ theme = 'dark', className }: Readonly<Illustr
           cx="0"
           cy="0"
           r="18"
-          fill={successColor}
+          fill={colors.success}
           opacity="0.15"
         />
 
@@ -179,7 +180,7 @@ export function SaveIllustration({ theme = 'dark', className }: Readonly<Illustr
           y="5"
           fontSize="14"
           fontWeight="700"
-          fill={successColor}
+          fill={colors.success}
           textAnchor="middle"
         >
           +25%
@@ -191,19 +192,19 @@ export function SaveIllustration({ theme = 'dark', className }: Readonly<Illustr
         {/* Top sparkle */}
         <path
           d="M 200,20 L 202,25 L 207,27 L 202,29 L 200,34 L 198,29 L 193,27 L 198,25 Z"
-          fill={successColor}
+          fill={colors.success}
         />
 
         {/* Bottom sparkle */}
         <path
           d="M 150,165 L 152,170 L 157,172 L 152,174 L 150,179 L 148,174 L 143,172 L 148,170 Z"
-          fill={successColor}
+          fill={colors.success}
         />
 
         {/* Right sparkle - smaller */}
         <path
           d="M 265,120 L 266,123 L 269,124 L 266,125 L 265,128 L 264,125 L 261,124 L 264,123 Z"
-          fill={successColor}
+          fill={colors.success}
         />
       </g>
     </svg>
