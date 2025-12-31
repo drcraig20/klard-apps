@@ -90,12 +90,12 @@ Based on a 4px grid system:
 ## Usage in Code
 
 ```tsx
-import { Colors } from '@/styles/colors';
+import { lightTheme, darkTheme } from '@/styles/colors';
 import { useColorScheme } from 'react-native';
 
 const MyComponent = () => {
   const colorScheme = useColorScheme() ?? 'light';
-  const colors = Colors[colorScheme];
+  const colors = colorScheme === 'dark' ? darkTheme : lightTheme;
 
   return (
     <View style={{ backgroundColor: colors.background }}>
