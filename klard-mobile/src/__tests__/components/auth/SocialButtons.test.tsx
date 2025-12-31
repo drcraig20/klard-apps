@@ -16,14 +16,6 @@ import { Platform } from 'react-native';
 import * as Haptics from 'expo-haptics';
 import { SocialButtons } from '@/components/auth/social-buttons';
 
-// Mock expo-haptics
-jest.mock('expo-haptics', () => ({
-  impactAsync: jest.fn(),
-  ImpactFeedbackStyle: {
-    Light: 'light',
-  },
-}));
-
 // Mock the auth client
 jest.mock('@/lib/auth-client', () => ({
   signIn: {
